@@ -97,9 +97,6 @@
     <ClInclude Include="Source\Material.h">
       <Filter>Others\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Vertex.h">
-      <Filter>Others\Geo</Filter>
-    </ClInclude>
     <ClInclude Include="Source\LoadImg.h">
       <Filter>Others\Graphics</Filter>
     </ClInclude>
@@ -265,6 +262,9 @@
     <ClInclude Include="Source\SceneA2.h" />
     <ClInclude Include="Source\HexGrid.h" />
     <ClInclude Include="Source\TimeOfDay.hpp" />
+    <ClInclude Include="Source\Vertex.h">
+      <Filter>Others\Geo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

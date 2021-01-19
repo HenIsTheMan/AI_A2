@@ -162,7 +162,7 @@ void SceneA2::RenderGrid(){
 				gridCellHeight + gridLineThickness * 2.0f,
 				1.0f
 			);
-			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.0f, 0.0f, 0.0f), 1.0f);
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(), 1.0f);
 			modelStack.PopMatrix();
 		}
 	}
@@ -175,8 +175,8 @@ void SceneA2::RenderSceneText(){
 
 	RenderDebugInfoText(textMesh, Color(0.0f, 1.0f, 0.0f), textSize);
 	RenderControlsText(textMesh, Color(1.0f, 0.0f, 1.0f), textSize);
-	RenderGridAttribsText(textMesh, Color(1.0f, 1.0f, 0.0f), textSize);
-	RenderGameInfoText(textMesh, Color(1.0f, 0.5f, 0.0f), textSize);
+	RenderGridAttribsText(textMesh, Color::HSVToRGB({(cosf(elapsedTime * 0.4f) * 0.5f + 0.5f) * 360.0f, 1.0f, 1.0f}), textSize);
+	RenderGameInfoText(textMesh, Color::HSVToRGB({(sinf(elapsedTime * 0.4f) * 0.5f + 0.5f) * 360.0f, 1.0f, 1.0f}), textSize);
 }
 
 void SceneA2::RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
