@@ -71,11 +71,10 @@ void SceneA2::RenderGrid(){
 				yOffset + (gridCellHeight + gridLineThickness) * (float)r,
 				0.05f
 			);
-			modelStack.Rotate(90.0f, 1.0f, 0.0f, 0.0f);
 			modelStack.Scale(
 				gridCellWidth,
-				1.0f,
-				gridCellHeight
+				gridCellHeight,
+				1.0f
 			);
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.5f, 0.5f, 0.5f), 1.0f);
 			modelStack.PopMatrix();

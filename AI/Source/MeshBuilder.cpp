@@ -184,23 +184,22 @@ Mesh* MeshBuilder::GenHex(const Color& color, const float radius){
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<GLuint> index_buffer_data;
 	Vertex v;
+	v.color = color;
+	v.normal.Set(0.0f, 0.0f, 1.0f);
 
 	const float degreePerSlice = 360.f / 6.0f;
 	for(unsigned slice = 0; slice < 6 + 1; ++slice){
-		float theta = slice * degreePerSlice;
-		v.color = color;
-		v.normal.Set(0.0f, 1.0f, 0.0f);
-		v.pos.Set(radius * cos(Math::DegreeToRadian(theta)), 0, radius * sin(Math::DegreeToRadian(theta)));
+		const float theta = slice * degreePerSlice;
+
+		v.pos.Set(radius * cos(Math::DegreeToRadian(theta)), radius * sin(Math::DegreeToRadian(theta)), 0.0f);
 		vertex_buffer_data.emplace_back(v);
 
-		v.color = color;
-		v.normal.Set(0.0f, 1.0f, 0.0f);
 		v.pos.Set(0.0f, 0.0f, 0.0f);
 		vertex_buffer_data.emplace_back(v);
 	}
 	for(unsigned slice = 0; slice < 6 + 1; ++slice){
-		index_buffer_data.emplace_back(2 * slice + 0);
 		index_buffer_data.emplace_back(2 * slice + 1);
+		index_buffer_data.emplace_back(2 * slice + 0);
 	}
 
 	Mesh* const mesh = new Mesh("");
