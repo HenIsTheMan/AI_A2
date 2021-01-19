@@ -41,6 +41,7 @@ public:
 		Boy,
 		Orc,
 		Circle,
+		Hex,
 		Amt
 	};
 

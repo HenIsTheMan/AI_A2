@@ -63,37 +63,22 @@ void SceneA2::RenderGrid(){
 	const float xOffset = ((float)windowWidth - gridWidth) * 0.5f + gridLineThickness * 0.5f;
 	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f + gridLineThickness * 0.5f;
 
-	const int amtOfVertLines = grid->CalcAmtOfVertLines();
-	for(int i = 0; i < amtOfVertLines; ++i){
-		modelStack.PushMatrix();
-		modelStack.Translate(
-			xOffset + (gridCellWidth + gridLineThickness) * (float)i,
-			(float)windowHeight * 0.5f,
-			0.05f
-		);
-		modelStack.Scale(
-			gridLineThickness,
-			gridHeight,
-			1.0f
-		);
-		RenderMesh(meshList[(int)GeoType::Quad], true, Color(0.5f, 0.5f, 0.5f), 1.0f);
-		modelStack.PopMatrix();
-	}
-
-	const int amtOfHorizLines = grid->CalcAmtOfHorizLines();
-	for(int i = 0; i < amtOfHorizLines; ++i){
-		modelStack.PushMatrix();
-		modelStack.Translate(
-			(float)windowWidth * 0.5f,
-			yOffset + (gridCellHeight + gridLineThickness) * (float)i,
-			0.05f
-		);
-		modelStack.Scale(
-			gridWidth,
-			gridLineThickness,
-			1.0f
-		);
-		RenderMesh(meshList[(int)GeoType::Quad], true, Color(0.5f, 0.5f, 0.5f), 1.0f);
-		modelStack.PopMatrix();
+	for(int r = 0; r < gridRows; ++r){
+		for(int c = 0; c < gridCols; ++c){
+			modelStack.PushMatrix();
+			modelStack.Translate(
+				xOffset + (gridCellWidth + gridLineThickness) * (float)c,
+				yOffset + (gridCellHeight + gridLineThickness) * (float)r,
+				0.05f
+			);
+			modelStack.Rotate(90.0f, 1.0f, 0.0f, 0.0f);
+			modelStack.Scale(
+				gridCellWidth,
+				1.0f,
+				gridCellHeight
+			);
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.5f, 0.5f, 0.5f), 1.0f);
+			modelStack.PopMatrix();
+		}
 	}
 }

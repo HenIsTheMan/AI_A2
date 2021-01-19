@@ -180,6 +180,41 @@ Mesh* MeshBuilder::GenerateCube(const std::string &meshName, Color color, float 
 	return mesh;
 }
 
+Mesh* MeshBuilder::GenHex(const Color& color, const float radius){
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+	Vertex v;
+
+	const float degreePerSlice = 360.f / 6.0f;
+	for(unsigned slice = 0; slice < 6 + 1; ++slice){
+		float theta = slice * degreePerSlice;
+		v.color = color;
+		v.normal.Set(0.0f, 1.0f, 0.0f);
+		v.pos.Set(radius * cos(Math::DegreeToRadian(theta)), 0, radius * sin(Math::DegreeToRadian(theta)));
+		vertex_buffer_data.emplace_back(v);
+
+		v.color = color;
+		v.normal.Set(0.0f, 1.0f, 0.0f);
+		v.pos.Set(0.0f, 0.0f, 0.0f);
+		vertex_buffer_data.emplace_back(v);
+	}
+	for(unsigned slice = 0; slice < 6 + 1; ++slice){
+		index_buffer_data.emplace_back(2 * slice + 0);
+		index_buffer_data.emplace_back(2 * slice + 1);
+	}
+
+	Mesh* const mesh = new Mesh("");
+
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+
+	mesh->mode = Mesh::DRAW_MODE::DRAW_TRIANGLE_STRIP;
+	mesh->indexSize = index_buffer_data.size();
+	return mesh;
+}
+
 Mesh* MeshBuilder::GenerateRing(const std::string &meshName, Color color, unsigned numSlice, float outerR, float innerR)
 {
 	std::vector<Vertex> vertex_buffer_data;
