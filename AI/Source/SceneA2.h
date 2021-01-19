@@ -16,6 +16,7 @@ public:
 	void Update(double dt) override;
 	void Render() override;
 private:
+	float gameSpd;
 	TimeOfDay timeOfDay;
 
 	HexGrid<float>::GridType gridType;
@@ -29,7 +30,10 @@ private:
 	ObjPool<Entity>* objPool;
 	Publisher* publisher;
 
+	void UpdateEntities(const double dt);
+
 	void RenderBG();
+	void RenderEntities();
 	void RenderGrid();
 
 	void RenderSceneText();

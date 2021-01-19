@@ -1,10 +1,13 @@
 #include "SceneA2.h"
 
+#include "App.h"
+
 extern int windowWidth;
 extern int windowHeight;
 
 SceneA2::SceneA2():
 	SceneSupport(),
+	gameSpd(1.0f),
 	timeOfDay(TimeOfDay::Rainy),
 	gridType(HexGrid<float>::GridType::FlatTop),
 	gridCellWidth(40.0f),
@@ -43,6 +46,27 @@ SceneA2::~SceneA2(){
 
 void SceneA2::Update(double dt){
 	SceneSupport::Update(dt);
+
+	static bool isKeyDownZ = false;
+	static bool isKeyDownX = false;
+	if(!isKeyDownZ && App::Key('Z')){
+		gameSpd += 0.1f;
+		isKeyDownZ = true;
+	} else if(isKeyDownZ && !App::Key('Z')){
+		isKeyDownZ = false;
+	}
+	if(!isKeyDownX && App::Key('X')){
+		gameSpd -= 0.1f;
+		isKeyDownX = true;
+	} else if(isKeyDownX && !App::Key('X')){
+		isKeyDownX = false;
+	}
+	gameSpd = Math::Clamp(gameSpd, 0.2f, 4.0f);
+
+	UpdateEntities(dt * gameSpd);
+}
+
+void SceneA2::UpdateEntities(const double dt){
 }
 
 void SceneA2::Render(){
@@ -91,6 +115,9 @@ void SceneA2::RenderBG(){
 	}
 
 	modelStack.PopMatrix();
+}
+
+void SceneA2::RenderEntities(){
 }
 
 void SceneA2::RenderGrid(){
@@ -228,22 +255,6 @@ void SceneA2::RenderControlsText(Mesh* const textMesh, const Color& textColor, c
 		0.0f,
 		textSize * 13.0f
 	);
-	RenderTextOnScreen(
-		textMesh,
-		"L: Toggle entity-to-target lines",
-		textColor,
-		textSize,
-		0.0f,
-		textSize * 12.0f
-	);
-	RenderTextOnScreen(
-		textMesh,
-		"0 - 9: Modify grid attribs",
-		textColor,
-		textSize,
-		0.0f,
-		textSize * 11.0f
-	);
 }
 
 void SceneA2::RenderGridAttribsText(Mesh* const textMesh, const Color& textColor, const float textSize){
@@ -295,4 +306,13 @@ void SceneA2::RenderGridAttribsText(Mesh* const textMesh, const Color& textColor
 }
 
 void SceneA2::RenderGameInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
+	RenderTextOnScreen(
+		textMesh,
+		"Game Spd: " + std::to_string(gameSpd).substr(0, std::to_string((int)gameSpd).length() + 2),
+		textColor,
+		textSize,
+		(float)windowWidth,
+		textSize * 19.0f,
+		TextAlignment::Right
+	);
 }
