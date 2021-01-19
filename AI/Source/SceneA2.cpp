@@ -10,7 +10,7 @@ SceneA2::SceneA2():
 	gridLineThickness(2.5f),
 	gridRows(20),
 	gridCols(20),
-	grid(new HexGrid<float>(0.0f, 0.0f, 0.0f, 0, 0)),
+	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
 	objPool(new ObjPool<Entity>()),
 	publisher(Publisher::RetrieveGlobalObjPtr())
 {
