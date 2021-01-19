@@ -33,6 +33,7 @@ public:
 		TextMod1,
 		TextMod2,
 		DayBG,
+		RainyBG,
 		NightBG,
 		Block,
 		Quad,

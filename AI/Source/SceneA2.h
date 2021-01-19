@@ -2,6 +2,8 @@
 
 #include "SceneSupport.h"
 
+#include "TimeOfDay.hpp"
+
 #include "HexGrid.h"
 #include "ObjPool.h"
 #include "Publisher.h"
@@ -14,6 +16,8 @@ public:
 	void Update(double dt) override;
 	void Render() override;
 private:
+	TimeOfDay timeOfDay;
+
 	HexGrid<float>::GridType gridType;
 	float gridCellWidth;
 	float gridCellHeight;
@@ -25,5 +29,6 @@ private:
 	ObjPool<Entity>* objPool;
 	Publisher* publisher;
 
+	void RenderBG();
 	void RenderGrid();
 };

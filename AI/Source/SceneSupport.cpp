@@ -62,11 +62,16 @@ SceneSupport::SceneSupport():
 
 	meshList[(int)GeoType::DayBG] = MeshBuilder::GenerateSpriteAni("DayBG", 3, 5);
 	meshList[(int)GeoType::DayBG]->textureID = LoadImg("Imgs//DayBG.png");
+	meshList[(int)GeoType::RainyBG] = MeshBuilder::GenerateSpriteAni("RainyBG", 2, 5);
+	meshList[(int)GeoType::RainyBG]->textureID = LoadImg("Imgs//RainyBG.png");
 	meshList[(int)GeoType::NightBG] = MeshBuilder::GenerateSpriteAni("NightBG", 1, 5);
 	meshList[(int)GeoType::NightBG]->textureID = LoadImg("Imgs//NightBG.png");
 	SpriteAni* const dayBGSpriteAni = static_cast<SpriteAni*>(meshList[(int)GeoType::DayBG]);
 	dayBGSpriteAni->AddAni("DayBG", 0, 12);
 	dayBGSpriteAni->ActivateAni("DayBG", 0.07f);
+	SpriteAni* const rainyBGSpriteAni = static_cast<SpriteAni*>(meshList[(int)GeoType::RainyBG]);
+	rainyBGSpriteAni->AddAni("RainyBG", 0, 10);
+	rainyBGSpriteAni->ActivateAni("RainyBG", 0.07f);
 	SpriteAni* const nightBGSpriteAni = static_cast<SpriteAni*>(meshList[(int)GeoType::NightBG]);
 	nightBGSpriteAni->AddAni("NightBG", 0, 4);
 	nightBGSpriteAni->ActivateAni("NightBG", 0.07f);
@@ -184,6 +189,7 @@ void SceneSupport::Update(double dt){
 	mouseScrollWheelYOffset = 0.0;
 
 	static_cast<SpriteAni*>(meshList[(int)GeoType::DayBG])->Update(elapsedTime);
+	static_cast<SpriteAni*>(meshList[(int)GeoType::RainyBG])->Update(elapsedTime);
 	static_cast<SpriteAni*>(meshList[(int)GeoType::NightBG])->Update(elapsedTime);
 }
 

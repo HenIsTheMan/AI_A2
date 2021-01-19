@@ -4,6 +4,7 @@ extern int windowWidth;
 extern int windowHeight;
 
 SceneA2::SceneA2():
+	timeOfDay(TimeOfDay::Rainy),
 	gridType(HexGrid<float>::GridType::FlatTop),
 	gridCellWidth(40.0f),
 	gridCellHeight(40.0f),
@@ -47,12 +48,46 @@ void SceneA2::Render(){
 	SceneSupport::Render();
 
 	modelStack.PushMatrix();
+
 	modelStack.Translate(
 		-(float)windowWidth * 0.5f,
 		-(float)windowHeight * 0.5f,
 		0.0f
 	);
+
+	RenderBG();
 	RenderGrid();
+
+	modelStack.PopMatrix();
+}
+
+void SceneA2::RenderBG(){
+	modelStack.PushMatrix();
+
+	modelStack.Translate(
+		im_Cam.pos.x + (float)windowWidth * 0.5f,
+		im_Cam.pos.y + (float)windowHeight * 0.5f,
+		0.0f
+	);
+
+	modelStack.Scale(
+		(float)windowWidth,
+		(float)windowHeight,
+		1.0f
+	);
+
+	switch(timeOfDay){
+		case TimeOfDay::Day:
+			RenderMesh(meshList[(int)GeoType::DayBG], false);
+			break;
+		case TimeOfDay::Rainy:
+			RenderMesh(meshList[(int)GeoType::RainyBG], false);
+			break;
+		case TimeOfDay::Night:
+			RenderMesh(meshList[(int)GeoType::NightBG], false);
+			break;
+	}
+
 	modelStack.PopMatrix();
 }
 

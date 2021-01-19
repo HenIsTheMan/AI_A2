@@ -264,6 +264,7 @@
     </ClInclude>
     <ClInclude Include="Source\SceneA2.h" />
     <ClInclude Include="Source\HexGrid.h" />
+    <ClInclude Include="Source\TimeOfDay.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
