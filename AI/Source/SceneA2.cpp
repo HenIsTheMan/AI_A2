@@ -4,6 +4,7 @@ extern int windowWidth;
 extern int windowHeight;
 
 SceneA2::SceneA2():
+	gridType(HexGrid<float>::GridType::FlatTop),
 	gridCellWidth(40.0f),
 	gridCellHeight(40.0f),
 	gridLineThickness(2.5f),
@@ -13,6 +14,7 @@ SceneA2::SceneA2():
 	objPool(new ObjPool<Entity>()),
 	publisher(Publisher::RetrieveGlobalObjPtr())
 {
+	grid->SetGridType(gridType);
 	grid->SetCellWidth(gridCellWidth);
 	grid->SetCellHeight(gridCellHeight);
 	grid->SetLineThickness(gridLineThickness);

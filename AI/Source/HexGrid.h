@@ -3,8 +3,14 @@
 template <class T>
 class HexGrid final{
 public:
+	enum struct GridType: int{
+		FlatTop,
+		SharpTop,
+		Amt
+	};
+
 	HexGrid<T>();
-	HexGrid<T>(const T cellWidth, const T cellHeight, const T lineThickness, const int rows, const int cols);
+	HexGrid<T>(const GridType type, const T cellWidth, const T cellHeight, const T lineThickness, const int rows, const int cols);
 	~HexGrid<T>() = default;
 
 	int CalcAmtOfHorizLines() const;
@@ -13,6 +19,7 @@ public:
 	T CalcHeight() const;
 
 	//* Getters
+	GridType GetGridType() const;
 	T GetCellWidth() const;
 	T GetCellHeight() const;
 	T GetLineThickness() const;
@@ -21,6 +28,7 @@ public:
 	//*/
 
 	//* Setters
+	void SetGridType(const GridType type);
 	void SetCellWidth(const T cellWidth);
 	void SetCellHeight(const T cellHeight);
 	void SetLineThickness(const T lineThickness);
@@ -28,6 +36,8 @@ public:
 	void SetCols(const int cols);
 	//*/
 private:
+	GridType im_Type;
+
 	T im_CellWidth;
 	T im_CellHeight;
 	T im_LineThickness;

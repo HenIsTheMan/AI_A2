@@ -14,6 +14,7 @@ public:
 	void Update(double dt) override;
 	void Render() override;
 private:
+	HexGrid<float>::GridType gridType;
 	float gridCellWidth;
 	float gridCellHeight;
 	float gridLineThickness;

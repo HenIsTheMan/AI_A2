@@ -1,6 +1,7 @@
 template <class T>
 HexGrid<T>::HexGrid():
 	HexGrid(
+		GridType::FlatTop,
 		(T)0,
 		(T)0,
 		(T)0,
@@ -11,7 +12,8 @@ HexGrid<T>::HexGrid():
 }
 
 template <class T>
-HexGrid<T>::HexGrid(const T cellWidth, const T cellHeight, const T lineThickness, const int rows, const int cols):
+HexGrid<T>::HexGrid(const GridType type, const T cellWidth, const T cellHeight, const T lineThickness, const int rows, const int cols):
+	im_Type(type),
 	im_CellWidth(cellWidth),
 	im_CellHeight(cellHeight),
 	im_LineThickness(lineThickness),
@@ -41,6 +43,11 @@ T HexGrid<T>::CalcHeight() const{
 }
 
 template <class T>
+HexGrid<T>::GridType HexGrid<T>::GetGridType() const{
+	return im_GridType;
+}
+
+template <class T>
 T HexGrid<T>::GetCellWidth() const{
 	return im_CellWidth;
 }
@@ -63,6 +70,11 @@ int HexGrid<T>::GetRows() const{
 template <class T>
 int HexGrid<T>::GetCols() const{
 	return im_Cols;
+}
+
+template <class T>
+void HexGrid<T>::SetGridType(const HexGrid<T>::GridType type){
+	im_Type = type;
 }
 
 template <class T>
