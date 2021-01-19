@@ -36,13 +36,13 @@ template <class T>
 T HexGrid<T>::CalcWidth() const{
 	return im_Type == GridType::FlatTop
 		? im_Cols * im_CellScaleX + (T)CalcAmtOfVertLines() * im_LineThickness
-		: (T)im_Cols * ((T)CalcCellFlatToFlatLen() + im_LineThickness) + im_LineThickness;
+		: (T)im_Cols * ((T)CalcCellFlatToFlatLen() + im_LineThickness) - (T)CalcCellFlatToFlatLen() * (T)0.5;
 }
 
 template <class T>
 T HexGrid<T>::CalcHeight() const{
 	return im_Type == GridType::FlatTop
-		? (T)im_Rows * ((T)CalcCellFlatToFlatLen() + im_LineThickness) + im_LineThickness
+		? (T)im_Rows * ((T)CalcCellFlatToFlatLen() + im_LineThickness) - (T)CalcCellFlatToFlatLen() * (T)0.5
 		: im_Rows * im_CellScaleY + (T)CalcAmtOfHorizLines() * im_LineThickness;
 }
 
