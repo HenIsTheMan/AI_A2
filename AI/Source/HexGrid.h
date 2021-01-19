@@ -9,8 +9,8 @@ public:
 
 	int CalcAmtOfHorizLines() const;
 	int CalcAmtOfVertLines() const;
-	//T CalcWidth() const;
-	//T CalcHeight() const;
+	T CalcWidth() const;
+	T CalcHeight() const;
 
 	//* Getters
 	T GetCellWidth() const;

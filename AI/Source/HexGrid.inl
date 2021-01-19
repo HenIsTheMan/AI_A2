@@ -30,13 +30,15 @@ int HexGrid<T>::CalcAmtOfVertLines() const{
 	return im_Cols + 1;
 }
 
-//template <class T>
-//T HexGrid<T>::CalcWidth() const{
-//}
-//
-//template <class T>
-//T HexGrid<T>::CalcHeight() const{
-//}
+template <class T>
+T HexGrid<T>::CalcWidth() const{
+	return im_Cols * im_CellWidth + (T)CalcAmtOfVertLines() * im_LineThickness;
+}
+
+template <class T>
+T HexGrid<T>::CalcHeight() const{
+	return im_Rows * im_CellHeight + (T)CalcAmtOfHorizLines() * im_LineThickness;
+}
 
 template <class T>
 T HexGrid<T>::GetCellWidth() const{

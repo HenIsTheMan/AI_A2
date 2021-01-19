@@ -153,6 +153,7 @@
     <ClCompile Include="Source\EventCalcOmegaCount.cpp" />
     <ClCompile Include="Source\EventFindClosestEnemy.cpp" />
     <ClCompile Include="Source\EventProcreated.cpp" />
+    <ClCompile Include="Source\SceneA2.cpp" />
     <ClCompile Include="Source\StateHelperFuncs.cpp" />
     <ClCompile Include="Source\Event.cpp" />
     <ClCompile Include="Source\EventCalcActiveObjs.cpp" />
@@ -173,12 +174,13 @@
     <ClCompile Include="Source\State.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HexGrid.h" />
     <ClInclude Include="Source\EventAttacking.h" />
     <ClInclude Include="Source\EventCalcAlphaCount.h" />
     <ClInclude Include="Source\EventCalcOmegaCount.h" />
     <ClInclude Include="Source\EventFindClosestEnemy.h" />
     <ClInclude Include="Source\EventProcreated.h" />
+    <ClInclude Include="Source\HexGrid.h" />
+    <ClInclude Include="Source\SceneA2.h" />
     <ClInclude Include="Source\StateBoyIdle.h" />
     <ClInclude Include="Source\StateBoyImmune.h" />
     <ClInclude Include="Source\StateHelperFuncs.h" />
@@ -242,11 +244,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="HexGrid.inl" />
     <None Include="Shaders\AI.fs" />
     <None Include="Shaders\AI.vs" />
     <None Include="Source\Entity.inl" />
     <None Include="Source\Grid.inl" />
+    <None Include="Source\HexGrid.inl" />
     <None Include="Source\ObjPool.inl" />
     <None Include="Source\StateBoyAttack.inl" />
     <None Include="Source\StateBoyIdle.inl" />

@@ -76,6 +76,7 @@
     <ClCompile Include="Source\EventProcreated.cpp">
       <Filter>Event\Events\Post-events</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneA2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\App.h">
@@ -261,7 +262,8 @@
     <ClInclude Include="Source\EventProcreated.h">
       <Filter>Event\Events\Post-events</Filter>
     </ClInclude>
-    <ClInclude Include="HexGrid.h" />
+    <ClInclude Include="Source\SceneA2.h" />
+    <ClInclude Include="Source\HexGrid.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
@@ -413,6 +415,6 @@
     <None Include="Source\StateSkeleDeadButNotDead.inl">
       <Filter>State\States\SkeleStates</Filter>
     </None>
-    <None Include="HexGrid.inl" />
+    <None Include="Source\HexGrid.inl" />
   </ItemGroup>
 </Project>
