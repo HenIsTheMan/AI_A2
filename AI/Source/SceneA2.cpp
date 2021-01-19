@@ -125,7 +125,7 @@ void SceneA2::RenderGrid(){
 	const float gridHeight = grid->CalcHeight();
 
 	const float xOffset = ((float)windowWidth - gridWidth) * 0.5f + gridLineThickness * 0.5f;
-	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f + gridLineThickness * 0.5f;
+	const float yOffset = ((float)windowHeight - (gridHeight - gridLineThickness - grid->CalcCellFlatToFlatLen() * 0.5f)) * 0.5f;
 
 	for(int r = 0; r < gridRows; ++r){
 		for(int c = 0; c < gridCols; ++c){
