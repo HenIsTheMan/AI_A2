@@ -4,11 +4,12 @@ extern int windowWidth;
 extern int windowHeight;
 
 SceneA2::SceneA2():
+	SceneSupport(),
 	timeOfDay(TimeOfDay::Rainy),
 	gridType(HexGrid<float>::GridType::FlatTop),
 	gridCellWidth(40.0f),
 	gridCellHeight(40.0f),
-	gridLineThickness(2.0f),
+	gridLineThickness(5.0f),
 	gridRows(17),
 	gridCols(17),
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
@@ -57,6 +58,7 @@ void SceneA2::Render(){
 
 	RenderBG();
 	RenderGrid();
+	RenderSceneText();
 
 	modelStack.PopMatrix();
 }
@@ -137,4 +139,160 @@ void SceneA2::RenderGrid(){
 			modelStack.PopMatrix();
 		}
 	}
+}
+
+void SceneA2::RenderSceneText(){
+	Mesh* const textMesh = meshList[(int)GeoType::Text];
+	const float textSize = (float)windowHeight * 0.05f;
+	const float colorComponent = (sinf(elapsedTime * 4.0f) + 1.0f) * 0.5f;
+
+	RenderDebugInfoText(textMesh, Color(0.0f, 1.0f, 0.0f), textSize);
+	RenderControlsText(textMesh, Color(1.0f, 0.0f, 1.0f), textSize);
+	RenderGridAttribsText(textMesh, Color(1.0f, 1.0f, 0.0f), textSize);
+	RenderGameInfoText(textMesh, Color(1.0f, 0.5f, 0.0f), textSize);
+}
+
+void SceneA2::RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
+	RenderTextOnScreen(
+		textMesh,
+		"Elapsed time: " + std::to_string(elapsedTime).substr(0, std::to_string((int)elapsedTime).length() + 3),
+		textColor,
+		textSize,
+		0.0f,
+		textSize * 0.0f
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"FPS: " + std::to_string(FPS).substr(0, std::to_string((int)FPS).length() + 3),
+		textColor,
+		textSize,
+		0.0f,
+		textSize * 1.0f
+	);
+}
+
+void SceneA2::RenderControlsText(Mesh* const textMesh, const Color& textColor, const float textSize){
+	RenderTextOnScreen(
+		textMesh,
+		"F1: Toggle fullscreen",
+		textColor,
+		textSize,
+		0.0f,
+		textSize * 19.0f
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"F2: Change polygon mode",
+		textColor,
+		textSize,
+		0.0f,
+		textSize * 18.0f
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"Tab: ...",
+		textColor,
+		textSize,
+		0.0f,
+		textSize * 17.0f
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"WASD: Move cam",
+		textColor,
+		textSize,
+		0.0f,
+		textSize * 16.0f
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"R: Reset cam",
+		textColor,
+		textSize,
+		0.0f,
+		textSize * 15.0f
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"Z: Increase game spd",
+		textColor,
+		textSize,
+		0.0f,
+		textSize * 14.0f
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"X: Decrease game spd",
+		textColor,
+		textSize,
+		0.0f,
+		textSize * 13.0f
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"L: Toggle entity-to-target lines",
+		textColor,
+		textSize,
+		0.0f,
+		textSize * 12.0f
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"0 - 9: Modify grid attribs",
+		textColor,
+		textSize,
+		0.0f,
+		textSize * 11.0f
+	);
+}
+
+void SceneA2::RenderGridAttribsText(Mesh* const textMesh, const Color& textColor, const float textSize){
+	RenderTextOnScreen(
+		textMesh,
+		"Grid cell width: " + std::to_string(gridCellWidth).substr(0, std::to_string((int)gridCellWidth).length() + 2),
+		textColor,
+		textSize,
+		(float)windowWidth,
+		textSize * 0.0f,
+		TextAlignment::Right
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"Grid cell height: " + std::to_string(gridCellHeight).substr(0, std::to_string((int)gridCellHeight).length() + 2),
+		textColor,
+		textSize,
+		(float)windowWidth,
+		textSize * 1.0f,
+		TextAlignment::Right
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"Grid line thickness: " + std::to_string(gridLineThickness).substr(0, std::to_string((int)gridLineThickness).length() + 2),
+		textColor,
+		textSize,
+		(float)windowWidth,
+		textSize * 2.0f,
+		TextAlignment::Right
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"Grid rows: " + std::to_string(gridRows),
+		textColor,
+		textSize,
+		(float)windowWidth,
+		textSize * 3.0f,
+		TextAlignment::Right
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"Grid cols: " + std::to_string(gridCols),
+		textColor,
+		textSize,
+		(float)windowWidth,
+		textSize * 4.0f,
+		TextAlignment::Right
+	);
+}
+
+void SceneA2::RenderGameInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
 }
