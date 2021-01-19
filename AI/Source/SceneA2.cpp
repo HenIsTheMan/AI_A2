@@ -10,8 +10,8 @@ SceneA2::SceneA2():
 	gameSpd(1.0f),
 	timeOfDay(TimeOfDay::Rainy),
 	gridType(HexGrid<float>::GridType::FlatTop),
-	gridCellScaleX(40.0f),
-	gridCellScaleY(40.0f),
+	gridCellScaleX(50.0f),
+	gridCellScaleY(50.0f),
 	gridLineThickness(5.0f),
 	gridRows(17),
 	gridCols(17),
@@ -127,16 +127,12 @@ void SceneA2::RenderGrid(){
 	const float xOffset = ((float)windowWidth - gridWidth) * 0.5f + gridLineThickness * 0.5f;
 	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f + gridLineThickness * 0.5f;
 
-	//const float hexHeight = sin(Math::DegreeToRadian(60)) * gridCellHeight;
-	//const float hexColOffset = 0.75f * gridCellWidth;
-	//const float hexOddOffset = hexHeight * 0.5f;
-
 	for(int r = 0; r < gridRows; ++r){
 		for(int c = 0; c < gridCols; ++c){
 			modelStack.PushMatrix();
 			modelStack.Translate(
-				xOffset + (grid->CalcCellWidth() + gridLineThickness) * (float)c, //??
-				yOffset + (grid->CalcCellHeight() + gridLineThickness) * (float)r, // + (c & 1) * hexOddOffset??
+				xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c + (c & 1) * grid->CalcAltOffsetX(),
+				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
 				0.05f
 			);
 			modelStack.Scale(
@@ -145,6 +141,24 @@ void SceneA2::RenderGrid(){
 				1.0f
 			);
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.5f, 0.5f, 0.5f), 1.0f);
+			modelStack.PopMatrix();
+		}
+	}
+
+	for(int r = 0; r < gridRows; ++r){
+		for(int c = 0; c < gridCols; ++c){
+			modelStack.PushMatrix();
+			modelStack.Translate(
+				xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c + (c & 1) * grid->CalcAltOffsetX(),
+				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
+				0.05f
+			);
+			modelStack.Scale(
+				gridCellScaleX + gridLineThickness * 2.5f,
+				gridCellScaleY + gridLineThickness * 2.5f,
+				1.0f
+			);
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.0f, 0.0f, 0.0f), 1.0f);
 			modelStack.PopMatrix();
 		}
 	}

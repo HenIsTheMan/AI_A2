@@ -43,17 +43,38 @@ T HexGrid<T>::CalcHeight() const{
 }
 
 template <class T>
-T HexGrid<T>::CalcCellWidth() const{
+T HexGrid<T>::CalcCellSharpToSharpLen() const{
 	return im_Type == GridType::FlatTop
 		? im_CellScaleX
-		: im_CellScaleX * sinf(Math::DegreeToRadian(60)); //2.0f * im_CellScaleX * 0.5f * sinf(Math::DegreeToRadian(60))
+		: im_CellScaleY;
 }
 
 template <class T>
-T HexGrid<T>::CalcCellHeight() const{
+T HexGrid<T>::CalcCellFlatToFlatLen() const{
 	return im_Type == GridType::FlatTop
-		? im_CellScaleY * sinf(Math::DegreeToRadian(60)) //2.0f * im_CellScaleY * 0.5f * sinf(Math::DegreeToRadian(60))
-		: im_CellScaleY;
+		? im_CellScaleX * sinf(Math::DegreeToRadian(60)) //2.0f * im_CellScaleX * 0.5f * sinf(Math::DegreeToRadian(60))
+		: im_CellScaleY * sinf(Math::DegreeToRadian(60)); //2.0f * im_CellScaleY * 0.5f * sinf(Math::DegreeToRadian(60))
+}
+
+template <class T>
+T HexGrid<T>::CalcCellSideLen() const{
+	return (im_Type == GridType::FlatTop
+		? im_CellScaleX
+		: im_CellScaleY) * cosf(Math::DegreeToRadian(60)); //...
+}
+
+template <class T>
+T HexGrid<T>::CalcAltOffsetX() const{
+	return im_Type == GridType::FlatTop
+		? 0.0f
+		: im_CellScaleX * 0.5f;
+}
+
+template <class T>
+T HexGrid<T>::CalcAltOffsetY() const{
+	return im_Type == GridType::FlatTop
+		? im_CellScaleY * 0.5f
+		: 0.0f;
 }
 
 template <class T>

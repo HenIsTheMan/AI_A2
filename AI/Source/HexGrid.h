@@ -17,8 +17,11 @@ public:
 	int CalcAmtOfVertLines() const;
 	T CalcWidth() const;
 	T CalcHeight() const;
-	T CalcCellWidth() const;
-	T CalcCellHeight() const;
+	T CalcCellSharpToSharpLen() const;
+	T CalcCellFlatToFlatLen() const;
+	T CalcCellSideLen() const;
+	T CalcAltOffsetX() const;
+	T CalcAltOffsetY() const;
 
 	//* Getters
 	GridType GetGridType() const;
