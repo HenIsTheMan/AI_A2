@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Source\Vector3.cpp" />
+    <ClCompile Include="Source\MatrixStack.cpp" />
+    <ClCompile Include="Source\Mtx44.cpp" />
+    <ClCompile Include="Source\timer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\MatrixStack.h" />
+    <ClInclude Include="Source\Mtx44.h" />
+    <ClInclude Include="Source\MyMath.h" />
+    <ClInclude Include="Source\timer.h" />
+    <ClInclude Include="Source\Vector3.h" />
+    <ClInclude Include="Source\stb_image.h" />
+    <ClInclude Include="Source\Singleton.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\Singleton.inl" />
+  </ItemGroup>
+</Project>

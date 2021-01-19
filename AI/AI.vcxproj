@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{18D69E36-A723-4700-919F-981C0C7C200A}</ProjectGuid>
+    <RootNamespace>AI</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <SourcePath>$(SolutionDir)$(ProjectName)\Source\</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <SourcePath>$(SolutionDir)$(ProjectName)\Source\</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <SourcePath>$(SolutionDir)$(ProjectName)\Source\</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <SourcePath>$(SolutionDir)$(ProjectName)\Source\</SourcePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)/Common/Source;$(SolutionDir)/glew/include;$(SolutionDir)/glfw/include;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>NotSet</SubSystem>
+      <AdditionalLibraryDirectories>$(SolutionDir)/glfw/lib-vc2015;$(SolutionDir)/glew/lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>winmm.lib;opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions> /ignore:4098</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>NotSet</SubSystem>
+      <AdditionalDependencies>winmm.lib;opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions> /ignore:4098</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)/Common/Source;$(SolutionDir)/glew/include;$(SolutionDir)/glfw/include;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>NotSet</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)/glfw/lib-vc2015;$(SolutionDir)/glew/lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>winmm.lib;opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions> /ignore:4098</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>NotSet</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>winmm.lib;opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions> /ignore:4098</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\App.cpp" />
+    <ClCompile Include="Source\Cam.cpp" />
+    <ClCompile Include="Source\EventAttacking.cpp" />
+    <ClCompile Include="Source\EventCalcAlphaCount.cpp" />
+    <ClCompile Include="Source\EventCalcOmegaCount.cpp" />
+    <ClCompile Include="Source\EventFindClosestEnemy.cpp" />
+    <ClCompile Include="Source\EventProcreated.cpp" />
+    <ClCompile Include="Source\StateHelperFuncs.cpp" />
+    <ClCompile Include="Source\Event.cpp" />
+    <ClCompile Include="Source\EventCalcActiveObjs.cpp" />
+    <ClCompile Include="Source\EventCalcInactiveObjs.cpp" />
+    <ClCompile Include="Source\EventBlockPlaced.cpp" />
+    <ClCompile Include="Source\EventGridHeightShrinking.cpp" />
+    <ClCompile Include="Source\EventGridWidthShrinking.cpp" />
+    <ClCompile Include="Source\Listener.cpp" />
+    <ClCompile Include="Source\LoadImg.cpp" />
+    <ClCompile Include="Source\EntryPt.cpp" />
+    <ClCompile Include="Source\Mesh.cpp" />
+    <ClCompile Include="Source\MeshBuilder.cpp" />
+    <ClCompile Include="Source\Publisher.cpp" />
+    <ClCompile Include="Source\Scene.cpp" />
+    <ClCompile Include="Source\SceneSupport.cpp" />
+    <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\SpriteAni.cpp" />
+    <ClCompile Include="Source\State.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HexGrid.h" />
+    <ClInclude Include="Source\EventAttacking.h" />
+    <ClInclude Include="Source\EventCalcAlphaCount.h" />
+    <ClInclude Include="Source\EventCalcOmegaCount.h" />
+    <ClInclude Include="Source\EventFindClosestEnemy.h" />
+    <ClInclude Include="Source\EventProcreated.h" />
+    <ClInclude Include="Source\StateBoyIdle.h" />
+    <ClInclude Include="Source\StateBoyImmune.h" />
+    <ClInclude Include="Source\StateHelperFuncs.h" />
+    <ClInclude Include="Source\EntityTeam.hpp" />
+    <ClInclude Include="Source\EventCalcActiveObjs.h" />
+    <ClInclude Include="Source\EventCalcInactiveObjs.h" />
+    <ClInclude Include="Source\EventBlockPlaced.h" />
+    <ClInclude Include="Source\EventGridHeightShrinking.h" />
+    <ClInclude Include="Source\EventGridWidthShrinking.h" />
+    <ClInclude Include="Source\Event.h" />
+    <ClInclude Include="Source\App.h" />
+    <ClInclude Include="Source\Cam.h" />
+    <ClInclude Include="Source\Entity.h" />
+    <ClInclude Include="Source\EntityAttribs.hpp" />
+    <ClInclude Include="Source\EntityType.hpp" />
+    <ClInclude Include="Source\EventID.hpp" />
+    <ClInclude Include="Source\Grid.h" />
+    <ClInclude Include="Source\Listener.h" />
+    <ClInclude Include="Source\ListenerFlags.hpp" />
+    <ClInclude Include="Source\LoadImg.h" />
+    <ClInclude Include="Source\Material.h" />
+    <ClInclude Include="Source\Mesh.h" />
+    <ClInclude Include="Source\MeshBuilder.h" />
+    <ClInclude Include="Source\ObjPool.h" />
+    <ClInclude Include="Source\IScene.hpp" />
+    <ClInclude Include="Source\Publisher.h" />
+    <ClInclude Include="Source\Scene.h" />
+    <ClInclude Include="Source\SceneSupport.h" />
+    <ClInclude Include="Source\shader.h" />
+    <ClInclude Include="Source\SpriteAni.h" />
+    <ClInclude Include="Source\State.h" />
+    <ClInclude Include="Source\StateBoyAttack.h" />
+    <ClInclude Include="Source\StateBoyDead.h" />
+    <ClInclude Include="Source\StateBoyChase.h" />
+    <ClInclude Include="Source\StateBoyPatrol.h" />
+    <ClInclude Include="Source\StateID.hpp" />
+    <ClInclude Include="Source\StateMachine.h" />
+    <ClInclude Include="Source\StateOrcAttack.h" />
+    <ClInclude Include="Source\StateOrcExplosive.h" />
+    <ClInclude Include="Source\StateOrcIdle.h" />
+    <ClInclude Include="Source\StateOrcDead.h" />
+    <ClInclude Include="Source\StateOrcPatrol.h" />
+    <ClInclude Include="Source\StateOrcChase.h" />
+    <ClInclude Include="Source\StateReptileAttack.h" />
+    <ClInclude Include="Source\StateReptileIdle.h" />
+    <ClInclude Include="Source\StateReptileDead.h" />
+    <ClInclude Include="Source\StateReptilePatrol.h" />
+    <ClInclude Include="Source\StateReptileChase.h" />
+    <ClInclude Include="Source\StateReptileProcreate.h" />
+    <ClInclude Include="Source\StateSkeleAttack.h" />
+    <ClInclude Include="Source\StateSkeleDeadButNotDead.h" />
+    <ClInclude Include="Source\StateSkeleIdle.h" />
+    <ClInclude Include="Source\StateSkeleDead.h" />
+    <ClInclude Include="Source\StateSkelePatrol.h" />
+    <ClInclude Include="Source\StateSkeleChase.h" />
+    <ClInclude Include="Source\Vertex.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.vcxproj">
+      <Project>{f0ff80e5-2bc5-4142-bdf4-f24e7610b8b7}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="HexGrid.inl" />
+    <None Include="Shaders\AI.fs" />
+    <None Include="Shaders\AI.vs" />
+    <None Include="Source\Entity.inl" />
+    <None Include="Source\Grid.inl" />
+    <None Include="Source\ObjPool.inl" />
+    <None Include="Source\StateBoyAttack.inl" />
+    <None Include="Source\StateBoyIdle.inl" />
+    <None Include="Source\StateBoyDead.inl" />
+    <None Include="Source\StateBoyChase.inl" />
+    <None Include="Source\StateBoyImmune.inl" />
+    <None Include="Source\StateBoyPatrol.inl" />
+    <None Include="Source\StateMachine.inl" />
+    <None Include="Source\StateOrcAttack.inl" />
+    <None Include="Source\StateOrcExplosive.inl" />
+    <None Include="Source\StateOrcIdle.inl" />
+    <None Include="Source\StateOrcDead.inl" />
+    <None Include="Source\StateOrcPatrol.inl" />
+    <None Include="Source\StateOrcChase.inl" />
+    <None Include="Source\StateReptileAttack.inl" />
+    <None Include="Source\StateReptileIdle.inl" />
+    <None Include="Source\StateReptileDead.inl" />
+    <None Include="Source\StateReptilePatrol.inl" />
+    <None Include="Source\StateReptileChase.inl" />
+    <None Include="Source\StateReptileProcreate.inl" />
+    <None Include="Source\StateSkeleAttack.inl" />
+    <None Include="Source\StateSkeleDeadButNotDead.inl" />
+    <None Include="Source\StateSkeleIdle.inl" />
+    <None Include="Source\StateSkeleDead.inl" />
+    <None Include="Source\StateSkelePatrol.inl" />
+    <None Include="Source\StateSkeleChase.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
