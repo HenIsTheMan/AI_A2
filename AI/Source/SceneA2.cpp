@@ -7,9 +7,9 @@ SceneA2::SceneA2():
 	gridType(HexGrid<float>::GridType::FlatTop),
 	gridCellWidth(40.0f),
 	gridCellHeight(40.0f),
-	gridLineThickness(2.5f),
-	gridRows(20),
-	gridCols(20),
+	gridLineThickness(2.0f),
+	gridRows(17),
+	gridCols(17),
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
 	objPool(new ObjPool<Entity>()),
 	publisher(Publisher::RetrieveGlobalObjPtr())
@@ -63,12 +63,16 @@ void SceneA2::RenderGrid(){
 	const float xOffset = ((float)windowWidth - gridWidth) * 0.5f + gridLineThickness * 0.5f;
 	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f + gridLineThickness * 0.5f;
 
+	const float hexHeight = sin(Math::DegreeToRadian(60)) * gridCellHeight;
+	const float hexColOffset = 0.75f * gridCellWidth;
+	const float hexOddOffset = hexHeight * 0.5f;
+
 	for(int r = 0; r < gridRows; ++r){
 		for(int c = 0; c < gridCols; ++c){
 			modelStack.PushMatrix();
 			modelStack.Translate(
-				xOffset + (gridCellWidth + gridLineThickness) * (float)c,
-				yOffset + (gridCellHeight + gridLineThickness) * (float)r,
+				xOffset + (hexColOffset + gridLineThickness) * (float)c,
+				yOffset + (hexHeight + gridLineThickness) * (float)r + (c & 1) * hexOddOffset,
 				0.05f
 			);
 			modelStack.Scale(
@@ -77,6 +81,24 @@ void SceneA2::RenderGrid(){
 				1.0f
 			);
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.5f, 0.5f, 0.5f), 1.0f);
+			modelStack.PopMatrix();
+		}
+	}
+
+	for(int r = 0; r < gridRows; ++r){
+		for(int c = 0; c < gridCols; ++c){
+			modelStack.PushMatrix();
+			modelStack.Translate(
+				xOffset + (hexColOffset + gridLineThickness) * (float)c,
+				yOffset + (hexHeight + gridLineThickness) * (float)r + (c & 1) * hexOddOffset,
+				0.05f
+			);
+			modelStack.Scale(
+				gridCellWidth + gridLineThickness * 2.0f,
+				gridCellHeight + gridLineThickness * 2.0f,
+				1.0f
+			);
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.0f, 0.0f, 0.0f), 1.0f);
 			modelStack.PopMatrix();
 		}
 	}
