@@ -10,18 +10,20 @@ public:
 	};
 
 	HexGrid<T>();
-	HexGrid<T>(const GridType type, const T cellWidth, const T cellHeight, const T lineThickness, const int rows, const int cols);
+	HexGrid<T>(const GridType type, const T cellScaleX, const T cellScaleY, const T lineThickness, const int rows, const int cols);
 	~HexGrid<T>() = default;
 
 	int CalcAmtOfHorizLines() const;
 	int CalcAmtOfVertLines() const;
 	T CalcWidth() const;
 	T CalcHeight() const;
+	T CalcCellWidth() const;
+	T CalcCellHeight() const;
 
 	//* Getters
 	GridType GetGridType() const;
-	T GetCellWidth() const;
-	T GetCellHeight() const;
+	T GetCellScaleX() const;
+	T GetCellScaleY() const;
 	T GetLineThickness() const;
 	int GetRows() const;
 	int GetCols() const;
@@ -29,8 +31,8 @@ public:
 
 	//* Setters
 	void SetGridType(const GridType type);
-	void SetCellWidth(const T cellWidth);
-	void SetCellHeight(const T cellHeight);
+	void SetCellScaleX(const T cellScaleX);
+	void SetCellScaleY(const T cellScaleY);
 	void SetLineThickness(const T lineThickness);
 	void SetRows(const int rows);
 	void SetCols(const int cols);
@@ -38,12 +40,12 @@ public:
 private:
 	GridType im_Type;
 
-	T im_CellWidth;
-	T im_CellHeight;
-	T im_LineThickness;
+	T im_CellScaleX;
+	T im_CellScaleY;
+	T im_LineThickness; //Jagged
 
-	int im_Rows;
-	int im_Cols;
+	int im_Rows; //Jagged if GridType::FlatTop
+	int im_Cols; //Jagged if GridType::SharpTop
 };
 
 #include "HexGrid.inl"

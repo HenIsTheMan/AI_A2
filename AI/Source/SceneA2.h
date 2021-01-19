@@ -20,8 +20,8 @@ private:
 	TimeOfDay timeOfDay;
 
 	HexGrid<float>::GridType gridType;
-	float gridCellWidth;
-	float gridCellHeight;
+	float gridCellScaleX;
+	float gridCellScaleY;
 	float gridLineThickness;
 	int gridRows;
 	int gridCols;

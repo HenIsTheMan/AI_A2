@@ -12,10 +12,10 @@ HexGrid<T>::HexGrid():
 }
 
 template <class T>
-HexGrid<T>::HexGrid(const typename GridType type, const T cellWidth, const T cellHeight, const T lineThickness, const int rows, const int cols):
+HexGrid<T>::HexGrid(const GridType type, const T cellScaleX, const T cellScaleY, const T lineThickness, const int rows, const int cols):
 	im_Type(type),
-	im_CellWidth(cellWidth),
-	im_CellHeight(cellHeight),
+	im_CellScaleX(cellScaleX),
+	im_CellScaleY(cellScaleY),
 	im_LineThickness(lineThickness),
 	im_Rows(rows),
 	im_Cols(cols)
@@ -34,12 +34,26 @@ int HexGrid<T>::CalcAmtOfVertLines() const{
 
 template <class T>
 T HexGrid<T>::CalcWidth() const{
-	return im_Cols * im_CellWidth + (T)CalcAmtOfVertLines() * im_LineThickness;
+	return im_Cols * im_CellScaleX + (T)CalcAmtOfVertLines() * im_LineThickness;
 }
 
 template <class T>
 T HexGrid<T>::CalcHeight() const{
-	return im_Rows * im_CellHeight + (T)CalcAmtOfHorizLines() * im_LineThickness;
+	return im_Rows * im_CellScaleY + (T)CalcAmtOfHorizLines() * im_LineThickness;
+}
+
+template <class T>
+T HexGrid<T>::CalcCellWidth() const{
+	return im_Type == GridType::FlatTop
+		? im_CellScaleX
+		: im_CellScaleX * sinf(Math::DegreeToRadian(60)); //2.0f * im_CellScaleX * 0.5f * sinf(Math::DegreeToRadian(60))
+}
+
+template <class T>
+T HexGrid<T>::CalcCellHeight() const{
+	return im_Type == GridType::FlatTop
+		? im_CellScaleY * sinf(Math::DegreeToRadian(60)) //2.0f * im_CellScaleY * 0.5f * sinf(Math::DegreeToRadian(60))
+		: im_CellScaleY;
 }
 
 template <class T>
@@ -48,13 +62,13 @@ typename HexGrid<T>::GridType HexGrid<T>::GetGridType() const{
 }
 
 template <class T>
-T HexGrid<T>::GetCellWidth() const{
-	return im_CellWidth;
+T HexGrid<T>::GetCellScaleX() const{
+	return im_CellScaleX;
 }
 
 template <class T>
-T HexGrid<T>::GetCellHeight() const{
-	return im_CellHeight;
+T HexGrid<T>::GetCellScaleY() const{
+	return im_CellScaleY;
 }
 
 template <class T>
@@ -78,13 +92,13 @@ void HexGrid<T>::SetGridType(const typename GridType type){
 }
 
 template <class T>
-void HexGrid<T>::SetCellWidth(const T cellWidth){
-	im_CellWidth = cellWidth;
+void HexGrid<T>::SetCellScaleX(const T cellScaleX){
+	im_CellScaleX = cellScaleX;
 }
 
 template <class T>
-void HexGrid<T>::SetCellHeight(const T cellHeight){
-	im_CellHeight = cellHeight;
+void HexGrid<T>::SetCellScaleY(const T cellScaleY){
+	im_CellScaleY = cellScaleY;
 }
 
 template <class T>
