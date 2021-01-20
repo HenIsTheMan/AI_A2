@@ -71,13 +71,13 @@ template <class T>
 T HexGrid<T>::CalcAltOffsetX() const{
 	return im_Type == GridType::FlatTop
 		? 0.0f
-		: im_CellScaleX * 0.5f;
+		: (CalcCellFlatToFlatLen() + im_LineThickness) * 0.5f;
 }
 
 template <class T>
 T HexGrid<T>::CalcAltOffsetY() const{
 	return im_Type == GridType::FlatTop
-		? im_CellScaleY * 0.5f
+		? (CalcCellFlatToFlatLen() + im_LineThickness) * 0.5f
 		: 0.0f;
 }
 

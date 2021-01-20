@@ -10,7 +10,7 @@ SceneA2::SceneA2():
 	gridType(HexGrid<float>::GridType::FlatTop),
 	gridCellScaleX(50.0f),
 	gridCellScaleY(50.0f),
-	gridLineThickness(5.0f),
+	gridLineThickness(4.0f),
 	gridRows(19),
 	gridCols(19),
 	sim(new Sim()),
