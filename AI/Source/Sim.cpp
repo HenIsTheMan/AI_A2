@@ -63,20 +63,20 @@ void Sim::SetTimeOfDay(const TimeOfDay timeOfDay){
 }
 
 void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key){
-	/*int fogSumOfWeights = 0;
+	int fogSumOfWeights = 0;
 	for(int i = 0; i < (int)FogType::Amt; ++i){
 		fogSumOfWeights += fogWeights[i];
 	}
 	if(fogSumOfWeights == 0){
 		return;
-	}*/
+	}
 	srand(key);
 
 	const int gridTotalCells = gridRows * gridCols;
 	fogLayer.reserve(gridTotalCells);
 
 	for(int i = 0; i < gridTotalCells; ++i){
-		/*int val = rand() % fogSumOfWeights + 1;
+		int val = rand() % fogSumOfWeights + 1;
 
 		for(int i = 0; i < (int)FogType::Amt; ++i){
 			const int fogWeight = fogWeights[i];
@@ -85,8 +85,7 @@ void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow
 				break;
 			}
 			val -= fogWeight;
-		}*/
-		fogLayer.emplace_back(FogType::Thin);
+		}
 	}
 
 	fogLayer[startRow * gridCols + startCol] = FogType::Inexistent;

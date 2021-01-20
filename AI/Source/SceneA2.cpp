@@ -1,6 +1,7 @@
 #include "SceneA2.h"
 
 #include "App.h"
+#include "GLFW/glfw3.h"
 
 extern int windowWidth;
 extern int windowHeight;
@@ -19,6 +20,10 @@ SceneA2::SceneA2():
 	publisher(Publisher::RetrieveGlobalObjPtr())
 {
 	sim->SetTimeOfDay(TimeOfDay::Rainy);
+
+	sim->ChangeFogWeight((int)FogType::Inexistent, 5);
+	sim->ChangeFogWeight((int)FogType::Thin, 20);
+	sim->ChangeFogWeight((int)FogType::Thick, 20);
 
 	sim->ChangeTileWeight((int)TileType::Invalid, 0);
 	sim->ChangeTileWeight((int)TileType::Wall, 70);
@@ -184,11 +189,33 @@ void SceneA2::RenderMap(){
 			);
 
 			RenderTile(tileLayer, r, c);
+
+			modelStack.PopMatrix();
+		}
+	}
+
+	glDepthFunc(GL_ALWAYS);
+	for(int r = 0; r < gridRows; ++r){
+		for(int c = 0; c < gridCols; ++c){
+			modelStack.PushMatrix();
+
+			modelStack.Translate(
+				xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c + (c & 1) * grid->CalcAltOffsetX(),
+				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
+				0.1f
+			);
+			modelStack.Scale(
+				gridCellScaleX,
+				gridCellScaleY,
+				1.0f
+			);
+
 			RenderFog(fogLayer, r, c);
 
 			modelStack.PopMatrix();
 		}
 	}
+	glDepthFunc(GL_LESS);
 }
 
 void SceneA2::RenderFog(const std::vector<FogType>& fogLayer, const int r, const int c){
@@ -201,12 +228,33 @@ void SceneA2::RenderFog(const std::vector<FogType>& fogLayer, const int r, const
 				0.0f,
 				0.1f
 			);
+			modelStack.Scale(
+				0.9f,
+				0.9f,
+				0.9f
+			);
 
-			RenderMesh(meshList[(int)GeoType::Hex], true, Color(1.0f, 1.0f, 0.0f), 0.5f);
+			RenderMesh(meshList[(int)GeoType::Fog], true, Color(1.0f, 0.63f, 0.63f), 0.8f);
 
 			modelStack.PopMatrix();
 			break;
 		case FogType::Thick:
+			modelStack.PushMatrix();
+
+			modelStack.Translate(
+				0.0f,
+				0.0f,
+				0.1f
+			);
+			modelStack.Scale(
+				1.1f,
+				1.1f,
+				1.1f
+			);
+
+			RenderMesh(meshList[(int)GeoType::Fog], true, Color(1.0f, 0.0f, 0.0f), 0.6f);
+
+			modelStack.PopMatrix();
 			break;
 	}
 }

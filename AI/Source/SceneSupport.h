@@ -42,6 +42,7 @@ public:
 		Boy,
 		Orc,
 		Circle,
+		Fog,
 		Hex,
 		WallTile,
 		SoilTile,

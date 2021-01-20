@@ -90,6 +90,8 @@ SceneSupport::SceneSupport():
 	meshList[(int)GeoType::Orc]->textureID = LoadImg("Imgs//Orc.png");
 	meshList[(int)GeoType::Circle] = MeshBuilder::GenCircle(Color(), 30, 0.5f);
 
+	meshList[(int)GeoType::Fog] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
+	meshList[(int)GeoType::Fog]->textureID = LoadImg("Imgs//Fog.png");
 	meshList[(int)GeoType::Hex] = MeshBuilder::GenHex(Color(), 0.5f);
 	meshList[(int)GeoType::WallTile] = MeshBuilder::GenHex(Color(), 0.5f);
 	meshList[(int)GeoType::WallTile]->textureID = LoadImg("Imgs//Wall.png");
