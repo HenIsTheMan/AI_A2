@@ -234,3 +234,7 @@ void Sim::RefineTileLayer(const int gridRows, const int gridCols, const unsigned
 		}
 	}
 }
+
+void Sim::MakeRadialHoleInTileLayer(const int gridCols, const int row, const int col, const int radius){
+	tileLayer[row * gridCols, col] = TileType::Invalid;
+}
