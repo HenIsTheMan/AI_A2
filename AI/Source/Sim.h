@@ -35,6 +35,7 @@ private:
 	std::vector<FogType> fogLayer;
 	std::vector<TileType> tileLayer;
 
-	void GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key);
-	void GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key);
+	void GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol);
+	void GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol);
+	void RefineTileLayer(const int gridRows, const int gridCols);
 };

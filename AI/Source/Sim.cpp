@@ -12,8 +12,9 @@ Sim::Sim():
 
 void Sim::Start(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key){
 	srand(key);
-	GenFogLayer(gridRows, gridCols, startRow, startCol, key);
-	GenTileLayer(gridRows, gridCols, startRow, startCol, key);
+	GenFogLayer(gridRows, gridCols, startRow, startCol);
+	GenTileLayer(gridRows, gridCols, startRow, startCol);
+	RefineTileLayer(gridRows, gridCols);
 }
 
 float& Sim::RetrieveGameSpd(){
@@ -56,7 +57,7 @@ void Sim::SetTimeOfDay(const TimeOfDay timeOfDay){
 	this->timeOfDay = timeOfDay;
 }
 
-void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key){
+void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol){
 	const int gridTotalCells = gridRows * gridCols;
 	fogLayer.reserve(gridTotalCells);
 
@@ -67,7 +68,7 @@ void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow
 	fogLayer[startRow * gridCols + startCol] = FogType::Inexistent;
 }
 
-void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key){
+void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol){
 	const int gridTotalCells = gridRows * gridCols;
 	std::vector<int> wallIndices;
 	std::vector<int> savedIndices;
@@ -198,6 +199,18 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 					savedIndices[otherDRIndex] = otherIndex;
 					wallIndices.emplace_back(otherDRIndex);
 				}
+			}
+		}
+	}
+}
+
+void Sim::RefineTileLayer(const int gridRows, const int gridCols){
+	const int gridTotalCells = gridRows * gridCols;
+	for(int i = 0; i < gridTotalCells; ++i){
+		TileType& type = tileLayer[i];
+		if(type == TileType::Wall){
+			if(rand() % 100 + 1 <=  10){
+				type = TileType::Invalid;
 			}
 		}
 	}
