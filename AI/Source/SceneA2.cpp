@@ -155,11 +155,7 @@ void SceneA2::RenderMap(){
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.0f, 0.0f, 0.0f), 0.7f);
 
 			modelStack.PopMatrix();
-		}
-	}
 
-	for(int r = 0; r < gridRows; ++r){
-		for(int c = 0; c < gridCols; ++c){
 			modelStack.PushMatrix();
 
 			modelStack.Translate(
@@ -173,11 +169,15 @@ void SceneA2::RenderMap(){
 				1.0f
 			);
 
+			RenderFog(fogLayer, r, c);
 			RenderTile(tileLayer, r, c);
 
 			modelStack.PopMatrix();
 		}
 	}
+}
+
+void SceneA2::RenderFog(const std::vector<FogType>& fogLayer, const int r, const int c){
 }
 
 void SceneA2::RenderTile(const std::vector<TileType>& tileLayer, const int r, const int c){
