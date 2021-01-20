@@ -10,7 +10,7 @@ enum struct TileCost: int{
 	Amt = 8
 };
 
-static TileCost tileCosts[(int)TileCost::Amt + 1]{
+static TileCost tileCosts[(int)TileCost::Amt]{
 	TileCost::InvalidCost,
 	TileCost::WallCost,
 	TileCost::EmptyCost,
@@ -19,5 +19,4 @@ static TileCost tileCosts[(int)TileCost::Amt + 1]{
 	TileCost::WaterCost,
 	TileCost::GrassCost,
 	TileCost::MudCost,
-	TileCost::Amt
 };

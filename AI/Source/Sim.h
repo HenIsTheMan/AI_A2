@@ -10,6 +10,7 @@ public:
 	Sim();
 	~Sim() = default;
 
+	void ChangeWeight(const int index, const int weight);
 	void Start(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key);
 
 	float& RetrieveGameSpd();
@@ -31,6 +32,8 @@ public:
 private:
 	float gameSpd;
 	TimeOfDay timeOfDay;
+
+	int weights[(int)TileType::Amt];
 
 	std::vector<FogType> fogLayer;
 	std::vector<TileType> tileLayer;

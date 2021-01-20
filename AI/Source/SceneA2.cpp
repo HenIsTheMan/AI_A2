@@ -18,6 +18,14 @@ SceneA2::SceneA2():
 	objPool(new ObjPool<Entity>()),
 	publisher(Publisher::RetrieveGlobalObjPtr())
 {
+	sim->ChangeWeight((int)TileType::Invalid, 0);
+	sim->ChangeWeight((int)TileType::Wall, 70);
+	sim->ChangeWeight((int)TileType::Empty, 10);
+	sim->ChangeWeight((int)TileType::Soil, 30);
+	sim->ChangeWeight((int)TileType::Fire, 20);
+	sim->ChangeWeight((int)TileType::Water, 20);
+	sim->ChangeWeight((int)TileType::Grass, 20);
+	sim->ChangeWeight((int)TileType::Mud, 20);
 	sim->SetTimeOfDay(TimeOfDay::Rainy);
 	sim->Start(gridRows, gridCols, 0, 0, 2169);
 
@@ -228,7 +236,7 @@ void SceneA2::RenderTile(const std::vector<TileType>& tileLayer, const int r, co
 			modelStack.PopMatrix();
 			break;
 		case TileType::Fire:
-			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.5f, 0.5f, 0.5f), 1.0f);
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(1.0f, 0.32f, 0.28f), 1.0f);
 
 			modelStack.PushMatrix();
 

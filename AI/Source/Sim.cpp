@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "Sim.h"
 
 #include "TileCost.hpp"
@@ -5,9 +7,14 @@
 Sim::Sim():
 	gameSpd(1.0f),
 	timeOfDay(TimeOfDay::Amt),
+	weights(),
 	fogLayer(),
 	tileLayer()
 {
+}
+
+void Sim::ChangeWeight(const int index, const int weight){
+	weights[index] = weight;
 }
 
 void Sim::Start(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key){
@@ -205,12 +212,26 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 }
 
 void Sim::RefineTileLayer(const int gridRows, const int gridCols){
+	int weightsSum = 0;
+	for(int i = 0; i < (int)TileType::Amt; ++i){
+		weightsSum += weights[i];
+	}
+	assert(weightsSum > 0 && "weightsSum <= 0!");
+
 	const int gridTotalCells = gridRows * gridCols;
 	for(int i = 0; i < gridTotalCells; ++i){
 		TileType& type = tileLayer[i];
+
 		if(type == TileType::Wall){
-			if(rand() % 100 + 1 <=  10){
-				type = TileType::Invalid;
+			int val = rand() % weightsSum + 1;
+
+			for(int i = 0; i < (int)TileType::Amt; ++i){
+				const int weight = weights[i];
+				if(val <= weight){
+					type = (TileType)i;
+					break;
+				}
+				val -= weight;
 			}
 		}
 	}
