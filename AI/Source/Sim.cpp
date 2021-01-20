@@ -235,6 +235,61 @@ void Sim::RefineTileLayer(const int gridRows, const int gridCols, const unsigned
 	}
 }
 
-void Sim::MakeRadialHoleInTileLayer(const int gridCols, const int row, const int col, const int radius){
-	tileLayer[row * gridCols, col] = TileType::Invalid;
+void Sim::MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, const int row, const int col, const int radius){
+	std::vector<std::pair<int, int>> myVec;
+	myVec.emplace_back(std::make_pair(0, row * gridCols + col));
+
+	while(!myVec.empty()){
+		const std::pair<int, int> myPair = myVec.front();
+		if(tileLayer[myPair.second] == TileType::Invalid){
+			myVec.erase(myVec.begin());
+			continue;
+		}
+		tileLayer[myPair.second] = TileType::Invalid;
+
+		if(myPair.first != radius){
+			const int myCol = myPair.second % gridCols;
+			const int myRow = myPair.second / gridCols;
+
+			const int upIndex = (myRow + 1) * gridCols + myCol;
+			const int downIndex = (myRow - 1) * gridCols + myCol;
+			const int leftIndex = myRow * gridCols + (myCol - 1);
+			const int rightIndex = myRow * gridCols + (myCol + 1);
+
+			if(myRow < gridRows - 1){
+				myVec.emplace_back(std::make_pair(myPair.first + 1, upIndex));
+			}
+			if(myRow > 0){
+				myVec.emplace_back(std::make_pair(myPair.first + 1, downIndex));
+			}
+			if(myCol > 0){
+				myVec.emplace_back(std::make_pair(myPair.first + 1, leftIndex));
+			}
+			if(myCol < gridCols - 1){
+				myVec.emplace_back(std::make_pair(myPair.first + 1, rightIndex));
+			}
+
+			if(myCol & 1){
+				const int ULIndex = (myRow + 1) * gridCols + (myCol - 1);
+				const int URIndex = (myRow + 1) * gridCols + (myCol + 1);
+				if(myCol > 0 && myRow < gridRows - 1){
+					myVec.emplace_back(std::make_pair(myPair.first + 1, ULIndex));
+				}
+				if(myCol < gridCols - 1 && myRow < gridRows - 1){
+					myVec.emplace_back(std::make_pair(myPair.first + 1, URIndex));
+				}
+			} else{
+				const int DLIndex = (myRow - 1) * gridCols + (myCol - 1);
+				const int DRIndex = (myRow - 1) * gridCols + (myCol + 1);
+				if(myCol > 0 && myRow > 0){
+					myVec.emplace_back(std::make_pair(myPair.first + 1, DLIndex));
+				}
+				if(myCol < gridCols - 1 && myRow > 0){
+					myVec.emplace_back(std::make_pair(myPair.first + 1, DRIndex));
+				}
+			}
+		}
+
+		myVec.erase(myVec.begin());
+	}
 }

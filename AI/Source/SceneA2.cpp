@@ -32,6 +32,7 @@ SceneA2::SceneA2():
 	sim->GenFogLayer(gridRows, gridCols, 0, 0, 2169);
 	sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169);
 	sim->RefineTileLayer(gridRows, gridCols, 2169);
+	sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 5, 5, 2);
 
 	grid->SetGridType(gridType);
 	grid->SetCellScaleX(gridCellScaleX);

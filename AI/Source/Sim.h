@@ -14,7 +14,7 @@ public:
 	void GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key);
 	void GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key);
 	void RefineTileLayer(const int gridRows, const int gridCols, const unsigned int key);
-	void MakeRadialHoleInTileLayer(const int gridCols, const int row, const int col, const int radius);
+	void MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, const int row, const int col, const int radius);
 
 	float& RetrieveGameSpd();
 	TimeOfDay& RetrieveTimeOfDay();
