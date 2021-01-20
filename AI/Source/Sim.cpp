@@ -17,13 +17,6 @@ void Sim::ChangeWeight(const int index, const int weight){
 	weights[index] = weight;
 }
 
-void Sim::Start(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key){
-	srand(key);
-	GenFogLayer(gridRows, gridCols, startRow, startCol);
-	GenTileLayer(gridRows, gridCols, startRow, startCol);
-	RefineTileLayer(gridRows, gridCols);
-}
-
 float& Sim::RetrieveGameSpd(){
 	return gameSpd;
 }
@@ -64,7 +57,8 @@ void Sim::SetTimeOfDay(const TimeOfDay timeOfDay){
 	this->timeOfDay = timeOfDay;
 }
 
-void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol){
+void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key){
+	srand(key);
 	const int gridTotalCells = gridRows * gridCols;
 	fogLayer.reserve(gridTotalCells);
 
@@ -75,7 +69,8 @@ void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow
 	fogLayer[startRow * gridCols + startCol] = FogType::Inexistent;
 }
 
-void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol){
+void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key){
+	srand(key);
 	const int gridTotalCells = gridRows * gridCols;
 	std::vector<int> wallIndices;
 	std::vector<int> savedIndices;
@@ -211,12 +206,15 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 	}
 }
 
-void Sim::RefineTileLayer(const int gridRows, const int gridCols){
+void Sim::RefineTileLayer(const int gridRows, const int gridCols, const unsigned int key){
 	int weightsSum = 0;
 	for(int i = 0; i < (int)TileType::Amt; ++i){
 		weightsSum += weights[i];
 	}
-	assert(weightsSum > 0 && "weightsSum <= 0!");
+	if(weightsSum == 0){
+		return;
+	}
+	srand(key);
 
 	const int gridTotalCells = gridRows * gridCols;
 	for(int i = 0; i < gridTotalCells; ++i){
