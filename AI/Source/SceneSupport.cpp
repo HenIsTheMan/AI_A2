@@ -92,6 +92,8 @@ SceneSupport::SceneSupport():
 
 	meshList[(int)GeoType::Hex] = MeshBuilder::GenHex(Color(), 0.5f);
 
+	meshList[(int)GeoType::WallTile] = MeshBuilder::GenHex(Color(), 0.5f);
+	meshList[(int)GeoType::WallTile]->textureID = LoadImg("Imgs//Wall.png");
 	meshList[(int)GeoType::FireTile] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
 	meshList[(int)GeoType::FireTile]->textureID = LoadImg("Imgs//Fire.png");
 

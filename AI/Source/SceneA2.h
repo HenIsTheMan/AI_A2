@@ -32,6 +32,7 @@ private:
 	void RenderBG();
 	void RenderEntities();
 	void RenderMap();
+	void RenderTile(const std::vector<TileType>& tileLayer, const int r, const int c);
 
 	void RenderSceneText();
 	void RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, const float textSize);

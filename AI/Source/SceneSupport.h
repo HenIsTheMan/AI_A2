@@ -43,6 +43,7 @@ public:
 		Orc,
 		Circle,
 		Hex,
+		WallTile,
 		FireTile,
 		Amt
 	};

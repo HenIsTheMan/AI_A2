@@ -173,43 +173,64 @@ void SceneA2::RenderMap(){
 				1.0f
 			);
 
-			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.5f, 0.5f, 0.5f), 1.0f);
-			switch(tileLayer[r * gridCols + c]){
-				//case TileType::Fire:
-				case TileType::Wall:
-					modelStack.PushMatrix();
-
-					modelStack.Translate(
-						0.0f,
-						0.0f,
-						0.05f
-					);
-					modelStack.Scale(
-						0.7f,
-						0.7f,
-						1.0f
-					);
-
-					RenderMesh(meshList[(int)GeoType::FireTile], true, Color(0.9f, 0.9f, 0.9f), 1.0f);
-
-					modelStack.PopMatrix();
-					break;
-			}
+			RenderTile(tileLayer, r, c);
 
 			modelStack.PopMatrix();
 		}
 	}
 }
 
+void SceneA2::RenderTile(const std::vector<TileType>& tileLayer, const int r, const int c){
+	switch(tileLayer[r * gridCols + c]){
+		case TileType::Empty:
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.5f, 0.5f, 0.5f), 1.0f);
+			break;
+		case TileType::Wall:
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color::HSVToRGB({(cosf(elapsedTime * 0.4f) * 0.5f + 0.5f) * 360.0f, 1.0f, 1.0f}), 1.0f);
+
+			modelStack.PushMatrix();
+
+			modelStack.Translate(
+				0.0f,
+				0.0f,
+				0.05f
+			);
+
+			RenderMesh(meshList[(int)GeoType::WallTile], true, Color(0.8f, 0.8f, 0.8f), 1.0f);
+
+			modelStack.PopMatrix();
+			break;
+		case TileType::Fire:
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.5f, 0.5f, 0.5f), 1.0f);
+
+			modelStack.PushMatrix();
+
+			modelStack.Translate(
+				0.0f,
+				0.0f,
+				0.05f
+			);
+			modelStack.Scale(
+				0.7f,
+				0.7f,
+				1.0f
+			);
+
+			RenderMesh(meshList[(int)GeoType::FireTile], true, Color(0.9f, 0.9f, 0.9f), 1.0f);
+
+			modelStack.PopMatrix();
+			break;
+	}
+}
+
 void SceneA2::RenderSceneText(){
 	Mesh* const textMesh = meshList[(int)GeoType::Text];
 	const float textSize = (float)windowHeight * 0.05f;
-	const float colorComponent = (sinf(elapsedTime * 4.0f) + 1.0f) * 0.5f;
 
 	RenderDebugInfoText(textMesh, Color(0.0f, 1.0f, 0.0f), textSize);
 	RenderControlsText(textMesh, Color(1.0f, 0.0f, 1.0f), textSize);
-	RenderGridAttribsText(textMesh, Color::HSVToRGB({(cosf(elapsedTime * 0.4f) * 0.5f + 0.5f) * 360.0f, 1.0f, 1.0f}), textSize);
-	RenderGameInfoText(textMesh, Color::HSVToRGB({(sinf(elapsedTime * 0.4f) * 0.5f + 0.5f) * 360.0f, 1.0f, 1.0f}), textSize);
+	RenderGridAttribsText(textMesh, Color(1.0f, 1.0f, 0.0f), textSize);
+	RenderGameInfoText(textMesh, Color(1.0f, 0.5f, 0.0f), textSize);
 }
 
 void SceneA2::RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){

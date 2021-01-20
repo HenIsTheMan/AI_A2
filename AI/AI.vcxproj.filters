@@ -269,6 +269,7 @@
     <ClInclude Include="Source\Sim.h" />
     <ClInclude Include="Source\TileType.hpp" />
     <ClInclude Include="Source\FogType.hpp" />
+    <ClInclude Include="Source\TileCost.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
