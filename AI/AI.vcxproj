@@ -154,6 +154,7 @@
     <ClCompile Include="Source\EventFindClosestEnemy.cpp" />
     <ClCompile Include="Source\EventProcreated.cpp" />
     <ClCompile Include="Source\SceneA2.cpp" />
+    <ClCompile Include="Source\Sim.cpp" />
     <ClCompile Include="Source\StateHelperFuncs.cpp" />
     <ClCompile Include="Source\Event.cpp" />
     <ClCompile Include="Source\EventCalcActiveObjs.cpp" />
@@ -179,8 +180,10 @@
     <ClInclude Include="Source\EventCalcOmegaCount.h" />
     <ClInclude Include="Source\EventFindClosestEnemy.h" />
     <ClInclude Include="Source\EventProcreated.h" />
+    <ClInclude Include="Source\FogType.hpp" />
     <ClInclude Include="Source\HexGrid.h" />
     <ClInclude Include="Source\SceneA2.h" />
+    <ClInclude Include="Source\Sim.h" />
     <ClInclude Include="Source\StateBoyIdle.h" />
     <ClInclude Include="Source\StateBoyImmune.h" />
     <ClInclude Include="Source\StateHelperFuncs.h" />
@@ -236,6 +239,7 @@
     <ClInclude Include="Source\StateSkeleDead.h" />
     <ClInclude Include="Source\StateSkelePatrol.h" />
     <ClInclude Include="Source\StateSkeleChase.h" />
+    <ClInclude Include="Source\TileType.hpp" />
     <ClInclude Include="Source\TimeOfDay.hpp" />
     <ClInclude Include="Source\Vertex.h" />
   </ItemGroup>

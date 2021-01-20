@@ -77,6 +77,7 @@
       <Filter>Event\Events\Post-events</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneA2.cpp" />
+    <ClCompile Include="Source\Sim.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\App.h">
@@ -265,6 +266,9 @@
     <ClInclude Include="Source\Vertex.h">
       <Filter>Others\Geo</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Sim.h" />
+    <ClInclude Include="Source\TileType.hpp" />
+    <ClInclude Include="Source\FogType.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
