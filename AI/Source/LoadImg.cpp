@@ -8,11 +8,11 @@
 GLuint LoadImg(const std::string& filePath){
 	struct{
 		std::string texPath = std::string();
-		bool flipTex = true;
-		int texTarget = GL_TEXTURE_2D;
-		int texWrapParam = GL_REPEAT;
-		int texFilterMin = GL_LINEAR_MIPMAP_LINEAR;
-		int texFilterMag = GL_LINEAR;
+		const bool flipTex = true;
+		const int texTarget = GL_TEXTURE_2D;
+		const int texWrapParam = GL_CLAMP_TO_EDGE;
+		const int texFilterMin = GL_LINEAR_MIPMAP_LINEAR;
+		const int texFilterMag = GL_LINEAR;
 	} params;
 
 	params.texPath = filePath;

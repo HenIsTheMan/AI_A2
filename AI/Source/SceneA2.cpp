@@ -190,7 +190,7 @@ void SceneA2::RenderMap(){
 						1.0f
 					);
 
-					RenderMesh(meshList[(int)GeoType::FireTile], true, Color(0.5f, 0.5f, 0.5f), 1.0f);
+					RenderMesh(meshList[(int)GeoType::FireTile], true, Color(0.9f, 0.9f, 0.9f), 1.0f);
 
 					modelStack.PopMatrix();
 					break;
