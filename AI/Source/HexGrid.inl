@@ -34,22 +34,16 @@ int HexGrid<T>::CalcAmtOfVertLines() const{
 
 template <class T>
 T HexGrid<T>::CalcWidth() const{
-	const T val = im_LineThickness * cosf(Math::DegreeToRadian(30));
 	return im_Type == GridType::FlatTop
-		? (im_Cols & 1
-		? (im_Cols - 1) / 2 * (CalcCellSharpToSharpLen() + CalcCellSideLen() + val * (T)2.0) + CalcCellSharpToSharpLen() * (T)0.5 + val
-		: im_Cols / 2 * (CalcCellSharpToSharpLen() + CalcCellSideLen() + val * (T)2.0) - CalcCellSideLen() * (T)0.5)
+		? (im_Cols - 1) * ((T)CalcCellSideLen() * (T)1.5 + im_LineThickness)
 		: (T)im_Cols * ((T)CalcCellFlatToFlatLen() + im_LineThickness) - (T)CalcCellFlatToFlatLen() * (T)0.5;
 }
 
 template <class T>
 T HexGrid<T>::CalcHeight() const{
-	const T val = im_LineThickness * cosf(Math::DegreeToRadian(30));
 	return im_Type == GridType::FlatTop
 		? (T)im_Rows * ((T)CalcCellFlatToFlatLen() + im_LineThickness) - (T)CalcCellFlatToFlatLen() * (T)0.5
-		: (im_Rows & 1
-		? (im_Rows - 1) / 2 * (CalcCellSharpToSharpLen() + CalcCellSideLen() + val * (T)2.0) + CalcCellSharpToSharpLen() * (T)0.5 + val
-		: im_Rows / 2 * (CalcCellSharpToSharpLen() + CalcCellSideLen() + val * (T)2.0) - CalcCellSideLen() * (T)0.5);
+		: (im_Rows - 1) * ((T)CalcCellSideLen() * (T)1.5 + im_LineThickness);
 }
 
 template <class T>
