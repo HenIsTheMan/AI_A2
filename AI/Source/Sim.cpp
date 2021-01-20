@@ -149,9 +149,8 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 		const int otherX = (wallX << 1) - savedX; //wallX + xDiff
 		const int otherY = (wallY << 1) - savedY; //wallY + yDiff
 		const int otherIndex = otherY * gridCols + otherX;
-		const int otherTileCost = (int)tileCosts[(int)tileLayer[otherIndex]];
 
-		if(otherX >= 0 && otherX <= gridCols - 1 && otherY >= 0 && otherY <= gridRows - 1 && otherTileCost < 0 && (visited[savedIndex] ^ visited[otherIndex])){
+		if(otherX >= 0 && otherX <= gridCols - 1 && otherY >= 0 && otherY <= gridRows - 1 && (visited[savedIndex] ^ visited[otherIndex])){
 			tileLayer[wallIndex] = TileType::Empty;
 			tileLayer[otherIndex] = TileType::Empty;
 			visited[otherIndex] = true;
@@ -160,19 +159,19 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 			const int otherDownIndex = (otherY - 1) * gridCols + otherX;
 			const int otherLeftIndex = otherY * gridCols + (otherX - 1);
 			const int otherRightIndex = otherY * gridCols + (otherX + 1);
-			if(otherY < gridRows - 1 && otherTileCost < 0){
+			if(otherY < gridRows - 1){
 				savedIndices[otherUpIndex] = otherIndex;
 				wallIndices.emplace_back(otherUpIndex);
 			}
-			if(otherY > 0 && otherTileCost < 0){
+			if(otherY > 0){
 				savedIndices[otherDownIndex] = otherIndex;
 				wallIndices.emplace_back(otherDownIndex);
 			}
-			if(otherX > 0 && otherTileCost < 0){
+			if(otherX > 0){
 				savedIndices[otherLeftIndex] = otherIndex;
 				wallIndices.emplace_back(otherLeftIndex);
 			}
-			if(otherX < gridCols - 1 && otherTileCost < 0){
+			if(otherX < gridCols - 1){
 				savedIndices[otherRightIndex] = otherIndex;
 				wallIndices.emplace_back(otherRightIndex);
 			}

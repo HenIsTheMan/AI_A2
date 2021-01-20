@@ -193,7 +193,7 @@ void SceneA2::RenderTile(const std::vector<TileType>& tileLayer, const int r, co
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.7f, 0.7f, 0.7f), 1.0f);
 			break;
 		case TileType::Wall:
-			RenderMesh(meshList[(int)GeoType::Hex], true, Color::HSVToRGB({(cosf(elapsedTime * 0.4f) * 0.5f + 0.5f) * 360.0f, 1.0f, 1.0f}), 1.0f);
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color::HSVToRGB({(cosf(elapsedTime * 0.4f) * 0.5f + 0.5f) * 360.0f, 1.0f, 0.9f}), 1.0f);
 
 			modelStack.PushMatrix();
 
