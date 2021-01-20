@@ -180,37 +180,41 @@ Mesh* MeshBuilder::GenerateCube(const std::string &meshName, Color color, float 
 	return mesh;
 }
 
-Mesh* MeshBuilder::GenHex(const Color& color, const float radius){
+Mesh* MeshBuilder::GenHex(const Color& color, const float r){
+	Vertex v;
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<GLuint> index_buffer_data;
-	Vertex v;
 	v.color = color;
-	v.normal.Set(0.0f, 0.0f, 1.0f);
+	v.normal.Set(0.f, 0.f, 1.f);
 
-	const float degreePerSlice = 360.f / 6.0f;
-	for(unsigned slice = 0; slice < 6 + 1; ++slice){
-		const float theta = slice * degreePerSlice;
+	const unsigned numSlice = 6;
 
-		v.pos.Set(radius * cos(Math::DegreeToRadian(theta)), radius * sin(Math::DegreeToRadian(theta)), 0.0f);
-		vertex_buffer_data.emplace_back(v);
-
-		v.pos.Set(0.0f, 0.0f, 0.0f);
+	v.pos.Set(0.f, 0.f, 0.f);
+	v.texCoord.Set(.5f, .5f);
+	vertex_buffer_data.emplace_back(v);
+	for(unsigned slice = 0; slice < numSlice + 1; ++slice){
+		float &&degreePerSlice = -360.f / (float)numSlice, &&theta = slice * degreePerSlice;
+		v.pos.Set(r * cos(Math::DegreeToRadian(theta)), r * sin(Math::DegreeToRadian(theta)), 0);
+		v.texCoord.Set((v.pos.x / r + 1.f) / 2.f, (v.pos.y / r + 1.f) / 2.f);
 		vertex_buffer_data.emplace_back(v);
 	}
-	for(unsigned slice = 0; slice < 6 + 1; ++slice){
-		index_buffer_data.emplace_back(2 * slice + 1);
-		index_buffer_data.emplace_back(2 * slice + 0);
+	for(unsigned slice = 0; slice < numSlice + 2; ++slice){
+		index_buffer_data.emplace_back(slice + 2);
+		index_buffer_data.emplace_back(slice + 1);
+		index_buffer_data.emplace_back(0);
 	}
 
-	Mesh* const mesh = new Mesh("");
+	Mesh *mesh = new Mesh("");
+
+	mesh->mode = Mesh::DRAW_MODE::DRAW_TRIANGLES;
 
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
 
-	mesh->mode = Mesh::DRAW_MODE::DRAW_TRIANGLE_STRIP;
 	mesh->indexSize = index_buffer_data.size();
+
 	return mesh;
 }
 

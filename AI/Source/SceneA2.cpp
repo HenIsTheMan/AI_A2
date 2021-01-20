@@ -19,6 +19,7 @@ SceneA2::SceneA2():
 	publisher(Publisher::RetrieveGlobalObjPtr())
 {
 	sim->SetTimeOfDay(TimeOfDay::Rainy);
+	sim->Start(gridRows, gridCols);
 
 	grid->SetGridType(gridType);
 	grid->SetCellScaleX(gridCellScaleX);
@@ -88,7 +89,7 @@ void SceneA2::Render(){
 	);
 
 	RenderBG();
-	RenderGrid();
+	RenderMap();
 	RenderSceneText();
 
 	modelStack.PopMatrix();
@@ -102,7 +103,6 @@ void SceneA2::RenderBG(){
 		im_Cam.pos.y + (float)windowHeight * 0.5f,
 		0.0f
 	);
-
 	modelStack.Scale(
 		(float)windowWidth,
 		(float)windowHeight,
@@ -127,34 +127,20 @@ void SceneA2::RenderBG(){
 void SceneA2::RenderEntities(){
 }
 
-void SceneA2::RenderGrid(){
+void SceneA2::RenderMap(){
 	const float gridWidth = grid->CalcWidth();
 	const float gridHeight = grid->CalcHeight();
 
 	const float xOffset = ((float)windowWidth - gridWidth) * 0.5f;
 	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f;
 
-	for(int r = 0; r < gridRows; ++r){
-		for(int c = 0; c < gridCols; ++c){
-			modelStack.PushMatrix();
-			modelStack.Translate(
-				xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c + (c & 1) * grid->CalcAltOffsetX(),
-				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
-				0.05f
-			);
-			modelStack.Scale(
-				gridCellScaleX,
-				gridCellScaleY,
-				1.0f
-			);
-			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.5f, 0.5f, 0.5f), 1.0f);
-			modelStack.PopMatrix();
-		}
-	}
+	const std::vector<FogType>& fogLayer = sim->GetFogLayer();
+	const std::vector<TileType>& tileLayer = sim->GetTileLayer();
 
 	for(int r = 0; r < gridRows; ++r){
 		for(int c = 0; c < gridCols; ++c){
 			modelStack.PushMatrix();
+
 			modelStack.Translate(
 				xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c + (c & 1) * grid->CalcAltOffsetX(),
 				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
@@ -165,7 +151,51 @@ void SceneA2::RenderGrid(){
 				gridCellScaleY + gridLineThickness * 2.5f,
 				1.0f
 			);
-			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.0f, 0.0f, 0.0f), 1.0f);
+
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.0f, 0.0f, 0.0f), 0.7f);
+
+			modelStack.PopMatrix();
+		}
+	}
+
+	for(int r = 0; r < gridRows; ++r){
+		for(int c = 0; c < gridCols; ++c){
+			modelStack.PushMatrix();
+
+			modelStack.Translate(
+				xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c + (c & 1) * grid->CalcAltOffsetX(),
+				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
+				0.1f
+			);
+			modelStack.Scale(
+				gridCellScaleX,
+				gridCellScaleY,
+				1.0f
+			);
+
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.5f, 0.5f, 0.5f), 1.0f);
+			switch(tileLayer[r * gridCols + c]){
+				//case TileType::Fire:
+				case TileType::Wall:
+					modelStack.PushMatrix();
+
+					modelStack.Translate(
+						0.0f,
+						0.0f,
+						0.05f
+					);
+					modelStack.Scale(
+						0.7f,
+						0.7f,
+						1.0f
+					);
+
+					RenderMesh(meshList[(int)GeoType::FireTile], true, Color(0.5f, 0.5f, 0.5f), 1.0f);
+
+					modelStack.PopMatrix();
+					break;
+			}
+
 			modelStack.PopMatrix();
 		}
 	}

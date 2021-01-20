@@ -8,8 +8,8 @@ Sim::Sim():
 {
 }
 
-void Sim::Start(){
-	GenMapLayers();
+void Sim::Start(const int gridRows, const int gridCols){
+	GenMapLayers(gridRows, gridCols);
 }
 
 float& Sim::RetrieveGameSpd(){
@@ -52,5 +52,14 @@ void Sim::SetTimeOfDay(const TimeOfDay timeOfDay){
 	this->timeOfDay = timeOfDay;
 }
 
-void Sim::GenMapLayers(){
+void Sim::GenMapLayers(const int gridRows, const int gridCols){
+	const int gridTotalCells = gridRows * gridCols;
+
+	fogLayer.reserve(gridTotalCells);
+	tileLayer.reserve(gridTotalCells);
+
+	for(int i = 0; i < gridTotalCells; ++i){
+		fogLayer.emplace_back(FogType::Inexistent);
+		tileLayer.emplace_back(TileType::Wall);
+	}
 }

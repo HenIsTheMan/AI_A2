@@ -89,7 +89,11 @@ SceneSupport::SceneSupport():
 	meshList[(int)GeoType::Orc] = MeshBuilder::GenerateSpriteAni("Orc", 21, 13);
 	meshList[(int)GeoType::Orc]->textureID = LoadImg("Imgs//Orc.png");
 	meshList[(int)GeoType::Circle] = MeshBuilder::GenCircle(Color(), 30, 0.5f);
+
 	meshList[(int)GeoType::Hex] = MeshBuilder::GenHex(Color(), 0.5f);
+
+	meshList[(int)GeoType::FireTile] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
+	meshList[(int)GeoType::FireTile]->textureID = LoadImg("Imgs//Fire.png");
 
 	SpriteAni* const skeleSpriteAni = static_cast<SpriteAni*>(meshList[(int)GeoType::Skele]);
 	skeleSpriteAni->AddAni("SkeleStaticUp", 4 * 13, 4 * 13 + 1);

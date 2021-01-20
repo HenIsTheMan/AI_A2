@@ -31,7 +31,7 @@ private:
 
 	void RenderBG();
 	void RenderEntities();
-	void RenderGrid();
+	void RenderMap();
 
 	void RenderSceneText();
 	void RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, const float textSize);
