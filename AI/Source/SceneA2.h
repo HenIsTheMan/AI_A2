@@ -2,8 +2,7 @@
 
 #include "SceneSupport.h"
 
-#include "TimeOfDay.hpp"
-
+#include "Sim.h"
 #include "HexGrid.h"
 #include "ObjPool.h"
 #include "Publisher.h"
@@ -16,9 +15,6 @@ public:
 	void Update(double dt) override;
 	void Render() override;
 private:
-	float gameSpd;
-	TimeOfDay timeOfDay;
-
 	HexGrid<float>::GridType gridType;
 	float gridCellScaleX;
 	float gridCellScaleY;
@@ -26,6 +22,7 @@ private:
 	int gridRows;
 	int gridCols;
 
+	Sim* sim;
 	HexGrid<float>* grid;
 	ObjPool<Entity>* objPool;
 	Publisher* publisher;

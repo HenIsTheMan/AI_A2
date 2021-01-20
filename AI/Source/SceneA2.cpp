@@ -7,18 +7,19 @@ extern int windowHeight;
 
 SceneA2::SceneA2():
 	SceneSupport(),
-	gameSpd(1.0f),
-	timeOfDay(TimeOfDay::Rainy),
 	gridType(HexGrid<float>::GridType::FlatTop),
 	gridCellScaleX(50.0f),
 	gridCellScaleY(50.0f),
 	gridLineThickness(5.0f),
 	gridRows(19),
 	gridCols(19),
+	sim(new Sim()),
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
 	objPool(new ObjPool<Entity>()),
 	publisher(Publisher::RetrieveGlobalObjPtr())
 {
+	sim->SetTimeOfDay(TimeOfDay::Rainy);
+
 	grid->SetGridType(gridType);
 	grid->SetCellScaleX(gridCellScaleX);
 	grid->SetCellScaleY(gridCellScaleY);
@@ -28,6 +29,11 @@ SceneA2::SceneA2():
 }
 
 SceneA2::~SceneA2(){
+	if(sim != nullptr){
+		delete sim;
+		sim = nullptr;
+	}
+
 	if(grid != nullptr){
 		delete grid;
 		grid = nullptr;
@@ -47,6 +53,7 @@ SceneA2::~SceneA2(){
 void SceneA2::Update(double dt){
 	SceneSupport::Update(dt);
 
+	float& gameSpd = sim->RetrieveGameSpd();
 	static bool isKeyDownZ = false;
 	static bool isKeyDownX = false;
 	if(!isKeyDownZ && App::Key('Z')){
@@ -102,7 +109,7 @@ void SceneA2::RenderBG(){
 		1.0f
 	);
 
-	switch(timeOfDay){
+	switch(sim->GetTimeOfDay()){
 		case TimeOfDay::Day:
 			RenderMesh(meshList[(int)GeoType::DayBG], false);
 			break;
@@ -302,6 +309,7 @@ void SceneA2::RenderGridAttribsText(Mesh* const textMesh, const Color& textColor
 }
 
 void SceneA2::RenderGameInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
+	const float gameSpd = sim->GetGameSpd();
 	RenderTextOnScreen(
 		textMesh,
 		"Game Spd: " + std::to_string(gameSpd).substr(0, std::to_string((int)gameSpd).length() + 2),

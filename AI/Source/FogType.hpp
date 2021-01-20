@@ -1,5 +1,5 @@
 enum struct FogType: int{
-	None,
+	Inexistent,
 	Thin,
 	Thick,
 	Amt
