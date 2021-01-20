@@ -179,6 +179,12 @@ void SceneA2::RenderMap(){
 }
 
 void SceneA2::RenderFog(const std::vector<FogType>& fogLayer, const int r, const int c){
+	switch(fogLayer[r * gridCols + c]){
+		case FogType::Thin:
+			break;
+		case FogType::Thick:
+			break;
+	}
 }
 
 void SceneA2::RenderTile(const std::vector<TileType>& tileLayer, const int r, const int c){
