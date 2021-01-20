@@ -20,14 +20,14 @@ SceneA2::SceneA2():
 {
 	sim->SetTimeOfDay(TimeOfDay::Rainy);
 
-	sim->ChangeWeight((int)TileType::Invalid, 0);
-	sim->ChangeWeight((int)TileType::Wall, 70);
-	sim->ChangeWeight((int)TileType::Empty, 10);
-	sim->ChangeWeight((int)TileType::Soil, 30);
-	sim->ChangeWeight((int)TileType::Fire, 20);
-	sim->ChangeWeight((int)TileType::Water, 20);
-	sim->ChangeWeight((int)TileType::Grass, 20);
-	sim->ChangeWeight((int)TileType::Mud, 20);
+	sim->ChangeTileWeight((int)TileType::Invalid, 0);
+	sim->ChangeTileWeight((int)TileType::Wall, 70);
+	sim->ChangeTileWeight((int)TileType::Empty, 10);
+	sim->ChangeTileWeight((int)TileType::Soil, 30);
+	sim->ChangeTileWeight((int)TileType::Fire, 20);
+	sim->ChangeTileWeight((int)TileType::Water, 20);
+	sim->ChangeTileWeight((int)TileType::Grass, 20);
+	sim->ChangeTileWeight((int)TileType::Mud, 20);
 
 	sim->GenFogLayer(gridRows, gridCols, 0, 0, 2169);
 	sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169);
@@ -183,8 +183,8 @@ void SceneA2::RenderMap(){
 				1.0f
 			);
 
-			RenderFog(fogLayer, r, c);
 			RenderTile(tileLayer, r, c);
+			RenderFog(fogLayer, r, c);
 
 			modelStack.PopMatrix();
 		}
@@ -194,6 +194,17 @@ void SceneA2::RenderMap(){
 void SceneA2::RenderFog(const std::vector<FogType>& fogLayer, const int r, const int c){
 	switch(fogLayer[r * gridCols + c]){
 		case FogType::Thin:
+			modelStack.PushMatrix();
+
+			modelStack.Translate(
+				0.0f,
+				0.0f,
+				0.1f
+			);
+
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(1.0f, 1.0f, 0.0f), 0.5f);
+
+			modelStack.PopMatrix();
 			break;
 		case FogType::Thick:
 			break;

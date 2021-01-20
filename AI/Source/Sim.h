@@ -10,7 +10,9 @@ public:
 	Sim();
 	~Sim() = default;
 
-	void ChangeWeight(const int index, const int weight);
+	void ChangeFogWeight(const int index, const int fogWeight);
+	void ChangeTileWeight(const int index, const int tileWeight);
+
 	void GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key);
 	void GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key);
 	void RefineTileLayer(const int gridRows, const int gridCols, const unsigned int key);
@@ -36,7 +38,8 @@ private:
 	float gameSpd;
 	TimeOfDay timeOfDay;
 
-	int weights[(int)TileType::Amt];
+	int fogWeights[(int)FogType::Amt];
+	int tileWeights[(int)TileType::Amt];
 
 	std::vector<FogType> fogLayer;
 	std::vector<TileType> tileLayer;

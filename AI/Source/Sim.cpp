@@ -7,14 +7,19 @@
 Sim::Sim():
 	gameSpd(1.0f),
 	timeOfDay(TimeOfDay::Amt),
-	weights(),
+	fogWeights(),
+	tileWeights(),
 	fogLayer(),
 	tileLayer()
 {
 }
 
-void Sim::ChangeWeight(const int index, const int weight){
-	weights[index] = weight;
+void Sim::ChangeFogWeight(const int index, const int fogWeight){
+	fogWeights[index] = fogWeight;
+}
+
+void Sim::ChangeTileWeight(const int index, const int tileWeight){
+	tileWeights[index] = tileWeight;
 }
 
 float& Sim::RetrieveGameSpd(){
@@ -58,12 +63,30 @@ void Sim::SetTimeOfDay(const TimeOfDay timeOfDay){
 }
 
 void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key){
+	/*int fogSumOfWeights = 0;
+	for(int i = 0; i < (int)FogType::Amt; ++i){
+		fogSumOfWeights += fogWeights[i];
+	}
+	if(fogSumOfWeights == 0){
+		return;
+	}*/
 	srand(key);
+
 	const int gridTotalCells = gridRows * gridCols;
 	fogLayer.reserve(gridTotalCells);
 
 	for(int i = 0; i < gridTotalCells; ++i){
-		fogLayer.emplace_back(FogType::Inexistent);
+		/*int val = rand() % fogSumOfWeights + 1;
+
+		for(int i = 0; i < (int)FogType::Amt; ++i){
+			const int fogWeight = fogWeights[i];
+			if(val <= fogWeight){
+				fogLayer.emplace_back((FogType)i);
+				break;
+			}
+			val -= fogWeight;
+		}*/
+		fogLayer.emplace_back(FogType::Thin);
 	}
 
 	fogLayer[startRow * gridCols + startCol] = FogType::Inexistent;
@@ -207,11 +230,11 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 }
 
 void Sim::RefineTileLayer(const int gridRows, const int gridCols, const unsigned int key){
-	int weightsSum = 0;
+	int tileSumOfWeights = 0;
 	for(int i = 0; i < (int)TileType::Amt; ++i){
-		weightsSum += weights[i];
+		tileSumOfWeights += tileWeights[i];
 	}
-	if(weightsSum == 0){
+	if(tileSumOfWeights == 0){
 		return;
 	}
 	srand(key);
@@ -221,15 +244,15 @@ void Sim::RefineTileLayer(const int gridRows, const int gridCols, const unsigned
 		TileType& type = tileLayer[i];
 
 		if(type == TileType::Wall){
-			int val = rand() % weightsSum + 1;
+			int val = rand() % tileSumOfWeights + 1;
 
 			for(int i = 0; i < (int)TileType::Amt; ++i){
-				const int weight = weights[i];
-				if(val <= weight){
+				const int tileWeight = tileWeights[i];
+				if(val <= tileWeight){
 					type = (TileType)i;
 					break;
 				}
-				val -= weight;
+				val -= tileWeight;
 			}
 		}
 	}
