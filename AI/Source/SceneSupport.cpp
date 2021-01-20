@@ -91,11 +91,18 @@ SceneSupport::SceneSupport():
 	meshList[(int)GeoType::Circle] = MeshBuilder::GenCircle(Color(), 30, 0.5f);
 
 	meshList[(int)GeoType::Hex] = MeshBuilder::GenHex(Color(), 0.5f);
-
 	meshList[(int)GeoType::WallTile] = MeshBuilder::GenHex(Color(), 0.5f);
 	meshList[(int)GeoType::WallTile]->textureID = LoadImg("Imgs//Wall.png");
+	meshList[(int)GeoType::SoilTile] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
+	meshList[(int)GeoType::SoilTile]->textureID = LoadImg("Imgs//Soil.png");
 	meshList[(int)GeoType::FireTile] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
 	meshList[(int)GeoType::FireTile]->textureID = LoadImg("Imgs//Fire.png");
+	meshList[(int)GeoType::WaterTile] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
+	meshList[(int)GeoType::WaterTile]->textureID = LoadImg("Imgs//Water.png");
+	meshList[(int)GeoType::GrassTile] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
+	meshList[(int)GeoType::GrassTile]->textureID = LoadImg("Imgs//Grass.png");
+	meshList[(int)GeoType::MudTile] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
+	meshList[(int)GeoType::MudTile]->textureID = LoadImg("Imgs//Mud.png");
 
 	SpriteAni* const skeleSpriteAni = static_cast<SpriteAni*>(meshList[(int)GeoType::Skele]);
 	skeleSpriteAni->AddAni("SkeleStaticUp", 4 * 13, 4 * 13 + 1);

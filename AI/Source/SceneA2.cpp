@@ -200,6 +200,26 @@ void SceneA2::RenderTile(const std::vector<TileType>& tileLayer, const int r, co
 
 			modelStack.PopMatrix();
 			break;
+		case TileType::Soil:
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.8f, 0.52f, 0.25f), 1.0f);
+
+			modelStack.PushMatrix();
+
+			modelStack.Translate(
+				0.0f,
+				0.0f,
+				0.05f
+			);
+			modelStack.Scale(
+				0.6f,
+				0.6f,
+				1.0f
+			);
+
+			RenderMesh(meshList[(int)GeoType::SoilTile], true, Color(), 1.0f);
+
+			modelStack.PopMatrix();
+			break;
 		case TileType::Fire:
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.5f, 0.5f, 0.5f), 1.0f);
 
@@ -217,6 +237,66 @@ void SceneA2::RenderTile(const std::vector<TileType>& tileLayer, const int r, co
 			);
 
 			RenderMesh(meshList[(int)GeoType::FireTile], true, Color(0.9f, 0.9f, 0.9f), 1.0f);
+
+			modelStack.PopMatrix();
+			break;
+		case TileType::Water:
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.05f, 0.64f, 1.0f), 1.0f);
+
+			modelStack.PushMatrix();
+
+			modelStack.Translate(
+				0.0f,
+				0.0f,
+				0.05f
+			);
+			modelStack.Scale(
+				0.7f,
+				0.7f,
+				1.0f
+			);
+
+			RenderMesh(meshList[(int)GeoType::WaterTile], true, Color(), 1.0f);
+
+			modelStack.PopMatrix();
+			break;
+		case TileType::Grass:
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.49f, 0.78f, 0.31f), 1.0f);
+
+			modelStack.PushMatrix();
+
+			modelStack.Translate(
+				0.0f,
+				0.0f,
+				0.05f
+			);
+			modelStack.Scale(
+				0.6f,
+				0.6f,
+				1.0f
+			);
+
+			RenderMesh(meshList[(int)GeoType::GrassTile], true, Color(0.7f, 0.7f, 0.7f), 1.0f);
+
+			modelStack.PopMatrix();
+			break;
+		case TileType::Mud:
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.4f, 0.26f, 0.13f), 1.0f);
+
+			modelStack.PushMatrix();
+
+			modelStack.Translate(
+				0.0f,
+				0.0f,
+				0.05f
+			);
+			modelStack.Scale(
+				0.6f,
+				0.6f,
+				1.0f
+			);
+
+			RenderMesh(meshList[(int)GeoType::MudTile], true, Color(), 1.0f);
 
 			modelStack.PopMatrix();
 			break;

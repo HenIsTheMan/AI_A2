@@ -44,7 +44,11 @@ public:
 		Circle,
 		Hex,
 		WallTile,
+		SoilTile,
 		FireTile,
+		WaterTile,
+		GrassTile,
+		MudTile,
 		Amt
 	};
 

@@ -60,6 +60,6 @@ void Sim::GenMapLayers(const int gridRows, const int gridCols){
 
 	for(int i = 0; i < gridTotalCells; ++i){
 		fogLayer.emplace_back(FogType::Inexistent);
-		tileLayer.emplace_back(TileType::Wall);
+		tileLayer.emplace_back(TileType::Mud);
 	}
 }
