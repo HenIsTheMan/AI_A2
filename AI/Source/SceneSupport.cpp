@@ -16,7 +16,7 @@ SceneSupport::SceneSupport():
 	im_parameters(),
 	meshList(),
 	im_vertexArrayID(0),
-	im_programID(LoadShaders("Shaders//AI.vs", "Shaders//AI.fs")),
+	im_programID(LoadShaders("Shaders//AI.vertexS", "Shaders//AI.fragS")),
 	im_Cam(Cam()),
 	modelStack(MS()),
 	viewStack(MS()),

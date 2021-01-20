@@ -336,12 +336,6 @@
     <None Include="Source\ObjPool.inl">
       <Filter>Obj</Filter>
     </None>
-    <None Include="Shaders\AI.fs">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Shaders\AI.vs">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="Source\StateMachine.inl">
       <Filter>State</Filter>
     </None>
@@ -421,5 +415,11 @@
       <Filter>State\States\SkeleStates</Filter>
     </None>
     <None Include="Source\HexGrid.inl" />
+    <None Include="Shaders\AI.fragS">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\AI.vertexS">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

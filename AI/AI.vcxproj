@@ -249,8 +249,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\AI.fs" />
-    <None Include="Shaders\AI.vs" />
+    <None Include="Shaders\AI.fragS" />
+    <None Include="Shaders\AI.vertexS" />
     <None Include="Source\Entity.inl" />
     <None Include="Source\Grid.inl" />
     <None Include="Source\HexGrid.inl" />
