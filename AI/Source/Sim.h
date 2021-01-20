@@ -10,7 +10,7 @@ public:
 	Sim();
 	~Sim() = default;
 
-	void Start(const int gridRows, const int gridCols);
+	void Start(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key);
 
 	float& RetrieveGameSpd();
 	TimeOfDay& RetrieveTimeOfDay();
@@ -35,5 +35,5 @@ private:
 	std::vector<FogType> fogLayer;
 	std::vector<TileType> tileLayer;
 
-	void GenMapLayers(const int gridRows, const int gridCols);
+	void GenMapLayers(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key);
 };

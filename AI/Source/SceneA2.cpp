@@ -19,7 +19,7 @@ SceneA2::SceneA2():
 	publisher(Publisher::RetrieveGlobalObjPtr())
 {
 	sim->SetTimeOfDay(TimeOfDay::Rainy);
-	sim->Start(gridRows, gridCols);
+	sim->Start(gridRows, gridCols, 0, 0, 2169);
 
 	grid->SetGridType(gridType);
 	grid->SetCellScaleX(gridCellScaleX);
@@ -90,6 +90,7 @@ void SceneA2::Render(){
 
 	RenderBG();
 	RenderMap();
+	RenderEntities();
 	RenderSceneText();
 
 	modelStack.PopMatrix();
@@ -183,7 +184,7 @@ void SceneA2::RenderFog(const std::vector<FogType>& fogLayer, const int r, const
 void SceneA2::RenderTile(const std::vector<TileType>& tileLayer, const int r, const int c){
 	switch(tileLayer[r * gridCols + c]){
 		case TileType::Empty:
-			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.5f, 0.5f, 0.5f), 1.0f);
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.7f, 0.7f, 0.7f), 1.0f);
 			break;
 		case TileType::Wall:
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color::HSVToRGB({(cosf(elapsedTime * 0.4f) * 0.5f + 0.5f) * 360.0f, 1.0f, 1.0f}), 1.0f);
@@ -196,7 +197,7 @@ void SceneA2::RenderTile(const std::vector<TileType>& tileLayer, const int r, co
 				0.05f
 			);
 
-			RenderMesh(meshList[(int)GeoType::WallTile], true, Color(0.8f, 0.8f, 0.8f), 1.0f);
+			RenderMesh(meshList[(int)GeoType::WallTile], true, Color(0.6f, 0.6f, 0.6f), 1.0f);
 
 			modelStack.PopMatrix();
 			break;

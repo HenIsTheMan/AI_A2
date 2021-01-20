@@ -1,5 +1,7 @@
 #include "Sim.h"
 
+#include "TileCost.hpp"
+
 Sim::Sim():
 	gameSpd(1.0f),
 	timeOfDay(TimeOfDay::Amt),
@@ -8,8 +10,8 @@ Sim::Sim():
 {
 }
 
-void Sim::Start(const int gridRows, const int gridCols){
-	GenMapLayers(gridRows, gridCols);
+void Sim::Start(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key){
+	GenMapLayers(gridRows, gridCols, startRow, startCol, key);
 }
 
 float& Sim::RetrieveGameSpd(){
@@ -52,14 +54,144 @@ void Sim::SetTimeOfDay(const TimeOfDay timeOfDay){
 	this->timeOfDay = timeOfDay;
 }
 
-void Sim::GenMapLayers(const int gridRows, const int gridCols){
+void Sim::GenMapLayers(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key){
+	srand(key);
 	const int gridTotalCells = gridRows * gridCols;
+
+	std::vector<int> wallIndices;
+	std::vector<int> savedIndices;
+	std::vector<bool> visited;
 
 	fogLayer.reserve(gridTotalCells);
 	tileLayer.reserve(gridTotalCells);
+	wallIndices.reserve(gridTotalCells);
+	savedIndices.reserve(gridTotalCells);
+	visited.reserve(gridTotalCells);
 
 	for(int i = 0; i < gridTotalCells; ++i){
-		fogLayer.emplace_back(FogType::Inexistent);
-		tileLayer.emplace_back(TileType::Mud);
+		fogLayer.emplace_back(FogType::Inexistent); //??
+		tileLayer.emplace_back(TileType::Wall);
+		savedIndices.emplace_back(-1);
+		visited.emplace_back(false);
+	}
+
+	const int startIndex = startRow * gridCols + startCol;
+	fogLayer[startIndex] = FogType::Inexistent;
+	tileLayer[startIndex] = TileType::Empty;
+	visited[startIndex] = true;
+
+	const int upIndex = (startRow + 1) * gridCols + startCol;
+	const int downIndex = (startRow - 1) * gridCols + startCol;
+	const int leftIndex = startRow * gridCols + (startCol - 1);
+	const int rightIndex = startRow * gridCols + (startCol + 1);
+	if(startRow < gridRows - 1){
+		savedIndices[upIndex] = startIndex;
+		wallIndices.emplace_back(upIndex);
+	}
+	if(startRow > 0){
+		savedIndices[downIndex] = startIndex;
+		wallIndices.emplace_back(downIndex);
+	}
+	if(startCol > 0){
+		savedIndices[leftIndex] = startIndex;
+		wallIndices.emplace_back(leftIndex);
+	}
+	if(startCol < gridCols - 1){
+		savedIndices[rightIndex] = startIndex;
+		wallIndices.emplace_back(rightIndex);
+	}
+
+	if(startCol & 1){
+		const int ULIndex = (startRow + 1) * gridCols + (startCol - 1);
+		const int URIndex = (startRow + 1) * gridCols + (startCol + 1);
+		if(startCol > 0 && startRow < gridRows - 1){
+			savedIndices[ULIndex] = startIndex;
+			wallIndices.emplace_back(ULIndex);
+		}
+		if(startCol < gridCols - 1 && startRow < gridRows - 1){
+			savedIndices[URIndex] = startIndex;
+			wallIndices.emplace_back(URIndex);
+		}
+	} else{
+		const int DLIndex = (startRow - 1) * gridCols + (startCol - 1);
+		const int DRIndex = (startRow - 1) * gridCols + (startCol + 1);
+		if(startCol > 0 && startRow > 0){
+			savedIndices[DLIndex] = startIndex;
+			wallIndices.emplace_back(DLIndex);
+		}
+		if(startCol < gridCols - 1 && startRow > 0){
+			savedIndices[DRIndex] = startIndex;
+			wallIndices.emplace_back(DRIndex);
+		}
+	}
+
+	while(!wallIndices.empty()){
+		const size_t wallIndicesSize = wallIndices.size();
+
+		const int randIndex = rand() % wallIndicesSize;
+		const int wallIndex = wallIndices[randIndex];
+		visited[wallIndex] = true;
+		const int savedIndex = savedIndices[wallIndex];
+		wallIndices.erase(wallIndices.begin() + randIndex);
+
+		const int savedX = savedIndex % gridCols;
+		const int savedY = savedIndex / gridCols;
+		const int wallX = wallIndex % gridCols;
+		const int wallY = wallIndex / gridCols;
+		const int otherX = (wallX << 1) - savedX; //wallX + xDiff
+		const int otherY = (wallY << 1) - savedY; //wallY + yDiff
+		const int otherIndex = otherY * gridCols + otherX;
+		const int otherTileCost = (int)tileCosts[(int)tileLayer[otherIndex]];
+
+		if(otherX >= 0 && otherX <= gridCols - 1 && otherY >= 0 && otherY <= gridRows - 1 && otherTileCost < 0 && (visited[savedIndex] ^ visited[otherIndex])){
+			tileLayer[wallIndex] = TileType::Empty;
+			tileLayer[otherIndex] = TileType::Empty;
+			visited[otherIndex] = true;
+
+			const int otherUpIndex = (otherY + 1) * gridCols + otherX;
+			const int otherDownIndex = (otherY - 1) * gridCols + otherX;
+			const int otherLeftIndex = otherY * gridCols + (otherX - 1);
+			const int otherRightIndex = otherY * gridCols + (otherX + 1);
+			if(otherY < gridRows - 1 && otherTileCost < 0){
+				savedIndices[otherUpIndex] = otherIndex;
+				wallIndices.emplace_back(otherUpIndex);
+			}
+			if(otherY > 0 && otherTileCost < 0){
+				savedIndices[otherDownIndex] = otherIndex;
+				wallIndices.emplace_back(otherDownIndex);
+			}
+			if(otherX > 0 && otherTileCost < 0){
+				savedIndices[otherLeftIndex] = otherIndex;
+				wallIndices.emplace_back(otherLeftIndex);
+			}
+			if(otherX < gridCols - 1 && otherTileCost < 0){
+				savedIndices[otherRightIndex] = otherIndex;
+				wallIndices.emplace_back(otherRightIndex);
+			}
+
+			if(otherX & 1){
+				const int otherULIndex = (otherY + 1) * gridCols + (otherX - 1);
+				const int otherURIndex = (otherY + 1) * gridCols + (otherX + 1);
+				if(otherX > 0 && otherY < gridRows - 1){
+					savedIndices[otherULIndex] = otherIndex;
+					wallIndices.emplace_back(otherULIndex);
+				}
+				if(otherX < gridCols - 1 && otherY < gridRows - 1){
+					savedIndices[otherURIndex] = otherIndex;
+					wallIndices.emplace_back(otherURIndex);
+				}
+			} else{
+				const int otherDLIndex = (otherY - 1) * gridCols + (otherX - 1);
+				const int otherDRIndex = (otherY - 1) * gridCols + (otherX + 1);
+				if(otherX > 0 && otherY > 0){
+					savedIndices[otherDLIndex] = otherIndex;
+					wallIndices.emplace_back(otherDLIndex);
+				}
+				if(otherX < gridCols - 1 && otherY > 0){
+					savedIndices[otherDRIndex] = otherIndex;
+					wallIndices.emplace_back(otherDRIndex);
+				}
+			}
+		}
 	}
 }
