@@ -130,6 +130,32 @@ void Scene::Update(double dt){
 		isKeyDownV = false;
 	}
 
+	static bool isKeyDownB = false;
+	static bool isKeyDownN = false;
+	if(!isKeyDownB && App::Key('B')){
+		sim->turnElapsedTime = 0.0f;
+		isKeyDownB = true;
+	} else if(isKeyDownB && !App::Key('B')){
+		isKeyDownB = false;
+	}
+	if(!isKeyDownN && App::Key('N')){
+		sim->timeOfDayElapsedTime = 0.0f;
+		isKeyDownN = true;
+	} else if(isKeyDownN && !App::Key('N')){
+		isKeyDownN = false;
+	}
+
+	/*static bool isKeyDownT = false;
+	static bool isKeyDownY = false;
+	static bool isKeyDownU = false;
+	static bool isKeyDownI = false;
+	if(!isKeyDownT && App::Key('T')){
+		++sim->turn;
+		isKeyDownT = true;
+	} else if(isKeyDownT && !App::Key('T')){
+		isKeyDownT = false;
+	}*/
+
 	switch(sim->status){
 		case RuntimeStatus::Waiting:
 			if(App::IsMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)){
@@ -583,7 +609,9 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		"Z: Increase sim spd",
 		"X: Decrease sim spd",
 		"C: Increment sim turn manually",
-		"V: Change sim time of day manually"
+		"V: Change sim time of day manually",
+		"B: Reset sim turn elapsed time",
+		"N: Reset sim time of day elapsed time"
 	};
 	static size_t size = sizeof(texts) / sizeof(texts[0]);
 	static float val = 25.5f;
