@@ -20,7 +20,8 @@ Scene::Scene():
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
 	publisher(Publisher::RetrieveGlobalObjPtr())
 {
-	sim->SetTimeOfDay(TimeOfDay::Rainy);
+	sim->spd = 1.0f;
+	sim->timeOfDay = TimeOfDay::Rainy;
 
 	sim->ChangeFogWeight((int)FogType::Inexistent, 5);
 	sim->ChangeFogWeight((int)FogType::Thin, 20);
@@ -83,24 +84,24 @@ void Scene::Update(double dt){
 		isKeyDownP = false;
 	}
 
-	float& gameSpd = sim->RetrieveGameSpd();
+	float& simSpd = sim->spd;
 	static bool isKeyDownZ = false;
 	static bool isKeyDownX = false;
 	if(!isKeyDownZ && App::Key('Z')){
-		gameSpd += 0.1f;
+		simSpd += 0.1f;
 		isKeyDownZ = true;
 	} else if(isKeyDownZ && !App::Key('Z')){
 		isKeyDownZ = false;
 	}
 	if(!isKeyDownX && App::Key('X')){
-		gameSpd -= 0.1f;
+		simSpd -= 0.1f;
 		isKeyDownX = true;
 	} else if(isKeyDownX && !App::Key('X')){
 		isKeyDownX = false;
 	}
-	gameSpd = Math::Clamp(gameSpd, 0.2f, 4.0f);
+	simSpd = Math::Clamp(simSpd, 0.2f, 4.0f);
 
-	UpdateEntities(dt * gameSpd);
+	UpdateEntities(dt * simSpd);
 }
 
 void Scene::UpdateEntities(const double dt){
@@ -139,7 +140,7 @@ void Scene::RenderBG(){
 		1.0f
 	);
 
-	switch(sim->GetTimeOfDay()){
+	switch(sim->timeOfDay){
 		case TimeOfDay::Day:
 			RenderMesh(meshList[(int)GeoType::DayBG], false);
 			break;
@@ -426,7 +427,7 @@ void Scene::RenderSceneText(){
 	RenderDebugInfoText(textMesh, Color(0.0f, 1.0f, 0.0f), textSize);
 	RenderControlsText(textMesh, Color(1.0f, 0.0f, 1.0f), textSize);
 	RenderGridAttribsText(textMesh, Color(1.0f, 1.0f, 0.0f), textSize);
-	RenderGameInfoText(textMesh, Color(1.0f, 0.5f, 0.0f), textSize);
+	RenderSimInfoText(textMesh, Color(1.0f, 0.5f, 0.0f), textSize);
 }
 
 void Scene::RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
@@ -507,7 +508,7 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 	);
 	RenderTextOnScreen(
 		textMesh,
-		"Z: Increase game spd",
+		"Z: Increase sim spd",
 		textColor,
 		textSize,
 		0.0f,
@@ -515,7 +516,7 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 	);
 	RenderTextOnScreen(
 		textMesh,
-		"X: Decrease game spd",
+		"X: Decrease sim spd",
 		textColor,
 		textSize,
 		0.0f,
@@ -571,11 +572,10 @@ void Scene::RenderGridAttribsText(Mesh* const textMesh, const Color& textColor, 
 	);
 }
 
-void Scene::RenderGameInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
-	const float gameSpd = sim->GetGameSpd();
+void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
 	RenderTextOnScreen(
 		textMesh,
-		"Game Spd: " + std::to_string(gameSpd).substr(0, std::to_string((int)gameSpd).length() + 2),
+		"Sim spd: " + std::to_string(sim->spd).substr(0, std::to_string((int)sim->spd).length() + 2),
 		textColor,
 		textSize,
 		(float)windowWidth,
