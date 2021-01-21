@@ -41,6 +41,8 @@ public:
 	const std::vector<TileType>& GetTileLayer() const;
 	//*/
 private:
+	bool isKeySpace;
+
 	int fogWeights[(int)FogType::Amt];
 	int tileWeights[(int)TileType::Amt];
 
