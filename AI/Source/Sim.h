@@ -9,8 +9,11 @@ class Sim final{
 public:
 	struct{
 		float spd = 0.0f;
-		float turnTime = 0.0f;
+		float turnDuration = 0.0f;
+		float turnElapsedTime = 0.0f;
 		int turn = 0;
+		float timeOfDayDuration = 0.0f;
+		float timeOfDayElapsedTime = 0.0f;
 		TimeOfDay timeOfDay = TimeOfDay::Amt;
 	};
 

@@ -21,7 +21,12 @@ Scene::Scene():
 	publisher(Publisher::RetrieveGlobalObjPtr())
 {
 	sim->spd = 1.0f;
-	sim->timeOfDay = TimeOfDay::Rainy;
+	sim->turnDuration = 5.0f;
+	sim->turnElapsedTime = 0.0f;
+	sim->turn = 0;
+	sim->timeOfDayDuration = 10.0f;
+	sim->timeOfDayElapsedTime = 0.0f;
+	sim->timeOfDay = (TimeOfDay)Math::RandIntMinMax((int)TimeOfDay::Day, (int)TimeOfDay::Night);
 
 	sim->ChangeFogWeight((int)FogType::Inexistent, 5);
 	sim->ChangeFogWeight((int)FogType::Thin, 20);
@@ -422,7 +427,7 @@ void Scene::RenderTile(const std::vector<TileType>& tileLayer, const int r, cons
 
 void Scene::RenderSceneText(){
 	Mesh* const textMesh = meshList[(int)GeoType::Text];
-	const float textSize = (float)windowHeight * 0.05f;
+	const float textSize = (float)windowWidth * 0.02f;
 
 	RenderDebugInfoText(textMesh, Color(0.0f, 1.0f, 0.0f), textSize);
 	RenderControlsText(textMesh, Color(1.0f, 0.0f, 1.0f), textSize);
@@ -456,7 +461,7 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		textColor,
 		textSize,
 		0.0f,
-		textSize * 19.0f
+		textSize * 25.5f
 	);
 	RenderTextOnScreen(
 		textMesh,
@@ -464,15 +469,15 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		textColor,
 		textSize,
 		0.0f,
-		textSize * 18.0f
+		textSize * 24.5f
 	);
 	RenderTextOnScreen(
 		textMesh,
-		"F3: Toggle visibility of...",
+		"F3: Toggle visibility of app window",
 		textColor,
 		textSize,
 		0.0f,
-		textSize * 17.0f
+		textSize * 23.5f
 	);
 	RenderTextOnScreen(
 		textMesh,
@@ -480,7 +485,7 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		textColor,
 		textSize,
 		0.0f,
-		textSize * 16.0f
+		textSize * 22.5f
 	);
 	RenderTextOnScreen(
 		textMesh,
@@ -488,7 +493,7 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		textColor,
 		textSize,
 		0.0f,
-		textSize * 15.0f
+		textSize * 21.5f
 	);
 	RenderTextOnScreen(
 		textMesh,
@@ -496,7 +501,7 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		textColor,
 		textSize,
 		0.0f,
-		textSize * 14.0f
+		textSize * 20.5f
 	);
 	RenderTextOnScreen(
 		textMesh,
@@ -504,7 +509,7 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		textColor,
 		textSize,
 		0.0f,
-		textSize * 13.0f
+		textSize * 19.5f
 	);
 	RenderTextOnScreen(
 		textMesh,
@@ -512,7 +517,7 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		textColor,
 		textSize,
 		0.0f,
-		textSize * 12.0f
+		textSize * 18.5f
 	);
 	RenderTextOnScreen(
 		textMesh,
@@ -520,7 +525,7 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		textColor,
 		textSize,
 		0.0f,
-		textSize * 11.0f
+		textSize * 17.5f
 	);
 }
 
@@ -575,11 +580,71 @@ void Scene::RenderGridAttribsText(Mesh* const textMesh, const Color& textColor, 
 void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
 	RenderTextOnScreen(
 		textMesh,
-		"Sim spd: " + std::to_string(sim->spd).substr(0, std::to_string((int)sim->spd).length() + 2),
+		"Sim spd: " + std::to_string(sim->spd).substr(0, std::to_string((int)sim->spd).length() + 3),
 		textColor,
 		textSize,
 		(float)windowWidth,
-		textSize * 19.0f,
+		textSize * 25.5f,
+		TextAlignment::Right
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"Sim turn duration: " + std::to_string(sim->turnDuration).substr(0, std::to_string((int)sim->turnDuration).length() + 3),
+		textColor,
+		textSize,
+		(float)windowWidth,
+		textSize * 24.5f,
+		TextAlignment::Right
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"Sim turn elapsed time: " + std::to_string(sim->turnElapsedTime).substr(0, std::to_string((int)sim->turnElapsedTime).length() + 3),
+		textColor,
+		textSize,
+		(float)windowWidth,
+		textSize * 23.5f,
+		TextAlignment::Right
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"Sim turn: " + std::to_string(sim->turn),
+		textColor,
+		textSize,
+		(float)windowWidth,
+		textSize * 22.5f,
+		TextAlignment::Right
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"Sim time of day duration: " + std::to_string(sim->timeOfDayDuration).substr(0, std::to_string((int)sim->timeOfDayDuration).length() + 3),
+		textColor,
+		textSize,
+		(float)windowWidth,
+		textSize * 21.5f,
+		TextAlignment::Right
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"Sim time of day elapsed time: " + std::to_string(sim->timeOfDayElapsedTime).substr(0, std::to_string((int)sim->timeOfDayElapsedTime).length() + 3),
+		textColor,
+		textSize,
+		(float)windowWidth,
+		textSize * 20.5f,
+		TextAlignment::Right
+	);
+
+	static std::string timeOfDayTexts[(int)TimeOfDay::Amt]{
+		"Day",
+		"Rainy",
+		"Night",
+	};
+	RenderTextOnScreen(
+		textMesh,
+		"Sim time of day: " + timeOfDayTexts[(int)sim->timeOfDay],
+		textColor,
+		textSize,
+		(float)windowWidth,
+		textSize * 19.5f,
 		TextAlignment::Right
 	);
 }
