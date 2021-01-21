@@ -131,7 +131,7 @@ void App::Run(){
 
 		glfwSwapBuffers(im_window);
 		glfwPollEvents();
-        //im_timer.waitUntil(frameTime);
+        //im_Timer.waitUntil(frameTime);
 	}
 }
 

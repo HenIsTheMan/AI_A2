@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "timer.h"
+
 #include "RuntimeStatus.hpp"
 #include "TimeOfDay.hpp"
 
@@ -29,7 +31,7 @@ public:
 	void ChangeFogWeight(const int index, const int fogWeight);
 	void ChangeTileWeight(const int index, const int tileWeight);
 
-	void GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key, const float* const quickRenderDelay);
+	void GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key, const float* quickRenderDelay);
 	void GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key);
 	void RefineTileLayer(const int gridRows, const int gridCols, const unsigned int key);
 	void MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, const int row, const int col, const int radius);
@@ -44,4 +46,6 @@ private:
 
 	std::vector<FogType> fogLayer;
 	std::vector<TileType> tileLayer;
+
+	StopWatch timer;
 };

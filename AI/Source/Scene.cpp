@@ -181,7 +181,7 @@ void Scene::Update(double dt){
 					sim->ChangeTileWeight((int)TileType::Grass, 20);
 					sim->ChangeTileWeight((int)TileType::Mud, 20);
 
-					const float* const quickRenderDelay0 = new float(0.5f);
+					const float* const quickRenderDelay0 = new float(0.02f);
 					sim->GenFogLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay0);
 					sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169);
 					sim->RefineTileLayer(gridRows, gridCols, 2169);

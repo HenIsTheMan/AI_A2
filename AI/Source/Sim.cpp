@@ -11,8 +11,10 @@ Sim::Sim():
 	fogWeights(),
 	tileWeights(),
 	fogLayer(),
-	tileLayer()
+	tileLayer(),
+	timer()
 {
+	timer.startTimer();
 }
 
 void Sim::ChangeFogWeight(const int index, const int fogWeight){
@@ -31,7 +33,7 @@ const std::vector<TileType>& Sim::GetTileLayer() const{
 	return tileLayer;
 }
 
-void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key, const float* const quickRenderDelay){
+void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key, const float* quickRenderDelay){
 	int fogSumOfWeights = 0;
 	for(int i = 0; i < (int)FogType::Amt; ++i){
 		fogSumOfWeights += fogWeights[i];
@@ -55,9 +57,14 @@ void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow
 
 				if(quickRenderDelay != nullptr){
 					App::QuickRender();
-					/*float currTime = 0.0f;
-					while(){
-					}*/
+					float currTime = 0.0f;
+
+					while(quickRenderDelay != nullptr && currTime < *quickRenderDelay){
+						currTime += (float)timer.getElapsedTime();
+						if(App::Key(VK_SPACE)){
+							quickRenderDelay = nullptr;
+						}
+					}
 				}
 
 				break;
