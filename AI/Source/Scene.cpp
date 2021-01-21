@@ -145,16 +145,34 @@ void Scene::Update(double dt){
 		isKeyDownN = false;
 	}
 
-	/*static bool isKeyDownT = false;
+	static bool isKeyDownT = false;
 	static bool isKeyDownY = false;
 	static bool isKeyDownU = false;
 	static bool isKeyDownI = false;
 	if(!isKeyDownT && App::Key('T')){
-		++sim->turn;
+		sim->turnDuration += 0.1f;
 		isKeyDownT = true;
 	} else if(isKeyDownT && !App::Key('T')){
 		isKeyDownT = false;
-	}*/
+	}
+	if(!isKeyDownY && App::Key('Y')){
+		sim->turnDuration -= 0.1f;
+		isKeyDownY = true;
+	} else if(isKeyDownY && !App::Key('Y')){
+		isKeyDownY = false;
+	}
+	if(!isKeyDownU && App::Key('U')){
+		sim->timeOfDayDuration += 0.1f;
+		isKeyDownU = true;
+	} else if(isKeyDownU && !App::Key('U')){
+		isKeyDownU = false;
+	}
+	if(!isKeyDownI && App::Key('I')){
+		sim->timeOfDayDuration -= 0.1f;
+		isKeyDownI = true;
+	} else if(isKeyDownI && !App::Key('I')){
+		isKeyDownI = false;
+	}
 
 	switch(sim->status){
 		case RuntimeStatus::Waiting:
@@ -612,6 +630,10 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		"V: Change sim time of day manually",
 		"B: Reset sim turn elapsed time",
 		"N: Reset sim time of day elapsed time"
+		"T: Increase sim turn duration",
+		"Y: Decrease sim turn duration",
+		"U: Increase sim time of day duration",
+		"I: Decrease sim time of day duration",
 	};
 	static size_t size = sizeof(texts) / sizeof(texts[0]);
 	static float val = 25.5f;
