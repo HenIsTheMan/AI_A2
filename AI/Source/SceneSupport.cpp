@@ -53,12 +53,14 @@ SceneSupport::SceneSupport():
 	meshList[(int)GeoType::Text] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[(int)GeoType::Text]->textureID = LoadImg("Imgs//Calibri.png");
 	meshList[(int)GeoType::Text]->material.kAmbient.Set(1, 0, 0);
+	/*
 	meshList[(int)GeoType::TextMod1] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[(int)GeoType::TextMod1]->textureID = LoadImg("Imgs//CalibriMod1.tga");
 	meshList[(int)GeoType::TextMod1]->material.kAmbient.Set(1, 0, 0);
 	meshList[(int)GeoType::TextMod2] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[(int)GeoType::TextMod2]->textureID = LoadImg("Imgs//CalibriMod2.tga");
 	meshList[(int)GeoType::TextMod2]->material.kAmbient.Set(1, 0, 0);
+	//*/
 
 	meshList[(int)GeoType::DayBG] = MeshBuilder::GenerateSpriteAni("DayBG", 3, 5);
 	meshList[(int)GeoType::DayBG]->textureID = LoadImg("Imgs//DayBG.png");
@@ -76,6 +78,7 @@ SceneSupport::SceneSupport():
 	nightBGSpriteAni->AddAni("NightBG", 0, 4);
 	nightBGSpriteAni->ActivateAni("NightBG", 0.07f);
 
+	/*
 	meshList[(int)GeoType::Block] = MeshBuilder::GenerateQuad("Block", Color(), 1.0f);
 	meshList[(int)GeoType::Block]->textureID = LoadImg("Imgs//Block.png");
 	meshList[(int)GeoType::Quad] = MeshBuilder::GenerateQuad("Quad", Color(), 1.0f);
@@ -89,6 +92,7 @@ SceneSupport::SceneSupport():
 	meshList[(int)GeoType::Orc] = MeshBuilder::GenerateSpriteAni("Orc", 21, 13);
 	meshList[(int)GeoType::Orc]->textureID = LoadImg("Imgs//Orc.png");
 	meshList[(int)GeoType::Circle] = MeshBuilder::GenCircle(Color(), 30, 0.5f);
+	//*/
 
 	meshList[(int)GeoType::Fog] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
 	meshList[(int)GeoType::Fog]->textureID = LoadImg("Imgs//Fog.png");
@@ -105,7 +109,8 @@ SceneSupport::SceneSupport():
 	meshList[(int)GeoType::GrassTile]->textureID = LoadImg("Imgs//Grass.png");
 	meshList[(int)GeoType::MudTile] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
 	meshList[(int)GeoType::MudTile]->textureID = LoadImg("Imgs//Mud.png");
-
+	
+	/*
 	SpriteAni* const skeleSpriteAni = static_cast<SpriteAni*>(meshList[(int)GeoType::Skele]);
 	skeleSpriteAni->AddAni("SkeleStaticUp", 4 * 13, 4 * 13 + 1);
 	skeleSpriteAni->AddAni("SkeleStaticDown", 6 * 13, 6 * 13 + 1);
@@ -165,6 +170,7 @@ SceneSupport::SceneSupport():
 	orcSpriteAni->AddAni("OrcSmackLeft", 13 * 13, 13 * 13 + 6);
 	orcSpriteAni->AddAni("OrcSmackRight", 15 * 13, 15 * 13 + 6);
 	orcSpriteAni->AddAni("OrcFacePlant", 20 * 13 + 5, 20 * 13 + 5 + 1);
+	//*/
 }
 
 SceneSupport::~SceneSupport(){

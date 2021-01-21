@@ -25,9 +25,6 @@
     <ClCompile Include="Source\SpriteAni.cpp">
       <Filter>Others\Geo</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SceneSupport.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -41,43 +38,46 @@
       <Filter>Event</Filter>
     </ClCompile>
     <ClCompile Include="Source\EventCalcActiveObjs.cpp">
-      <Filter>Event\Events</Filter>
+      <Filter>A1\Events</Filter>
     </ClCompile>
     <ClCompile Include="Source\EventCalcInactiveObjs.cpp">
-      <Filter>Event\Events</Filter>
+      <Filter>A1\Events</Filter>
     </ClCompile>
     <ClCompile Include="Source\Publisher.cpp">
       <Filter>Event</Filter>
     </ClCompile>
     <ClCompile Include="Source\EventGridHeightShrinking.cpp">
-      <Filter>Event\Events\Pre-events</Filter>
+      <Filter>A1\Events\Pre-events</Filter>
     </ClCompile>
     <ClCompile Include="Source\EventGridWidthShrinking.cpp">
-      <Filter>Event\Events\Pre-events</Filter>
+      <Filter>A1\Events\Pre-events</Filter>
     </ClCompile>
     <ClCompile Include="Source\StateHelperFuncs.cpp">
       <Filter>State</Filter>
     </ClCompile>
     <ClCompile Include="Source\EventBlockPlaced.cpp">
-      <Filter>Event\Events\Post-events</Filter>
+      <Filter>A1\Events\Post-events</Filter>
     </ClCompile>
     <ClCompile Include="Source\EventCalcAlphaCount.cpp">
-      <Filter>Event\Events</Filter>
+      <Filter>A1\Events</Filter>
     </ClCompile>
     <ClCompile Include="Source\EventCalcOmegaCount.cpp">
-      <Filter>Event\Events</Filter>
+      <Filter>A1\Events</Filter>
     </ClCompile>
     <ClCompile Include="Source\EventFindClosestEnemy.cpp">
-      <Filter>Event\Events</Filter>
+      <Filter>A1\Events</Filter>
     </ClCompile>
     <ClCompile Include="Source\EventAttacking.cpp">
-      <Filter>Event\Events\Pre-events</Filter>
+      <Filter>A1\Events\Pre-events</Filter>
     </ClCompile>
     <ClCompile Include="Source\EventProcreated.cpp">
-      <Filter>Event\Events\Post-events</Filter>
+      <Filter>A1\Events\Post-events</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneA2.cpp" />
     <ClCompile Include="Source\Sim.cpp" />
+    <ClCompile Include="Source\Scene.cpp">
+      <Filter>A1\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\App.h">
@@ -105,7 +105,7 @@
       <Filter>Others\Geo</Filter>
     </ClInclude>
     <ClInclude Include="Source\Grid.h">
-      <Filter>Grid</Filter>
+      <Filter>A1\Grid</Filter>
     </ClInclude>
     <ClInclude Include="Source\ObjPool.h">
       <Filter>Obj</Filter>
@@ -125,9 +125,6 @@
     <ClInclude Include="Source\IScene.hpp">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SceneSupport.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -144,34 +141,34 @@
       <Filter>Event</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateSkeleAttack.h">
-      <Filter>State\States\SkeleStates</Filter>
+      <Filter>A1\States\SkeleStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateSkeleDead.h">
-      <Filter>State\States\SkeleStates</Filter>
+      <Filter>A1\States\SkeleStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateReptileAttack.h">
-      <Filter>State\States\ReptileStates</Filter>
+      <Filter>A1\States\ReptileStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateReptileDead.h">
-      <Filter>State\States\ReptileStates</Filter>
+      <Filter>A1\States\ReptileStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateBoyAttack.h">
-      <Filter>State\States\BoyStates</Filter>
+      <Filter>A1\States\BoyStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateBoyDead.h">
-      <Filter>State\States\BoyStates</Filter>
+      <Filter>A1\States\BoyStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateOrcAttack.h">
-      <Filter>State\States\OrcStates</Filter>
+      <Filter>A1\States\OrcStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateOrcDead.h">
-      <Filter>State\States\OrcStates</Filter>
+      <Filter>A1\States\OrcStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\EventCalcInactiveObjs.h">
-      <Filter>Event\Events</Filter>
+      <Filter>A1\Events</Filter>
     </ClInclude>
     <ClInclude Include="Source\EventCalcActiveObjs.h">
-      <Filter>Event\Events</Filter>
+      <Filter>A1\Events</Filter>
     </ClInclude>
     <ClInclude Include="Source\Event.h">
       <Filter>Event</Filter>
@@ -183,10 +180,10 @@
       <Filter>Event</Filter>
     </ClInclude>
     <ClInclude Include="Source\EventGridHeightShrinking.h">
-      <Filter>Event\Events\Pre-events</Filter>
+      <Filter>A1\Events\Pre-events</Filter>
     </ClInclude>
     <ClInclude Include="Source\EventGridWidthShrinking.h">
-      <Filter>Event\Events\Pre-events</Filter>
+      <Filter>A1\Events\Pre-events</Filter>
     </ClInclude>
     <ClInclude Include="Source\EntityTeam.hpp">
       <Filter>Obj</Filter>
@@ -195,70 +192,70 @@
       <Filter>State</Filter>
     </ClInclude>
     <ClInclude Include="Source\EventBlockPlaced.h">
-      <Filter>Event\Events\Post-events</Filter>
+      <Filter>A1\Events\Post-events</Filter>
     </ClInclude>
     <ClInclude Include="Source\EventCalcAlphaCount.h">
-      <Filter>Event\Events</Filter>
+      <Filter>A1\Events</Filter>
     </ClInclude>
     <ClInclude Include="Source\EventCalcOmegaCount.h">
-      <Filter>Event\Events</Filter>
+      <Filter>A1\Events</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateBoyPatrol.h">
-      <Filter>State\States\BoyStates</Filter>
+      <Filter>A1\States\BoyStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateOrcPatrol.h">
-      <Filter>State\States\OrcStates</Filter>
+      <Filter>A1\States\OrcStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateReptilePatrol.h">
-      <Filter>State\States\ReptileStates</Filter>
+      <Filter>A1\States\ReptileStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateSkelePatrol.h">
-      <Filter>State\States\SkeleStates</Filter>
+      <Filter>A1\States\SkeleStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateSkeleIdle.h">
-      <Filter>State\States\SkeleStates</Filter>
+      <Filter>A1\States\SkeleStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateReptileIdle.h">
-      <Filter>State\States\ReptileStates</Filter>
+      <Filter>A1\States\ReptileStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateOrcIdle.h">
-      <Filter>State\States\OrcStates</Filter>
+      <Filter>A1\States\OrcStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateBoyIdle.h">
-      <Filter>State\States\BoyStates</Filter>
+      <Filter>A1\States\BoyStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateBoyChase.h">
-      <Filter>State\States\BoyStates</Filter>
+      <Filter>A1\States\BoyStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateOrcChase.h">
-      <Filter>State\States\OrcStates</Filter>
+      <Filter>A1\States\OrcStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateReptileChase.h">
-      <Filter>State\States\ReptileStates</Filter>
+      <Filter>A1\States\ReptileStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateSkeleChase.h">
-      <Filter>State\States\SkeleStates</Filter>
+      <Filter>A1\States\SkeleStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\EventFindClosestEnemy.h">
-      <Filter>Event\Events</Filter>
+      <Filter>A1\Events</Filter>
     </ClInclude>
     <ClInclude Include="Source\EventAttacking.h">
-      <Filter>Event\Events\Pre-events</Filter>
+      <Filter>A1\Events\Pre-events</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateOrcExplosive.h">
-      <Filter>State\States\OrcStates</Filter>
+      <Filter>A1\States\OrcStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateReptileProcreate.h">
-      <Filter>State\States\ReptileStates</Filter>
+      <Filter>A1\States\ReptileStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateSkeleDeadButNotDead.h">
-      <Filter>State\States\SkeleStates</Filter>
+      <Filter>A1\States\SkeleStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\StateBoyImmune.h">
-      <Filter>State\States\BoyStates</Filter>
+      <Filter>A1\States\BoyStates</Filter>
     </ClInclude>
     <ClInclude Include="Source\EventProcreated.h">
-      <Filter>Event\Events\Post-events</Filter>
+      <Filter>A1\Events\Post-events</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneA2.h" />
     <ClInclude Include="Source\HexGrid.h" />
@@ -270,6 +267,9 @@
     <ClInclude Include="Source\TileType.hpp" />
     <ClInclude Include="Source\FogType.hpp" />
     <ClInclude Include="Source\TileCost.hpp" />
+    <ClInclude Include="Source\Scene.h">
+      <Filter>A1\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
@@ -293,9 +293,6 @@
     <Filter Include="Others\App">
       <UniqueIdentifier>{2cecd5b5-12ca-4af9-86a4-d65b0c91073f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Grid">
-      <UniqueIdentifier>{cce7b4cb-e2ab-4915-bdcc-985e6fb8a541}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Obj">
       <UniqueIdentifier>{c9054835-fbb9-4de5-b687-d6f14d115968}</UniqueIdentifier>
     </Filter>
@@ -305,34 +302,55 @@
     <Filter Include="Event">
       <UniqueIdentifier>{daa924bf-3cb9-4670-bc73-a5c16acb65f7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="State\States">
+    <Filter Include="A1">
+      <UniqueIdentifier>{80368097-cc82-440d-81db-8e55076deab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="A1\Grid">
+      <UniqueIdentifier>{cce7b4cb-e2ab-4915-bdcc-985e6fb8a541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="A1\Scene">
+      <UniqueIdentifier>{f503ce1e-1fdf-4d5b-8bd4-4b9d08e1c352}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="A1\States">
       <UniqueIdentifier>{f2c770d8-f746-4383-8240-f1aacabe0c3d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Event\Events">
-      <UniqueIdentifier>{db84da28-fefe-4ffd-9e86-ceec7c0d7544}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Event\Events\Post-events">
-      <UniqueIdentifier>{9fab4848-b73a-421b-b464-a8d212706871}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Event\Events\Pre-events">
-      <UniqueIdentifier>{9e8aa6a4-dd6d-49e2-b73b-c16162b7b821}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="State\States\SkeleStates">
+    <Filter Include="A1\States\SkeleStates">
       <UniqueIdentifier>{7821e776-cfe6-464c-8598-4ca860602e67}</UniqueIdentifier>
     </Filter>
-    <Filter Include="State\States\ReptileStates">
+    <Filter Include="A1\States\ReptileStates">
       <UniqueIdentifier>{c72cc829-8126-47ca-8d7a-655a2138fa1b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="State\States\BoyStates">
+    <Filter Include="A1\States\BoyStates">
       <UniqueIdentifier>{42f8ee01-1aef-4c1e-b772-44d649e964e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="State\States\OrcStates">
+    <Filter Include="A1\States\OrcStates">
       <UniqueIdentifier>{b82bba0b-9b28-4c9a-9b91-83e5d6b421d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State\States">
+      <UniqueIdentifier>{d8ebda90-5e16-4a07-92f8-788cb92bd036}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="A1\Events">
+      <UniqueIdentifier>{db84da28-fefe-4ffd-9e86-ceec7c0d7544}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="A1\Events\Post-events">
+      <UniqueIdentifier>{9fab4848-b73a-421b-b464-a8d212706871}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="A1\Events\Pre-events">
+      <UniqueIdentifier>{9e8aa6a4-dd6d-49e2-b73b-c16162b7b821}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Event\Events">
+      <UniqueIdentifier>{13355d01-0992-48a1-87f9-ea6f108904d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Event\Events\Post-events">
+      <UniqueIdentifier>{64bd9565-c811-4bdd-b36b-725d91a0ba79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Event\Events\Pre-events">
+      <UniqueIdentifier>{52777eee-28d2-498c-bd93-5e6aa1918a0a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Grid.inl">
-      <Filter>Grid</Filter>
+      <Filter>A1\Grid</Filter>
     </None>
     <None Include="Source\ObjPool.inl">
       <Filter>Obj</Filter>
@@ -341,79 +359,79 @@
       <Filter>State</Filter>
     </None>
     <None Include="Source\StateSkeleAttack.inl">
-      <Filter>State\States\SkeleStates</Filter>
+      <Filter>A1\States\SkeleStates</Filter>
     </None>
     <None Include="Source\StateSkeleDead.inl">
-      <Filter>State\States\SkeleStates</Filter>
+      <Filter>A1\States\SkeleStates</Filter>
     </None>
     <None Include="Source\StateReptileAttack.inl">
-      <Filter>State\States\ReptileStates</Filter>
+      <Filter>A1\States\ReptileStates</Filter>
     </None>
     <None Include="Source\StateReptileDead.inl">
-      <Filter>State\States\ReptileStates</Filter>
+      <Filter>A1\States\ReptileStates</Filter>
     </None>
     <None Include="Source\StateBoyAttack.inl">
-      <Filter>State\States\BoyStates</Filter>
+      <Filter>A1\States\BoyStates</Filter>
     </None>
     <None Include="Source\StateBoyDead.inl">
-      <Filter>State\States\BoyStates</Filter>
+      <Filter>A1\States\BoyStates</Filter>
     </None>
     <None Include="Source\StateOrcAttack.inl">
-      <Filter>State\States\OrcStates</Filter>
+      <Filter>A1\States\OrcStates</Filter>
     </None>
     <None Include="Source\StateOrcDead.inl">
-      <Filter>State\States\OrcStates</Filter>
+      <Filter>A1\States\OrcStates</Filter>
     </None>
     <None Include="Source\Entity.inl">
       <Filter>Obj</Filter>
     </None>
     <None Include="Source\StateBoyPatrol.inl">
-      <Filter>State\States\BoyStates</Filter>
+      <Filter>A1\States\BoyStates</Filter>
     </None>
     <None Include="Source\StateOrcPatrol.inl">
-      <Filter>State\States\OrcStates</Filter>
+      <Filter>A1\States\OrcStates</Filter>
     </None>
     <None Include="Source\StateReptilePatrol.inl">
-      <Filter>State\States\ReptileStates</Filter>
+      <Filter>A1\States\ReptileStates</Filter>
     </None>
     <None Include="Source\StateSkelePatrol.inl">
-      <Filter>State\States\SkeleStates</Filter>
+      <Filter>A1\States\SkeleStates</Filter>
     </None>
     <None Include="Source\StateSkeleIdle.inl">
-      <Filter>State\States\SkeleStates</Filter>
+      <Filter>A1\States\SkeleStates</Filter>
     </None>
     <None Include="Source\StateReptileIdle.inl">
-      <Filter>State\States\ReptileStates</Filter>
+      <Filter>A1\States\ReptileStates</Filter>
     </None>
     <None Include="Source\StateOrcIdle.inl">
-      <Filter>State\States\OrcStates</Filter>
+      <Filter>A1\States\OrcStates</Filter>
     </None>
     <None Include="Source\StateBoyIdle.inl">
-      <Filter>State\States\BoyStates</Filter>
+      <Filter>A1\States\BoyStates</Filter>
     </None>
     <None Include="Source\StateBoyChase.inl">
-      <Filter>State\States\BoyStates</Filter>
+      <Filter>A1\States\BoyStates</Filter>
     </None>
     <None Include="Source\StateOrcChase.inl">
-      <Filter>State\States\OrcStates</Filter>
+      <Filter>A1\States\OrcStates</Filter>
     </None>
     <None Include="Source\StateReptileChase.inl">
-      <Filter>State\States\ReptileStates</Filter>
+      <Filter>A1\States\ReptileStates</Filter>
     </None>
     <None Include="Source\StateSkeleChase.inl">
-      <Filter>State\States\SkeleStates</Filter>
+      <Filter>A1\States\SkeleStates</Filter>
     </None>
     <None Include="Source\StateBoyImmune.inl">
-      <Filter>State\States\BoyStates</Filter>
+      <Filter>A1\States\BoyStates</Filter>
     </None>
     <None Include="Source\StateOrcExplosive.inl">
-      <Filter>State\States\OrcStates</Filter>
+      <Filter>A1\States\OrcStates</Filter>
     </None>
     <None Include="Source\StateReptileProcreate.inl">
-      <Filter>State\States\ReptileStates</Filter>
+      <Filter>A1\States\ReptileStates</Filter>
     </None>
     <None Include="Source\StateSkeleDeadButNotDead.inl">
-      <Filter>State\States\SkeleStates</Filter>
+      <Filter>A1\States\SkeleStates</Filter>
     </None>
     <None Include="Source\HexGrid.inl" />
     <None Include="Shaders\AI.fragS">
