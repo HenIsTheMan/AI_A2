@@ -115,6 +115,21 @@ void Scene::Update(double dt){
 	}
 	simSpd = Math::Clamp(simSpd, 0.2f, 4.0f);
 
+	static bool isKeyDownC = false;
+	static bool isKeyDownV = false;
+	if(!isKeyDownC && App::Key('C')){
+		++sim->turn;
+		isKeyDownC = true;
+	} else if(isKeyDownC && !App::Key('C')){
+		isKeyDownC = false;
+	}
+	if(!isKeyDownV && App::Key('V')){
+		sim->timeOfDay = (TimeOfDay)Math::RandIntMinMax((int)TimeOfDay::Day, (int)TimeOfDay::Amt - 1);
+		isKeyDownV = true;
+	} else if(isKeyDownV && !App::Key('V')){
+		isKeyDownV = false;
+	}
+
 	switch(sim->status){
 		case RuntimeStatus::Waiting:
 			if(App::IsMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)){
@@ -567,6 +582,8 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		"P: Toggle fog",
 		"Z: Increase sim spd",
 		"X: Decrease sim spd",
+		"C: Increment sim turn manually",
+		"V: Change sim time of day manually"
 	};
 	static size_t size = sizeof(texts) / sizeof(texts[0]);
 	static float val = 25.5f;
