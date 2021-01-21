@@ -1,6 +1,9 @@
 #ifndef App_H
 #define App_H
 
+#include <mutex>
+#include <thread>
+
 #include "Scene.h"
 #include "timer.h"
 
@@ -26,8 +29,13 @@ private:
 	App() = default;
 
 	StopWatch im_Timer = StopWatch();
+
+	std::mutex myMutex;
 	
 	static IScene* im_Scene;
+
+	void Update();
+	void Render();
 };
 
 #endif

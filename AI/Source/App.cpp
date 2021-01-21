@@ -87,7 +87,7 @@ void App::Init(){
 	GLenum err = glewInit();
 
 	//If GLEW hasn't initialized
-	if (err != GLEW_OK) {
+	if(err != GLEW_OK){
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 	}
 
@@ -97,12 +97,15 @@ void App::Init(){
 	glfwSwapInterval(0); //Disable VSync
 }
 
-void App::Run(){
+void App::Update(){
 	static bool isF3 = false;
 	static bool isF1 = false;
 
 	im_Timer.startTimer();
 	while(!endLoop){
+		myMutex.lock();
+		glfwMakeContextCurrent(im_window);
+
 		if(glfwWindowShouldClose(im_window) || Key(VK_ESCAPE)){
 			endLoop = true;
 		}
@@ -123,6 +126,21 @@ void App::Run(){
 			isF1 = false;
 		}
 
+		glfwMakeContextCurrent(NULL);
+		myMutex.unlock();
+	}
+}
+
+void App::Render(){
+	//Timer??
+	while(!endLoop){
+		myMutex.lock();
+		glfwMakeContextCurrent(im_window);
+
+		if(glfwWindowShouldClose(im_window) || Key(VK_ESCAPE)){
+			endLoop = true;
+		}
+
 		if(glfwGetWindowAttrib(im_window, GLFW_VISIBLE)){
 			glViewport(0, 0, windowWidth, windowHeight);
 			im_Scene->Render();
@@ -130,8 +148,23 @@ void App::Run(){
 
 		glfwSwapBuffers(im_window);
 		glfwPollEvents();
-        //im_Timer.waitUntil(frameTime);
+		//im_Timer.waitUntil(frameTime);
+
+		glfwMakeContextCurrent(NULL);
+		myMutex.unlock();
 	}
+}
+
+void App::Run(){
+	glfwMakeContextCurrent(NULL);
+
+	std::thread updateThread(&App::Update, this);
+	std::thread renderThread(&App::Render, this);
+
+	updateThread.join();
+	renderThread.join();
+
+	glfwMakeContextCurrent(im_window);
 }
 
 void App::Exit(){
