@@ -181,7 +181,7 @@ void Scene::Update(double dt){
 					sim->ChangeTileWeight((int)TileType::Grass, 20);
 					sim->ChangeTileWeight((int)TileType::Mud, 20);
 
-					const float* const quickRenderDelay0 = new float(0.02f);
+					const float* const quickRenderDelay0 = new float(0.05f);
 					sim->GenFogLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay0);
 					sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169);
 					sim->RefineTileLayer(gridRows, gridCols, 2169);
@@ -348,12 +348,8 @@ void Scene::RenderMap(){
 	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f;
 
 	const std::vector<TileType>& tileLayer = sim->GetTileLayer();
-	const int tileLayerSize = (int)tileLayer.size();
-	const int tileCols = (tileLayerSize - 1) % gridCols;
-	const int tileRows = (tileLayerSize - 1) / gridCols;
-
-	for(int r = 0; r < tileRows; ++r){
-		for(int c = 0; c < tileCols; ++c){
+	for(int r = 0; r < gridRows; ++r){
+		for(int c = 0; c < gridCols; ++c){
 			modelStack.PushMatrix();
 
 			modelStack.Translate(
@@ -391,14 +387,11 @@ void Scene::RenderMap(){
 	}
 
 	if(shldRenderFog){
-		const std::vector<FogType>& fogLayer = sim->GetFogLayer();
-		const int fogLayerSize = (int)fogLayer.size();
-		const int fogCols = (fogLayerSize - 1) % gridCols;
-		const int fogRows = (fogLayerSize - 1) / gridCols;
-
 		glDepthFunc(GL_ALWAYS);
-		for(int r = 0; r < fogRows; ++r){
-			for(int c = 0; c < fogCols; ++c){
+
+		const std::vector<FogType>& fogLayer = sim->GetFogLayer();
+		for(int r = 0; r < gridRows; ++r){
+			for(int c = 0; c < gridCols; ++c){
 				modelStack.PushMatrix();
 
 				modelStack.Translate(
@@ -417,11 +410,16 @@ void Scene::RenderMap(){
 				modelStack.PopMatrix();
 			}
 		}
+
 		glDepthFunc(GL_LESS);
 	}
 }
 
 void Scene::RenderFog(const std::vector<FogType>& fogLayer, const int r, const int c){
+	if(r * gridCols + c >= (int)fogLayer.size()){
+		return;
+	}
+
 	switch(fogLayer[r * gridCols + c]){
 		case FogType::Thin:
 			modelStack.PushMatrix();
@@ -475,6 +473,10 @@ void Scene::RenderFog(const std::vector<FogType>& fogLayer, const int r, const i
 }
 
 void Scene::RenderTile(const std::vector<TileType>& tileLayer, const int r, const int c){
+	if(r * gridCols + c >= (int)tileLayer.size()){
+		return;
+	}
+
 	switch(tileLayer[r * gridCols + c]){
 		case TileType::Empty:
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.7f, 0.7f, 0.7f), 1.0f);
