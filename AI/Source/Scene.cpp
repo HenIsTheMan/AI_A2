@@ -3,6 +3,8 @@
 #include "App.h"
 #include "GLFW/glfw3.h"
 
+#include "Easing.hpp"
+
 extern int windowWidth;
 extern int windowHeight;
 
@@ -137,7 +139,8 @@ void Scene::Render(){
 		RenderMap();
 		RenderEntities();
 	} else{
-		RenderCover();
+		RenderCoverMap();
+		RenderCoverText();
 	}
 	RenderSceneText();
 
@@ -173,7 +176,7 @@ void Scene::RenderBG(){
 	modelStack.PopMatrix();
 }
 
-void Scene::RenderCover(){
+void Scene::RenderCoverMap(){
 	const float gridWidth = grid->CalcWidth();
 	const float gridHeight = grid->CalcHeight();
 
@@ -220,6 +223,32 @@ void Scene::RenderCover(){
 			modelStack.PopMatrix();
 		}
 	}
+}
+
+void Scene::RenderCoverText(){
+	static float startTextSize = (float)windowWidth * 0.03f;
+	static float endTextSize = (float)windowWidth * 0.04f;
+	const float lerpFactor = EaseInOutSine(sin(elapsedTime * 7.0f) * 0.5f + 0.5f);
+	const float textSize = (1.0f - lerpFactor) * startTextSize + lerpFactor * endTextSize;
+
+	RenderTextOnScreen(
+		meshList[(int)GeoType::TextMod1],
+		"Press Middle Mouse Button (MMB) to start!",
+		Color(),
+		textSize,
+		(float)windowWidth * 0.5f,
+		(float)windowHeight * 0.5f,
+		TextAlignment::Center
+	);
+	RenderTextOnScreen(
+		meshList[(int)GeoType::TextMod2],
+		"Modify the grid now if u want :)",
+		Color(),
+		textSize,
+		(float)windowWidth * 0.5f,
+		(float)windowHeight * 0.5f - textSize,
+		TextAlignment::Center
+	);
 }
 
 void Scene::RenderEntities(){
@@ -488,8 +517,8 @@ void Scene::RenderTile(const std::vector<TileType>& tileLayer, const int r, cons
 }
 
 void Scene::RenderSceneText(){
-	Mesh* const textMesh = meshList[(int)GeoType::Text];
-	const float textSize = (float)windowWidth * 0.02f;
+	static Mesh* const textMesh = meshList[(int)GeoType::Text];
+	static float textSize = (float)windowWidth * 0.02f;
 
 	RenderDebugInfoText(textMesh, Color(0.0f, 1.0f, 0.0f), textSize);
 	RenderControlsText(textMesh, Color(1.0f, 0.0f, 1.0f), textSize);
