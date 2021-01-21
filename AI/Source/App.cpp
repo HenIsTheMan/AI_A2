@@ -98,7 +98,7 @@ void App::Init(){
 void App::Run(){
 	IScene* scene = new Scene();
 
-	static bool isTab = false;
+	static bool isF3 = false;
 	static bool isF1 = false;
 
 	im_timer.startTimer();
@@ -109,11 +109,11 @@ void App::Run(){
 
 		scene->Update(im_timer.getElapsedTime());
 
-		if(!isTab && Key(VK_TAB)){
+		if(!isF3 && Key(VK_F3)){
 			glfwGetWindowAttrib(im_window, GLFW_VISIBLE) ? glfwHideWindow(im_window) : glfwShowWindow(im_window);
-			isTab = true;
-		} else if(isTab && !Key(VK_TAB)){
-			isTab = false;
+			isF3 = true;
+		} else if(isF3 && !Key(VK_F3)){
+			isF3 = false;
 		}
 		if(!isF1 && Key(VK_F1)){
 			const GLFWvidmode* const& mode = glfwGetVideoMode(glfwGetPrimaryMonitor());

@@ -468,7 +468,7 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 	);
 	RenderTextOnScreen(
 		textMesh,
-		"Tab: ...",
+		"F3: Toggle visibility of...",
 		textColor,
 		textSize,
 		0.0f,
