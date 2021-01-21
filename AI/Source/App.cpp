@@ -10,8 +10,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "Scene.h"
-
 GLFWwindow* im_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
@@ -92,22 +90,22 @@ void App::Init(){
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 	}
 
-	glfwSwapInterval(0);
+	im_Scene = new Scene();
+
+	glfwSwapInterval(0); //Disable VSync
 }
 
 void App::Run(){
-	IScene* scene = new Scene();
-
 	static bool isF3 = false;
 	static bool isF1 = false;
 
-	im_timer.startTimer();
+	im_Timer.startTimer();
 	while(!endLoop){
 		if(glfwWindowShouldClose(im_window) || Key(VK_ESCAPE)){
 			endLoop = true;
 		}
 
-		scene->Update(im_timer.getElapsedTime());
+		im_Scene->Update(im_Timer.getElapsedTime());
 
 		if(!isF3 && Key(VK_F3)){
 			glfwGetWindowAttrib(im_window, GLFW_VISIBLE) ? glfwHideWindow(im_window) : glfwShowWindow(im_window);
@@ -125,21 +123,27 @@ void App::Run(){
 
 		if(glfwGetWindowAttrib(im_window, GLFW_VISIBLE)){
 			glViewport(0, 0, windowWidth, windowHeight);
-			scene->Render();
+			im_Scene->Render();
 		}
 
 		glfwSwapBuffers(im_window);
 		glfwPollEvents();
         //im_timer.waitUntil(frameTime);
 	}
-
-	if(scene){
-		delete scene;
-		scene = nullptr;
-	}
 }
 
 void App::Exit(){
+	if(im_Scene){
+		delete im_Scene;
+		im_Scene = nullptr;
+	}
+
 	glfwDestroyWindow(im_window);
 	glfwTerminate();
+}
+
+void App::QuickRender(){
+	im_Scene->Render();
+	glfwSwapBuffers(im_window);
+	glfwPollEvents();
 }

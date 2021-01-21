@@ -296,8 +296,8 @@ void Scene::RenderCoverMap(){
 }
 
 void Scene::RenderCoverText(){
-	static float startTextSize = (float)windowWidth * 0.03f;
-	static float endTextSize = (float)windowWidth * 0.04f;
+	static float startTextSize = (float)windowWidth * 0.02f;
+	static float endTextSize = (float)windowWidth * 0.03f;
 	const float lerpFactor = EaseInOutSine(sin(elapsedTime * 7.0f) * 0.5f + 0.5f);
 	const float textSize = (1.0f - lerpFactor) * startTextSize + lerpFactor * endTextSize;
 
@@ -629,7 +629,7 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		"C: Increment sim turn manually",
 		"V: Change sim time of day manually",
 		"B: Reset sim turn elapsed time",
-		"N: Reset sim time of day elapsed time"
+		"N: Reset sim time of day elapsed time",
 		"T: Increase sim turn duration",
 		"Y: Decrease sim turn duration",
 		"U: Increase sim time of day duration",

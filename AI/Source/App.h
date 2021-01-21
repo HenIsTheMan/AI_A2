@@ -1,6 +1,7 @@
 #ifndef App_H
 #define App_H
 
+#include "Scene.h"
 #include "timer.h"
 
 class App{
@@ -16,13 +17,16 @@ public:
 	void Run();
 	void Exit();
 
+	void QuickRender();
+
 	static bool Key(unsigned short key);
 	static bool IsMousePressed(unsigned short key);
 	static void GetCursorPos(double* xpos, double* ypos);
 private:
 	App() = default;
 
-	StopWatch im_timer;
+	IScene* im_Scene = nullptr;
+	StopWatch im_Timer = StopWatch();
 };
 
 #endif
