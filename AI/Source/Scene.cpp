@@ -66,6 +66,52 @@ void Scene::Init(){
 void Scene::Update(double dt){
 	SceneSupport::Update(dt);
 
+	UpdateMisc(dt);
+
+	switch(sim->status){
+		case RuntimeStatus::Waiting:
+			if(App::IsMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)){
+				sim->status = RuntimeStatus::Ongoing;
+
+				if(canMakeSimMap){
+					sim->ChangeFogWeight((int)FogType::Inexistent, 5);
+					sim->ChangeFogWeight((int)FogType::Thin, 20);
+					sim->ChangeFogWeight((int)FogType::Thick, 20);
+
+					sim->ChangeTileWeight((int)TileType::Invalid, 0);
+					sim->ChangeTileWeight((int)TileType::Wall, 70);
+					sim->ChangeTileWeight((int)TileType::Empty, 10);
+					sim->ChangeTileWeight((int)TileType::Soil, 30);
+					sim->ChangeTileWeight((int)TileType::Fire, 20);
+					sim->ChangeTileWeight((int)TileType::Water, 20);
+					sim->ChangeTileWeight((int)TileType::Grass, 20);
+					sim->ChangeTileWeight((int)TileType::Mud, 20);
+
+					const float* const quickRenderDelay0 = new float(0.04f);
+					const float* const quickRenderDelay1 = new float(0.03f);
+					const float* const quickRenderDelay2 = new float(0.05f);
+					const float* const quickRenderDelay3 = new float(0.01f);
+					sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay0);
+					sim->RefineTileLayer(gridRows, gridCols, 2169, quickRenderDelay1);
+					sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 5, 5, 2, quickRenderDelay2);
+					sim->GenFogLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay3);
+					delete quickRenderDelay0;
+					delete quickRenderDelay1;
+					delete quickRenderDelay2;
+					delete quickRenderDelay3;
+
+					canMakeSimMap = false;
+				}
+			}
+			break;
+		case RuntimeStatus::Ongoing:
+			sim->Update(dt); //Not (dt * sim->spd) as...
+			UpdateEntities(dt * sim->spd);
+			break;
+	}
+}
+
+void Scene::UpdateMisc(const double dt){
 	customHue += (float)dt * 40.0f;
 	if(customHue >= 360.0f){
 		customHue = 0.0f;
@@ -160,48 +206,6 @@ void Scene::Update(double dt){
 		isKeyDownI = true;
 	} else if(isKeyDownI && !App::Key('I')){
 		isKeyDownI = false;
-	}
-
-	switch(sim->status){
-		case RuntimeStatus::Waiting:
-			if(App::IsMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)){
-				sim->status = RuntimeStatus::Ongoing;
-
-				if(canMakeSimMap){
-					sim->ChangeFogWeight((int)FogType::Inexistent, 5);
-					sim->ChangeFogWeight((int)FogType::Thin, 20);
-					sim->ChangeFogWeight((int)FogType::Thick, 20);
-
-					sim->ChangeTileWeight((int)TileType::Invalid, 0);
-					sim->ChangeTileWeight((int)TileType::Wall, 70);
-					sim->ChangeTileWeight((int)TileType::Empty, 10);
-					sim->ChangeTileWeight((int)TileType::Soil, 30);
-					sim->ChangeTileWeight((int)TileType::Fire, 20);
-					sim->ChangeTileWeight((int)TileType::Water, 20);
-					sim->ChangeTileWeight((int)TileType::Grass, 20);
-					sim->ChangeTileWeight((int)TileType::Mud, 20);
-
-					const float* const quickRenderDelay0 = new float(0.04f);
-					const float* const quickRenderDelay1 = new float(0.03f);
-					const float* const quickRenderDelay2 = new float(0.05f);
-					const float* const quickRenderDelay3 = new float(0.01f);
-					sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay0);
-					sim->RefineTileLayer(gridRows, gridCols, 2169, quickRenderDelay1);
-					sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 5, 5, 2, quickRenderDelay2);
-					sim->GenFogLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay3);
-					delete quickRenderDelay0;
-					delete quickRenderDelay1;
-					delete quickRenderDelay2;
-					delete quickRenderDelay3;
-
-					canMakeSimMap = false;
-				}
-			}
-			break;
-		case RuntimeStatus::Ongoing:
-			sim->Update(dt); //Not (dt * simSpd) as...
-			UpdateEntities(dt * simSpd);
-			break;
 	}
 }
 

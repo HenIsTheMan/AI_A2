@@ -31,6 +31,7 @@ private:
 	HexGrid<float>* grid;
 	Publisher* publisher;
 
+	void UpdateMisc(const double dt);
 	void UpdateEntities(const double dt);
 
 	void RenderBG();
