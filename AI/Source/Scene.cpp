@@ -181,14 +181,14 @@ void Scene::Update(double dt){
 					sim->ChangeTileWeight((int)TileType::Grass, 20);
 					sim->ChangeTileWeight((int)TileType::Mud, 20);
 
-					const float* const quickRenderDelay0 = new float(0.015f);
-					const float* const quickRenderDelay1 = new float(0.015f);
-					const float* const quickRenderDelay2 = new float(0.015f);
-					const float* const quickRenderDelay3 = new float(0.015f);
-					sim->GenFogLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay0);
-					sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay1);
-					sim->RefineTileLayer(gridRows, gridCols, 2169, quickRenderDelay2);
-					sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 5, 5, 2, quickRenderDelay3);
+					const float* const quickRenderDelay0 = new float(0.04f);
+					const float* const quickRenderDelay1 = new float(0.03f);
+					const float* const quickRenderDelay2 = new float(0.05f);
+					const float* const quickRenderDelay3 = new float(0.01f);
+					sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay0);
+					sim->RefineTileLayer(gridRows, gridCols, 2169, quickRenderDelay1);
+					sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 5, 5, 2, quickRenderDelay2);
+					sim->GenFogLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay3);
 					delete quickRenderDelay0;
 					delete quickRenderDelay1;
 					delete quickRenderDelay2;
@@ -354,6 +354,8 @@ void Scene::RenderMap(){
 	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f;
 
 	const std::vector<TileType>& tileLayer = sim->GetTileLayer();
+	const int tileLayerSize = (int)tileLayer.size();
+
 	for(int r = 0; r < gridRows; ++r){
 		for(int c = 0; c < gridCols; ++c){
 			modelStack.PushMatrix();
@@ -372,6 +374,10 @@ void Scene::RenderMap(){
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.0f, 0.0f, 0.0f), 0.7f);
 
 			modelStack.PopMatrix();
+
+			if(r * gridCols + c >= tileLayerSize){
+				continue;
+			}
 
 			modelStack.PushMatrix();
 
@@ -396,8 +402,14 @@ void Scene::RenderMap(){
 		glDepthFunc(GL_ALWAYS);
 
 		const std::vector<FogType>& fogLayer = sim->GetFogLayer();
+		const int fogLayerSize = (int)fogLayer.size();
+
 		for(int r = 0; r < gridRows; ++r){
 			for(int c = 0; c < gridCols; ++c){
+				if(r * gridCols + c >= fogLayerSize){
+					continue;
+				}
+
 				modelStack.PushMatrix();
 
 				modelStack.Translate(
@@ -422,10 +434,6 @@ void Scene::RenderMap(){
 }
 
 void Scene::RenderFog(const std::vector<FogType>& fogLayer, const int r, const int c){
-	if(r * gridCols + c >= (int)fogLayer.size()){
-		return;
-	}
-
 	switch(fogLayer[r * gridCols + c]){
 		case FogType::Thin:
 			modelStack.PushMatrix();
@@ -479,10 +487,6 @@ void Scene::RenderFog(const std::vector<FogType>& fogLayer, const int r, const i
 }
 
 void Scene::RenderTile(const std::vector<TileType>& tileLayer, const int r, const int c){
-	if(r * gridCols + c >= (int)tileLayer.size()){
-		return;
-	}
-
 	switch(tileLayer[r * gridCols + c]){
 		case TileType::Empty:
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.7f, 0.7f, 0.7f), 1.0f);
