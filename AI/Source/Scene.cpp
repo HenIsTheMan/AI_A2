@@ -21,7 +21,7 @@ Scene::Scene():
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
 	publisher(Publisher::RetrieveGlobalObjPtr())
 {
-	sim->hasBegun = true;
+	sim->hasBegun = false;
 	sim->spd = 1.0f;
 	sim->turnDuration = 5.0f;
 	sim->turnElapsedTime = 0.0f;
@@ -174,7 +174,52 @@ void Scene::RenderBG(){
 }
 
 void Scene::RenderCover(){
+	const float gridWidth = grid->CalcWidth();
+	const float gridHeight = grid->CalcHeight();
 
+	const float xOffset = ((float)windowWidth - gridWidth) * 0.5f;
+	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f;
+
+	const std::vector<FogType>& fogLayer = sim->GetFogLayer();
+	const std::vector<TileType>& tileLayer = sim->GetTileLayer();
+
+	for(int r = 0; r < gridRows; ++r){
+		for(int c = 0; c < gridCols; ++c){
+			modelStack.PushMatrix();
+
+			modelStack.Translate(
+				xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c + (c & 1) * grid->CalcAltOffsetX(),
+				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
+				0.05f
+			);
+			modelStack.Scale(
+				gridCellScaleX + gridLineThickness * 2.5f,
+				gridCellScaleY + gridLineThickness * 2.5f,
+				1.0f
+			);
+
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color::HSVToRGB({customHue, 1.0f, 1.0f}), 0.5f);
+
+			modelStack.PopMatrix();
+
+			modelStack.PushMatrix();
+
+			modelStack.Translate(
+				xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c + (c & 1) * grid->CalcAltOffsetX(),
+				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
+				0.1f
+			);
+			modelStack.Scale(
+				gridCellScaleX,
+				gridCellScaleY,
+				1.0f
+			);
+
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.0f, 0.0f, 0.0f), 0.5f);
+
+			modelStack.PopMatrix();
+		}
+	}
 }
 
 void Scene::RenderEntities(){
@@ -313,7 +358,7 @@ void Scene::RenderTile(const std::vector<TileType>& tileLayer, const int r, cons
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.7f, 0.7f, 0.7f), 1.0f);
 			break;
 		case TileType::Wall:
-			RenderMesh(meshList[(int)GeoType::Hex], true, Color::HSVToRGB({customHue, 1.0f, 0.9f}), 1.0f);
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color::HSVToRGB({customHue, 1.0f, 1.0f}), 1.0f);
 
 			if(shldRenderTileArt){
 				modelStack.PushMatrix();
