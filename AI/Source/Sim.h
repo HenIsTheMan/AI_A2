@@ -8,6 +8,7 @@
 class Sim final{
 public:
 	struct{
+		bool hasBegun = false;
 		float spd = 0.0f;
 		float turnDuration = 0.0f;
 		float turnElapsedTime = 0.0f;

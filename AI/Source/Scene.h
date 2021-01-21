@@ -31,6 +31,7 @@ private:
 	void UpdateEntities(const double dt);
 
 	void RenderBG();
+	void RenderCover();
 	void RenderEntities();
 	void RenderMap();
 	void RenderFog(const std::vector<FogType>& fogLayer, const int r, const int c);

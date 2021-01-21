@@ -20,6 +20,7 @@ Scene::Scene():
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
 	publisher(Publisher::RetrieveGlobalObjPtr())
 {
+	sim->hasBegun = false;
 	sim->spd = 1.0f;
 	sim->turnDuration = 5.0f;
 	sim->turnElapsedTime = 0.0f;
@@ -106,7 +107,9 @@ void Scene::Update(double dt){
 	}
 	simSpd = Math::Clamp(simSpd, 0.2f, 4.0f);
 
-	UpdateEntities(dt * simSpd);
+	if(sim->hasBegun){
+		UpdateEntities(dt * simSpd);
+	}
 }
 
 void Scene::UpdateEntities(const double dt){
@@ -122,10 +125,14 @@ void Scene::Render(){
 		-(float)windowHeight * 0.5f,
 		0.0f
 	);
-
+	
 	RenderBG();
-	RenderMap();
-	RenderEntities();
+	if(sim->hasBegun){
+		RenderMap();
+		RenderEntities();
+	} else{
+		RenderCover();
+	}
 	RenderSceneText();
 
 	modelStack.PopMatrix();
@@ -158,6 +165,10 @@ void Scene::RenderBG(){
 	}
 
 	modelStack.PopMatrix();
+}
+
+void Scene::RenderCover(){
+
 }
 
 void Scene::RenderEntities(){
@@ -455,78 +466,30 @@ void Scene::RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, co
 }
 
 void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, const float textSize){
-	RenderTextOnScreen(
-		textMesh,
+	static std::string texts[]{
 		"F1: Toggle fullscreen",
-		textColor,
-		textSize,
-		0.0f,
-		textSize * 25.5f
-	);
-	RenderTextOnScreen(
-		textMesh,
 		"F2: Change polygon mode",
-		textColor,
-		textSize,
-		0.0f,
-		textSize * 24.5f
-	);
-	RenderTextOnScreen(
-		textMesh,
 		"F3: Toggle visibility of app window",
-		textColor,
-		textSize,
-		0.0f,
-		textSize * 23.5f
-	);
-	RenderTextOnScreen(
-		textMesh,
 		"WASD: Move cam",
-		textColor,
-		textSize,
-		0.0f,
-		textSize * 22.5f
-	);
-	RenderTextOnScreen(
-		textMesh,
 		"R: Reset cam",
-		textColor,
-		textSize,
-		0.0f,
-		textSize * 21.5f
-	);
-	RenderTextOnScreen(
-		textMesh,
 		"O: Toggle tile art",
-		textColor,
-		textSize,
-		0.0f,
-		textSize * 20.5f
-	);
-	RenderTextOnScreen(
-		textMesh,
 		"P: Toggle fog",
-		textColor,
-		textSize,
-		0.0f,
-		textSize * 19.5f
-	);
-	RenderTextOnScreen(
-		textMesh,
 		"Z: Increase sim spd",
-		textColor,
-		textSize,
-		0.0f,
-		textSize * 18.5f
-	);
-	RenderTextOnScreen(
-		textMesh,
 		"X: Decrease sim spd",
-		textColor,
-		textSize,
-		0.0f,
-		textSize * 17.5f
-	);
+	};
+	static size_t size = sizeof(texts) / sizeof(texts[0]);
+	static float val = 25.5f;
+
+	for(size_t i = 0; i < size; ++i){
+		RenderTextOnScreen(
+			textMesh,
+			texts[i],
+			textColor,
+			textSize,
+			0.0f,
+			textSize * (val - (float)i)
+		);
+	}
 }
 
 void Scene::RenderGridAttribsText(Mesh* const textMesh, const Color& textColor, const float textSize){
@@ -578,73 +541,35 @@ void Scene::RenderGridAttribsText(Mesh* const textMesh, const Color& textColor, 
 }
 
 void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
-	RenderTextOnScreen(
-		textMesh,
-		"Sim spd: " + std::to_string(sim->spd).substr(0, std::to_string((int)sim->spd).length() + 3),
-		textColor,
-		textSize,
-		(float)windowWidth,
-		textSize * 25.5f,
-		TextAlignment::Right
-	);
-	RenderTextOnScreen(
-		textMesh,
-		"Sim turn duration: " + std::to_string(sim->turnDuration).substr(0, std::to_string((int)sim->turnDuration).length() + 3),
-		textColor,
-		textSize,
-		(float)windowWidth,
-		textSize * 24.5f,
-		TextAlignment::Right
-	);
-	RenderTextOnScreen(
-		textMesh,
-		"Sim turn elapsed time: " + std::to_string(sim->turnElapsedTime).substr(0, std::to_string((int)sim->turnElapsedTime).length() + 3),
-		textColor,
-		textSize,
-		(float)windowWidth,
-		textSize * 23.5f,
-		TextAlignment::Right
-	);
-	RenderTextOnScreen(
-		textMesh,
-		"Sim turn: " + std::to_string(sim->turn),
-		textColor,
-		textSize,
-		(float)windowWidth,
-		textSize * 22.5f,
-		TextAlignment::Right
-	);
-	RenderTextOnScreen(
-		textMesh,
-		"Sim time of day duration: " + std::to_string(sim->timeOfDayDuration).substr(0, std::to_string((int)sim->timeOfDayDuration).length() + 3),
-		textColor,
-		textSize,
-		(float)windowWidth,
-		textSize * 21.5f,
-		TextAlignment::Right
-	);
-	RenderTextOnScreen(
-		textMesh,
-		"Sim time of day elapsed time: " + std::to_string(sim->timeOfDayElapsedTime).substr(0, std::to_string((int)sim->timeOfDayElapsedTime).length() + 3),
-		textColor,
-		textSize,
-		(float)windowWidth,
-		textSize * 20.5f,
-		TextAlignment::Right
-	);
-
 	static std::string timeOfDayTexts[(int)TimeOfDay::Amt]{
 		"Day",
 		"Rainy",
 		"Night",
 	};
-	RenderTextOnScreen(
-		textMesh,
+	const std::string texts[]{
+		(std::string)"Sim has " + (sim->hasBegun ? "started" : "not started"),
+		"Sim spd: " + std::to_string(sim->spd).substr(0, std::to_string((int)sim->spd).length() + 3),
+		"Sim turn duration: " + std::to_string(sim->turnDuration).substr(0, std::to_string((int)sim->turnDuration).length() + 3),
+		"Sim turn elapsed time: " + std::to_string(sim->turnElapsedTime).substr(0, std::to_string((int)sim->turnElapsedTime).length() + 3),
+		"Sim turn: " + std::to_string(sim->turn),
+		"Sim time of day duration: " + std::to_string(sim->timeOfDayDuration).substr(0, std::to_string((int)sim->timeOfDayDuration).length() + 3),
+		"Sim time of day elapsed time: " + std::to_string(sim->timeOfDayElapsedTime).substr(0, std::to_string((int)sim->timeOfDayElapsedTime).length() + 3),
 		"Sim time of day: " + timeOfDayTexts[(int)sim->timeOfDay],
-		textColor,
-		textSize,
-		(float)windowWidth,
-		textSize * 19.5f,
-		TextAlignment::Right
-	);
+		(std::string)"shldRenderTileArt: " + (shldRenderTileArt ? "Yes" : "No"),
+		(std::string)"shldRenderFog: " + (shldRenderFog ? "Yes" : "No"),
+	};
+	const size_t size = sizeof(texts) / sizeof(texts[0]);
+	static float val = 25.5f;
+
+	for(size_t i = 0; i < size; ++i){
+		RenderTextOnScreen(
+			textMesh,
+			texts[i],
+			textColor,
+			textSize,
+			(float)windowWidth,
+			textSize * (val - (float)i),
+			TextAlignment::Right
+		);
+	}
 }
