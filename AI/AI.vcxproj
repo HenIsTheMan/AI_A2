@@ -163,8 +163,13 @@
     <ClCompile Include="Source\State.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Entity.h" />
+    <ClInclude Include="Source\EntityAttribs.hpp" />
+    <ClInclude Include="Source\EntityTeam.hpp" />
+    <ClInclude Include="Source\EntityType.hpp" />
     <ClInclude Include="Source\FogType.hpp" />
     <ClInclude Include="Source\HexGrid.h" />
+    <ClInclude Include="Source\ObjPool.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\Sim.h" />
     <ClInclude Include="Source\Event.h" />
@@ -198,7 +203,9 @@
   <ItemGroup>
     <None Include="Shaders\AI.fragS" />
     <None Include="Shaders\AI.vertexS" />
+    <None Include="Source\Entity.inl" />
     <None Include="Source\HexGrid.inl" />
+    <None Include="Source\ObjPool.inl" />
     <None Include="Source\StateMachine.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

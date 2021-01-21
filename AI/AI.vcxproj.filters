@@ -41,7 +41,7 @@
       <Filter>Event</Filter>
     </ClCompile>
     <ClCompile Include="Source\Sim.cpp">
-      <Filter>A2</Filter>
+      <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene.cpp">
       <Filter>Scene</Filter>
@@ -106,25 +106,40 @@
       <Filter>Others\Geo</Filter>
     </ClInclude>
     <ClInclude Include="Source\FogType.hpp">
-      <Filter>A2</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Source\HexGrid.h">
-      <Filter>A2</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Source\Sim.h">
-      <Filter>A2</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Source\TileCost.hpp">
-      <Filter>A2</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Source\TileType.hpp">
-      <Filter>A2</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Source\TimeOfDay.hpp">
-      <Filter>A2</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Entity.h">
+      <Filter>Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EntityAttribs.hpp">
+      <Filter>Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EntityTeam.hpp">
+      <Filter>Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EntityType.hpp">
+      <Filter>Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ObjPool.h">
+      <Filter>Obj</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -149,9 +164,6 @@
     <Filter Include="Others\App">
       <UniqueIdentifier>{2cecd5b5-12ca-4af9-86a4-d65b0c91073f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{66b8b471-8130-446e-a930-3e71384e6365}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Event">
       <UniqueIdentifier>{daa924bf-3cb9-4670-bc73-a5c16acb65f7}</UniqueIdentifier>
     </Filter>
@@ -167,7 +179,13 @@
     <Filter Include="Event\Events\Pre-events">
       <UniqueIdentifier>{52777eee-28d2-498c-bd93-5e6aa1918a0a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="A2">
+    <Filter Include="Others\Shaders">
+      <UniqueIdentifier>{66b8b471-8130-446e-a930-3e71384e6365}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Obj">
+      <UniqueIdentifier>{14dcf655-cd65-4a91-8e2e-c0a7b40258a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Misc">
       <UniqueIdentifier>{4cbf9812-0b34-4709-963a-225b9ab37d8d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -176,13 +194,19 @@
       <Filter>State</Filter>
     </None>
     <None Include="Shaders\AI.fragS">
-      <Filter>Shaders</Filter>
+      <Filter>Others\Shaders</Filter>
     </None>
     <None Include="Shaders\AI.vertexS">
-      <Filter>Shaders</Filter>
+      <Filter>Others\Shaders</Filter>
     </None>
     <None Include="Source\HexGrid.inl">
-      <Filter>A2</Filter>
+      <Filter>Misc</Filter>
+    </None>
+    <None Include="Source\Entity.inl">
+      <Filter>Obj</Filter>
+    </None>
+    <None Include="Source\ObjPool.inl">
+      <Filter>Obj</Filter>
     </None>
   </ItemGroup>
 </Project>
