@@ -2,6 +2,8 @@
 
 #include <unordered_map>
 
+#include "State.h"
+
 template <class T, typename Type>
 class StateMachine final{
 public:

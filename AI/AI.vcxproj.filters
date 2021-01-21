@@ -40,11 +40,11 @@
     <ClCompile Include="Source\Publisher.cpp">
       <Filter>Event</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneA2.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Sim.cpp">
       <Filter>A2</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -105,9 +105,6 @@
     <ClInclude Include="Source\Vertex.h">
       <Filter>Others\Geo</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneA2.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Source\FogType.hpp">
       <Filter>A2</Filter>
     </ClInclude>
@@ -125,6 +122,9 @@
     </ClInclude>
     <ClInclude Include="Source\TimeOfDay.hpp">
       <Filter>A2</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

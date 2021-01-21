@@ -1,4 +1,4 @@
-#include "SceneA2.h"
+#include "Scene.h"
 
 #include "App.h"
 #include "GLFW/glfw3.h"
@@ -6,7 +6,7 @@
 extern int windowWidth;
 extern int windowHeight;
 
-SceneA2::SceneA2():
+Scene::Scene():
 	SceneSupport(),
 	shldRenderTileArt(true),
 	shldRenderFog(true),
@@ -48,7 +48,7 @@ SceneA2::SceneA2():
 	grid->SetCols(gridCols);
 }
 
-SceneA2::~SceneA2(){
+Scene::~Scene(){
 	if(sim != nullptr){
 		delete sim;
 		sim = nullptr;
@@ -65,7 +65,7 @@ SceneA2::~SceneA2(){
 	}
 }
 
-void SceneA2::Update(double dt){
+void Scene::Update(double dt){
 	SceneSupport::Update(dt);
 
 	static bool isKeyDownO = false;
@@ -103,10 +103,10 @@ void SceneA2::Update(double dt){
 	UpdateEntities(dt * gameSpd);
 }
 
-void SceneA2::UpdateEntities(const double dt){
+void Scene::UpdateEntities(const double dt){
 }
 
-void SceneA2::Render(){
+void Scene::Render(){
 	SceneSupport::Render();
 
 	modelStack.PushMatrix();
@@ -125,7 +125,7 @@ void SceneA2::Render(){
 	modelStack.PopMatrix();
 }
 
-void SceneA2::RenderBG(){
+void Scene::RenderBG(){
 	modelStack.PushMatrix();
 
 	modelStack.Translate(
@@ -154,10 +154,10 @@ void SceneA2::RenderBG(){
 	modelStack.PopMatrix();
 }
 
-void SceneA2::RenderEntities(){
+void Scene::RenderEntities(){
 }
 
-void SceneA2::RenderMap(){
+void Scene::RenderMap(){
 	const float gridWidth = grid->CalcWidth();
 	const float gridHeight = grid->CalcHeight();
 
@@ -231,7 +231,7 @@ void SceneA2::RenderMap(){
 	}
 }
 
-void SceneA2::RenderFog(const std::vector<FogType>& fogLayer, const int r, const int c){
+void Scene::RenderFog(const std::vector<FogType>& fogLayer, const int r, const int c){
 	switch(fogLayer[r * gridCols + c]){
 		case FogType::Thin:
 			modelStack.PushMatrix();
@@ -272,7 +272,7 @@ void SceneA2::RenderFog(const std::vector<FogType>& fogLayer, const int r, const
 	}
 }
 
-void SceneA2::RenderTile(const std::vector<TileType>& tileLayer, const int r, const int c){
+void Scene::RenderTile(const std::vector<TileType>& tileLayer, const int r, const int c){
 	switch(tileLayer[r * gridCols + c]){
 		case TileType::Empty:
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.7f, 0.7f, 0.7f), 1.0f);
@@ -407,7 +407,7 @@ void SceneA2::RenderTile(const std::vector<TileType>& tileLayer, const int r, co
 	}
 }
 
-void SceneA2::RenderSceneText(){
+void Scene::RenderSceneText(){
 	Mesh* const textMesh = meshList[(int)GeoType::Text];
 	const float textSize = (float)windowHeight * 0.05f;
 
@@ -417,7 +417,7 @@ void SceneA2::RenderSceneText(){
 	RenderGameInfoText(textMesh, Color(1.0f, 0.5f, 0.0f), textSize);
 }
 
-void SceneA2::RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
+void Scene::RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
 	RenderTextOnScreen(
 		textMesh,
 		"Elapsed time: " + std::to_string(elapsedTime).substr(0, std::to_string((int)elapsedTime).length() + 3),
@@ -436,7 +436,7 @@ void SceneA2::RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, 
 	);
 }
 
-void SceneA2::RenderControlsText(Mesh* const textMesh, const Color& textColor, const float textSize){
+void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, const float textSize){
 	RenderTextOnScreen(
 		textMesh,
 		"F1: Toggle fullscreen",
@@ -511,7 +511,7 @@ void SceneA2::RenderControlsText(Mesh* const textMesh, const Color& textColor, c
 	);
 }
 
-void SceneA2::RenderGridAttribsText(Mesh* const textMesh, const Color& textColor, const float textSize){
+void Scene::RenderGridAttribsText(Mesh* const textMesh, const Color& textColor, const float textSize){
 	RenderTextOnScreen(
 		textMesh,
 		"Grid cell scale x: " + std::to_string(gridCellScaleX).substr(0, std::to_string((int)gridCellScaleX).length() + 2),
@@ -559,7 +559,7 @@ void SceneA2::RenderGridAttribsText(Mesh* const textMesh, const Color& textColor
 	);
 }
 
-void SceneA2::RenderGameInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
+void Scene::RenderGameInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
 	const float gameSpd = sim->GetGameSpd();
 	RenderTextOnScreen(
 		textMesh,

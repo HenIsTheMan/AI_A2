@@ -6,10 +6,10 @@
 #include "HexGrid.h"
 #include "Publisher.h"
 
-class SceneA2 final: public SceneSupport{
+class Scene final: public SceneSupport{
 public:
-	SceneA2();
-	~SceneA2();
+	Scene();
+	~Scene();
 
 	void Update(double dt) override;
 	void Render() override;

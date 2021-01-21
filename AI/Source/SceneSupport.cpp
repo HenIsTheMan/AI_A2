@@ -53,14 +53,12 @@ SceneSupport::SceneSupport():
 	meshList[(int)GeoType::Text] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[(int)GeoType::Text]->textureID = LoadImg("Imgs//Calibri.png");
 	meshList[(int)GeoType::Text]->material.kAmbient.Set(1, 0, 0);
-	/*
 	meshList[(int)GeoType::TextMod1] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[(int)GeoType::TextMod1]->textureID = LoadImg("Imgs//CalibriMod1.tga");
 	meshList[(int)GeoType::TextMod1]->material.kAmbient.Set(1, 0, 0);
 	meshList[(int)GeoType::TextMod2] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[(int)GeoType::TextMod2]->textureID = LoadImg("Imgs//CalibriMod2.tga");
 	meshList[(int)GeoType::TextMod2]->material.kAmbient.Set(1, 0, 0);
-	//*/
 
 	meshList[(int)GeoType::DayBG] = MeshBuilder::GenerateSpriteAni("DayBG", 3, 5);
 	meshList[(int)GeoType::DayBG]->textureID = LoadImg("Imgs//DayBG.png");
@@ -78,22 +76,6 @@ SceneSupport::SceneSupport():
 	nightBGSpriteAni->AddAni("NightBG", 0, 4);
 	nightBGSpriteAni->ActivateAni("NightBG", 0.07f);
 
-	/*
-	meshList[(int)GeoType::Block] = MeshBuilder::GenerateQuad("Block", Color(), 1.0f);
-	meshList[(int)GeoType::Block]->textureID = LoadImg("Imgs//Block.png");
-	meshList[(int)GeoType::Quad] = MeshBuilder::GenerateQuad("Quad", Color(), 1.0f);
-
-	meshList[(int)GeoType::Skele] = MeshBuilder::GenerateSpriteAni("Skele", 21, 13);
-	meshList[(int)GeoType::Skele]->textureID = LoadImg("Imgs//Skele.png");
-	meshList[(int)GeoType::Reptile] = MeshBuilder::GenerateSpriteAni("Reptile", 21, 13);
-	meshList[(int)GeoType::Reptile]->textureID = LoadImg("Imgs//Reptile.png");
-	meshList[(int)GeoType::Boy] = MeshBuilder::GenerateSpriteAni("Boy", 21, 13);
-	meshList[(int)GeoType::Boy]->textureID = LoadImg("Imgs//Boy.png");
-	meshList[(int)GeoType::Orc] = MeshBuilder::GenerateSpriteAni("Orc", 21, 13);
-	meshList[(int)GeoType::Orc]->textureID = LoadImg("Imgs//Orc.png");
-	meshList[(int)GeoType::Circle] = MeshBuilder::GenCircle(Color(), 30, 0.5f);
-	//*/
-
 	meshList[(int)GeoType::Fog] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
 	meshList[(int)GeoType::Fog]->textureID = LoadImg("Imgs//Fog.png");
 	meshList[(int)GeoType::Hex] = MeshBuilder::GenHex(Color(), 0.5f);
@@ -109,68 +91,6 @@ SceneSupport::SceneSupport():
 	meshList[(int)GeoType::GrassTile]->textureID = LoadImg("Imgs//Grass.png");
 	meshList[(int)GeoType::MudTile] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
 	meshList[(int)GeoType::MudTile]->textureID = LoadImg("Imgs//Mud.png");
-	
-	/*
-	SpriteAni* const skeleSpriteAni = static_cast<SpriteAni*>(meshList[(int)GeoType::Skele]);
-	skeleSpriteAni->AddAni("SkeleStaticUp", 4 * 13, 4 * 13 + 1);
-	skeleSpriteAni->AddAni("SkeleStaticDown", 6 * 13, 6 * 13 + 1);
-	skeleSpriteAni->AddAni("SkeleStaticLeft", 5 * 13, 5 * 13 + 1);
-	skeleSpriteAni->AddAni("SkeleStaticRight", 7 * 13, 7 * 13 + 1);
-	skeleSpriteAni->AddAni("SkeleMoveUp", 8 * 13 + 1, 8 * 13 + 1 + 8);
-	skeleSpriteAni->AddAni("SkeleMoveDown", 10 * 13 + 1, 10 * 13 + 1 + 8);
-	skeleSpriteAni->AddAni("SkeleMoveLeft", 9 * 13 + 1, 9 * 13 + 1 + 8);
-	skeleSpriteAni->AddAni("SkeleMoveRight", 11 * 13 + 1, 11 * 13 + 1 + 8);
-	skeleSpriteAni->AddAni("SkeleThrustUp", 4 * 13 + 2, 4 * 13 + 2 + 6);
-	skeleSpriteAni->AddAni("SkeleThrustDown", 6 * 13 + 2, 6 * 13 + 2 + 6);
-	skeleSpriteAni->AddAni("SkeleThrustLeft", 5 * 13 + 2, 5 * 13 + 2 + 6);
-	skeleSpriteAni->AddAni("SkeleThrustRight", 7 * 13 + 2, 7 * 13 + 2 + 6);
-	skeleSpriteAni->AddAni("SkeleFacePlant", 20 * 13 + 5, 20 * 13 + 5 + 1);
-
-	SpriteAni* const reptileSpriteAni = static_cast<SpriteAni*>(meshList[(int)GeoType::Reptile]);
-	reptileSpriteAni->AddAni("ReptileStaticUp", 4 * 13, 4 * 13 + 1);
-	reptileSpriteAni->AddAni("ReptileStaticDown", 6 * 13, 6 * 13 + 1);
-	reptileSpriteAni->AddAni("ReptileStaticLeft", 5 * 13, 5 * 13 + 1);
-	reptileSpriteAni->AddAni("ReptileStaticRight", 7 * 13, 7 * 13 + 1);
-	reptileSpriteAni->AddAni("ReptileMoveUp", 8 * 13 + 1, 8 * 13 + 1 + 8);
-	reptileSpriteAni->AddAni("ReptileMoveDown", 10 * 13 + 1, 10 * 13 + 1 + 8);
-	reptileSpriteAni->AddAni("ReptileMoveLeft", 9 * 13 + 1, 9 * 13 + 1 + 8);
-	reptileSpriteAni->AddAni("ReptileMoveRight", 11 * 13 + 1, 11 * 13 + 1 + 8);
-	reptileSpriteAni->AddAni("ReptileShootUp", 16 * 13, 16 * 13 + 10);
-	reptileSpriteAni->AddAni("ReptileShootDown", 18 * 13, 18 * 13 + 10);
-	reptileSpriteAni->AddAni("ReptileShootLeft", 17 * 13, 17 * 13 + 10);
-	reptileSpriteAni->AddAni("ReptileShootRight", 19 * 13, 19 * 13 + 10);
-	reptileSpriteAni->AddAni("ReptileFacePlant", 20 * 13 + 5, 20 * 13 + 5 + 1);
-
-	SpriteAni* const boySpriteAni = static_cast<SpriteAni*>(meshList[(int)GeoType::Boy]);
-	boySpriteAni->AddAni("BoyStaticUp", 4 * 13, 4 * 13 + 1);
-	boySpriteAni->AddAni("BoyStaticDown", 6 * 13, 6 * 13 + 1);
-	boySpriteAni->AddAni("BoyStaticLeft", 5 * 13, 5 * 13 + 1);
-	boySpriteAni->AddAni("BoyStaticRight", 7 * 13, 7 * 13 + 1);
-	boySpriteAni->AddAni("BoyMoveUp", 8 * 13 + 1, 8 * 13 + 1 + 8);
-	boySpriteAni->AddAni("BoyMoveDown", 10 * 13 + 1, 10 * 13 + 1 + 8);
-	boySpriteAni->AddAni("BoyMoveLeft", 9 * 13 + 1, 9 * 13 + 1 + 8);
-	boySpriteAni->AddAni("BoyMoveRight", 11 * 13 + 1, 11 * 13 + 1 + 8);
-	boySpriteAni->AddAni("BoySlashUp", 12 * 13, 12 * 13 + 6);
-	boySpriteAni->AddAni("BoySlashDown", 14 * 13, 14 * 13 + 6);
-	boySpriteAni->AddAni("BoySlashLeft", 13 * 13, 13 * 13 + 6);
-	boySpriteAni->AddAni("BoySlashRight", 15 * 13, 15 * 13 + 6);
-	boySpriteAni->AddAni("BoyFacePlant", 20 * 13 + 5, 20 * 13 + 5 + 1);
-
-	SpriteAni* const orcSpriteAni = static_cast<SpriteAni*>(meshList[(int)GeoType::Orc]);
-	orcSpriteAni->AddAni("OrcStaticUp", 4 * 13, 4 * 13 + 1);
-	orcSpriteAni->AddAni("OrcStaticDown", 6 * 13, 6 * 13 + 1);
-	orcSpriteAni->AddAni("OrcStaticLeft", 5 * 13, 5 * 13 + 1);
-	orcSpriteAni->AddAni("OrcStaticRight", 7 * 13, 7 * 13 + 1);
-	orcSpriteAni->AddAni("OrcMoveUp", 8 * 13 + 1, 8 * 13 + 1 + 8);
-	orcSpriteAni->AddAni("OrcMoveDown", 10 * 13 + 1, 10 * 13 + 1 + 8);
-	orcSpriteAni->AddAni("OrcMoveLeft", 9 * 13 + 1, 9 * 13 + 1 + 8);
-	orcSpriteAni->AddAni("OrcMoveRight", 11 * 13 + 1, 11 * 13 + 1 + 8);
-	orcSpriteAni->AddAni("OrcSmackUp", 12 * 13, 12 * 13 + 6);
-	orcSpriteAni->AddAni("OrcSmackDown", 14 * 13, 14 * 13 + 6);
-	orcSpriteAni->AddAni("OrcSmackLeft", 13 * 13, 13 * 13 + 6);
-	orcSpriteAni->AddAni("OrcSmackRight", 15 * 13, 15 * 13 + 6);
-	orcSpriteAni->AddAni("OrcFacePlant", 20 * 13 + 5, 20 * 13 + 5 + 1);
-	//*/
 }
 
 SceneSupport::~SceneSupport(){
