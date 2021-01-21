@@ -21,6 +21,8 @@ int windowHeight;
 
 extern bool endLoop;
 
+IScene* App::im_Scene = nullptr;
+
 static void error_callback(int error, const char* description){
 	fputs(description, stderr);
 	_fgetchar();
@@ -91,6 +93,7 @@ void App::Init(){
 	}
 
 	im_Scene = new Scene();
+	im_Scene->Init();
 
 	glfwSwapInterval(0); //Disable VSync
 }

@@ -63,11 +63,9 @@ void SpriteAni::Update(float elapsedTime){
 
 void SpriteAni::Render() const{
 	if(currAni){
-		assert(
-			currAni->currFrameIndex >= 0
-			&& currAni->currFrameIndex <= currAni->frames.back()
-			&& "currAni->currFrameIndex is not valid!"
-		);
+		if(!(currAni->currFrameIndex >= 0 && currAni->currFrameIndex <= currAni->frames.back())){
+			return;
+		}
 
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);

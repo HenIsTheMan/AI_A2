@@ -10,6 +10,7 @@ extern int windowHeight;
 
 Scene::Scene():
 	SceneSupport(),
+	canMakeSimMap(false),
 	shldRenderTileArt(true),
 	shldRenderFog(true),
 	customHue(0.0f),
@@ -23,39 +24,6 @@ Scene::Scene():
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
 	publisher(Publisher::RetrieveGlobalObjPtr())
 {
-	sim->status = RuntimeStatus::Waiting;
-	sim->spd = 1.0f;
-	sim->turnDuration = 5.0f;
-	sim->turnElapsedTime = 0.0f;
-	sim->turn = 0;
-	sim->timeOfDayDuration = 10.0f;
-	sim->timeOfDayElapsedTime = 0.0f;
-	sim->timeOfDay = (TimeOfDay)Math::RandIntMinMax((int)TimeOfDay::Day, (int)TimeOfDay::Amt - 1);
-
-	sim->ChangeFogWeight((int)FogType::Inexistent, 5);
-	sim->ChangeFogWeight((int)FogType::Thin, 20);
-	sim->ChangeFogWeight((int)FogType::Thick, 20);
-
-	sim->ChangeTileWeight((int)TileType::Invalid, 0);
-	sim->ChangeTileWeight((int)TileType::Wall, 70);
-	sim->ChangeTileWeight((int)TileType::Empty, 10);
-	sim->ChangeTileWeight((int)TileType::Soil, 30);
-	sim->ChangeTileWeight((int)TileType::Fire, 20);
-	sim->ChangeTileWeight((int)TileType::Water, 20);
-	sim->ChangeTileWeight((int)TileType::Grass, 20);
-	sim->ChangeTileWeight((int)TileType::Mud, 20);
-
-	sim->GenFogLayer(gridRows, gridCols, 0, 0, 2169);
-	sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169);
-	sim->RefineTileLayer(gridRows, gridCols, 2169);
-	sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 5, 5, 2);
-
-	grid->SetGridType(gridType);
-	grid->SetCellScaleX(gridCellScaleX);
-	grid->SetCellScaleY(gridCellScaleY);
-	grid->SetLineThickness(gridLineThickness);
-	grid->SetRows(gridRows);
-	grid->SetCols(gridCols);
 }
 
 Scene::~Scene(){
@@ -73,6 +41,26 @@ Scene::~Scene(){
 		publisher->Destroy();
 		publisher = nullptr;
 	}
+}
+
+void Scene::Init(){
+	SceneSupport::Init();
+
+	sim->status = RuntimeStatus::Waiting;
+	sim->spd = 1.0f;
+	sim->turnDuration = 5.0f;
+	sim->turnElapsedTime = 0.0f;
+	sim->turn = 0;
+	sim->timeOfDayDuration = 10.0f;
+	sim->timeOfDayElapsedTime = 0.0f;
+	sim->timeOfDay = (TimeOfDay)Math::RandIntMinMax((int)TimeOfDay::Day, (int)TimeOfDay::Amt - 1);
+
+	grid->SetGridType(gridType);
+	grid->SetCellScaleX(gridCellScaleX);
+	grid->SetCellScaleY(gridCellScaleY);
+	grid->SetLineThickness(gridLineThickness);
+	grid->SetRows(gridRows);
+	grid->SetCols(gridCols);
 }
 
 void Scene::Update(double dt){
@@ -178,6 +166,30 @@ void Scene::Update(double dt){
 		case RuntimeStatus::Waiting:
 			if(App::IsMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)){
 				sim->status = RuntimeStatus::Ongoing;
+
+				if(canMakeSimMap){
+					sim->ChangeFogWeight((int)FogType::Inexistent, 5);
+					sim->ChangeFogWeight((int)FogType::Thin, 20);
+					sim->ChangeFogWeight((int)FogType::Thick, 20);
+
+					sim->ChangeTileWeight((int)TileType::Invalid, 0);
+					sim->ChangeTileWeight((int)TileType::Wall, 70);
+					sim->ChangeTileWeight((int)TileType::Empty, 10);
+					sim->ChangeTileWeight((int)TileType::Soil, 30);
+					sim->ChangeTileWeight((int)TileType::Fire, 20);
+					sim->ChangeTileWeight((int)TileType::Water, 20);
+					sim->ChangeTileWeight((int)TileType::Grass, 20);
+					sim->ChangeTileWeight((int)TileType::Mud, 20);
+
+					const float* const quickRenderDelay0 = new float(0.5f);
+					sim->GenFogLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay0);
+					sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169);
+					sim->RefineTileLayer(gridRows, gridCols, 2169);
+					sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 5, 5, 2);
+					delete quickRenderDelay0;
+
+					canMakeSimMap = false;
+				}
 			}
 			break;
 		case RuntimeStatus::Ongoing:
@@ -215,6 +227,10 @@ void Scene::Render(){
 	RenderSceneText();
 
 	modelStack.PopMatrix();
+
+	if(sim->status == RuntimeStatus::Waiting){
+		canMakeSimMap = true;
+	}
 }
 
 void Scene::RenderBG(){
@@ -331,11 +347,13 @@ void Scene::RenderMap(){
 	const float xOffset = ((float)windowWidth - gridWidth) * 0.5f;
 	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f;
 
-	const std::vector<FogType>& fogLayer = sim->GetFogLayer();
 	const std::vector<TileType>& tileLayer = sim->GetTileLayer();
+	const int tileLayerSize = (int)tileLayer.size();
+	const int tileCols = (tileLayerSize - 1) % gridCols;
+	const int tileRows = (tileLayerSize - 1) / gridCols;
 
-	for(int r = 0; r < gridRows; ++r){
-		for(int c = 0; c < gridCols; ++c){
+	for(int r = 0; r < tileRows; ++r){
+		for(int c = 0; c < tileCols; ++c){
 			modelStack.PushMatrix();
 
 			modelStack.Translate(
@@ -373,9 +391,14 @@ void Scene::RenderMap(){
 	}
 
 	if(shldRenderFog){
+		const std::vector<FogType>& fogLayer = sim->GetFogLayer();
+		const int fogLayerSize = (int)fogLayer.size();
+		const int fogCols = (fogLayerSize - 1) % gridCols;
+		const int fogRows = (fogLayerSize - 1) / gridCols;
+
 		glDepthFunc(GL_ALWAYS);
-		for(int r = 0; r < gridRows; ++r){
-			for(int c = 0; c < gridCols; ++c){
+		for(int r = 0; r < fogRows; ++r){
+			for(int c = 0; c < fogCols; ++c){
 				modelStack.PushMatrix();
 
 				modelStack.Translate(

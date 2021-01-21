@@ -11,9 +11,11 @@ public:
 	Scene();
 	~Scene();
 
+	void Init() override;
 	void Update(double dt) override;
 	void Render() override;
 private:
+	bool canMakeSimMap;
 	bool shldRenderTileArt;
 	bool shldRenderFog;
 	float customHue;

@@ -26,6 +26,21 @@ SceneSupport::SceneSupport():
 	FPS(0.0f),
 	orthoProjectionScaleFactor(1.0)
 {
+}
+
+SceneSupport::~SceneSupport(){
+	for(int i = 0; i < (int)GeoType::Amt; ++i){
+		if(meshList[i]){
+			delete meshList[i];
+			meshList[i] = nullptr;
+		}
+	}
+
+	glDeleteProgram(im_programID);
+	glDeleteVertexArrays(1, &im_vertexArrayID);
+}
+
+void SceneSupport::Init(){
 	Math::InitRNG();
 
 	glClearColor(1.f, 0.82f, 0.86f, 1.f);
@@ -93,18 +108,6 @@ SceneSupport::SceneSupport():
 	meshList[(int)GeoType::GrassTile]->textureID = LoadImg("Imgs//Grass.png");
 	meshList[(int)GeoType::MudTile] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
 	meshList[(int)GeoType::MudTile]->textureID = LoadImg("Imgs//Mud.png");
-}
-
-SceneSupport::~SceneSupport(){
-	for(int i = 0; i < (int)GeoType::Amt; ++i){
-		if(meshList[i]){
-			delete meshList[i];
-			meshList[i] = nullptr;
-		}
-	}
-
-	glDeleteProgram(im_programID);
-	glDeleteVertexArrays(1, &im_vertexArrayID);
 }
 
 void SceneSupport::Update(double dt){

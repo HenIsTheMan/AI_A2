@@ -48,6 +48,7 @@ public:
 
 	virtual ~SceneSupport();
 
+	virtual void Init() override;
 	virtual void Update(double dt) override;
 	virtual void Render() override;
 

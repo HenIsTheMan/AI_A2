@@ -2,6 +2,8 @@
 
 #include "Sim.h"
 
+#include "App.h"
+
 #include "MyMath.h"
 #include "TileCost.hpp"
 
@@ -29,7 +31,7 @@ const std::vector<TileType>& Sim::GetTileLayer() const{
 	return tileLayer;
 }
 
-void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key){
+void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key, const float* const quickRenderDelay){
 	int fogSumOfWeights = 0;
 	for(int i = 0; i < (int)FogType::Amt; ++i){
 		fogSumOfWeights += fogWeights[i];
@@ -50,6 +52,14 @@ void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow
 			const int fogWeight = fogWeights[i];
 			if(val <= fogWeight){
 				fogLayer.emplace_back((FogType)i);
+
+				if(quickRenderDelay != nullptr){
+					App::QuickRender();
+					/*float currTime = 0.0f;
+					while(){
+					}*/
+				}
+
 				break;
 			}
 			val -= fogWeight;

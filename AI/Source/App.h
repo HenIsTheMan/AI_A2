@@ -17,7 +17,7 @@ public:
 	void Run();
 	void Exit();
 
-	void QuickRender();
+	static void QuickRender();
 
 	static bool Key(unsigned short key);
 	static bool IsMousePressed(unsigned short key);
@@ -25,8 +25,9 @@ public:
 private:
 	App() = default;
 
-	IScene* im_Scene = nullptr;
 	StopWatch im_Timer = StopWatch();
+	
+	static IScene* im_Scene;
 };
 
 #endif
