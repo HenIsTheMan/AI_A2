@@ -144,6 +144,9 @@
     <ClInclude Include="Source\Easing.hpp">
       <Filter>Misc</Filter>
     </ClInclude>
+    <ClInclude Include="Source\RuntimeStatus.hpp">
+      <Filter>Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

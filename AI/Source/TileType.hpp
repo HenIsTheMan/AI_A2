@@ -1,3 +1,5 @@
+#pragma once
+
 enum struct TileType: int{
 	Invalid,
 	Wall,

@@ -1,3 +1,5 @@
+#pragma once
+
 enum struct TileCost: int{
 	InvalidCost = -999,
 	WallCost = -1,

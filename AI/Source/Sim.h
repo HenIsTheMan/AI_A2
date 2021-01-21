@@ -1,5 +1,8 @@
+#pragma once
+
 #include <vector>
 
+#include "RuntimeStatus.hpp"
 #include "TimeOfDay.hpp"
 
 #include "FogType.hpp"
@@ -8,7 +11,7 @@
 class Sim final{
 public:
 	struct{
-		bool hasBegun = false;
+		RuntimeStatus status = RuntimeStatus::Amt;
 		float spd = 0.0f;
 		float turnDuration = 0.0f;
 		float turnElapsedTime = 0.0f;

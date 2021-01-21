@@ -23,7 +23,7 @@ Scene::Scene():
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
 	publisher(Publisher::RetrieveGlobalObjPtr())
 {
-	sim->hasBegun = false;
+	sim->status = RuntimeStatus::Waiting;
 	sim->spd = 1.0f;
 	sim->turnDuration = 5.0f;
 	sim->turnElapsedTime = 0.0f;
@@ -115,8 +115,15 @@ void Scene::Update(double dt){
 	}
 	simSpd = Math::Clamp(simSpd, 0.2f, 4.0f);
 
-	if(sim->hasBegun){
-		UpdateEntities(dt * simSpd);
+	switch(sim->status){
+		case RuntimeStatus::Waiting:
+			if(App::IsMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)){
+				sim->status = RuntimeStatus::Ongoing;
+			}
+			break;
+		case RuntimeStatus::Ongoing:
+			UpdateEntities(dt * simSpd);
+			break;
 	}
 }
 
@@ -135,12 +142,15 @@ void Scene::Render(){
 	);
 	
 	RenderBG();
-	if(sim->hasBegun){
-		RenderMap();
-		RenderEntities();
-	} else{
-		RenderCoverMap();
-		RenderCoverText();
+	switch(sim->status){
+		case RuntimeStatus::Waiting:
+			RenderCoverMap();
+			RenderCoverText();
+			break;
+		case RuntimeStatus::Ongoing:
+			RenderMap();
+			RenderEntities();
+			break;
 	}
 	RenderSceneText();
 
@@ -621,13 +631,19 @@ void Scene::RenderGridAttribsText(Mesh* const textMesh, const Color& textColor, 
 }
 
 void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
+	static std::string runtimeStatusTexts[(int)RuntimeStatus::Amt]{
+		"is waiting",
+		"is ongoing",
+		"has ended",
+	};
 	static std::string timeOfDayTexts[(int)TimeOfDay::Amt]{
 		"Day",
 		"Rainy",
 		"Night",
 	};
+
 	const std::string texts[]{
-		(std::string)"Sim has " + (sim->hasBegun ? "started" : "not started"),
+		(std::string)"Sim " + runtimeStatusTexts[(int)sim->status],
 		"Sim spd: " + std::to_string(sim->spd).substr(0, std::to_string((int)sim->spd).length() + 3),
 		"Sim turn duration: " + std::to_string(sim->turnDuration).substr(0, std::to_string((int)sim->turnDuration).length() + 3),
 		"Sim turn elapsed time: " + std::to_string(sim->turnElapsedTime).substr(0, std::to_string((int)sim->turnElapsedTime).length() + 3),

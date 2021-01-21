@@ -171,6 +171,7 @@
     <ClInclude Include="Source\FogType.hpp" />
     <ClInclude Include="Source\HexGrid.h" />
     <ClInclude Include="Source\ObjPool.h" />
+    <ClInclude Include="Source\RuntimeStatus.hpp" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\Sim.h" />
     <ClInclude Include="Source\Event.h" />

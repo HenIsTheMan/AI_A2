@@ -26,6 +26,8 @@ SceneSupport::SceneSupport():
 	FPS(0.0f),
 	orthoProjectionScaleFactor(1.0)
 {
+	Math::InitRNG();
+
 	glClearColor(1.f, 0.82f, 0.86f, 1.f);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
