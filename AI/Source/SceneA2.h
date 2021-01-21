@@ -4,7 +4,6 @@
 
 #include "Sim.h"
 #include "HexGrid.h"
-#include "ObjPool.h"
 #include "Publisher.h"
 
 class SceneA2 final: public SceneSupport{
@@ -27,7 +26,6 @@ private:
 
 	Sim* sim;
 	HexGrid<float>* grid;
-	ObjPool<Entity>* objPool;
 	Publisher* publisher;
 
 	void UpdateEntities(const double dt);

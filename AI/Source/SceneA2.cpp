@@ -18,7 +18,6 @@ SceneA2::SceneA2():
 	gridCols(19),
 	sim(new Sim()),
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
-	objPool(new ObjPool<Entity>()),
 	publisher(Publisher::RetrieveGlobalObjPtr())
 {
 	sim->SetTimeOfDay(TimeOfDay::Rainy);
@@ -58,11 +57,6 @@ SceneA2::~SceneA2(){
 	if(grid != nullptr){
 		delete grid;
 		grid = nullptr;
-	}
-
-	if(objPool){
-		delete objPool;
-		objPool = nullptr;
 	}
 
 	if(publisher){
