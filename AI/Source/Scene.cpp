@@ -181,12 +181,18 @@ void Scene::Update(double dt){
 					sim->ChangeTileWeight((int)TileType::Grass, 20);
 					sim->ChangeTileWeight((int)TileType::Mud, 20);
 
-					const float* const quickRenderDelay0 = new float(0.05f);
+					const float* const quickRenderDelay0 = new float(0.015f);
+					const float* const quickRenderDelay1 = new float(0.015f);
+					const float* const quickRenderDelay2 = new float(0.015f);
+					const float* const quickRenderDelay3 = new float(0.015f);
 					sim->GenFogLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay0);
-					sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169);
-					sim->RefineTileLayer(gridRows, gridCols, 2169);
-					sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 5, 5, 2);
+					sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay1);
+					sim->RefineTileLayer(gridRows, gridCols, 2169, quickRenderDelay2);
+					sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 5, 5, 2, quickRenderDelay3);
 					delete quickRenderDelay0;
+					delete quickRenderDelay1;
+					delete quickRenderDelay2;
+					delete quickRenderDelay3;
 
 					canMakeSimMap = false;
 				}

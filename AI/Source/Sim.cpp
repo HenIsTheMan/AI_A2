@@ -76,7 +76,7 @@ void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow
 	fogLayer[startRow * gridCols + startCol] = FogType::Inexistent;
 }
 
-void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key){
+void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key, const float* quickRenderDelay){
 	srand(key);
 	const int gridTotalCells = gridRows * gridCols;
 	std::vector<int> wallIndices;
@@ -97,6 +97,18 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 	const int startIndex = startRow * gridCols + startCol;
 	tileLayer[startIndex] = TileType::Empty;
 	visited[startIndex] = true;
+
+	if(quickRenderDelay != nullptr){
+		App::QuickRender();
+		float currTime = 0.0f;
+
+		while(quickRenderDelay != nullptr && currTime < *quickRenderDelay){
+			currTime += (float)timer.getElapsedTime();
+			if(App::Key(VK_SPACE)){
+				quickRenderDelay = nullptr;
+			}
+		}
+	}
 
 	const int upIndex = (startRow + 1) * gridCols + startCol;
 	const int downIndex = (startRow - 1) * gridCols + startCol;
@@ -165,6 +177,18 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 			tileLayer[otherIndex] = TileType::Empty;
 			visited[otherIndex] = true;
 
+			if(quickRenderDelay != nullptr){
+				App::QuickRender();
+				float currTime = 0.0f;
+
+				while(quickRenderDelay != nullptr && currTime < *quickRenderDelay){
+					currTime += (float)timer.getElapsedTime();
+					if(App::Key(VK_SPACE)){
+						quickRenderDelay = nullptr;
+					}
+				}
+			}
+
 			const int otherUpIndex = (otherY + 1) * gridCols + otherX;
 			const int otherDownIndex = (otherY - 1) * gridCols + otherX;
 			const int otherLeftIndex = otherY * gridCols + (otherX - 1);
@@ -213,7 +237,7 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 	}
 }
 
-void Sim::RefineTileLayer(const int gridRows, const int gridCols, const unsigned int key){
+void Sim::RefineTileLayer(const int gridRows, const int gridCols, const unsigned int key, const float* quickRenderDelay){
 	int tileSumOfWeights = 0;
 	for(int i = 0; i < (int)TileType::Amt; ++i){
 		tileSumOfWeights += tileWeights[i];
@@ -235,6 +259,19 @@ void Sim::RefineTileLayer(const int gridRows, const int gridCols, const unsigned
 				const int tileWeight = tileWeights[i];
 				if(val <= tileWeight){
 					type = (TileType)i;
+
+					if(quickRenderDelay != nullptr){
+						App::QuickRender();
+						float currTime = 0.0f;
+
+						while(quickRenderDelay != nullptr && currTime < *quickRenderDelay){
+							currTime += (float)timer.getElapsedTime();
+							if(App::Key(VK_SPACE)){
+								quickRenderDelay = nullptr;
+							}
+						}
+					}
+
 					break;
 				}
 				val -= tileWeight;
@@ -243,7 +280,7 @@ void Sim::RefineTileLayer(const int gridRows, const int gridCols, const unsigned
 	}
 }
 
-void Sim::MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, const int row, const int col, const int radius){
+void Sim::MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, const int row, const int col, const int radius, const float* quickRenderDelay){
 	std::vector<std::pair<int, int>> myVec;
 	myVec.emplace_back(std::make_pair(0, row * gridCols + col));
 
@@ -299,6 +336,18 @@ void Sim::MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, cons
 		}
 
 		myVec.erase(myVec.begin());
+
+		if(quickRenderDelay != nullptr){
+			App::QuickRender();
+			float currTime = 0.0f;
+
+			while(quickRenderDelay != nullptr && currTime < *quickRenderDelay){
+				currTime += (float)timer.getElapsedTime();
+				if(App::Key(VK_SPACE)){
+					quickRenderDelay = nullptr;
+				}
+			}
+		}
 	}
 }
 

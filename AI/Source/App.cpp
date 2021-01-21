@@ -33,9 +33,8 @@ static void resize_callback(GLFWwindow* window, int w, int h){
 	windowHeight = h;
 }
 
-bool App::Key(unsigned short key)
-{
-    return ((GetAsyncKeyState(key) & 0x8001) != 0);
+bool App::Key(unsigned short key){
+    return GetAsyncKeyState(key) & 0x8000;
 }
 
 bool App::IsMousePressed(unsigned short key) //0 - Left, 1 - Right, 2 - Middle
