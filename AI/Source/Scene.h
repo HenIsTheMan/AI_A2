@@ -16,6 +16,7 @@ public:
 private:
 	bool shldRenderTileArt;
 	bool shldRenderFog;
+	float customHue;
 
 	HexGrid<float>::GridType gridType;
 	float gridCellScaleX;

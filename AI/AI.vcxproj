@@ -163,6 +163,7 @@
     <ClCompile Include="Source\State.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Easing.hpp" />
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\EntityAttribs.hpp" />
     <ClInclude Include="Source\EntityTeam.hpp" />

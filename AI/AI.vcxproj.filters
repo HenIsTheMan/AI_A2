@@ -141,6 +141,9 @@
     <ClInclude Include="Source\ObjPool.h">
       <Filter>Obj</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Easing.hpp">
+      <Filter>Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

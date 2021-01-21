@@ -10,6 +10,7 @@ Scene::Scene():
 	SceneSupport(),
 	shldRenderTileArt(true),
 	shldRenderFog(true),
+	customHue(0.0f),
 	gridType(HexGrid<float>::GridType::FlatTop),
 	gridCellScaleX(50.0f),
 	gridCellScaleY(50.0f),
@@ -20,7 +21,7 @@ Scene::Scene():
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
 	publisher(Publisher::RetrieveGlobalObjPtr())
 {
-	sim->hasBegun = false;
+	sim->hasBegun = true;
 	sim->spd = 1.0f;
 	sim->turnDuration = 5.0f;
 	sim->turnElapsedTime = 0.0f;
@@ -74,6 +75,11 @@ Scene::~Scene(){
 
 void Scene::Update(double dt){
 	SceneSupport::Update(dt);
+
+	customHue += (float)dt * 40.0f;
+	if(customHue >= 360.0f){
+		customHue = 0.0f;
+	}
 
 	static bool isKeyDownO = false;
 	static bool isKeyDownP = false;
@@ -307,7 +313,7 @@ void Scene::RenderTile(const std::vector<TileType>& tileLayer, const int r, cons
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.7f, 0.7f, 0.7f), 1.0f);
 			break;
 		case TileType::Wall:
-			RenderMesh(meshList[(int)GeoType::Hex], true, Color::HSVToRGB({(cosf(elapsedTime * 0.4f) * 0.5f + 0.5f) * 360.0f, 1.0f, 0.9f}), 1.0f);
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color::HSVToRGB({customHue, 1.0f, 0.9f}), 1.0f);
 
 			if(shldRenderTileArt){
 				modelStack.PushMatrix();
