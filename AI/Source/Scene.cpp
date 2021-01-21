@@ -30,7 +30,7 @@ Scene::Scene():
 	sim->turn = 0;
 	sim->timeOfDayDuration = 10.0f;
 	sim->timeOfDayElapsedTime = 0.0f;
-	sim->timeOfDay = (TimeOfDay)Math::RandIntMinMax((int)TimeOfDay::Day, (int)TimeOfDay::Night);
+	sim->timeOfDay = (TimeOfDay)Math::RandIntMinMax((int)TimeOfDay::Day, (int)TimeOfDay::Amt - 1);
 
 	sim->ChangeFogWeight((int)FogType::Inexistent, 5);
 	sim->ChangeFogWeight((int)FogType::Thin, 20);
@@ -122,6 +122,7 @@ void Scene::Update(double dt){
 			}
 			break;
 		case RuntimeStatus::Ongoing:
+			sim->Update(dt); //Not (dt * simSpd) as...
 			UpdateEntities(dt * simSpd);
 			break;
 	}

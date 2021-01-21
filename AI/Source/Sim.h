@@ -24,6 +24,8 @@ public:
 	Sim();
 	~Sim() = default;
 
+	void Update(const double dt);
+
 	void ChangeFogWeight(const int index, const int fogWeight);
 	void ChangeTileWeight(const int index, const int tileWeight);
 

@@ -2,6 +2,7 @@
 
 #include "Sim.h"
 
+#include "MyMath.h"
 #include "TileCost.hpp"
 
 Sim::Sim():
@@ -281,5 +282,19 @@ void Sim::MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, cons
 		}
 
 		myVec.erase(myVec.begin());
+	}
+}
+
+void Sim::Update(const double dt){
+	turnElapsedTime += (float)dt;
+	timeOfDayElapsedTime += (float)dt;
+
+	if(turnElapsedTime >= turnDuration){
+		++turn;
+		turnElapsedTime = 0.0f;
+	}
+	if(timeOfDayElapsedTime >= timeOfDayDuration){
+		timeOfDay = (TimeOfDay)Math::RandIntMinMax((int)TimeOfDay::Day, (int)TimeOfDay::Amt - 1);
+		timeOfDayElapsedTime = 0.0f;
 	}
 }
