@@ -15,6 +15,9 @@ public:
 	void Update(double dt) override;
 	void Render() override;
 private:
+	bool shldRenderTileArt;
+	bool shldRenderFog;
+
 	HexGrid<float>::GridType gridType;
 	float gridCellScaleX;
 	float gridCellScaleY;

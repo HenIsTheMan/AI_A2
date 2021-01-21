@@ -8,6 +8,8 @@ extern int windowHeight;
 
 SceneA2::SceneA2():
 	SceneSupport(),
+	shldRenderTileArt(true),
+	shldRenderFog(true),
 	gridType(HexGrid<float>::GridType::FlatTop),
 	gridCellScaleX(50.0f),
 	gridCellScaleY(50.0f),
@@ -71,6 +73,21 @@ SceneA2::~SceneA2(){
 
 void SceneA2::Update(double dt){
 	SceneSupport::Update(dt);
+
+	static bool isKeyDownO = false;
+	static bool isKeyDownP = false;
+	if(!isKeyDownO && App::Key('O')){
+		shldRenderTileArt = !shldRenderTileArt;
+		isKeyDownO = true;
+	} else if(isKeyDownO && !App::Key('O')){
+		isKeyDownO = false;
+	}
+	if(!isKeyDownP && App::Key('P')){
+		shldRenderFog = !shldRenderFog;
+		isKeyDownP = true;
+	} else if(isKeyDownP && !App::Key('P')){
+		isKeyDownP = false;
+	}
 
 	float& gameSpd = sim->RetrieveGameSpd();
 	static bool isKeyDownZ = false;
@@ -194,28 +211,30 @@ void SceneA2::RenderMap(){
 		}
 	}
 
-	glDepthFunc(GL_ALWAYS);
-	for(int r = 0; r < gridRows; ++r){
-		for(int c = 0; c < gridCols; ++c){
-			modelStack.PushMatrix();
+	if(shldRenderFog){
+		glDepthFunc(GL_ALWAYS);
+		for(int r = 0; r < gridRows; ++r){
+			for(int c = 0; c < gridCols; ++c){
+				modelStack.PushMatrix();
 
-			modelStack.Translate(
-				xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c + (c & 1) * grid->CalcAltOffsetX(),
-				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
-				0.1f
-			);
-			modelStack.Scale(
-				gridCellScaleX,
-				gridCellScaleY,
-				1.0f
-			);
+				modelStack.Translate(
+					xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c + (c & 1) * grid->CalcAltOffsetX(),
+					yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
+					0.1f
+				);
+				modelStack.Scale(
+					gridCellScaleX,
+					gridCellScaleY,
+					1.0f
+				);
 
-			RenderFog(fogLayer, r, c);
+				RenderFog(fogLayer, r, c);
 
-			modelStack.PopMatrix();
+				modelStack.PopMatrix();
+			}
 		}
+		glDepthFunc(GL_LESS);
 	}
-	glDepthFunc(GL_LESS);
 }
 
 void SceneA2::RenderFog(const std::vector<FogType>& fogLayer, const int r, const int c){
@@ -267,117 +286,129 @@ void SceneA2::RenderTile(const std::vector<TileType>& tileLayer, const int r, co
 		case TileType::Wall:
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color::HSVToRGB({(cosf(elapsedTime * 0.4f) * 0.5f + 0.5f) * 360.0f, 1.0f, 0.9f}), 1.0f);
 
-			modelStack.PushMatrix();
+			if(shldRenderTileArt){
+				modelStack.PushMatrix();
 
-			modelStack.Translate(
-				0.0f,
-				0.0f,
-				0.05f
-			);
+				modelStack.Translate(
+					0.0f,
+					0.0f,
+					0.05f
+				);
 
-			RenderMesh(meshList[(int)GeoType::WallTile], true, Color(0.6f, 0.6f, 0.6f), 1.0f);
+				RenderMesh(meshList[(int)GeoType::WallTile], true, Color(0.6f, 0.6f, 0.6f), 1.0f);
 
-			modelStack.PopMatrix();
+				modelStack.PopMatrix();
+			}
 			break;
 		case TileType::Soil:
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.8f, 0.52f, 0.25f), 1.0f);
 
-			modelStack.PushMatrix();
+			if(shldRenderTileArt){
+				modelStack.PushMatrix();
 
-			modelStack.Translate(
-				0.0f,
-				0.0f,
-				0.05f
-			);
-			modelStack.Scale(
-				0.6f,
-				0.6f,
-				1.0f
-			);
+				modelStack.Translate(
+					0.0f,
+					0.0f,
+					0.05f
+				);
+				modelStack.Scale(
+					0.6f,
+					0.6f,
+					1.0f
+				);
 
-			RenderMesh(meshList[(int)GeoType::SoilTile], true, Color(), 1.0f);
+				RenderMesh(meshList[(int)GeoType::SoilTile], true, Color(), 1.0f);
 
-			modelStack.PopMatrix();
+				modelStack.PopMatrix();
+			}
 			break;
 		case TileType::Fire:
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.73f, 0.0f, 0.0f), 1.0f);
 
-			modelStack.PushMatrix();
+			if(shldRenderTileArt){
+				modelStack.PushMatrix();
 
-			modelStack.Translate(
-				0.0f,
-				0.0f,
-				0.05f
-			);
-			modelStack.Scale(
-				0.6f,
-				0.6f,
-				1.0f
-			);
+				modelStack.Translate(
+					0.0f,
+					0.0f,
+					0.05f
+				);
+				modelStack.Scale(
+					0.6f,
+					0.6f,
+					1.0f
+				);
 
-			RenderMesh(meshList[(int)GeoType::FireTile], true, Color(0.9f, 0.9f, 0.9f), 1.0f);
+				RenderMesh(meshList[(int)GeoType::FireTile], true, Color(0.9f, 0.9f, 0.9f), 1.0f);
 
-			modelStack.PopMatrix();
+				modelStack.PopMatrix();
+			}
 			break;
 		case TileType::Water:
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.05f, 0.64f, 1.0f), 1.0f);
 
-			modelStack.PushMatrix();
+			if(shldRenderTileArt){
+				modelStack.PushMatrix();
 
-			modelStack.Translate(
-				0.0f,
-				0.0f,
-				0.05f
-			);
-			modelStack.Scale(
-				0.7f,
-				0.7f,
-				1.0f
-			);
+				modelStack.Translate(
+					0.0f,
+					0.0f,
+					0.05f
+				);
+				modelStack.Scale(
+					0.7f,
+					0.7f,
+					1.0f
+				);
 
-			RenderMesh(meshList[(int)GeoType::WaterTile], true, Color(), 1.0f);
+				RenderMesh(meshList[(int)GeoType::WaterTile], true, Color(), 1.0f);
 
-			modelStack.PopMatrix();
+				modelStack.PopMatrix();
+			}
 			break;
 		case TileType::Grass:
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.49f, 0.78f, 0.31f), 1.0f);
 
-			modelStack.PushMatrix();
+			if(shldRenderTileArt){
+				modelStack.PushMatrix();
 
-			modelStack.Translate(
-				0.0f,
-				0.0f,
-				0.05f
-			);
-			modelStack.Scale(
-				0.6f,
-				0.6f,
-				1.0f
-			);
+				modelStack.Translate(
+					0.0f,
+					0.0f,
+					0.05f
+				);
+				modelStack.Scale(
+					0.6f,
+					0.6f,
+					1.0f
+				);
 
-			RenderMesh(meshList[(int)GeoType::GrassTile], true, Color(0.7f, 0.7f, 0.7f), 1.0f);
+				RenderMesh(meshList[(int)GeoType::GrassTile], true, Color(0.7f, 0.7f, 0.7f), 1.0f);
 
-			modelStack.PopMatrix();
+				modelStack.PopMatrix();
+			}
 			break;
 		case TileType::Mud:
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.4f, 0.26f, 0.13f), 1.0f);
 
-			modelStack.PushMatrix();
+			if(shldRenderTileArt){
+				modelStack.PushMatrix();
 
-			modelStack.Translate(
-				0.0f,
-				0.0f,
-				0.05f
-			);
-			modelStack.Scale(
-				0.6f,
-				0.6f,
-				1.0f
-			);
+				modelStack.Translate(
+					0.0f,
+					0.0f,
+					0.05f
+				);
+				modelStack.Scale(
+					0.6f,
+					0.6f,
+					1.0f
+				);
 
-			RenderMesh(meshList[(int)GeoType::MudTile], true, Color(), 1.0f);
+				RenderMesh(meshList[(int)GeoType::MudTile], true, Color(), 1.0f);
 
-			modelStack.PopMatrix();
+				modelStack.PopMatrix();
+			}
 			break;
 	}
 }
@@ -454,7 +485,7 @@ void SceneA2::RenderControlsText(Mesh* const textMesh, const Color& textColor, c
 	);
 	RenderTextOnScreen(
 		textMesh,
-		"Z: Increase game spd",
+		"O: Toggle tile art",
 		textColor,
 		textSize,
 		0.0f,
@@ -462,11 +493,27 @@ void SceneA2::RenderControlsText(Mesh* const textMesh, const Color& textColor, c
 	);
 	RenderTextOnScreen(
 		textMesh,
-		"X: Decrease game spd",
+		"P: Toggle fog",
 		textColor,
 		textSize,
 		0.0f,
 		textSize * 13.0f
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"Z: Increase game spd",
+		textColor,
+		textSize,
+		0.0f,
+		textSize * 12.0f
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"X: Decrease game spd",
+		textColor,
+		textSize,
+		0.0f,
+		textSize * 11.0f
 	);
 }
 

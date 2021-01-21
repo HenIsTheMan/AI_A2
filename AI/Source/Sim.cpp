@@ -68,6 +68,7 @@ void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow
 		fogSumOfWeights += fogWeights[i];
 	}
 	if(fogSumOfWeights == 0){
+		(void)puts("fogSumOfWeights == 0");
 		return;
 	}
 	srand(key);
@@ -234,6 +235,7 @@ void Sim::RefineTileLayer(const int gridRows, const int gridCols, const unsigned
 		tileSumOfWeights += tileWeights[i];
 	}
 	if(tileSumOfWeights == 0){
+		(void)puts("tileSumOfWeights == 0");
 		return;
 	}
 	srand(key);
