@@ -78,13 +78,9 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 	switch(sim->status){
 		case RuntimeStatus::Waiting:
-			if(App::IsMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)){
-				sim->status = RuntimeStatus::Ongoing;
-
-				if(canMakeSimMap){
-					myThread = new std::thread(&Scene::MakeSimMap, this);
-					canMakeSimMap = false;
-				}
+			if(canMakeSimMap && App::IsMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)){
+				myThread = new std::thread(&Scene::MakeSimMap, this);
+				canMakeSimMap = false;
 			}
 			break;
 		case RuntimeStatus::Ongoing:
@@ -221,8 +217,9 @@ void Scene::Render(){
 			RenderCoverText();
 			break;
 		case RuntimeStatus::Ongoing:
-			RenderMap();
 			RenderEntities();
+		case RuntimeStatus::MakingTheMap:
+			RenderMap();
 			break;
 	}
 	RenderSceneText();
@@ -733,6 +730,7 @@ void Scene::RenderGridAttribsText(Mesh* const textMesh, const Color& textColor, 
 void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
 	static std::string runtimeStatusTexts[(int)RuntimeStatus::Amt]{
 		"is waiting",
+		"is making the map",
 		"is ongoing",
 		"has ended",
 	};
@@ -770,6 +768,8 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 }
 
 void Scene::MakeSimMap() const{
+	sim->status = RuntimeStatus::MakingTheMap;
+
 	sim->ChangeFogWeight((int)FogType::Inexistent, 5);
 	sim->ChangeFogWeight((int)FogType::Thin, 20);
 	sim->ChangeFogWeight((int)FogType::Thick, 20);
@@ -797,4 +797,6 @@ void Scene::MakeSimMap() const{
 	delete quickRenderDelay1;
 	delete quickRenderDelay2;
 	delete quickRenderDelay3;
+
+	sim->status = RuntimeStatus::Ongoing;
 }
