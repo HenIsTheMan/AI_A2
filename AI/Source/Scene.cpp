@@ -444,7 +444,7 @@ void Scene::RenderFog(const std::vector<FogType>& fogLayer, const int r, const i
 				0.1f
 			);
 			modelStack.Rotate(
-				elapsedTime * 120.0f,
+				elapsedTime * 160.0f,
 				0.0f,
 				0.0f,
 				1.0f
@@ -468,15 +468,10 @@ void Scene::RenderFog(const std::vector<FogType>& fogLayer, const int r, const i
 				0.1f
 			);
 			modelStack.Rotate(
-				elapsedTime * -70.0f,
+				elapsedTime * -80.0f,
 				0.0f,
 				0.0f,
 				1.0f
-			);
-			modelStack.Scale(
-				0.9f,
-				0.9f,
-				0.9f
 			);
 
 			RenderMesh(meshList[(int)GeoType::Fog], true, Color(0.63f, 0.63f, 1.0f), 0.6f);
