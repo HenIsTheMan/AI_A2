@@ -34,7 +34,7 @@ double StopWatch::getElapsedTime(){
 	return LIToSecs(time);
 }
 
-void StopWatch::waitUntil(long long time){
+void StopWatch::waitUntil(long long time){ //No gd
 	LARGE_INTEGER nowTime;
 	LONGLONG timeElapsed;
 	while(1){
@@ -42,8 +42,8 @@ void StopWatch::waitUntil(long long time){
 		timeElapsed = ((nowTime.QuadPart - prevTime.QuadPart) * 1000 / frequency.QuadPart);
 		if(timeElapsed > time){
 			return;
-		} else if(time - timeElapsed > 1){
-			Sleep(1);
+		} else{
+			Sleep(time - timeElapsed);
 		}
 	}
 }

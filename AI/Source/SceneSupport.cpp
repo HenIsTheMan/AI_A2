@@ -130,7 +130,7 @@ void SceneSupport::Update(double dt){
 	if(App::Key('R')){
 		orthoProjectionScaleFactor = 1.0;
 	}
-	orthoProjectionScaleFactor -= dt * mouseScrollWheelYOffset * 10.0;
+	orthoProjectionScaleFactor -= mouseScrollWheelYOffset * 0.02; //No need dt
 	orthoProjectionScaleFactor = Math::Clamp(orthoProjectionScaleFactor, 0.2, 1.0);
 	mouseScrollWheelYOffset = 0.0;
 

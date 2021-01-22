@@ -29,8 +29,6 @@ private:
 	App() = default;
 
 	StopWatch im_Timer = StopWatch();
-
-	std::mutex myMutex; //??
 	
 	static IScene* im_Scene;
 

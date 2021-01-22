@@ -12,8 +12,8 @@
 
 static GLFWwindow* s_UpdateWindow = nullptr;
 static GLFWwindow* s_RenderWindow = nullptr;
-static const unsigned char FPS = 60; // FPS of this game
-static const unsigned int frameTime = 1000 / FPS; // time for each frame
+static const unsigned char FPS = 60;
+static const float frameTime = 1000.0f / (float)FPS;
 
 ///Shld be members of App instead
 double mouseScrollWheelYOffset;
@@ -112,7 +112,6 @@ void App::Render(){
 		}
 
 		glfwSwapBuffers(s_RenderWindow);
-		//im_Timer.waitUntil(frameTime);
 	}
 }
 
