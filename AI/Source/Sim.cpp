@@ -7,6 +7,8 @@
 #include "MyMath.h"
 #include "TileCost.hpp"
 
+extern bool endLoop;
+
 Sim::Sim():
 	isKeySpace(false),
 	fogWeights(),
@@ -61,6 +63,10 @@ void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow
 					float delay = FLT_MAX;
 
 					while(quickRenderDelay != nullptr && currTime < delay){
+						if(endLoop){
+							return;
+						}
+
 						currTime += (float)timer.getElapsedTime();
 
 						const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
@@ -112,6 +118,9 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 		float delay = FLT_MAX;
 
 		while(quickRenderDelay != nullptr && currTime < delay){
+			if(endLoop){
+				return;
+			}
 			currTime += (float)timer.getElapsedTime();
 
 			const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
@@ -198,6 +207,9 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 				float delay = FLT_MAX;
 
 				while(quickRenderDelay != nullptr && currTime < delay){
+					if(endLoop){
+						return;
+					}
 					currTime += (float)timer.getElapsedTime();
 
 					const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
@@ -266,6 +278,9 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 		float delay = FLT_MAX;
 
 		while(quickRenderDelay != nullptr && currTime < delay){
+			if(endLoop){
+				return;
+			}
 			currTime += (float)timer.getElapsedTime();
 
 			const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
@@ -309,6 +324,9 @@ void Sim::RefineTileLayer(const int gridRows, const int gridCols, const unsigned
 						float delay = FLT_MAX;
 
 						while(quickRenderDelay != nullptr && currTime < delay){
+							if(endLoop){
+								return;
+							}
 							currTime += (float)timer.getElapsedTime();
 
 							const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
@@ -393,6 +411,9 @@ void Sim::MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, cons
 			float delay = FLT_MAX;
 
 			while(quickRenderDelay != nullptr && currTime < delay){
+				if(endLoop){
+					return;
+				}
 				currTime += (float)timer.getElapsedTime();
 
 				const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
