@@ -1,5 +1,7 @@
 #pragma once
 
+#include <thread>
+
 #include "SceneSupport.h"
 
 #include "Sim.h"
@@ -31,6 +33,8 @@ private:
 	HexGrid<float>* grid;
 	Publisher* publisher;
 
+	std::thread* myThread;
+
 	void UpdateMisc(const double dt);
 	void UpdateEntities(const double dt);
 
@@ -47,4 +51,6 @@ private:
 	void RenderControlsText(Mesh* const textMesh, const Color& textColor, const float textSize);
 	void RenderGridAttribsText(Mesh* const textMesh, const Color& textColor, const float textSize);
 	void RenderSimInfoText(Mesh* const textMesh, const Color& textColor, const float textSize);
+
+	void MakeSimMap() const;
 };
