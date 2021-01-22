@@ -6,7 +6,6 @@
 #include "App.h"
 #include "LoadImg.h"
 
-extern double mouseScrollWheelYOffset;
 extern int windowWidth;
 extern int windowHeight;
 
@@ -116,8 +115,6 @@ void SceneSupport::Update(const double updateDt, const double renderDt){
 	updateFPS = (float)(1.f / updateDt);
 	renderFPS = (float)(1.f / renderDt);
 
-	im_Cam.Update(updateDt);
-
 	static int polyMode = GL_FILL;
 	static bool isF2 = false;
 
@@ -128,13 +125,6 @@ void SceneSupport::Update(const double updateDt, const double renderDt){
 	} else if(isF2 && !App::Key(VK_F2)){
 		isF2 = false;
 	}
-
-	if(App::Key('R')){
-		orthoProjectionScaleFactor = 1.0;
-	}
-	orthoProjectionScaleFactor -= mouseScrollWheelYOffset * 0.02; //No need dt
-	orthoProjectionScaleFactor = Math::Clamp(orthoProjectionScaleFactor, 0.2, 1.0);
-	mouseScrollWheelYOffset = 0.0;
 
 	static_cast<SpriteAni*>(meshList[(int)GeoType::DayBG])->Update(elapsedTime);
 	static_cast<SpriteAni*>(meshList[(int)GeoType::RainyBG])->Update(elapsedTime);

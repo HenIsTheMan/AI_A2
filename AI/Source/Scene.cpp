@@ -5,6 +5,7 @@
 
 #include "Easing.hpp"
 
+extern double mouseScrollWheelYOffset;
 extern int windowWidth;
 extern int windowHeight;
 
@@ -87,10 +88,10 @@ void Scene::Update(const double updateDt, const double renderDt){
 					sim->ChangeTileWeight((int)TileType::Grass, 20);
 					sim->ChangeTileWeight((int)TileType::Mud, 20);
 
-					const float* const quickRenderDelay0 = nullptr;
-					const float* const quickRenderDelay1 = nullptr;
-					const float* const quickRenderDelay2 = nullptr;
-					const float* const quickRenderDelay3 = nullptr;
+					const float* const quickRenderDelay0 = new float(0.04f);
+					const float* const quickRenderDelay1 = new float(0.03f);
+					const float* const quickRenderDelay2 = new float(0.05f);
+					const float* const quickRenderDelay3 = new float(0.01f);
 					sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay0);
 					sim->RefineTileLayer(gridRows, gridCols, 2169, quickRenderDelay1);
 					sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 5, 5, 2, quickRenderDelay2);
@@ -105,10 +106,18 @@ void Scene::Update(const double updateDt, const double renderDt){
 			}
 			break;
 		case RuntimeStatus::Ongoing:
+			im_Cam.Update(updateDt);
+			if (App::Key('R')) {
+				orthoProjectionScaleFactor = 1.0;
+			}
+			orthoProjectionScaleFactor -= mouseScrollWheelYOffset * 0.02; //No need dt
+			orthoProjectionScaleFactor = Math::Clamp(orthoProjectionScaleFactor, 0.2, 1.0);
+
 			sim->Update(updateDt); //Not (dt * sim->spd) as...
 			UpdateEntities(updateDt * sim->spd);
 			break;
 	}
+	mouseScrollWheelYOffset = 0.0;
 }
 
 void Scene::UpdateMisc(const double dt){
@@ -213,6 +222,9 @@ void Scene::UpdateEntities(const double dt){
 }
 
 void Scene::Render(){
+	static std::mutex myMutex;
+	myMutex.lock();
+
 	SceneSupport::Render();
 
 	modelStack.PushMatrix();
@@ -241,6 +253,8 @@ void Scene::Render(){
 	if(sim->status == RuntimeStatus::Waiting){
 		canMakeSimMap = true;
 	}
+
+	myMutex.unlock();
 }
 
 void Scene::RenderBG(){
