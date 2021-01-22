@@ -167,9 +167,3 @@ void App::Exit(){
 	glfwDestroyWindow(s_RenderWindow);
 	glfwTerminate();
 }
-
-void App::QuickRender(){
-	im_Scene->Render();
-	glfwSwapBuffers(s_RenderWindow);
-	glfwPollEvents();
-}

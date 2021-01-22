@@ -57,9 +57,7 @@ void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow
 				fogLayer.emplace_back((FogType)i);
 
 				if(quickRenderDelay != nullptr){
-					App::QuickRender();
 					float currTime = 0.0f;
-
 					while(quickRenderDelay != nullptr && currTime < *quickRenderDelay){
 						currTime += (float)timer.getElapsedTime();
 						if(!isKeySpace && App::Key(VK_SPACE)){
@@ -104,9 +102,7 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 	visited[startIndex] = true;
 
 	if(quickRenderDelay != nullptr){
-		App::QuickRender();
 		float currTime = 0.0f;
-
 		while(quickRenderDelay != nullptr && currTime < *quickRenderDelay){
 			currTime += (float)timer.getElapsedTime();
 			if(!isKeySpace && App::Key(VK_SPACE)){
@@ -186,9 +182,7 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 			visited[otherIndex] = true;
 
 			if(quickRenderDelay != nullptr){
-				App::QuickRender();
 				float currTime = 0.0f;
-
 				while(quickRenderDelay != nullptr && currTime < *quickRenderDelay){
 					currTime += (float)timer.getElapsedTime();
 					if(!isKeySpace && App::Key(VK_SPACE)){
@@ -250,9 +244,7 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 	tileLayer[gridRows * gridCols - 1] = TileType::Empty; //End
 
 	if(quickRenderDelay != nullptr){
-		App::QuickRender();
 		float currTime = 0.0f;
-
 		while (quickRenderDelay != nullptr && currTime < *quickRenderDelay) {
 			currTime += (float)timer.getElapsedTime();
 			if (!isKeySpace && App::Key(VK_SPACE)) {
@@ -290,9 +282,7 @@ void Sim::RefineTileLayer(const int gridRows, const int gridCols, const unsigned
 					type = (TileType)i;
 
 					if(quickRenderDelay != nullptr){
-						App::QuickRender();
 						float currTime = 0.0f;
-
 						while(quickRenderDelay != nullptr && currTime < *quickRenderDelay){
 							currTime += (float)timer.getElapsedTime();
 							if(!isKeySpace && App::Key(VK_SPACE)){
@@ -370,9 +360,7 @@ void Sim::MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, cons
 		myVec.erase(myVec.begin());
 
 		if(quickRenderDelay != nullptr){
-			App::QuickRender();
 			float currTime = 0.0f;
-
 			while(quickRenderDelay != nullptr && currTime < *quickRenderDelay){
 				currTime += (float)timer.getElapsedTime();
 				if(!isKeySpace && App::Key(VK_SPACE)){

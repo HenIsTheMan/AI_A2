@@ -204,9 +204,6 @@ void Scene::UpdateEntities(const double dt){
 }
 
 void Scene::Render(){
-	static std::mutex myMutex;
-	myMutex.lock();
-
 	SceneSupport::Render();
 
 	modelStack.PushMatrix();
@@ -235,8 +232,6 @@ void Scene::Render(){
 	if(sim->status == RuntimeStatus::Waiting){
 		canMakeSimMap = true;
 	}
-
-	myMutex.unlock();
 }
 
 void Scene::RenderBG(){
