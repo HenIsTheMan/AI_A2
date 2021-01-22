@@ -63,10 +63,10 @@ void Scene::Init(){
 	grid->SetCols(gridCols);
 }
 
-void Scene::Update(double dt){
-	SceneSupport::Update(dt);
+void Scene::Update(const double updateDt, const double renderDt){
+	SceneSupport::Update(updateDt, renderDt);
 
-	UpdateMisc(dt);
+	UpdateMisc(updateDt);
 
 	switch(sim->status){
 		case RuntimeStatus::Waiting:
@@ -105,8 +105,8 @@ void Scene::Update(double dt){
 			}
 			break;
 		case RuntimeStatus::Ongoing:
-			sim->Update(dt); //Not (dt * sim->spd) as...
-			UpdateEntities(dt * sim->spd);
+			sim->Update(updateDt); //Not (dt * sim->spd) as...
+			UpdateEntities(updateDt * sim->spd);
 			break;
 	}
 }
@@ -646,11 +646,19 @@ void Scene::RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, co
 	);
 	RenderTextOnScreen(
 		textMesh,
-		"FPS: " + std::to_string(FPS).substr(0, std::to_string((int)FPS).length() + 3),
+		"Update FPS: " + std::to_string(updateFPS).substr(0, std::to_string((int)updateFPS).length() + 3),
 		textColor,
 		textSize,
 		0.0f,
 		textSize * 1.0f
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"Render FPS: " + std::to_string(renderFPS).substr(0, std::to_string((int)renderFPS).length() + 3),
+		textColor,
+		textSize,
+		0.0f,
+		textSize * 2.0f
 	);
 }
 

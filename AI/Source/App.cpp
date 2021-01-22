@@ -100,11 +100,13 @@ void App::Init(){
 void App::Render(){
 	glfwMakeContextCurrent(s_RenderWindow);
 
-	//Timer??
+	im_RenderTimer.startTimer();
 	while(!endLoop){
 		if(glfwWindowShouldClose(s_RenderWindow) || Key(VK_ESCAPE)){
 			endLoop = true;
 		}
+
+		renderDt = im_RenderTimer.getElapsedTime();
 
 		if(glfwGetWindowAttrib(s_RenderWindow, GLFW_VISIBLE)){
 			glViewport(0, 0, windowWidth, windowHeight);
@@ -125,13 +127,13 @@ void App::Run(){
 	static bool isF3 = false;
 	static bool isF1 = false;
 
-	im_Timer.startTimer();
+	im_UpdateTimer.startTimer();
 	while(!endLoop){
 		if(glfwWindowShouldClose(s_UpdateWindow) || Key(VK_ESCAPE)){
 			endLoop = true;
 		}
 
-		im_Scene->Update(im_Timer.getElapsedTime());
+		im_Scene->Update(im_UpdateTimer.getElapsedTime(), renderDt);
 
 		/*if(!isF3 && Key(VK_F3)){
 			glfwGetWindowAttrib(s_UpdateWindow, GLFW_VISIBLE) ? glfwHideWindow(s_UpdateWindow) : glfwShowWindow(s_UpdateWindow);

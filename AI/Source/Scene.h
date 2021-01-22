@@ -12,7 +12,7 @@ public:
 	~Scene();
 
 	void Init() override;
-	void Update(double dt) override;
+	void Update(const double updateDt, const double renderDt) override;
 	void Render() override;
 private:
 	bool canMakeSimMap;

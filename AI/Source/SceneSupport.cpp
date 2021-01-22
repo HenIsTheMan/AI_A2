@@ -23,7 +23,8 @@ SceneSupport::SceneSupport():
 	projectionStack(MS()),
 	bLightEnabled(false),
 	elapsedTime(0.0f),
-	FPS(0.0f),
+	updateFPS(0.0f),
+	renderFPS(0.0f),
 	orthoProjectionScaleFactor(1.0)
 {
 }
@@ -110,11 +111,12 @@ void SceneSupport::Init(){
 	meshList[(int)GeoType::MudTile]->textureID = LoadImg("Imgs//Mud.png");
 }
 
-void SceneSupport::Update(double dt){
-	elapsedTime += (float)dt;
-	FPS = (float)(1.f / dt);
+void SceneSupport::Update(const double updateDt, const double renderDt){
+	elapsedTime += (float)updateDt;
+	updateFPS = (float)(1.f / updateDt);
+	renderFPS = (float)(1.f / renderDt);
 
-	im_Cam.Update(dt);
+	im_Cam.Update(updateDt);
 
 	static int polyMode = GL_FILL;
 	static bool isF2 = false;

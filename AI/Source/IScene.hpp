@@ -6,6 +6,6 @@ public:
 	virtual ~IScene() = default;
 
 	virtual void Init() = 0;
-	virtual void Update(double dt) = 0;
+	virtual void Update(const double updateDt, const double renderDt) = 0;
 	virtual void Render() = 0;
 };

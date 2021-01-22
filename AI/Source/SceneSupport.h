@@ -49,7 +49,7 @@ public:
 	virtual ~SceneSupport();
 
 	virtual void Init() override;
-	virtual void Update(double dt) override;
+	virtual void Update(const double updateDt, const double renderDt) override;
 	virtual void Render() override;
 
 	void RenderText(Mesh* mesh, std::string text, Color color, TextAlignment alignment = TextAlignment::Left); //Based on what model mats are alr in modelStack
@@ -71,7 +71,8 @@ protected:
 
 	bool bLightEnabled;
 	float elapsedTime;
-	float FPS;
+	float updateFPS;
+	float renderFPS;
 
 	double orthoProjectionScaleFactor;
 
