@@ -170,6 +170,7 @@
     <ClInclude Include="Source\EntityType.hpp" />
     <ClInclude Include="Source\FogType.hpp" />
     <ClInclude Include="Source\HexGrid.h" />
+    <ClInclude Include="Source\Mode.hpp" />
     <ClInclude Include="Source\ObjPool.h" />
     <ClInclude Include="Source\RuntimeStatus.hpp" />
     <ClInclude Include="Source\Scene.h" />

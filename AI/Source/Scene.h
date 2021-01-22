@@ -21,6 +21,8 @@ private:
 	bool shldRenderTileArt;
 	bool shldRenderFog;
 	float customHue;
+	int creditsPlayer;
+	int creditsAI;
 
 	HexGrid<float>::GridType gridType;
 	float gridCellScaleX;

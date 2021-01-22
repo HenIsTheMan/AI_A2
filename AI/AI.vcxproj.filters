@@ -150,6 +150,9 @@
     <ClInclude Include="Source\Turn.hpp">
       <Filter>Misc</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Mode.hpp">
+      <Filter>Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">

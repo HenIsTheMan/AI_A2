@@ -15,6 +15,8 @@ Scene::Scene():
 	shldRenderTileArt(true),
 	shldRenderFog(true),
 	customHue(0.0f),
+	creditsPlayer(0),
+	creditsAI(0),
 	gridType(HexGrid<float>::GridType::SharpTop),
 	gridCellScaleX(50.0f),
 	gridCellScaleY(50.0f),
@@ -55,6 +57,7 @@ void Scene::Init(){
 	SceneSupport::Init();
 
 	sim->status = RuntimeStatus::Waiting;
+	sim->mode = Mode::None;
 	sim->spd = 1.0f;
 	sim->turnDuration = 5.0f;
 	sim->turnElapsedTime = 0.0f;
@@ -736,6 +739,25 @@ void Scene::RenderSceneText(){
 	static Mesh* const textMesh = meshList[(int)GeoType::Text];
 	static float textSize = (float)windowWidth * 0.02f;
 
+	RenderTextOnScreen(
+		meshList[(int)GeoType::TextMod1],
+		"AI's Credits: " + std::to_string(creditsAI),
+		Color(),
+		textSize,
+		(float)windowWidth * 0.5f,
+		(float)windowHeight - textSize * 2.0f,
+		TextAlignment::Center
+	);
+	RenderTextOnScreen(
+		meshList[(int)GeoType::TextMod2],
+		"Your Credits: " + std::to_string(creditsPlayer),
+		Color(),
+		textSize,
+		(float)windowWidth * 0.5f,
+		textSize,
+		TextAlignment::Center
+	);
+
 	RenderDebugInfoText(textMesh, Color(0.0f, 1.0f, 0.0f), textSize);
 	RenderControlsText(textMesh, Color(1.0f, 0.0f, 1.0f), textSize);
 	RenderGridInfoText(textMesh, Color(1.0f, 1.0f, 0.0f), textSize);
@@ -876,6 +898,12 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 		"is ongoing",
 		"has ended",
 	};
+	static std::string modeTexts[(int)Mode::Amt]{
+		"None",
+		"Protect The King!",
+		"-- Last Team Standing --",
+		"~ Greatest Area Painted ~"
+	};
 	static std::string turnTexts[(int)Turn::Amt]{
 		"Nil",
 		"Player",
@@ -890,6 +918,7 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 
 	const std::string texts[]{
 		(std::string)"Sim " + runtimeStatusTexts[(int)sim->status],
+		"Sim mode: " + modeTexts[(int)sim->mode],
 		"Sim spd: " + std::to_string(sim->spd).substr(0, std::to_string((int)sim->spd).length() + 3),
 		"Sim turn duration: " + std::to_string(sim->turnDuration).substr(0, std::to_string((int)sim->turnDuration).length() + 3),
 		"Sim turn elapsed time: " + std::to_string(sim->turnElapsedTime).substr(0, std::to_string((int)sim->turnElapsedTime).length() + 3),
