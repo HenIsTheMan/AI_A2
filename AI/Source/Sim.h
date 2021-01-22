@@ -6,6 +6,7 @@
 
 #include "RuntimeStatus.hpp"
 #include "TimeOfDay.hpp"
+#include "Turn.hpp"
 
 #include "FogType.hpp"
 #include "TileType.hpp"
@@ -17,7 +18,7 @@ public:
 		float spd = 0.0f;
 		float turnDuration = 0.0f;
 		float turnElapsedTime = 0.0f;
-		int turn = 0;
+		Turn turn = Turn::Amt;
 		float timeOfDayDuration = 0.0f;
 		float timeOfDayElapsedTime = 0.0f;
 		TimeOfDay timeOfDay = TimeOfDay::Amt;

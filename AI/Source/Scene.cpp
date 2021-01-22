@@ -58,7 +58,7 @@ void Scene::Init(){
 	sim->spd = 1.0f;
 	sim->turnDuration = 5.0f;
 	sim->turnElapsedTime = 0.0f;
-	sim->turn = 0;
+	sim->turn = (bool)Math::RandIntMinMax(0, 1) ? Turn::Player : Turn::AI;
 	sim->timeOfDayDuration = 10.0f;
 	sim->timeOfDayElapsedTime = 0.0f;
 	sim->timeOfDay = (TimeOfDay)Math::RandIntMinMax((int)TimeOfDay::Day, (int)TimeOfDay::Amt - 1);
@@ -148,7 +148,18 @@ void Scene::UpdateMisc(const double dt){
 	static bool isKeyDownC = false;
 	static bool isKeyDownV = false;
 	if(!isKeyDownC && App::Key('C')){
-		++sim->turn;
+		static Turn savedTurn = Turn::Amt;
+		if(sim->turn != Turn::Environment){
+			if(Math::RandIntMinMax(1, 10) <= 2){
+				savedTurn = sim->turn;
+				sim->turn = Turn::Environment;
+			} else{
+				sim->turn = sim->turn == Turn::Player ? Turn::AI : Turn::Player;
+			}
+		} else{
+			sim->turn = savedTurn == Turn::Player ? Turn::AI : Turn::Player;
+		}
+
 		isKeyDownC = true;
 	} else if(isKeyDownC && !App::Key('C')){
 		isKeyDownC = false;
@@ -769,7 +780,7 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		"P: Toggle fog",
 		"Z: Increase sim spd",
 		"X: Decrease sim spd",
-		"C: Increment sim turn manually",
+		"C: Change sim turn manually",
 		"V: Change sim time of day manually",
 		"B: Reset sim turn elapsed time",
 		"N: Reset sim time of day elapsed time",
@@ -865,6 +876,12 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 		"is ongoing",
 		"has ended",
 	};
+	static std::string turnTexts[(int)Turn::Amt]{
+		"Nil",
+		"Player",
+		"AI",
+		"Environment"
+	};
 	static std::string timeOfDayTexts[(int)TimeOfDay::Amt]{
 		"Day",
 		"Rainy",
@@ -876,7 +893,7 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 		"Sim spd: " + std::to_string(sim->spd).substr(0, std::to_string((int)sim->spd).length() + 3),
 		"Sim turn duration: " + std::to_string(sim->turnDuration).substr(0, std::to_string((int)sim->turnDuration).length() + 3),
 		"Sim turn elapsed time: " + std::to_string(sim->turnElapsedTime).substr(0, std::to_string((int)sim->turnElapsedTime).length() + 3),
-		"Sim turn: " + std::to_string(sim->turn),
+		"Sim turn: " + turnTexts[(int)sim->turn],
 		"Sim time of day duration: " + std::to_string(sim->timeOfDayDuration).substr(0, std::to_string((int)sim->timeOfDayDuration).length() + 3),
 		"Sim time of day elapsed time: " + std::to_string(sim->timeOfDayElapsedTime).substr(0, std::to_string((int)sim->timeOfDayElapsedTime).length() + 3),
 		"Sim time of day: " + timeOfDayTexts[(int)sim->timeOfDay],

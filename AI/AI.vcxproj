@@ -195,6 +195,7 @@
     <ClInclude Include="Source\TileCost.hpp" />
     <ClInclude Include="Source\TileType.hpp" />
     <ClInclude Include="Source\TimeOfDay.hpp" />
+    <ClInclude Include="Source\Turn.hpp" />
     <ClInclude Include="Source\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
