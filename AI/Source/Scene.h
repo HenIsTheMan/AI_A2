@@ -49,7 +49,7 @@ private:
 	void RenderSceneText();
 	void RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, const float textSize);
 	void RenderControlsText(Mesh* const textMesh, const Color& textColor, const float textSize);
-	void RenderGridAttribsText(Mesh* const textMesh, const Color& textColor, const float textSize);
+	void RenderGridInfoText(Mesh* const textMesh, const Color& textColor, const float textSize);
 	void RenderSimInfoText(Mesh* const textMesh, const Color& textColor, const float textSize);
 
 	void MakeSimMap() const;

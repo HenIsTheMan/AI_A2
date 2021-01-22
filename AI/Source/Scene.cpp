@@ -727,7 +727,7 @@ void Scene::RenderSceneText(){
 
 	RenderDebugInfoText(textMesh, Color(0.0f, 1.0f, 0.0f), textSize);
 	RenderControlsText(textMesh, Color(1.0f, 0.0f, 1.0f), textSize);
-	RenderGridAttribsText(textMesh, Color(1.0f, 1.0f, 0.0f), textSize);
+	RenderGridInfoText(textMesh, Color(1.0f, 1.0f, 0.0f), textSize);
 	RenderSimInfoText(textMesh, Color(1.0f, 0.5f, 0.0f), textSize);
 }
 
@@ -792,7 +792,7 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 	}
 }
 
-void Scene::RenderGridAttribsText(Mesh* const textMesh, const Color& textColor, const float textSize){
+void Scene::RenderGridInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
 	RenderTextOnScreen(
 		textMesh,
 		"Grid cell scale x: " + std::to_string(gridCellScaleX).substr(0, std::to_string((int)gridCellScaleX).length() + 2),
@@ -838,6 +838,24 @@ void Scene::RenderGridAttribsText(Mesh* const textMesh, const Color& textColor, 
 		textSize * 4.0f,
 		TextAlignment::Right
 	);
+	RenderTextOnScreen(
+		textMesh,
+		(std::string)"shldRenderTileArt: " + (shldRenderTileArt ? "Yes" : "No"),
+		textColor,
+		textSize,
+		(float)windowWidth,
+		textSize * 5.0f,
+		TextAlignment::Right
+	);
+	RenderTextOnScreen(
+		textMesh,
+		(std::string)"shldRenderFog: " + (shldRenderFog ? "Yes" : "No"),
+		textColor,
+		textSize,
+		(float)windowWidth,
+		textSize * 6.0f,
+		TextAlignment::Right
+	);
 }
 
 void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
@@ -862,8 +880,6 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 		"Sim time of day duration: " + std::to_string(sim->timeOfDayDuration).substr(0, std::to_string((int)sim->timeOfDayDuration).length() + 3),
 		"Sim time of day elapsed time: " + std::to_string(sim->timeOfDayElapsedTime).substr(0, std::to_string((int)sim->timeOfDayElapsedTime).length() + 3),
 		"Sim time of day: " + timeOfDayTexts[(int)sim->timeOfDay],
-		(std::string)"shldRenderTileArt: " + (shldRenderTileArt ? "Yes" : "No"),
-		(std::string)"shldRenderFog: " + (shldRenderFog ? "Yes" : "No"),
 	};
 	const size_t size = sizeof(texts) / sizeof(texts[0]);
 
