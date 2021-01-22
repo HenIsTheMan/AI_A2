@@ -69,16 +69,12 @@ T HexGrid<T>::CalcCellSideLen() const{
 
 template <class T>
 T HexGrid<T>::CalcAltOffsetX() const{
-	return im_Type == GridType::FlatTop
-		? 0.0f
-		: (CalcCellFlatToFlatLen() + im_LineThickness) * 0.5f;
+	return (CalcCellFlatToFlatLen() + im_LineThickness) * 0.5f;
 }
 
 template <class T>
 T HexGrid<T>::CalcAltOffsetY() const{
-	return im_Type == GridType::FlatTop
-		? (CalcCellFlatToFlatLen() + im_LineThickness) * 0.5f
-		: 0.0f;
+	return (CalcCellFlatToFlatLen() + im_LineThickness) * 0.5f;
 }
 
 template <class T>
