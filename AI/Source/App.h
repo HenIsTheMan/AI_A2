@@ -34,7 +34,6 @@ private:
 	
 	static IScene* im_Scene;
 
-	void Update();
 	void Render();
 };
 

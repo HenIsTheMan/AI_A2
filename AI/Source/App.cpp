@@ -39,11 +39,11 @@ bool App::Key(unsigned short key){
 }
 
 bool App::IsMousePressed(unsigned short key){ //0 - Left, 1 - Right, 2 - Middle
-	return glfwGetMouseButton(glfwGetCurrentContext(), key) != 0;
+	return glfwGetMouseButton(s_RenderWindow, key) != 0;
 }
 
 void App::GetCursorPos(double* xpos, double* ypos){
-	glfwGetCursorPos(glfwGetCurrentContext(), xpos, ypos);
+	glfwGetCursorPos(s_RenderWindow, xpos, ypos);
 }
 
 static void ScrollCallback(GLFWwindow*, double xOffset, double yOffset){
@@ -68,6 +68,9 @@ void App::Init(){
 	s_UpdateWindow = glfwCreateWindow(1, 1, "Update Window", nullptr, nullptr);
 	glfwHideWindow(s_UpdateWindow);
 
+	glfwSetWindowSizeCallback(s_UpdateWindow, resize_callback);
+	glfwSetScrollCallback(s_UpdateWindow, ScrollCallback);
+
 	const GLFWvidmode* const& mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	s_RenderWindow = glfwCreateWindow(mode->width / 2, mode->height / 2, "App Window", nullptr, nullptr);
 	glfwSetWindowPos(s_RenderWindow, mode->width / 4, mode->height / 4);
@@ -83,7 +86,7 @@ void App::Init(){
 	glfwMakeContextCurrent(s_RenderWindow);
 
 	glfwSetWindowSizeCallback(s_RenderWindow, resize_callback);
-	glfwSetScrollCallback(s_RenderWindow, ScrollCallback);
+	//glfwSetScrollCallback(s_RenderWindow, ScrollCallback);
 
 	glewExperimental = true; //Needed for core profile
 	GLenum err = glewInit();
@@ -97,7 +100,30 @@ void App::Init(){
 	glfwSwapInterval(0); //Disable VSync
 }
 
-void App::Update(){
+void App::Render(){
+	glfwMakeContextCurrent(s_RenderWindow);
+
+	//Timer??
+	while(!endLoop){
+		if(glfwWindowShouldClose(s_RenderWindow) || Key(VK_ESCAPE)){
+			endLoop = true;
+		}
+
+		if(glfwGetWindowAttrib(s_RenderWindow, GLFW_VISIBLE)){
+			glViewport(0, 0, windowWidth, windowHeight);
+			im_Scene->Render();
+		}
+
+		glfwSwapBuffers(s_RenderWindow);
+		//im_Timer.waitUntil(frameTime);
+	}
+}
+
+void App::Run(){
+	glfwMakeContextCurrent(NULL);
+
+	std::thread renderThread(&App::Render, this);
+
 	glfwMakeContextCurrent(s_UpdateWindow);
 
 	static bool isF3 = false;
@@ -127,34 +153,7 @@ void App::Update(){
 
 		glfwPollEvents();
 	}
-}
 
-void App::Render(){
-	glfwMakeContextCurrent(s_RenderWindow);
-
-	//Timer??
-	while(!endLoop){
-		if(glfwWindowShouldClose(s_RenderWindow) || Key(VK_ESCAPE)){
-			endLoop = true;
-		}
-
-		if(glfwGetWindowAttrib(s_RenderWindow, GLFW_VISIBLE)){
-			glViewport(0, 0, windowWidth, windowHeight);
-			im_Scene->Render();
-		}
-
-		glfwSwapBuffers(s_RenderWindow);
-		//im_Timer.waitUntil(frameTime);
-	}
-}
-
-void App::Run(){
-	glfwMakeContextCurrent(NULL);
-
-	std::thread updateThread(&App::Update, this);
-	std::thread renderThread(&App::Render, this);
-
-	updateThread.join();
 	renderThread.join();
 }
 
