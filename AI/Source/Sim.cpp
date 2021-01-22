@@ -91,7 +91,7 @@ void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow
 	fogLayer[gridTotalCells - 1] = FogType::Inexistent; //End
 }
 
-void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key, const float* quickRenderDelay){
+void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key, const float* quickRenderDelay, const bool isFlatTop){
 	srand(key);
 	const int gridTotalCells = gridRows * gridCols;
 	std::vector<int> wallIndices;
@@ -156,27 +156,53 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 		wallIndices.emplace_back(rightIndex);
 	}
 
-	if(startCol & 1){
-		const int ULIndex = (startRow + 1) * gridCols + (startCol - 1);
-		const int URIndex = (startRow + 1) * gridCols + (startCol + 1);
-		if(startCol > 0 && startRow < gridRows - 1){
-			savedIndices[ULIndex] = startIndex;
-			wallIndices.emplace_back(ULIndex);
-		}
-		if(startCol < gridCols - 1 && startRow < gridRows - 1){
-			savedIndices[URIndex] = startIndex;
-			wallIndices.emplace_back(URIndex);
+	if(isFlatTop){
+		if(startCol & 1){
+			const int ULIndex = (startRow + 1) * gridCols + (startCol - 1);
+			const int URIndex = (startRow + 1) * gridCols + (startCol + 1);
+			if(startCol > 0 && startRow < gridRows - 1){
+				savedIndices[ULIndex] = startIndex;
+				wallIndices.emplace_back(ULIndex);
+			}
+			if(startCol < gridCols - 1 && startRow < gridRows - 1){
+				savedIndices[URIndex] = startIndex;
+				wallIndices.emplace_back(URIndex);
+			}
+		} else{
+			const int DLIndex = (startRow - 1) * gridCols + (startCol - 1);
+			const int DRIndex = (startRow - 1) * gridCols + (startCol + 1);
+			if(startCol > 0 && startRow > 0){
+				savedIndices[DLIndex] = startIndex;
+				wallIndices.emplace_back(DLIndex);
+			}
+			if(startCol < gridCols - 1 && startRow > 0){
+				savedIndices[DRIndex] = startIndex;
+				wallIndices.emplace_back(DRIndex);
+			}
 		}
 	} else{
-		const int DLIndex = (startRow - 1) * gridCols + (startCol - 1);
-		const int DRIndex = (startRow - 1) * gridCols + (startCol + 1);
-		if(startCol > 0 && startRow > 0){
-			savedIndices[DLIndex] = startIndex;
-			wallIndices.emplace_back(DLIndex);
-		}
-		if(startCol < gridCols - 1 && startRow > 0){
-			savedIndices[DRIndex] = startIndex;
-			wallIndices.emplace_back(DRIndex);
+		if(startRow & 1){
+			const int ULIndex = (startRow - 1) * gridCols + (startCol + 1);
+			const int URIndex = (startRow + 1) * gridCols + (startCol + 1);
+			if(startCol < gridCols - 1 && startRow > 0){
+				savedIndices[ULIndex] = startIndex;
+				wallIndices.emplace_back(ULIndex);
+			}
+			if(startCol < gridCols - 1 && startRow < gridRows - 1){
+				savedIndices[URIndex] = startIndex;
+				wallIndices.emplace_back(URIndex);
+			}
+		} else{
+			const int DLIndex = (startRow - 1) * gridCols + (startCol - 1);
+			const int DRIndex = (startRow + 1) * gridCols + (startCol - 1);
+			if(startCol > 0 && startRow > 0){
+				savedIndices[DLIndex] = startIndex;
+				wallIndices.emplace_back(DLIndex);
+			}
+			if(startCol > 0 && startRow < gridRows - 1){
+				savedIndices[DRIndex] = startIndex;
+				wallIndices.emplace_back(DRIndex);
+			}
 		}
 	}
 
@@ -245,27 +271,53 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 				wallIndices.emplace_back(otherRightIndex);
 			}
 
-			if(otherX & 1){
-				const int otherULIndex = (otherY + 1) * gridCols + (otherX - 1);
-				const int otherURIndex = (otherY + 1) * gridCols + (otherX + 1);
-				if(otherX > 0 && otherY < gridRows - 1){
-					savedIndices[otherULIndex] = otherIndex;
-					wallIndices.emplace_back(otherULIndex);
-				}
-				if(otherX < gridCols - 1 && otherY < gridRows - 1){
-					savedIndices[otherURIndex] = otherIndex;
-					wallIndices.emplace_back(otherURIndex);
+			if(isFlatTop){
+				if(otherX & 1){
+					const int otherULIndex = (otherY + 1) * gridCols + (otherX - 1);
+					const int otherURIndex = (otherY + 1) * gridCols + (otherX + 1);
+					if(otherX > 0 && otherY < gridRows - 1){
+						savedIndices[otherULIndex] = otherIndex;
+						wallIndices.emplace_back(otherULIndex);
+					}
+					if(otherX < gridCols - 1 && otherY < gridRows - 1){
+						savedIndices[otherURIndex] = otherIndex;
+						wallIndices.emplace_back(otherURIndex);
+					}
+				} else{
+					const int otherDLIndex = (otherY - 1) * gridCols + (otherX - 1);
+					const int otherDRIndex = (otherY - 1) * gridCols + (otherX + 1);
+					if(otherX > 0 && otherY > 0){
+						savedIndices[otherDLIndex] = otherIndex;
+						wallIndices.emplace_back(otherDLIndex);
+					}
+					if(otherX < gridCols - 1 && otherY > 0){
+						savedIndices[otherDRIndex] = otherIndex;
+						wallIndices.emplace_back(otherDRIndex);
+					}
 				}
 			} else{
-				const int otherDLIndex = (otherY - 1) * gridCols + (otherX - 1);
-				const int otherDRIndex = (otherY - 1) * gridCols + (otherX + 1);
-				if(otherX > 0 && otherY > 0){
-					savedIndices[otherDLIndex] = otherIndex;
-					wallIndices.emplace_back(otherDLIndex);
-				}
-				if(otherX < gridCols - 1 && otherY > 0){
-					savedIndices[otherDRIndex] = otherIndex;
-					wallIndices.emplace_back(otherDRIndex);
+				if(otherX & 1){
+					const int otherULIndex = (otherY - 1) * gridCols + (otherX + 1);
+					const int otherURIndex = (otherY + 1) * gridCols + (otherX + 1);
+					if(otherX < gridCols - 1 && otherY > 0){
+						savedIndices[otherULIndex] = otherIndex;
+						wallIndices.emplace_back(otherULIndex);
+					}
+					if(otherX < gridCols - 1 && otherY < gridRows - 1){
+						savedIndices[otherURIndex] = otherIndex;
+						wallIndices.emplace_back(otherURIndex);
+					}
+				} else{
+					const int otherDLIndex = (otherY - 1) * gridCols + (otherX - 1);
+					const int otherDRIndex = (otherY + 1) * gridCols + (otherX - 1);
+					if(otherX > 0 && otherY > 0){
+						savedIndices[otherDLIndex] = otherIndex;
+						wallIndices.emplace_back(otherDLIndex);
+					}
+					if(otherX > 0 && otherY < gridRows - 1){
+						savedIndices[otherDRIndex] = otherIndex;
+						wallIndices.emplace_back(otherDRIndex);
+					}
 				}
 			}
 		}
@@ -349,7 +401,7 @@ void Sim::RefineTileLayer(const int gridRows, const int gridCols, const unsigned
 	}
 }
 
-void Sim::MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, const int row, const int col, const int radius, const float* quickRenderDelay){
+void Sim::MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, const int row, const int col, const int radius, const float* quickRenderDelay, const bool isFlatTop){
 	std::vector<std::pair<int, int>> myVec;
 	myVec.emplace_back(std::make_pair(0, row * gridCols + col));
 
@@ -383,23 +435,45 @@ void Sim::MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, cons
 				myVec.emplace_back(std::make_pair(myPair.first + 1, rightIndex));
 			}
 
-			if(myCol & 1){
-				const int ULIndex = (myRow + 1) * gridCols + (myCol - 1);
-				const int URIndex = (myRow + 1) * gridCols + (myCol + 1);
-				if(myCol > 0 && myRow < gridRows - 1){
-					myVec.emplace_back(std::make_pair(myPair.first + 1, ULIndex));
-				}
-				if(myCol < gridCols - 1 && myRow < gridRows - 1){
-					myVec.emplace_back(std::make_pair(myPair.first + 1, URIndex));
+			if(isFlatTop){
+				if(myCol & 1){
+					const int ULIndex = (myRow + 1) * gridCols + (myCol - 1);
+					const int URIndex = (myRow + 1) * gridCols + (myCol + 1);
+					if(myCol > 0 && myRow < gridRows - 1){
+						myVec.emplace_back(std::make_pair(myPair.first + 1, ULIndex));
+					}
+					if(myCol < gridCols - 1 && myRow < gridRows - 1){
+						myVec.emplace_back(std::make_pair(myPair.first + 1, URIndex));
+					}
+				} else{
+					const int DLIndex = (myRow - 1) * gridCols + (myCol - 1);
+					const int DRIndex = (myRow - 1) * gridCols + (myCol + 1);
+					if(myCol > 0 && myRow > 0){
+						myVec.emplace_back(std::make_pair(myPair.first + 1, DLIndex));
+					}
+					if(myCol < gridCols - 1 && myRow > 0){
+						myVec.emplace_back(std::make_pair(myPair.first + 1, DRIndex));
+					}
 				}
 			} else{
-				const int DLIndex = (myRow - 1) * gridCols + (myCol - 1);
-				const int DRIndex = (myRow - 1) * gridCols + (myCol + 1);
-				if(myCol > 0 && myRow > 0){
-					myVec.emplace_back(std::make_pair(myPair.first + 1, DLIndex));
-				}
-				if(myCol < gridCols - 1 && myRow > 0){
-					myVec.emplace_back(std::make_pair(myPair.first + 1, DRIndex));
+				if(myRow & 1){
+					const int ULIndex = (myRow - 1) * gridCols + (myCol + 1);
+					const int URIndex = (myRow + 1) * gridCols + (myCol + 1);
+					if(myCol < gridCols - 1 && myRow > 0){
+						myVec.emplace_back(std::make_pair(myPair.first + 1, ULIndex));
+					}
+					if(myCol < gridCols - 1 && myRow < gridRows - 1){
+						myVec.emplace_back(std::make_pair(myPair.first + 1, URIndex));
+					}
+				} else{
+					const int DLIndex = (myRow - 1) * gridCols + (myCol - 1);
+					const int DRIndex = (myRow + 1) * gridCols + (myCol - 1);
+					if(myCol > 0 && myRow > 0){
+						myVec.emplace_back(std::make_pair(myPair.first + 1, DLIndex));
+					}
+					if(myCol > 0 && myRow < gridRows - 1){
+						myVec.emplace_back(std::make_pair(myPair.first + 1, DRIndex));
+					}
 				}
 			}
 		}

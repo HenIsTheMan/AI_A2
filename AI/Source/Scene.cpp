@@ -896,15 +896,16 @@ void Scene::MakeSimMap() const{
 	sim->ChangeTileWeight((int)TileType::Grass, 20);
 	sim->ChangeTileWeight((int)TileType::Mud, 20);
 
+	const bool isFlatTop = gridType == HexGrid<float>::GridType::FlatTop;
 	const float* const quickRenderDelay0 = new float(0.05f);
 	const float* const quickRenderDelay1 = new float(0.02f);
 	const float* const quickRenderDelay2 = new float(0.04f);
 	const float* const quickRenderDelay3 = new float(0.01f);
-	sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay0);
+	sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay0, isFlatTop);
 	sim->RefineTileLayer(gridRows, gridCols, 2169, quickRenderDelay1);
-	sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 14, 4, 1, quickRenderDelay2);
-	sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 4, 5, 2, quickRenderDelay2);
-	sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 10, 12, 3, quickRenderDelay2);
+	sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 14, 4, 1, quickRenderDelay2, isFlatTop);
+	sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 4, 5, 2, quickRenderDelay2, isFlatTop);
+	sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 10, 12, 3, quickRenderDelay2, isFlatTop);
 	sim->GenFogLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay3);
 	delete quickRenderDelay0;
 	delete quickRenderDelay1;

@@ -32,9 +32,9 @@ public:
 	void ChangeTileWeight(const int index, const int tileWeight);
 
 	void GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key, const float* quickRenderDelay);
-	void GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key, const float* quickRenderDelay);
+	void GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key, const float* quickRenderDelay, const bool isFlatTop);
 	void RefineTileLayer(const int gridRows, const int gridCols, const unsigned int key, const float* quickRenderDelay);
-	void MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, const int row, const int col, const int radius, const float* quickRenderDelay);
+	void MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, const int row, const int col, const int radius, const float* quickRenderDelay, const bool isFlatTop);
 
 	//* Getters
 	const std::vector<FogType>& GetFogLayer() const;
