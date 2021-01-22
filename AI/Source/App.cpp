@@ -102,8 +102,9 @@ void App::Render(){
 
 	im_RenderTimer.startTimer();
 	while(!endLoop){
-		if(glfwWindowShouldClose(s_RenderWindow) || Key(VK_ESCAPE)){
+		if(glfwWindowShouldClose(s_RenderWindow)){
 			endLoop = true;
+			continue;
 		}
 
 		renderDt = im_RenderTimer.getElapsedTime();
@@ -129,8 +130,9 @@ void App::Run(){
 
 	im_UpdateTimer.startTimer();
 	while(!endLoop){
-		if(glfwWindowShouldClose(s_UpdateWindow) || Key(VK_ESCAPE)){
+		if(glfwWindowShouldClose(s_UpdateWindow)){
 			endLoop = true;
+			continue;
 		}
 
 		im_Scene->Update(im_UpdateTimer.getElapsedTime(), renderDt);
