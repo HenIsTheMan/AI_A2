@@ -10,9 +10,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-GLFWwindow* im_window;
-const unsigned char FPS = 60; // FPS of this game
-const unsigned int frameTime = 1000 / FPS; // time for each frame
+static GLFWwindow* s_UpdateWindow = nullptr;
+static GLFWwindow* s_RenderWindow = nullptr;
+static const unsigned char FPS = 60; // FPS of this game
+static const unsigned int frameTime = 1000 / FPS; // time for each frame
 
 ///Shld be members of App instead
 double mouseScrollWheelYOffset;
@@ -37,14 +38,12 @@ bool App::Key(unsigned short key){
     return GetAsyncKeyState(key) & 0x8000;
 }
 
-bool App::IsMousePressed(unsigned short key) //0 - Left, 1 - Right, 2 - Middle
-{
-	return glfwGetMouseButton(im_window, key) != 0;
+bool App::IsMousePressed(unsigned short key){ //0 - Left, 1 - Right, 2 - Middle
+	return glfwGetMouseButton(glfwGetCurrentContext(), key) != 0;
 }
 
-void App::GetCursorPos(double* xpos, double* ypos)
-{
-	glfwGetCursorPos(im_window, xpos, ypos);
+void App::GetCursorPos(double* xpos, double* ypos){
+	glfwGetCursorPos(glfwGetCurrentContext(), xpos, ypos);
 }
 
 static void ScrollCallback(GLFWwindow*, double xOffset, double yOffset){
@@ -65,28 +64,29 @@ void App::Init(){
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
 	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-	const GLFWvidmode* const& mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	im_window = glfwCreateWindow(mode->width / 2, mode->height / 2, "App Window", nullptr, nullptr);
-	glfwSetWindowPos(im_window, mode->width / 4, mode->height / 4);
-	glfwMaximizeWindow(im_window);
-	glfwShowWindow(im_window);
-	glfwGetWindowSize(im_window, &windowWidth, &windowHeight);
 
-	if(!im_window){
-		fprintf(stderr, "Failed to open GLFW window.\n");
+	s_UpdateWindow = glfwCreateWindow(1, 1, "Update Window", nullptr, nullptr);
+	glfwHideWindow(s_UpdateWindow);
+
+	const GLFWvidmode* const& mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	s_RenderWindow = glfwCreateWindow(mode->width / 2, mode->height / 2, "App Window", nullptr, nullptr);
+	glfwSetWindowPos(s_RenderWindow, mode->width / 4, mode->height / 4);
+	glfwMaximizeWindow(s_RenderWindow);
+	glfwShowWindow(s_RenderWindow);
+	glfwGetWindowSize(s_RenderWindow, &windowWidth, &windowHeight);
+
+	if(!s_RenderWindow){
+		fprintf(stderr, "Failed to open render window.\n");
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
-	glfwMakeContextCurrent(im_window);
+	glfwMakeContextCurrent(s_RenderWindow);
 
-	glfwSetWindowSizeCallback(im_window, resize_callback);
-	glfwSetScrollCallback(im_window, ScrollCallback);
+	glfwSetWindowSizeCallback(s_RenderWindow, resize_callback);
+	glfwSetScrollCallback(s_RenderWindow, ScrollCallback);
 
-	glewExperimental = true; // Needed for core profile
-	//Initialize GLEW
+	glewExperimental = true; //Needed for core profile
 	GLenum err = glewInit();
-
-	//If GLEW hasn't initialized
 	if(err != GLEW_OK){
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 	}
@@ -98,67 +98,53 @@ void App::Init(){
 }
 
 void App::Update(){
+	glfwMakeContextCurrent(s_UpdateWindow);
+
 	static bool isF3 = false;
 	static bool isF1 = false;
 
 	im_Timer.startTimer();
 	while(!endLoop){
-		/*myMutex.lock();
-		if(glfwGetCurrentContext() != NULL){
-			myMutex.unlock();
-			continue;
-		}
-		glfwMakeContextCurrent(im_window);*/
-
-		if(glfwWindowShouldClose(im_window) || Key(VK_ESCAPE)){
+		if(glfwWindowShouldClose(s_UpdateWindow) || Key(VK_ESCAPE)){
 			endLoop = true;
 		}
 
 		im_Scene->Update(im_Timer.getElapsedTime());
 
-		if(!isF3 && Key(VK_F3)){
-			glfwGetWindowAttrib(im_window, GLFW_VISIBLE) ? glfwHideWindow(im_window) : glfwShowWindow(im_window);
+		/*if(!isF3 && Key(VK_F3)){
+			glfwGetWindowAttrib(s_UpdateWindow, GLFW_VISIBLE) ? glfwHideWindow(s_UpdateWindow) : glfwShowWindow(s_UpdateWindow);
 			isF3 = true;
 		} else if(isF3 && !Key(VK_F3)){
 			isF3 = false;
 		}
 		if(!isF1 && Key(VK_F1)){
 			const GLFWvidmode* const& mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-			glfwSetWindowMonitor(im_window, glfwGetWindowMonitor(im_window) ? nullptr : glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, GLFW_DONT_CARE);
+			glfwSetWindowMonitor(s_UpdateWindow, glfwGetWindowMonitor(s_UpdateWindow) ? nullptr : glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, GLFW_DONT_CARE);
 			isF1 = true;
 		} else if(isF1 && !Key(VK_F1)){
 			isF1 = false;
-		}
+		}*/
 
-		//glfwMakeContextCurrent(NULL);
-		//myMutex.unlock();
+		glfwPollEvents();
 	}
 }
 
 void App::Render(){
+	glfwMakeContextCurrent(s_RenderWindow);
+
 	//Timer??
 	while(!endLoop){
-		/*if(glfwGetCurrentContext() != NULL){
-			continue;
-		}*/
-		//myMutex.lock();
-		glfwMakeContextCurrent(im_window);
-
-		if(glfwWindowShouldClose(im_window) || Key(VK_ESCAPE)){
+		if(glfwWindowShouldClose(s_RenderWindow) || Key(VK_ESCAPE)){
 			endLoop = true;
 		}
 
-		if(glfwGetWindowAttrib(im_window, GLFW_VISIBLE)){
+		if(glfwGetWindowAttrib(s_RenderWindow, GLFW_VISIBLE)){
 			glViewport(0, 0, windowWidth, windowHeight);
 			im_Scene->Render();
 		}
 
-		glfwSwapBuffers(im_window);
-		glfwPollEvents();
+		glfwSwapBuffers(s_RenderWindow);
 		//im_Timer.waitUntil(frameTime);
-
-		glfwMakeContextCurrent(NULL);
-		//myMutex.unlock();
 	}
 }
 
@@ -170,8 +156,6 @@ void App::Run(){
 
 	updateThread.join();
 	renderThread.join();
-
-	glfwMakeContextCurrent(im_window);
 }
 
 void App::Exit(){
@@ -180,12 +164,13 @@ void App::Exit(){
 		im_Scene = nullptr;
 	}
 
-	glfwDestroyWindow(im_window);
+	glfwDestroyWindow(s_UpdateWindow);
+	glfwDestroyWindow(s_RenderWindow);
 	glfwTerminate();
 }
 
 void App::QuickRender(){
 	im_Scene->Render();
-	glfwSwapBuffers(im_window);
+	glfwSwapBuffers(s_RenderWindow);
 	glfwPollEvents();
 }

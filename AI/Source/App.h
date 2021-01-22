@@ -30,7 +30,7 @@ private:
 
 	StopWatch im_Timer = StopWatch();
 
-	std::mutex myMutex;
+	std::mutex myMutex; //??
 	
 	static IScene* im_Scene;
 
