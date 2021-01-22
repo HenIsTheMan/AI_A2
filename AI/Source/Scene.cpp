@@ -15,7 +15,7 @@ Scene::Scene():
 	shldRenderTileArt(true),
 	shldRenderFog(true),
 	customHue(0.0f),
-	gridType(HexGrid<float>::GridType::SharpTop),
+	gridType(HexGrid<float>::GridType::FlatTop),
 	gridCellScaleX(50.0f),
 	gridCellScaleY(50.0f),
 	gridLineThickness(4.0f),
@@ -275,18 +275,10 @@ void Scene::RenderCoverMap(){
 			modelStack.PushMatrix();
 
 			modelStack.Translate(
-				xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)c + (r & 1) * grid->CalcAltOffsetX(),
-				yOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
+				xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c + (c & 1) * grid->CalcAltOffsetX(),
+				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
 				0.05f
 			);
-			if(gridType == HexGrid<float>::GridType::SharpTop){
-				modelStack.Rotate(
-					90.0f,
-					0.0f,
-					0.0f,
-					1.0f
-				);
-			}
 			modelStack.Scale(
 				gridCellScaleX + gridLineThickness * 2.5f,
 				gridCellScaleY + gridLineThickness * 2.5f,
@@ -300,18 +292,10 @@ void Scene::RenderCoverMap(){
 			modelStack.PushMatrix();
 
 			modelStack.Translate(
-				xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)c + (r & 1) * grid->CalcAltOffsetX(),
-				yOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
+				xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c + (c & 1) * grid->CalcAltOffsetX(),
+				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
 				0.1f
 			);
-			if(gridType == HexGrid<float>::GridType::SharpTop){
-				modelStack.Rotate(
-					90.0f,
-					0.0f,
-					0.0f,
-					1.0f
-				);
-			}
 			modelStack.Scale(
 				gridCellScaleX,
 				gridCellScaleY,
@@ -373,14 +357,6 @@ void Scene::RenderMap(){
 				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
 				0.05f
 			);
-			if(gridType == HexGrid<float>::GridType::SharpTop){
-				modelStack.Rotate(
-					90.0f,
-					0.0f,
-					0.0f,
-					1.0f
-				);
-			}
 			modelStack.Scale(
 				gridCellScaleX + gridLineThickness * 2.5f,
 				gridCellScaleY + gridLineThickness * 2.5f,
@@ -402,14 +378,6 @@ void Scene::RenderMap(){
 				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
 				0.1f
 			);
-			if(gridType == HexGrid<float>::GridType::SharpTop){
-				modelStack.Rotate(
-					90.0f,
-					0.0f,
-					0.0f,
-					1.0f
-				);
-			}
 			modelStack.Scale(
 				gridCellScaleX,
 				gridCellScaleY,
