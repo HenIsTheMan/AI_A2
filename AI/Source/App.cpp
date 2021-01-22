@@ -103,8 +103,12 @@ void App::Update(){
 
 	im_Timer.startTimer();
 	while(!endLoop){
-		myMutex.lock();
-		glfwMakeContextCurrent(im_window);
+		/*myMutex.lock();
+		if(glfwGetCurrentContext() != NULL){
+			myMutex.unlock();
+			continue;
+		}
+		glfwMakeContextCurrent(im_window);*/
 
 		if(glfwWindowShouldClose(im_window) || Key(VK_ESCAPE)){
 			endLoop = true;
@@ -126,15 +130,18 @@ void App::Update(){
 			isF1 = false;
 		}
 
-		glfwMakeContextCurrent(NULL);
-		myMutex.unlock();
+		//glfwMakeContextCurrent(NULL);
+		//myMutex.unlock();
 	}
 }
 
 void App::Render(){
 	//Timer??
 	while(!endLoop){
-		myMutex.lock();
+		/*if(glfwGetCurrentContext() != NULL){
+			continue;
+		}*/
+		//myMutex.lock();
 		glfwMakeContextCurrent(im_window);
 
 		if(glfwWindowShouldClose(im_window) || Key(VK_ESCAPE)){
@@ -151,7 +158,7 @@ void App::Render(){
 		//im_Timer.waitUntil(frameTime);
 
 		glfwMakeContextCurrent(NULL);
-		myMutex.unlock();
+		//myMutex.unlock();
 	}
 }
 
