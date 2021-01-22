@@ -68,9 +68,6 @@ void App::Init(){
 	s_UpdateWindow = glfwCreateWindow(1, 1, "Update Window", nullptr, nullptr);
 	glfwHideWindow(s_UpdateWindow);
 
-	glfwSetWindowSizeCallback(s_UpdateWindow, resize_callback);
-	glfwSetScrollCallback(s_UpdateWindow, ScrollCallback);
-
 	const GLFWvidmode* const& mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	s_RenderWindow = glfwCreateWindow(mode->width / 2, mode->height / 2, "App Window", nullptr, nullptr);
 	glfwSetWindowPos(s_RenderWindow, mode->width / 4, mode->height / 4);
@@ -86,7 +83,7 @@ void App::Init(){
 	glfwMakeContextCurrent(s_RenderWindow);
 
 	glfwSetWindowSizeCallback(s_RenderWindow, resize_callback);
-	//glfwSetScrollCallback(s_RenderWindow, ScrollCallback);
+	glfwSetScrollCallback(s_RenderWindow, ScrollCallback);
 
 	glewExperimental = true; //Needed for core profile
 	GLenum err = glewInit();

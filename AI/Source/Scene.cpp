@@ -87,10 +87,10 @@ void Scene::Update(double dt){
 					sim->ChangeTileWeight((int)TileType::Grass, 20);
 					sim->ChangeTileWeight((int)TileType::Mud, 20);
 
-					const float* const quickRenderDelay0 = new float(0.04f);
-					const float* const quickRenderDelay1 = new float(0.03f);
-					const float* const quickRenderDelay2 = new float(0.05f);
-					const float* const quickRenderDelay3 = new float(0.01f);
+					const float* const quickRenderDelay0 = nullptr;
+					const float* const quickRenderDelay1 = nullptr;
+					const float* const quickRenderDelay2 = nullptr;
+					const float* const quickRenderDelay3 = nullptr;
 					sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay0);
 					sim->RefineTileLayer(gridRows, gridCols, 2169, quickRenderDelay1);
 					sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 5, 5, 2, quickRenderDelay2);
