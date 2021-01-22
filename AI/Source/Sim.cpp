@@ -78,6 +78,7 @@ void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow
 	}
 
 	fogLayer[startRow * gridCols + startCol] = FogType::Inexistent;
+	fogLayer[gridTotalCells - 1] = FogType::Inexistent; //End
 }
 
 void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key, const float* quickRenderDelay){
@@ -242,6 +243,24 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 					savedIndices[otherDRIndex] = otherIndex;
 					wallIndices.emplace_back(otherDRIndex);
 				}
+			}
+		}
+	}
+
+	tileLayer[gridRows * gridCols - 1] = TileType::Empty; //End
+
+	if(quickRenderDelay != nullptr){
+		App::QuickRender();
+		float currTime = 0.0f;
+
+		while (quickRenderDelay != nullptr && currTime < *quickRenderDelay) {
+			currTime += (float)timer.getElapsedTime();
+			if (!isKeySpace && App::Key(VK_SPACE)) {
+				quickRenderDelay = nullptr;
+				isKeySpace = true;
+			}
+			else if (isKeySpace && !App::Key(VK_SPACE)) {
+				isKeySpace = false;
 			}
 		}
 	}
