@@ -12,8 +12,6 @@
 
 static GLFWwindow* s_UpdateWindow = nullptr;
 static GLFWwindow* s_RenderWindow = nullptr;
-static const unsigned char FPS = 60;
-static const float frameTime = 1000.0f / (float)FPS;
 
 ///Shld be members of App instead
 double mouseScrollWheelYOffset;
@@ -152,6 +150,15 @@ void App::Run(){
 		}
 
 		glfwPollEvents();
+
+		static double prevTime = 0.0;
+		static double currTime = 0.0;
+		double dt = 0.0;
+		while(dt < 1.0 / 240.0){ //Cap at 240 FPS
+			currTime = glfwGetTime();
+			dt = currTime - prevTime;
+		}
+		prevTime = currTime;
 	}
 
 	renderThread.join();

@@ -33,17 +33,3 @@ double StopWatch::getElapsedTime(){
 	prevTime = currTime;
 	return LIToSecs(time);
 }
-
-void StopWatch::waitUntil(long long time){ //No gd
-	LARGE_INTEGER nowTime;
-	LONGLONG timeElapsed;
-	while(1){
-		QueryPerformanceCounter(&nowTime);
-		timeElapsed = ((nowTime.QuadPart - prevTime.QuadPart) * 1000 / frequency.QuadPart);
-		if(timeElapsed > time){
-			return;
-		} else{
-			Sleep(time - timeElapsed);
-		}
-	}
-}
