@@ -683,7 +683,6 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		"I: Decrease sim time of day duration",
 	};
 	static size_t size = sizeof(texts) / sizeof(texts[0]);
-	static float val = 25.5f;
 
 	for(size_t i = 0; i < size; ++i){
 		RenderTextOnScreen(
@@ -692,7 +691,7 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 			textColor,
 			textSize,
 			0.0f,
-			textSize * (val - (float)i)
+			(float)windowHeight - textSize * float(i + 1)
 		);
 	}
 }
@@ -770,7 +769,6 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 		(std::string)"shldRenderFog: " + (shldRenderFog ? "Yes" : "No"),
 	};
 	const size_t size = sizeof(texts) / sizeof(texts[0]);
-	static float val = 25.5f;
 
 	for(size_t i = 0; i < size; ++i){
 		RenderTextOnScreen(
@@ -779,7 +777,7 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 			textColor,
 			textSize,
 			(float)windowWidth,
-			textSize * (val - (float)i),
+			(float)windowHeight - textSize * float(i + 1),
 			TextAlignment::Right
 		);
 	}

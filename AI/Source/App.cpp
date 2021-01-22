@@ -135,19 +135,19 @@ void App::Run(){
 
 		im_Scene->Update(im_UpdateTimer.getElapsedTime(), renderDt);
 
-		/*if(!isF3 && Key(VK_F3)){
-			glfwGetWindowAttrib(s_UpdateWindow, GLFW_VISIBLE) ? glfwHideWindow(s_UpdateWindow) : glfwShowWindow(s_UpdateWindow);
+		if(!isF3 && Key(VK_F3)){
+			glfwGetWindowAttrib(s_RenderWindow, GLFW_VISIBLE) ? glfwHideWindow(s_RenderWindow) : glfwShowWindow(s_RenderWindow);
 			isF3 = true;
 		} else if(isF3 && !Key(VK_F3)){
 			isF3 = false;
 		}
 		if(!isF1 && Key(VK_F1)){
 			const GLFWvidmode* const& mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-			glfwSetWindowMonitor(s_UpdateWindow, glfwGetWindowMonitor(s_UpdateWindow) ? nullptr : glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, GLFW_DONT_CARE);
+			glfwSetWindowMonitor(s_RenderWindow, glfwGetWindowMonitor(s_RenderWindow) ? nullptr : glfwGetPrimaryMonitor(), 0, 0, mode->width, mode->height, GLFW_DONT_CARE);
 			isF1 = true;
 		} else if(isF1 && !Key(VK_F1)){
 			isF1 = false;
-		}*/
+		}
 
 		glfwPollEvents();
 	}
