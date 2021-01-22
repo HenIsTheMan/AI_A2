@@ -63,15 +63,15 @@ void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow
 					while(quickRenderDelay != nullptr && currTime < delay){
 						currTime += (float)timer.getElapsedTime();
 
+						const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
+						delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
+
 						if(!isKeySpace && App::Key(VK_SPACE)){
 							quickRenderDelay = nullptr;
 							isKeySpace = true;
 						} else if(isKeySpace && !App::Key(VK_SPACE)){
 							isKeySpace = false;
 						}
-
-						const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
-						delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
 					}
 				}
 
@@ -114,15 +114,15 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 		while(quickRenderDelay != nullptr && currTime < delay){
 			currTime += (float)timer.getElapsedTime();
 
+			const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
+			delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
+
 			if(!isKeySpace && App::Key(VK_SPACE)){
 				quickRenderDelay = nullptr;
 				isKeySpace = true;
 			} else if(isKeySpace && !App::Key(VK_SPACE)){
 				isKeySpace = false;
 			}
-
-			const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
-			delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
 		}
 	}
 
@@ -200,15 +200,15 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 				while(quickRenderDelay != nullptr && currTime < delay){
 					currTime += (float)timer.getElapsedTime();
 
+					const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
+					delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
+
 					if(!isKeySpace && App::Key(VK_SPACE)){
 						quickRenderDelay = nullptr;
 						isKeySpace = true;
 					} else if(isKeySpace && !App::Key(VK_SPACE)){
 						isKeySpace = false;
 					}
-
-					const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
-					delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
 				}
 			}
 
@@ -268,15 +268,15 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 		while(quickRenderDelay != nullptr && currTime < delay){
 			currTime += (float)timer.getElapsedTime();
 
+			const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
+			delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
+
 			if(!isKeySpace && App::Key(VK_SPACE)){
 				quickRenderDelay = nullptr;
 				isKeySpace = true;
 			} else if(isKeySpace && !App::Key(VK_SPACE)){
 				isKeySpace = false;
 			}
-
-			const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
-			delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
 		}
 	}
 }
@@ -311,15 +311,15 @@ void Sim::RefineTileLayer(const int gridRows, const int gridCols, const unsigned
 						while(quickRenderDelay != nullptr && currTime < delay){
 							currTime += (float)timer.getElapsedTime();
 
+							const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
+							delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
+
 							if(!isKeySpace && App::Key(VK_SPACE)){
 								quickRenderDelay = nullptr;
 								isKeySpace = true;
 							} else if(isKeySpace && !App::Key(VK_SPACE)){
 								isKeySpace = false;
 							}
-
-							const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
-							delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
 						}
 					}
 
@@ -395,15 +395,15 @@ void Sim::MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, cons
 			while(quickRenderDelay != nullptr && currTime < delay){
 				currTime += (float)timer.getElapsedTime();
 
+				const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
+				delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
+
 				if(!isKeySpace && App::Key(VK_SPACE)){
 					quickRenderDelay = nullptr;
 					isKeySpace = true;
 				} else if(isKeySpace && !App::Key(VK_SPACE)){
 					isKeySpace = false;
 				}
-
-				const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
-				delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
 			}
 		}
 	}
