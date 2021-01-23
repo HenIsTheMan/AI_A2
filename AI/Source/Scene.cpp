@@ -376,6 +376,8 @@ void Scene::UpdateEntities(const double dt){
 		entity->im_Attribs.im_Type = Obj::EntityType::Knight;
 		entity->im_Attribs.im_LocalPos.x = 2.0f;
 		entity->im_Attribs.im_LocalPos.y = 2.0f;
+		entity->im_Attribs.im_CurrHealth = 5.0f;
+		entity->im_Attribs.im_MaxHealth = entity->im_Attribs.im_CurrHealth;
 		hasSpawned = true;
 	}
 
@@ -591,6 +593,8 @@ void Scene::RenderCoverText(){
 }
 
 void Scene::RenderEntities(){
+	static float individualDepthOffset = 0.0f;
+
 	const float gridWidth = grid->CalcWidth();
 	const float gridHeight = grid->CalcHeight();
 
@@ -605,7 +609,7 @@ void Scene::RenderEntities(){
 			modelStack.Translate(
 				xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * localPos.x,
 				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * localPos.y + ((int)localPos.x & 1) * grid->CalcAltOffsetY(),
-				0.3f
+				0.25f + individualDepthOffset
 			);
 			modelStack.Scale(
 				gridCellScaleX + gridLineThickness * 2.5f,
@@ -616,7 +620,7 @@ void Scene::RenderEntities(){
 			modelStack.Translate(
 				xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * localPos.x + ((int)localPos.y & 1) * grid->CalcAltOffsetX(),
 				yOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * localPos.y,
-				0.3f
+				0.25f + individualDepthOffset
 			);
 			modelStack.Rotate(
 				90.0f,
@@ -632,8 +636,49 @@ void Scene::RenderEntities(){
 		}
 
 		RenderMesh(meshList[(int)GeoType::Hex], true, Color(), 1.0f);
+
+			const float ratio = entity->im_Attribs.im_CurrHealth / entity->im_Attribs.im_MaxHealth;
+			modelStack.PushMatrix();
+
+			modelStack.Translate(
+				0.0f,
+				0.3f,
+				0.25f + individualDepthOffset
+			);
+			modelStack.Scale(
+				0.9f,
+				0.05f,
+				1.0f
+			);
+
+			if(entity->im_Attribs.im_CurrHealth > 0.0f){
+				modelStack.PushMatrix();
+
+				modelStack.Translate(
+					-(1.f - ratio) * 0.5f,
+					0.0f,
+					0.0f
+				);
+				modelStack.Scale(
+					ratio - 0.05f,
+					0.5f,
+					1.0f
+				);
+
+				RenderMesh(meshList[(int)GeoType::Quad], true, Color(ratio < 0.5f ? 1.0f : (1.0f - ratio) * 2.0f, ratio > 0.5f ? 1.0f : ratio * 2.0f, 0.0f), 1.0f);
+				modelStack.PopMatrix();
+
+				RenderMesh(meshList[(int)GeoType::Quad], true, Color(0.1f, 0.1f, 0.1f), 1.0f);
+			}
+
+			modelStack.PopMatrix();
+
 		modelStack.PopMatrix();
+
+		individualDepthOffset += 0.01f;
 	}
+
+	individualDepthOffset = 0.0f;
 }
 
 void Scene::RenderMap(){

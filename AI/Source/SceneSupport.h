@@ -36,6 +36,7 @@ public:
 		RainyBG,
 		NightBG,
 		Fog,
+		Quad,
 		Hex,
 		WallTile,
 		SoilTile,
