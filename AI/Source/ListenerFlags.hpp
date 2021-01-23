@@ -5,14 +5,6 @@
 #endif
 
 enum struct ListenerFlags: long int{ //Flags enum
-	ObjPool = BIT(1),
-	Skele = BIT(2),
-	Reptile = BIT(3),
-	Boy = BIT(4),
-	Orc = BIT(5),
-	AlphaTeam = BIT(6),
-	OmegaTeam = BIT(7),
-	Entity = BIT(8),
-	Scene = BIT(9),
-	Amt = 9
+	Entity = BIT(0),
+	Amt = 1
 };
