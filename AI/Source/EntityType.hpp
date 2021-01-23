@@ -3,10 +3,10 @@
 namespace Obj{
 	enum struct EntityType: int{
 		Null,
-		Skele,
-		Reptile,
-		Boy,
-		Orc,
+		Knight,
+		Gunner,
+		Healer,
+		King,
 		Amt
 	};
 }
