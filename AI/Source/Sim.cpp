@@ -402,6 +402,10 @@ void Sim::RefineTileLayer(const int gridRows, const int gridCols, const unsigned
 }
 
 void Sim::MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, const int row, const int col, const int radius, const float* quickRenderDelay, const bool isFlatTop){
+	if(row < 0 || row > gridRows - 1 || col < 0 || col > gridCols - 1){ //Can be handled better
+		return;
+	}
+
 	std::vector<std::pair<int, int>> myVec;
 	myVec.emplace_back(std::make_pair(0, row * gridCols + col));
 

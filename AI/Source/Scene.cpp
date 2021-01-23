@@ -225,19 +225,6 @@ void Scene::UpdateGridAttribs(){
 	} else if(isKeyDown8 && !App::Key('8')){
 		isKeyDown8 = false;
 	}
-
-	if(!isKeyDown9 && App::Key('9')){
-
-		isKeyDown9 = true;
-	} else if(isKeyDown9 && !App::Key('9')){
-		isKeyDown9 = false;
-	}
-	if(!isKeyDown0 && App::Key('0')){
-
-		isKeyDown0 = true;
-	} else if(isKeyDown0 && !App::Key('0')){
-		isKeyDown0 = false;
-	}
 }
 
 void Scene::UpdateMisc(const double dt){
