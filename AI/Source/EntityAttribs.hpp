@@ -2,6 +2,8 @@
 
 #include "EntityTeam.hpp"
 #include "EntityType.hpp"
+#include "EntityFacingDir.hpp"
+
 #include "State.h"
 
 enum struct StateID: int;
@@ -19,24 +21,21 @@ namespace Obj{
 		~EntityAttribs<T, Type>() = default;
 
 		EntityType im_Type = EntityType::Null;
+		EntityTeam im_Team = EntityTeam::None;
+		EntityFacingDir im_FacingDir = EntityFacingDir::Invalid;
+
 		T im_LocalPos = T();
 		T im_LocalScale = T();
 
 		Type im_Dmg = Type();
 		Type im_CurrHealth = Type();
 		Type im_MaxHealth = Type();
-		Type im_Spd = Type();
 
-		Entity<T, Type>* im_Target = nullptr;
-		T im_GridTargetLocalPos = T();
-		Type im_TimeLeft = Type();
-		Type im_SpriteAniElapsedTime = Type();
-		Type im_SpriteAniDelay = Type();
-		EntityTeam im_Team = EntityTeam::Amt;
+		Entity<T, Type>* im_EntityTarget = nullptr;
+		T im_GridCellTargetLocalPos = T();
 
 		StateMachine<StateID, Entity<T, Type>>* im_StateMachine = nullptr;
 		State* im_CurrState = nullptr;
 		State* im_NextState = nullptr;
-		std::string im_SpriteAniMiddleName = "";
 	};
 }
