@@ -35,7 +35,9 @@ Scene::Scene():
 	gridMaxCols(20),
 	sim(new Sim()),
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
+	entityPool(ObjPool<Entity>::RetrieveGlobalObjPtr()),
 	publisher(Publisher::RetrieveGlobalObjPtr()),
+	activeEntities(entityPool->GetActiveObjs()),
 	myThread(nullptr)
 {
 }
@@ -49,6 +51,11 @@ Scene::~Scene(){
 	if(grid != nullptr){
 		delete grid;
 		grid = nullptr;
+	}
+
+	if(entityPool != nullptr){
+		entityPool->Destroy();
+		entityPool = nullptr;
 	}
 
 	if(publisher != nullptr){
@@ -65,6 +72,9 @@ Scene::~Scene(){
 
 void Scene::Init(){
 	SceneSupport::Init();
+
+	const size_t entityPoolSize = 40000;
+	entityPool->Init(entityPoolSize, entityPoolSize);
 
 	sim->status = SimRuntimeStatus::Waiting;
 	sim->mode = SimMode::ProtectTheKing;
@@ -360,6 +370,18 @@ void Scene::UpdateMisc(const double dt){
 }
 
 void Scene::UpdateEntities(const double dt){
+	for(Entity* const& entity: activeEntities){
+		switch(entity->im_Attribs.im_Type){
+			case Obj::EntityType::Knight:
+				break;
+			case Obj::EntityType::Gunner:
+				break;
+			case Obj::EntityType::Healer:
+				break;
+			case Obj::EntityType::King:
+				break;
+		}
+	}
 }
 
 void Scene::Render(){
@@ -561,6 +583,18 @@ void Scene::RenderCoverText(){
 }
 
 void Scene::RenderEntities(){
+	for(const Entity* const& entity: activeEntities){
+		switch(entity->im_Attribs.im_Type){
+			case Obj::EntityType::Knight:
+				break;
+			case Obj::EntityType::Gunner:
+				break;
+			case Obj::EntityType::Healer:
+				break;
+			case Obj::EntityType::King:
+				break;
+		}
+	}
 }
 
 void Scene::RenderMap(){

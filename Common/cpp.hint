@@ -1,0 +1,4 @@
+// Hint files help the Visual Studio IDE interpret Visual C++ identifiers
+// such as names of functions and macros.
+// For more information see https://go.microsoft.com/fwlink/?linkid=865984
+#define _4_DELETED(__VA_ARGS__) __VA_ARGS__(const __VA_ARGS__&) = delete; __VA_ARGS__(__VA_ARGS__&&) noexcept = delete; __VA_ARGS__& operator=(const __VA_ARGS__&) = delete; __VA_ARGS__& operator=(__VA_ARGS__&&) noexcept = delete;

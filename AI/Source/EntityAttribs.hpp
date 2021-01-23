@@ -17,7 +17,7 @@ class StateMachine;
 
 namespace Obj{
 	template <class T, typename Type>
-	class Entity;
+	struct Entity;
 
 	template <class T, typename Type>
 	struct EntityAttribs final{

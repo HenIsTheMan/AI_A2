@@ -4,11 +4,15 @@
 
 #include "SceneSupport.h"
 
+#include "Entity.h"
 #include "Rounding.hpp"
 
 #include "Sim.h"
 #include "HexGrid.h"
+#include "ObjPool.h"
 #include "Publisher.h"
+
+using Entity = Obj::Entity<Vector3, float>; //Can because Entity<Vector3, float> is in another namespace
 
 class Scene final: public SceneSupport{
 public:
@@ -46,7 +50,10 @@ private:
 
 	Sim* sim;
 	HexGrid<float>* grid;
+	ObjPool<Entity>* entityPool;
 	Publisher* publisher;
+
+	const std::vector<Entity*>& activeEntities;
 
 	std::thread* myThread;
 

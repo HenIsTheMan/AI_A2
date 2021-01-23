@@ -32,6 +32,11 @@ void ObjPool<T>::Init(const size_t& inactiveSize, const size_t& activeSize){
 }
 
 template <class T>
+const std::vector<T*>& ObjPool<T>::GetActiveObjs() const{
+	return activeObjs;
+}
+
+template <class T>
 T* ObjPool<T>::ActivateObj(){
 	if(inactiveObjs.empty()){
 		assert(false && "inactiveObjs is empty!");

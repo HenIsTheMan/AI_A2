@@ -20,6 +20,7 @@ namespace Obj{
 		int val = -1;
 
 		switch(myEvent->GetID()){
+
 		}
 
 		if(destroyEvent && myEvent){

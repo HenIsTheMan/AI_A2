@@ -17,5 +17,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Singleton.inl" />
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

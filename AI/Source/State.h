@@ -5,7 +5,7 @@
 
 namespace Obj{
 	template <class T, typename Type>
-	class Entity;
+	struct Entity;
 }
 
 using Entity = Obj::Entity<Vector3, float>;

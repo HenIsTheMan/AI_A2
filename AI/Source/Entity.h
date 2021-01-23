@@ -15,7 +15,7 @@ namespace Obj{
 		~Entity<T, Type>() = default;
 
 		int OnEvent(Event* myEvent, const bool destroyEvent = false) override;
-	private:
+
 		EntityAttribs<T, Type> im_Attribs;
 	};
 }
