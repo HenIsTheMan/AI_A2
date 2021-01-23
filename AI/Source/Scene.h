@@ -31,12 +31,24 @@ private:
 	int gridRows;
 	int gridCols;
 
+	float gridMinCellScaleX;
+	float gridMaxCellScaleX;
+	float gridMinCellScaleY;
+	float gridMaxCellScaleY;
+	float gridMinLineThickness;
+	float gridMaxLineThickness;
+	int gridMinRows;
+	int gridMinCols;
+	int gridMaxRows;
+	int gridMaxCols;
+
 	Sim* sim;
 	HexGrid<float>* grid;
 	Publisher* publisher;
 
 	std::thread* myThread;
 
+	void UpdateGridAttribs();
 	void UpdateMisc(const double dt);
 	void UpdateEntities(const double dt);
 

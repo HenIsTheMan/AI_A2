@@ -23,6 +23,16 @@ Scene::Scene():
 	gridLineThickness(4.0f),
 	gridRows(19),
 	gridCols(19),
+	gridMinCellScaleX(30.0f),
+	gridMaxCellScaleX(70.0f),
+	gridMinCellScaleY(30.0f),
+	gridMaxCellScaleY(70.0f),
+	gridMinLineThickness(0.0f),
+	gridMaxLineThickness(10.0f),
+	gridMinRows(12),
+	gridMinCols(12),
+	gridMaxRows(20),
+	gridMaxCols(20),
 	sim(new Sim()),
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
 	publisher(Publisher::RetrieveGlobalObjPtr()),
@@ -81,10 +91,13 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 	switch(sim->status){
 		case RuntimeStatus::Waiting:
+			UpdateGridAttribs();
+
 			if(canMakeSimMap && App::IsMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)){
 				myThread = new std::thread(&Scene::MakeSimMap, this);
 				canMakeSimMap = false;
 			}
+
 			break;
 		case RuntimeStatus::MakingTheMap:
 			im_Cam.Update(updateDt);
@@ -105,9 +118,105 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 			sim->Update(updateDt); //Not (dt * sim->spd) as...
 			UpdateEntities(updateDt * sim->spd);
+
 			break;
 	}
 	mouseScrollWheelYOffset = 0.0;
+}
+
+void Scene::UpdateGridAttribs(){
+	static bool isKeyDown1 = false;
+	static bool isKeyDown2 = false;
+	static bool isKeyDown3 = false;
+	static bool isKeyDown4 = false;
+	static bool isKeyDown5 = false;
+	static bool isKeyDown6 = false;
+	static bool isKeyDown7 = false;
+	static bool isKeyDown8 = false;
+	static bool isKeyDown9 = false;
+	static bool isKeyDown0 = false;
+	if(!isKeyDown1 && App::Key('1')){
+		if(gridCellScaleX < gridMaxCellScaleX){
+			grid->SetCellScaleX(++gridCellScaleX);
+		}
+		isKeyDown1 = true;
+	} else if(isKeyDown1 && !App::Key('1')){
+		isKeyDown1 = false;
+	}
+	if(!isKeyDown2 && App::Key('2')){
+		if(gridCellScaleX > gridMinCellScaleX){
+			grid->SetCellScaleX(--gridCellScaleX);
+		}
+		isKeyDown2 = true;
+	} else if(isKeyDown2 && !App::Key('2')){
+		isKeyDown2 = false;
+	}
+	if(!isKeyDown3 && App::Key('3')){
+		if(gridCellScaleY < gridMaxCellScaleY){
+			grid->SetCellScaleY(++gridCellScaleY);
+		}
+		isKeyDown3 = true;
+	} else if(isKeyDown3 && !App::Key('3')){
+		isKeyDown3 = false;
+	}
+	if(!isKeyDown4 && App::Key('4')){
+		if(gridCellScaleY > gridMinCellScaleY){
+			grid->SetCellScaleY(--gridCellScaleY);
+		}
+		isKeyDown4 = true;
+	} else if(isKeyDown4 && !App::Key('4')){
+		isKeyDown4 = false;
+	}
+	if(!isKeyDown5 && App::Key('5')){
+		if(gridLineThickness < gridMaxLineThickness){
+			gridLineThickness += 0.1f;
+			grid->SetLineThickness(gridLineThickness);
+		}
+		isKeyDown5 = true;
+	} else if(isKeyDown5 && !App::Key('5')){
+		isKeyDown5 = false;
+	}
+	if(!isKeyDown6 && App::Key('6')){
+		if(gridLineThickness > gridMinLineThickness){
+			gridLineThickness -= 0.1f;
+			grid->SetLineThickness(gridLineThickness);
+		}
+		isKeyDown6 = true;
+	} else if(isKeyDown6 && !App::Key('6')){
+		isKeyDown6 = false;
+	}
+	if(!isKeyDown7 && App::Key('7')){
+		if(gridRows < gridMaxRows){
+			grid->SetRows(++gridRows);
+		}
+		isKeyDown7 = true;
+	} else if(isKeyDown7 && !App::Key('7')){
+		isKeyDown7 = false;
+	}
+	if(!isKeyDown8 && App::Key('8')){
+		if(gridRows > gridMinRows){
+			grid->SetRows(--gridRows);
+		}
+		isKeyDown8 = true;
+	} else if(isKeyDown8 && !App::Key('8')){
+		isKeyDown8 = false;
+	}
+	if(!isKeyDown9 && App::Key('9')){
+		if(gridCols < gridMaxCols){
+			grid->SetCols(++gridCols);
+		}
+		isKeyDown9 = true;
+	} else if(isKeyDown9 && !App::Key('9')){
+		isKeyDown9 = false;
+	}
+	if(!isKeyDown0 && App::Key('0')){
+		if(gridCols > gridMinCols){
+			grid->SetCols(--gridCols);
+		}
+		isKeyDown0 = true;
+	} else if(isKeyDown0 && !App::Key('0')){
+		isKeyDown0 = false;
+	}
 }
 
 void Scene::UpdateMisc(const double dt){
