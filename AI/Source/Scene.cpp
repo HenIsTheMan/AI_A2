@@ -430,6 +430,11 @@ void Scene::RenderCoverMap(){
 					yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
 					0.05f
 				);
+				modelStack.Scale(
+					gridCellScaleX + gridLineThickness * 2.5f,
+					gridCellScaleY + gridLineThickness * 2.5f,
+					1.0f
+				);
 			} else{
 				modelStack.Translate(
 					xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)c + (r & 1) * grid->CalcAltOffsetX(),
@@ -442,12 +447,12 @@ void Scene::RenderCoverMap(){
 					0.0f,
 					1.0f
 				);
+				modelStack.Scale(
+					gridCellScaleY + gridLineThickness * 2.5f,
+					gridCellScaleX + gridLineThickness * 2.5f,
+					1.0f
+				);
 			}
-			modelStack.Scale(
-				gridCellScaleX + gridLineThickness * 2.5f,
-				gridCellScaleY + gridLineThickness * 2.5f,
-				1.0f
-			);
 
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color::HSVToRGB({customHue, 1.0f, 1.0f}), 0.5f);
 
@@ -461,6 +466,11 @@ void Scene::RenderCoverMap(){
 					yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
 					0.1f
 				);
+				modelStack.Scale(
+					gridCellScaleX,
+					gridCellScaleY,
+					1.0f
+				);
 			} else{
 				modelStack.Translate(
 					xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)c + (r & 1) * grid->CalcAltOffsetX(),
@@ -473,12 +483,12 @@ void Scene::RenderCoverMap(){
 					0.0f,
 					1.0f
 				);
+				modelStack.Scale(
+					gridCellScaleY,
+					gridCellScaleX,
+					1.0f
+				);
 			}
-			modelStack.Scale(
-				gridCellScaleX,
-				gridCellScaleY,
-				1.0f
-			);
 
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.0f, 0.0f, 0.0f), 0.5f);
 
@@ -536,6 +546,11 @@ void Scene::RenderMap(){
 					yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
 					0.05f
 				);
+				modelStack.Scale(
+					gridCellScaleX + gridLineThickness * 2.5f,
+					gridCellScaleY + gridLineThickness * 2.5f,
+					1.0f
+				);
 			} else{
 				modelStack.Translate(
 					xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)c + (r & 1) * grid->CalcAltOffsetX(),
@@ -548,12 +563,12 @@ void Scene::RenderMap(){
 					0.0f,
 					1.0f
 				);
+				modelStack.Scale(
+					gridCellScaleY + gridLineThickness * 2.5f,
+					gridCellScaleX + gridLineThickness * 2.5f,
+					1.0f
+				);
 			}
-			modelStack.Scale(
-				gridCellScaleX + gridLineThickness * 2.5f,
-				gridCellScaleY + gridLineThickness * 2.5f,
-				1.0f
-			);
 
 			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.0f, 0.0f, 0.0f), 0.7f);
 
@@ -571,6 +586,11 @@ void Scene::RenderMap(){
 					yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
 					0.1f
 				);
+				modelStack.Scale(
+					gridCellScaleX,
+					gridCellScaleY,
+					1.0f
+				);
 			} else{
 				modelStack.Translate(
 					xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)c + (r & 1) * grid->CalcAltOffsetX(),
@@ -583,12 +603,12 @@ void Scene::RenderMap(){
 					0.0f,
 					1.0f
 				);
+				modelStack.Scale(
+					gridCellScaleY,
+					gridCellScaleX,
+					1.0f
+				);
 			}
-			modelStack.Scale(
-				gridCellScaleX,
-				gridCellScaleY,
-				1.0f
-			);
 
 			RenderTile(tileLayer, r, c);
 
@@ -959,7 +979,7 @@ void Scene::RenderGridInfoText(Mesh* const textMesh, const Color& textColor, con
 		textColor,
 		textSize,
 		(float)windowWidth,
-		textSize * 0.0f,
+		textSize * 6.0f,
 		TextAlignment::Right
 	);
 	RenderTextOnScreen(
@@ -968,7 +988,7 @@ void Scene::RenderGridInfoText(Mesh* const textMesh, const Color& textColor, con
 		textColor,
 		textSize,
 		(float)windowWidth,
-		textSize * 1.0f,
+		textSize * 5.0f,
 		TextAlignment::Right
 	);
 	RenderTextOnScreen(
@@ -977,7 +997,7 @@ void Scene::RenderGridInfoText(Mesh* const textMesh, const Color& textColor, con
 		textColor,
 		textSize,
 		(float)windowWidth,
-		textSize * 2.0f,
+		textSize * 4.0f,
 		TextAlignment::Right
 	);
 	RenderTextOnScreen(
@@ -995,7 +1015,7 @@ void Scene::RenderGridInfoText(Mesh* const textMesh, const Color& textColor, con
 		textColor,
 		textSize,
 		(float)windowWidth,
-		textSize * 4.0f,
+		textSize * 2.0f,
 		TextAlignment::Right
 	);
 	RenderTextOnScreen(
@@ -1004,7 +1024,7 @@ void Scene::RenderGridInfoText(Mesh* const textMesh, const Color& textColor, con
 		textColor,
 		textSize,
 		(float)windowWidth,
-		textSize * 5.0f,
+		textSize * 1.0f,
 		TextAlignment::Right
 	);
 	RenderTextOnScreen(
@@ -1013,7 +1033,7 @@ void Scene::RenderGridInfoText(Mesh* const textMesh, const Color& textColor, con
 		textColor,
 		textSize,
 		(float)windowWidth,
-		textSize * 6.0f,
+		textSize * 0.0f,
 		TextAlignment::Right
 	);
 }
