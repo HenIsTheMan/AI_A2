@@ -2,6 +2,10 @@
 
 #include <algorithm>
 
+static float EaseInQuint(const float x){
+	return x * x * x * x * x;
+}
+
 static float EaseInOutSine(const float x){
 	return -(cosf(Math::PI * x) - 1.0f) * 0.5f;
 }

@@ -18,11 +18,11 @@ Scene::Scene():
 	creditsPlayer(0),
 	creditsAI(0),
 	gridType(HexGrid<float>::GridType::FlatTop),
-	gridCellScaleX(50.0f),
-	gridCellScaleY(50.0f),
+	gridCellScaleX(48.0f),
+	gridCellScaleY(48.0f),
 	gridLineThickness(4.0f),
-	gridRows(19),
-	gridCols(19),
+	gridRows(17),
+	gridCols(17),
 	gridMinCellScaleX(30.0f),
 	gridMaxCellScaleX(70.0f),
 	gridMinCellScaleY(30.0f),
@@ -67,7 +67,7 @@ void Scene::Init(){
 	SceneSupport::Init();
 
 	sim->status = RuntimeStatus::Waiting;
-	sim->mode = Mode::None;
+	sim->mode = Mode::ProtectTheKing;
 	sim->spd = 1.0f;
 	sim->turnDuration = 5.0f;
 	sim->turnElapsedTime = 0.0f;
@@ -90,8 +90,28 @@ void Scene::Update(const double updateDt, const double renderDt){
 	UpdateMisc(updateDt);
 
 	switch(sim->status){
-		case RuntimeStatus::Waiting:
+		case RuntimeStatus::Waiting: {
 			UpdateGridAttribs();
+
+			static bool isKeyDownLeft = false;
+			static bool isKeyDownRight = false;
+
+			if(!isKeyDownLeft && App::Key(VK_LEFT)){
+				const int simModeInt = (int)sim->mode;
+				sim->mode = simModeInt == (int)Mode::None + 1 ? Mode((int)Mode::Amt - 1) : Mode(simModeInt - 1);
+
+				isKeyDownLeft = true;
+			} else if(isKeyDownLeft && !App::Key(VK_LEFT)){
+				isKeyDownLeft = false;
+			}
+			if(!isKeyDownRight && App::Key(VK_RIGHT)){
+				const int simModeInt = (int)sim->mode;
+				sim->mode = simModeInt == (int)Mode::Amt - 1 ? Mode((int)Mode::None + 1) : Mode(simModeInt + 1);
+
+				isKeyDownRight = true;
+			} else if(isKeyDownRight && !App::Key(VK_RIGHT)){
+				isKeyDownRight = false;
+			}
 
 			if(canMakeSimMap && App::IsMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)){
 				myThread = new std::thread(&Scene::MakeSimMap, this);
@@ -99,6 +119,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 			}
 
 			break;
+		}
 		case RuntimeStatus::MakingTheMap:
 			im_Cam.Update(updateDt);
 			if(App::Key('R')){
@@ -490,27 +511,51 @@ void Scene::RenderCoverMap(){
 }
 
 void Scene::RenderCoverText(){
+	static float textSize0 = (float)windowWidth * 0.025f;
+
 	static float startTextSize = (float)windowWidth * 0.02f;
 	static float endTextSize = (float)windowWidth * 0.03f;
-	const float lerpFactor = EaseInOutSine(sin(elapsedTime * 7.0f) * 0.5f + 0.5f);
-	const float textSize = (1.0f - lerpFactor) * startTextSize + lerpFactor * endTextSize;
+
+	const float lerpFactor1 = EaseInQuint(cosf(elapsedTime * 7.0f) * 0.5f + 0.5f);
+	const float textSize1 = (1.0f - lerpFactor1) * startTextSize + lerpFactor1 * endTextSize;
+
+	const float lerpFactor2 = EaseInQuint(sinf(elapsedTime * 7.0f) * 0.5f + 0.5f);
+	const float textSize2 = (1.0f - lerpFactor2) * startTextSize + lerpFactor2 * endTextSize;
 
 	RenderTextOnScreen(
 		meshList[(int)GeoType::TextMod1],
 		"Press Middle Mouse Button (MMB) to start!",
 		Color(),
-		textSize,
+		textSize1,
 		(float)windowWidth * 0.5f,
-		(float)windowHeight * 0.5f,
+		(float)windowHeight * 0.5f + textSize0 + textSize1 * 2.0f,
 		TextAlignment::Center
 	);
 	RenderTextOnScreen(
 		meshList[(int)GeoType::TextMod2],
-		"Modify the grid now if u want :) (1 - 8, ~)",
+		"Modify hex grid (1 - 8, ~)",
 		Color(),
-		textSize,
+		textSize0,
 		(float)windowWidth * 0.5f,
-		(float)windowHeight * 0.5f - textSize,
+		(float)windowHeight * 0.5f + textSize0 * 0.75f,
+		TextAlignment::Center
+	);
+	RenderTextOnScreen(
+		meshList[(int)GeoType::TextMod2],
+		"Change sim mode (< and/or >)",
+		Color(),
+		textSize0,
+		(float)windowWidth * 0.5f,
+		(float)windowHeight * 0.5f - textSize0 * 0.75f,
+		TextAlignment::Center
+	);
+	RenderTextOnScreen(
+		meshList[(int)GeoType::TextMod1],
+		"Press Middle Mouse Button (MMB) to start!",
+		Color(),
+		textSize2,
+		(float)windowWidth * 0.5f,
+		(float)windowHeight * 0.5f - textSize0 - textSize2 * 2.0f,
 		TextAlignment::Center
 	);
 }
