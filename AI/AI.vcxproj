@@ -165,10 +165,13 @@
   <ItemGroup>
     <ClInclude Include="Source\Easing.hpp" />
     <ClInclude Include="Source\Entity.h" />
+    <ClInclude Include="Source\EntityActionType.hpp" />
     <ClInclude Include="Source\EntityAttribs.hpp" />
     <ClInclude Include="Source\EntityFacingDir.hpp" />
+    <ClInclude Include="Source\EntityMovementType.hpp" />
     <ClInclude Include="Source\EntityTeam.hpp" />
     <ClInclude Include="Source\EntityType.hpp" />
+    <ClInclude Include="Source\EntityVisionType.hpp" />
     <ClInclude Include="Source\FogType.hpp" />
     <ClInclude Include="Source\HexGrid.h" />
     <ClInclude Include="Source\Mode.hpp" />

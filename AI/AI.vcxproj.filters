@@ -159,6 +159,9 @@
     <ClInclude Include="Source\EntityFacingDir.hpp">
       <Filter>Obj</Filter>
     </ClInclude>
+    <ClInclude Include="Source\EntityActionType.hpp" />
+    <ClInclude Include="Source\EntityMovementType.hpp" />
+    <ClInclude Include="Source\EntityVisionType.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
