@@ -4,6 +4,8 @@
 
 #include "SceneSupport.h"
 
+#include "Rounding.hpp"
+
 #include "Sim.h"
 #include "HexGrid.h"
 #include "Publisher.h"

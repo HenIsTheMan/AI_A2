@@ -170,6 +170,7 @@ void Scene::UpdateGridAttribs(){
 	if(!isKeyDown5 && App::Key('5')){
 		if(gridLineThickness < gridMaxLineThickness){
 			gridLineThickness += 0.1f;
+			RoundedTo2dp(gridLineThickness);
 			grid->SetLineThickness(gridLineThickness);
 		}
 		isKeyDown5 = true;
@@ -179,6 +180,7 @@ void Scene::UpdateGridAttribs(){
 	if(!isKeyDown6 && App::Key('6')){
 		if(gridLineThickness > gridMinLineThickness){
 			gridLineThickness -= 0.1f;
+			RoundedTo2dp(gridLineThickness);
 			grid->SetLineThickness(gridLineThickness);
 		}
 		isKeyDown6 = true;
@@ -316,12 +318,14 @@ void Scene::UpdateMisc(const double dt){
 	}
 	if(!isKeyDownU && App::Key('U')){
 		sim->timeOfDayDuration += 0.1f;
+		RoundedTo2dp(sim->timeOfDayDuration);
 		isKeyDownU = true;
 	} else if(isKeyDownU && !App::Key('U')){
 		isKeyDownU = false;
 	}
 	if(!isKeyDownI && App::Key('I')){
 		sim->timeOfDayDuration -= 0.1f;
+		RoundedTo2dp(sim->timeOfDayDuration);
 		isKeyDownI = true;
 	} else if(isKeyDownI && !App::Key('I')){
 		isKeyDownI = false;
