@@ -370,6 +370,15 @@ void Scene::UpdateMisc(const double dt){
 }
 
 void Scene::UpdateEntities(const double dt){
+	static bool hasSpawned = false;
+	if(!hasSpawned){
+		Entity* const entity = entityPool->ActivateObj();
+		entity->im_Attribs.im_Type = Obj::EntityType::Knight;
+		entity->im_Attribs.im_LocalPos.x = 2.0f;
+		entity->im_Attribs.im_LocalPos.y = 2.0f;
+		hasSpawned = true;
+	}
+
 	for(Entity* const& entity: activeEntities){
 		switch(entity->im_Attribs.im_Type){
 			case Obj::EntityType::Knight:
@@ -402,7 +411,9 @@ void Scene::Render(){
 			RenderCoverText();
 			break;
 		case SimRuntimeStatus::Ongoing:
+			RenderMap();
 			RenderEntities();
+			break;
 		case SimRuntimeStatus::MakingTheMap:
 			RenderMap();
 			break;
@@ -451,9 +462,6 @@ void Scene::RenderCoverMap(){
 
 	const float xOffset = ((float)windowWidth - gridWidth) * 0.5f;
 	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f;
-
-	const std::vector<FogType>& fogLayer = sim->GetFogLayer();
-	const std::vector<TileType>& tileLayer = sim->GetTileLayer();
 
 	for(int r = 0; r < gridRows; ++r){
 		for(int c = 0; c < gridCols; ++c){
@@ -583,17 +591,48 @@ void Scene::RenderCoverText(){
 }
 
 void Scene::RenderEntities(){
+	const float gridWidth = grid->CalcWidth();
+	const float gridHeight = grid->CalcHeight();
+
+	const float xOffset = ((float)windowWidth - gridWidth) * 0.5f;
+	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f;
+
 	for(const Entity* const& entity: activeEntities){
-		switch(entity->im_Attribs.im_Type){
-			case Obj::EntityType::Knight:
-				break;
-			case Obj::EntityType::Gunner:
-				break;
-			case Obj::EntityType::Healer:
-				break;
-			case Obj::EntityType::King:
-				break;
+		modelStack.PushMatrix();
+		const Vector3 localPos = Vector3(entity->im_Attribs.im_LocalPos.x, entity->im_Attribs.im_LocalPos.y, 0.0f);
+
+		if(gridType == HexGrid<float>::GridType::FlatTop){
+			modelStack.Translate(
+				xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * localPos.x,
+				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * localPos.y + ((int)localPos.x & 1) * grid->CalcAltOffsetY(),
+				0.3f
+			);
+			modelStack.Scale(
+				gridCellScaleX + gridLineThickness * 2.5f,
+				gridCellScaleY + gridLineThickness * 2.5f,
+				1.0f
+			);
+		} else{
+			modelStack.Translate(
+				xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * localPos.x + ((int)localPos.y & 1) * grid->CalcAltOffsetX(),
+				yOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * localPos.y,
+				0.3f
+			);
+			modelStack.Rotate(
+				90.0f,
+				0.0f,
+				0.0f,
+				1.0f
+			);
+			modelStack.Scale(
+				gridCellScaleY + gridLineThickness * 2.5f,
+				gridCellScaleX + gridLineThickness * 2.5f,
+				1.0f
+			);
 		}
+
+		RenderMesh(meshList[(int)GeoType::Hex], true, Color(), 1.0f);
+		modelStack.PopMatrix();
 	}
 }
 
