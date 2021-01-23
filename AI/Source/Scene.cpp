@@ -149,13 +149,20 @@ void Scene::UpdateGridAttribs(){
 		if(gridCellScaleX < gridMaxCellScaleX){
 			grid->SetCellScaleX(++gridCellScaleX);
 		}
+		if(gridCellScaleY < gridMaxCellScaleY){
+			grid->SetCellScaleY(++gridCellScaleY);
+		}
 		isKeyDown1 = true;
 	} else if(isKeyDown1 && !App::Key('1')){
 		isKeyDown1 = false;
 	}
+
 	if(!isKeyDown2 && App::Key('2')){
 		if(gridCellScaleX > gridMinCellScaleX){
 			grid->SetCellScaleX(--gridCellScaleX);
+		}
+		if(gridCellScaleY > gridMinCellScaleY){
+			grid->SetCellScaleY(--gridCellScaleY);
 		}
 		isKeyDown2 = true;
 	} else if(isKeyDown2 && !App::Key('2')){
@@ -163,16 +170,21 @@ void Scene::UpdateGridAttribs(){
 	}
 
 	if(!isKeyDown3 && App::Key('3')){
-		if(gridCellScaleY < gridMaxCellScaleY){
-			grid->SetCellScaleY(++gridCellScaleY);
+		if(gridLineThickness < gridMaxLineThickness){
+			gridLineThickness += 0.1f;
+			RoundedTo2dp(gridLineThickness);
+			grid->SetLineThickness(gridLineThickness);
 		}
 		isKeyDown3 = true;
 	} else if(isKeyDown3 && !App::Key('3')){
 		isKeyDown3 = false;
 	}
+
 	if(!isKeyDown4 && App::Key('4')){
-		if(gridCellScaleY > gridMinCellScaleY){
-			grid->SetCellScaleY(--gridCellScaleY);
+		if(gridLineThickness > gridMinLineThickness){
+			gridLineThickness -= 0.1f;
+			RoundedTo2dp(gridLineThickness);
+			grid->SetLineThickness(gridLineThickness);
 		}
 		isKeyDown4 = true;
 	} else if(isKeyDown4 && !App::Key('4')){
@@ -180,20 +192,17 @@ void Scene::UpdateGridAttribs(){
 	}
 
 	if(!isKeyDown5 && App::Key('5')){
-		if(gridLineThickness < gridMaxLineThickness){
-			gridLineThickness += 0.1f;
-			RoundedTo2dp(gridLineThickness);
-			grid->SetLineThickness(gridLineThickness);
+		if(gridRows < gridMaxRows){
+			grid->SetRows(++gridRows);
 		}
 		isKeyDown5 = true;
 	} else if(isKeyDown5 && !App::Key('5')){
 		isKeyDown5 = false;
 	}
+
 	if(!isKeyDown6 && App::Key('6')){
-		if(gridLineThickness > gridMinLineThickness){
-			gridLineThickness -= 0.1f;
-			RoundedTo2dp(gridLineThickness);
-			grid->SetLineThickness(gridLineThickness);
+		if(gridRows > gridMinRows){
+			grid->SetRows(--gridRows);
 		}
 		isKeyDown6 = true;
 	} else if(isKeyDown6 && !App::Key('6')){
@@ -201,16 +210,16 @@ void Scene::UpdateGridAttribs(){
 	}
 
 	if(!isKeyDown7 && App::Key('7')){
-		if(gridRows < gridMaxRows){
-			grid->SetRows(++gridRows);
+		if(gridCols < gridMaxCols){
+			grid->SetCols(++gridCols);
 		}
 		isKeyDown7 = true;
 	} else if(isKeyDown7 && !App::Key('7')){
 		isKeyDown7 = false;
 	}
 	if(!isKeyDown8 && App::Key('8')){
-		if(gridRows > gridMinRows){
-			grid->SetRows(--gridRows);
+		if(gridCols > gridMinCols){
+			grid->SetCols(--gridCols);
 		}
 		isKeyDown8 = true;
 	} else if(isKeyDown8 && !App::Key('8')){
@@ -218,17 +227,13 @@ void Scene::UpdateGridAttribs(){
 	}
 
 	if(!isKeyDown9 && App::Key('9')){
-		if(gridCols < gridMaxCols){
-			grid->SetCols(++gridCols);
-		}
+
 		isKeyDown9 = true;
 	} else if(isKeyDown9 && !App::Key('9')){
 		isKeyDown9 = false;
 	}
 	if(!isKeyDown0 && App::Key('0')){
-		if(gridCols > gridMinCols){
-			grid->SetCols(--gridCols);
-		}
+
 		isKeyDown0 = true;
 	} else if(isKeyDown0 && !App::Key('0')){
 		isKeyDown0 = false;
@@ -514,7 +519,7 @@ void Scene::RenderCoverText(){
 	);
 	RenderTextOnScreen(
 		meshList[(int)GeoType::TextMod2],
-		"Modify the grid now if u want :) (0 - 9, ~)",
+		"Modify the grid now if u want :) (1 - 8, ~)",
 		Color(),
 		textSize,
 		(float)windowWidth * 0.5f,
