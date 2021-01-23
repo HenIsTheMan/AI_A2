@@ -4,6 +4,10 @@
 #include "EntityType.hpp"
 #include "EntityFacingDir.hpp"
 
+#include "EntityActionType.hpp"
+#include "EntityMovementType.hpp"
+#include "EntityVisionType.hpp"
+
 #include "State.h"
 
 enum struct StateID: int;
@@ -24,10 +28,17 @@ namespace Obj{
 		EntityTeam im_Team = EntityTeam::None;
 		EntityFacingDir im_FacingDir = EntityFacingDir::Invalid;
 
+		EntityActionType im_ActionType = EntityActionType::Nil;
+		int im_ActionRange = 0;
+		EntityMovementType im_MovementType = EntityMovementType::Nil;
+		int im_MovementRange = 0;
+		EntityVisionType im_VisionType = EntityVisionType::Nil;
+		int im_VisionRange = 0;
+
 		T im_LocalPos = T();
 		T im_LocalScale = T();
 
-		Type im_Dmg = Type();
+		Type im_ActionMag = Type();
 		Type im_CurrHealth = Type();
 		Type im_MaxHealth = Type();
 

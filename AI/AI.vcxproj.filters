@@ -159,9 +159,15 @@
     <ClInclude Include="Source\EntityFacingDir.hpp">
       <Filter>Obj</Filter>
     </ClInclude>
-    <ClInclude Include="Source\EntityActionType.hpp" />
-    <ClInclude Include="Source\EntityMovementType.hpp" />
-    <ClInclude Include="Source\EntityVisionType.hpp" />
+    <ClInclude Include="Source\EntityActionType.hpp">
+      <Filter>Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EntityMovementType.hpp">
+      <Filter>Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EntityVisionType.hpp">
+      <Filter>Obj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
