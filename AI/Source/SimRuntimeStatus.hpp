@@ -1,6 +1,6 @@
 #pragma once
 
-enum struct RuntimeStatus: int{
+enum struct SimRuntimeStatus: int{
 	Waiting,
 	MakingTheMap,
 	Ongoing,

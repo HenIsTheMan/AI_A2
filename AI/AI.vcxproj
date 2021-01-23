@@ -174,10 +174,10 @@
     <ClInclude Include="Source\EntityVisionType.hpp" />
     <ClInclude Include="Source\FogType.hpp" />
     <ClInclude Include="Source\HexGrid.h" />
-    <ClInclude Include="Source\Mode.hpp" />
+    <ClInclude Include="Source\SimMode.hpp" />
     <ClInclude Include="Source\ObjPool.h" />
     <ClInclude Include="Source\Rounding.hpp" />
-    <ClInclude Include="Source\RuntimeStatus.hpp" />
+    <ClInclude Include="Source\SimRuntimeStatus.hpp" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\Sim.h" />
     <ClInclude Include="Source\Event.h" />
@@ -200,8 +200,8 @@
     <ClInclude Include="Source\StateMachine.h" />
     <ClInclude Include="Source\TileCost.hpp" />
     <ClInclude Include="Source\TileType.hpp" />
-    <ClInclude Include="Source\TimeOfDay.hpp" />
-    <ClInclude Include="Source\Turn.hpp" />
+    <ClInclude Include="Source\SimTimeOfDay.hpp" />
+    <ClInclude Include="Source\SimTurn.hpp" />
     <ClInclude Include="Source\Vertex.h" />
   </ItemGroup>
   <ItemGroup>

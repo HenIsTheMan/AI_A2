@@ -1,6 +1,6 @@
 #pragma once
 
-enum struct Mode: int{
+enum struct SimMode: int{
 	None,
 	ProtectTheKing,
 	LastTeamStanding,

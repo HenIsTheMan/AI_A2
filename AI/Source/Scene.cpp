@@ -66,15 +66,15 @@ Scene::~Scene(){
 void Scene::Init(){
 	SceneSupport::Init();
 
-	sim->status = RuntimeStatus::Waiting;
-	sim->mode = Mode::ProtectTheKing;
+	sim->status = SimRuntimeStatus::Waiting;
+	sim->mode = SimMode::ProtectTheKing;
 	sim->spd = 1.0f;
 	sim->turnDuration = 5.0f;
 	sim->turnElapsedTime = 0.0f;
-	sim->turn = (bool)Math::RandIntMinMax(0, 1) ? Turn::Player : Turn::AI;
+	sim->turn = (bool)Math::RandIntMinMax(0, 1) ? SimTurn::Player : SimTurn::AI;
 	sim->timeOfDayDuration = 10.0f;
 	sim->timeOfDayElapsedTime = 0.0f;
-	sim->timeOfDay = (TimeOfDay)Math::RandIntMinMax((int)TimeOfDay::Day, (int)TimeOfDay::Amt - 1);
+	sim->timeOfDay = (SimTimeOfDay)Math::RandIntMinMax((int)SimTimeOfDay::Day, (int)SimTimeOfDay::Amt - 1);
 
 	grid->SetGridType(gridType);
 	grid->SetCellScaleX(gridCellScaleX);
@@ -90,7 +90,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 	UpdateMisc(updateDt);
 
 	switch(sim->status){
-		case RuntimeStatus::Waiting: {
+		case SimRuntimeStatus::Waiting: {
 			UpdateGridAttribs();
 
 			static bool isKeyDownLeft = false;
@@ -98,7 +98,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 			if(!isKeyDownLeft && App::Key(VK_LEFT)){
 				const int simModeInt = (int)sim->mode;
-				sim->mode = simModeInt == (int)Mode::None + 1 ? Mode((int)Mode::Amt - 1) : Mode(simModeInt - 1);
+				sim->mode = simModeInt == (int)SimMode::None + 1 ? SimMode((int)SimMode::Amt - 1) : SimMode(simModeInt - 1);
 
 				isKeyDownLeft = true;
 			} else if(isKeyDownLeft && !App::Key(VK_LEFT)){
@@ -106,7 +106,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 			}
 			if(!isKeyDownRight && App::Key(VK_RIGHT)){
 				const int simModeInt = (int)sim->mode;
-				sim->mode = simModeInt == (int)Mode::Amt - 1 ? Mode((int)Mode::None + 1) : Mode(simModeInt + 1);
+				sim->mode = simModeInt == (int)SimMode::Amt - 1 ? SimMode((int)SimMode::None + 1) : SimMode(simModeInt + 1);
 
 				isKeyDownRight = true;
 			} else if(isKeyDownRight && !App::Key(VK_RIGHT)){
@@ -120,7 +120,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 			break;
 		}
-		case RuntimeStatus::MakingTheMap:
+		case SimRuntimeStatus::MakingTheMap:
 			im_Cam.Update(updateDt);
 			if(App::Key('R')){
 				orthoProjectionScaleFactor = 1.0;
@@ -129,7 +129,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 			orthoProjectionScaleFactor = Math::Clamp(orthoProjectionScaleFactor, 0.2, 1.0);
 
 			break;
-		case RuntimeStatus::Ongoing:
+		case SimRuntimeStatus::Ongoing:
 			im_Cam.Update(updateDt);
 			if(App::Key('R')){
 				orthoProjectionScaleFactor = 1.0;
@@ -289,16 +289,16 @@ void Scene::UpdateMisc(const double dt){
 	static bool isKeyDownC = false;
 	static bool isKeyDownV = false;
 	if(!isKeyDownC && App::Key('C')){
-		static Turn savedTurn = Turn::Amt;
-		if(sim->turn != Turn::Environment){
+		static SimTurn savedTurn = SimTurn::Amt;
+		if(sim->turn != SimTurn::Environment){
 			if(Math::RandIntMinMax(1, 10) <= 2){
 				savedTurn = sim->turn;
-				sim->turn = Turn::Environment;
+				sim->turn = SimTurn::Environment;
 			} else{
-				sim->turn = sim->turn == Turn::Player ? Turn::AI : Turn::Player;
+				sim->turn = sim->turn == SimTurn::Player ? SimTurn::AI : SimTurn::Player;
 			}
 		} else{
-			sim->turn = savedTurn == Turn::Player ? Turn::AI : Turn::Player;
+			sim->turn = savedTurn == SimTurn::Player ? SimTurn::AI : SimTurn::Player;
 		}
 
 		isKeyDownC = true;
@@ -306,7 +306,7 @@ void Scene::UpdateMisc(const double dt){
 		isKeyDownC = false;
 	}
 	if(!isKeyDownV && App::Key('V')){
-		sim->timeOfDay = (TimeOfDay)Math::RandIntMinMax((int)TimeOfDay::Day, (int)TimeOfDay::Amt - 1);
+		sim->timeOfDay = (SimTimeOfDay)Math::RandIntMinMax((int)SimTimeOfDay::Day, (int)SimTimeOfDay::Amt - 1);
 		isKeyDownV = true;
 	} else if(isKeyDownV && !App::Key('V')){
 		isKeyDownV = false;
@@ -375,13 +375,13 @@ void Scene::Render(){
 	
 	RenderBG();
 	switch(sim->status){
-		case RuntimeStatus::Waiting:
+		case SimRuntimeStatus::Waiting:
 			RenderCoverMap();
 			RenderCoverText();
 			break;
-		case RuntimeStatus::Ongoing:
+		case SimRuntimeStatus::Ongoing:
 			RenderEntities();
-		case RuntimeStatus::MakingTheMap:
+		case SimRuntimeStatus::MakingTheMap:
 			RenderMap();
 			break;
 	}
@@ -389,7 +389,7 @@ void Scene::Render(){
 
 	modelStack.PopMatrix();
 
-	if(sim->status == RuntimeStatus::Waiting){
+	if(sim->status == SimRuntimeStatus::Waiting){
 		canMakeSimMap = true;
 	}
 }
@@ -409,13 +409,13 @@ void Scene::RenderBG(){
 	);
 
 	switch(sim->timeOfDay){
-		case TimeOfDay::Day:
+		case SimTimeOfDay::Day:
 			RenderMesh(meshList[(int)GeoType::DayBG], false);
 			break;
-		case TimeOfDay::Rainy:
+		case SimTimeOfDay::Rainy:
 			RenderMesh(meshList[(int)GeoType::RainyBG], false);
 			break;
-		case TimeOfDay::Night:
+		case SimTimeOfDay::Night:
 			RenderMesh(meshList[(int)GeoType::NightBG], false);
 			break;
 	}
@@ -1076,25 +1076,25 @@ void Scene::RenderGridInfoText(Mesh* const textMesh, const Color& textColor, con
 }
 
 void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, const float textSize){
-	static std::string runtimeStatusTexts[(int)RuntimeStatus::Amt]{
+	static std::string runtimeStatusTexts[(int)SimRuntimeStatus::Amt]{
 		"is waiting",
 		"is making the map",
 		"is ongoing",
 		"has ended",
 	};
-	static std::string modeTexts[(int)Mode::Amt]{
+	static std::string modeTexts[(int)SimMode::Amt]{
 		"None",
 		"Protect The King!",
 		"-- Last Team Standing --",
 		"~ Greatest Area Painted ~"
 	};
-	static std::string turnTexts[(int)Turn::Amt]{
+	static std::string turnTexts[(int)SimTurn::Amt]{
 		"Nil",
 		"Player",
 		"AI",
 		"Environment"
 	};
-	static std::string timeOfDayTexts[(int)TimeOfDay::Amt]{
+	static std::string timeOfDayTexts[(int)SimTimeOfDay::Amt]{
 		"Day",
 		"Rainy",
 		"Night",
@@ -1127,7 +1127,7 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 }
 
 void Scene::MakeSimMap() const{
-	sim->status = RuntimeStatus::MakingTheMap;
+	sim->status = SimRuntimeStatus::MakingTheMap;
 
 	sim->ChangeFogWeight((int)FogType::Inexistent, 5);
 	sim->ChangeFogWeight((int)FogType::Thin, 20);
@@ -1158,5 +1158,5 @@ void Scene::MakeSimMap() const{
 	delete quickRenderDelay2;
 	delete quickRenderDelay3;
 
-	sim->status = RuntimeStatus::Ongoing;
+	sim->status = SimRuntimeStatus::Ongoing;
 }

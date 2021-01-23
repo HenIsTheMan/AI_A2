@@ -4,10 +4,10 @@
 
 #include "timer.h"
 
-#include "Mode.hpp"
-#include "RuntimeStatus.hpp"
-#include "TimeOfDay.hpp"
-#include "Turn.hpp"
+#include "SimMode.hpp"
+#include "SimRuntimeStatus.hpp"
+#include "SimTimeOfDay.hpp"
+#include "SimTurn.hpp"
 
 #include "FogType.hpp"
 #include "TileType.hpp"
@@ -15,15 +15,15 @@
 class Sim final{
 public:
 	struct{
-		RuntimeStatus status = RuntimeStatus::Amt;
-		Mode mode = Mode::Amt;
+		SimRuntimeStatus status = SimRuntimeStatus::Amt;
+		SimMode mode = SimMode::Amt;
 		float spd = 0.0f;
 		float turnDuration = 0.0f;
 		float turnElapsedTime = 0.0f;
-		Turn turn = Turn::Amt;
+		SimTurn turn = SimTurn::Amt;
 		float timeOfDayDuration = 0.0f;
 		float timeOfDayElapsedTime = 0.0f;
-		TimeOfDay timeOfDay = TimeOfDay::Amt;
+		SimTimeOfDay timeOfDay = SimTimeOfDay::Amt;
 	};
 
 	Sim();

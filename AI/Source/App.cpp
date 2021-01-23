@@ -154,7 +154,7 @@ void App::Run(){
 		static double prevTime = 0.0;
 		static double currTime = 0.0;
 		double dt = 0.0;
-		while(dt < 1.0 / 240.0){ //Cap at 240 FPS
+		while(dt < 1.0 / 400.0){ //Cap at 400 FPS
 			currTime = glfwGetTime();
 			dt = currTime - prevTime;
 		}

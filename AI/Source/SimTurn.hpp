@@ -1,6 +1,6 @@
 #pragma once
 
-enum struct Turn: int{
+enum struct SimTurn: int{
 	Nil,
 	Player,
 	AI,

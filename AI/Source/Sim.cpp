@@ -512,22 +512,22 @@ void Sim::Update(const double dt){
 	turnElapsedTime += (float)dt;
 	timeOfDayElapsedTime += (float)dt;
 
-	static Turn savedTurn = Turn::Amt;
+	static SimTurn savedTurn = SimTurn::Amt;
 	if(turnElapsedTime >= turnDuration){
-		if(turn != Turn::Environment){
+		if(turn != SimTurn::Environment){
 			if(Math::RandIntMinMax(1, 10) <= 2){
 				savedTurn = turn;
-				turn = Turn::Environment;
+				turn = SimTurn::Environment;
 			} else{
-				turn = turn == Turn::Player ? Turn::AI : Turn::Player;
+				turn = turn == SimTurn::Player ? SimTurn::AI : SimTurn::Player;
 			}
 		} else{
-			turn = savedTurn == Turn::Player ? Turn::AI : Turn::Player;
+			turn = savedTurn == SimTurn::Player ? SimTurn::AI : SimTurn::Player;
 		}
 		turnElapsedTime = 0.0f;
 	}
 	if(timeOfDayElapsedTime >= timeOfDayDuration){
-		timeOfDay = (TimeOfDay)Math::RandIntMinMax((int)TimeOfDay::Day, (int)TimeOfDay::Amt - 1);
+		timeOfDay = (SimTimeOfDay)Math::RandIntMinMax((int)SimTimeOfDay::Day, (int)SimTimeOfDay::Amt - 1);
 		timeOfDayElapsedTime = 0.0f;
 	}
 }

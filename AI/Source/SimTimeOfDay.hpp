@@ -1,6 +1,6 @@
 #pragma once
 
-enum struct TimeOfDay: int{
+enum struct SimTimeOfDay: int{
 	Day,
 	Rainy,
 	Night,
