@@ -17,7 +17,7 @@ Scene::Scene():
 	customHue(0.0f),
 	creditsPlayer(0),
 	creditsAI(0),
-	gridType(HexGrid<float>::GridType::SharpTop),
+	gridType(HexGrid<float>::GridType::FlatTop),
 	gridCellScaleX(50.0f),
 	gridCellScaleY(50.0f),
 	gridLineThickness(4.0f),
@@ -802,7 +802,7 @@ void Scene::RenderTile(const std::vector<TileType>& tileLayer, const int r, cons
 				}
 				modelStack.Scale(
 					0.7f,
-					0.7f,
+					0.5f,
 					1.0f
 				);
 
