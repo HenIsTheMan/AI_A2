@@ -125,6 +125,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 }
 
 void Scene::UpdateGridAttribs(){
+	static bool isKeyDownTilde = false;
 	static bool isKeyDown1 = false;
 	static bool isKeyDown2 = false;
 	static bool isKeyDown3 = false;
@@ -135,6 +136,15 @@ void Scene::UpdateGridAttribs(){
 	static bool isKeyDown8 = false;
 	static bool isKeyDown9 = false;
 	static bool isKeyDown0 = false;
+
+	if(!isKeyDownTilde && App::Key(VK_OEM_3)){
+		gridType = gridType == HexGrid<float>::GridType::SharpTop ? HexGrid<float>::GridType::FlatTop : HexGrid<float>::GridType::SharpTop;
+		grid->SetGridType(gridType);
+		isKeyDownTilde = true;
+	} else if(isKeyDownTilde && !App::Key(VK_OEM_3)){
+		isKeyDownTilde = false;
+	}
+
 	if(!isKeyDown1 && App::Key('1')){
 		if(gridCellScaleX < gridMaxCellScaleX){
 			grid->SetCellScaleX(++gridCellScaleX);
@@ -151,6 +161,7 @@ void Scene::UpdateGridAttribs(){
 	} else if(isKeyDown2 && !App::Key('2')){
 		isKeyDown2 = false;
 	}
+
 	if(!isKeyDown3 && App::Key('3')){
 		if(gridCellScaleY < gridMaxCellScaleY){
 			grid->SetCellScaleY(++gridCellScaleY);
@@ -167,6 +178,7 @@ void Scene::UpdateGridAttribs(){
 	} else if(isKeyDown4 && !App::Key('4')){
 		isKeyDown4 = false;
 	}
+
 	if(!isKeyDown5 && App::Key('5')){
 		if(gridLineThickness < gridMaxLineThickness){
 			gridLineThickness += 0.1f;
@@ -187,6 +199,7 @@ void Scene::UpdateGridAttribs(){
 	} else if(isKeyDown6 && !App::Key('6')){
 		isKeyDown6 = false;
 	}
+
 	if(!isKeyDown7 && App::Key('7')){
 		if(gridRows < gridMaxRows){
 			grid->SetRows(++gridRows);
@@ -203,6 +216,7 @@ void Scene::UpdateGridAttribs(){
 	} else if(isKeyDown8 && !App::Key('8')){
 		isKeyDown8 = false;
 	}
+
 	if(!isKeyDown9 && App::Key('9')){
 		if(gridCols < gridMaxCols){
 			grid->SetCols(++gridCols);
@@ -490,7 +504,7 @@ void Scene::RenderCoverText(){
 	);
 	RenderTextOnScreen(
 		meshList[(int)GeoType::TextMod2],
-		"Modify the grid now if u want :)",
+		"Modify the grid now if u want :) (0 - 9, ~)",
 		Color(),
 		textSize,
 		(float)windowWidth * 0.5f,
