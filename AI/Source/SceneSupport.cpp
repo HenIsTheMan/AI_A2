@@ -117,17 +117,17 @@ void SceneSupport::Init(){
 	meshList[(int)GeoType::King]->textureID = LoadImg("Imgs//King.png");
 }
 
+static int polyMode = GL_FILL;
+
 void SceneSupport::Update(const double updateDt, const double renderDt){
 	elapsedTime += (float)updateDt;
 	updateFPS = (float)(1.f / updateDt);
 	renderFPS = (float)(1.f / renderDt);
 
-	static int polyMode = GL_FILL;
 	static bool isF2 = false;
 
 	if(!isF2 && App::Key(VK_F2)){
 		polyMode += polyMode == GL_FILL ? -2 : 1;
-		glPolygonMode(GL_FRONT_AND_BACK, polyMode);
 		isF2 = true;
 	} else if(isF2 && !App::Key(VK_F2)){
 		isF2 = false;
@@ -294,6 +294,8 @@ void SceneSupport::ManualRenderMesh(const std::string& name, const float time, c
 
 void SceneSupport::Render(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glPolygonMode(GL_FRONT_AND_BACK, polyMode);
 
 	modelStack.LoadIdentity();
 
