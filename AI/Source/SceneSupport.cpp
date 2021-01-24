@@ -143,7 +143,7 @@ void SceneSupport::Update(const double updateDt, const double renderDt){
 	static_cast<SpriteAni*>(meshList[(int)GeoType::NightBG])->Update(elapsedTime);
 }
 
-void SceneSupport::RenderText(Mesh* mesh, std::string text, Color color, TextAlignment alignment){
+void SceneSupport::RenderText(Mesh* mesh, std::string text, Color color, TextAlignment alignment, const float myAccum){
 	if(!mesh || mesh->textureID <= 0){
 		return;
 	}
@@ -162,7 +162,7 @@ void SceneSupport::RenderText(Mesh* mesh, std::string text, Color color, TextAli
 		textWidth += (float)fontWidth[(unsigned)text[i]] / 64.0f;
 	}
 
-	float accum = 0;
+	float accum = myAccum;
 	for(unsigned i = 0; i < text.length(); ++i){
 		Mtx44 characterSpacing;
 
@@ -189,7 +189,7 @@ void SceneSupport::RenderText(Mesh* mesh, std::string text, Color color, TextAli
 	glEnable(GL_DEPTH_TEST);
 }
 
-void SceneSupport::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, TextAlignment alignment){
+void SceneSupport::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, TextAlignment alignment, const float myAccum){
 	if(!mesh || mesh->textureID <= 0){
 		return;
 	}
@@ -220,7 +220,7 @@ void SceneSupport::RenderTextOnScreen(Mesh* mesh, std::string text, Color color,
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 
-	float accum = 0.0f;
+	float accum = myAccum;
 	for(unsigned i = 0; i < text.length(); ++i){
 		Mtx44 characterSpacing;
 

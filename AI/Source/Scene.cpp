@@ -1120,7 +1120,7 @@ void Scene::RenderSceneText(){
 	static float textSize = (float)windowWidth * 0.02f;
 
 	RenderTextOnScreen(
-		meshList[(int)GeoType::TextMod1],
+		meshList[(int)GeoType::Text],
 		"AI's Credits: " + std::to_string(creditsAI),
 		Color(),
 		textSize,
@@ -1129,7 +1129,7 @@ void Scene::RenderSceneText(){
 		TextAlignment::Center
 	);
 	RenderTextOnScreen(
-		meshList[(int)GeoType::TextMod2],
+		meshList[(int)GeoType::Text],
 		"Your Credits: " + std::to_string(creditsPlayer),
 		Color(),
 		textSize,

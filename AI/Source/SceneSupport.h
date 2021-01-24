@@ -58,8 +58,8 @@ public:
 	virtual void Update(const double updateDt, const double renderDt) override;
 	virtual void Render() override;
 
-	void RenderText(Mesh* mesh, std::string text, Color color, TextAlignment alignment = TextAlignment::Left); //Based on what model mats are alr in modelStack
-	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, TextAlignment alignment = TextAlignment::Left);
+	void RenderText(Mesh* mesh, std::string text, Color color, TextAlignment alignment = TextAlignment::Left, const float myAccum = 0.0f); //Based on what model mats are alr in modelStack
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y, TextAlignment alignment = TextAlignment::Left, const float myAccum = 0.0f);
 	void RenderMesh(const Mesh* const& mesh, const bool& useCustom = false, const Color& colour = Color(), const float& alpha = 1.0f);
 	void ManualRenderMesh(const std::string& name, const float time, const float delay,
 		Mesh* const& mesh, const bool& useCustom = false, const Color& colour = Color(), const float& alpha = 1.0f);
