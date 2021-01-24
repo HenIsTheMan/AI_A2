@@ -149,6 +149,17 @@ void Scene::Update(const double updateDt, const double renderDt){
 			orthoProjectionScaleFactor -= mouseScrollWheelYOffset * 0.02; //No need dt
 			orthoProjectionScaleFactor = Math::Clamp(orthoProjectionScaleFactor, 0.2, 1.0);
 
+			static bool isKeyDownSpace = false;
+			if(!isKeyDownSpace && App::Key(VK_SPACE)){
+				if(sim->turn == SimTurn::Player){
+					sim->turn = Math::RandIntMinMax(1, 10) <= 2 ? SimTurn::Environment : SimTurn::AI;
+					sim->turnElapsedTime = 0.0f;
+				}
+				isKeyDownSpace = true;
+			} else if(isKeyDownSpace && !App::Key(VK_SPACE)){
+				isKeyDownSpace = false;
+			}
+
 			sim->Update(updateDt); //Not (dt * sim->spd) as...
 			UpdateEntities(updateDt * sim->spd);
 
@@ -1126,6 +1137,7 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		"0: Toggle fog",
 		"+: Increase sim spd",
 		"-: Decrease sim spd",
+		"Space: End your turn",
 	};
 	static size_t size = sizeof(texts) / sizeof(texts[0]);
 
@@ -1245,12 +1257,12 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 		(std::string)"Sim " + runtimeStatusTexts[(int)sim->status],
 		"Sim mode: " + modeTexts[(int)sim->mode],
 		"Sim spd: " + std::to_string(sim->spd).substr(0, std::to_string((int)sim->spd).length() + 3),
-		"Sim turn duration: " + std::to_string(sim->turnDuration).substr(0, std::to_string((int)sim->turnDuration).length() + 3),
-		"Sim turn elapsed time: " + std::to_string(sim->turnElapsedTime).substr(0, std::to_string((int)sim->turnElapsedTime).length() + 3),
 		"Sim turn: " + turnTexts[(int)sim->turn],
-		"Sim time of day duration: " + std::to_string(sim->timeOfDayDuration).substr(0, std::to_string((int)sim->timeOfDayDuration).length() + 3),
-		"Sim time of day elapsed time: " + std::to_string(sim->timeOfDayElapsedTime).substr(0, std::to_string((int)sim->timeOfDayElapsedTime).length() + 3),
+		"Sim turn elapsed time: " + std::to_string(sim->turnElapsedTime).substr(0, std::to_string((int)sim->turnElapsedTime).length() + 3),
+		"Sim turn duration: " + std::to_string(sim->turnDuration).substr(0, std::to_string((int)sim->turnDuration).length() + 3),
 		"Sim time of day: " + timeOfDayTexts[(int)sim->timeOfDay],
+		"Sim time of day elapsed time: " + std::to_string(sim->timeOfDayElapsedTime).substr(0, std::to_string((int)sim->timeOfDayElapsedTime).length() + 3),
+		"Sim time of day duration: " + std::to_string(sim->timeOfDayDuration).substr(0, std::to_string((int)sim->timeOfDayDuration).length() + 3),
 	};
 	const size_t size = sizeof(texts) / sizeof(texts[0]);
 
