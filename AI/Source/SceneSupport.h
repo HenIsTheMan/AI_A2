@@ -29,7 +29,6 @@ public:
 		Amt
 	};
 	enum struct GeoType: int{
-		Text,
 		TextMod1,
 		TextMod2,
 		DayBG,

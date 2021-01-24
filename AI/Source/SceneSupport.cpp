@@ -67,15 +67,10 @@ void SceneSupport::Init(){
 		meshList[i] = nullptr;
 	}
 
-	meshList[(int)GeoType::Text] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[(int)GeoType::Text]->textureID = LoadImg("Imgs//Calibri.png");
-	meshList[(int)GeoType::Text]->material.kAmbient.Set(1, 0, 0);
 	meshList[(int)GeoType::TextMod1] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[(int)GeoType::TextMod1]->textureID = LoadImg("Imgs//CalibriMod1.tga");
-	meshList[(int)GeoType::TextMod1]->material.kAmbient.Set(1, 0, 0);
 	meshList[(int)GeoType::TextMod2] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[(int)GeoType::TextMod2]->textureID = LoadImg("Imgs//CalibriMod2.tga");
-	meshList[(int)GeoType::TextMod2]->material.kAmbient.Set(1, 0, 0);
 
 	meshList[(int)GeoType::DayBG] = MeshBuilder::GenerateSpriteAni("DayBG", 3, 5);
 	meshList[(int)GeoType::DayBG]->textureID = LoadImg("Imgs//DayBG.png");

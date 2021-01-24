@@ -583,7 +583,8 @@ void Scene::RenderCoverText(){
 		textSize1,
 		(float)windowWidth * 0.5f,
 		(float)windowHeight * 0.5f + textSize0 + textSize1 * 2.0f,
-		TextAlignment::Center
+		TextAlignment::Center,
+		-0.1f
 	);
 	RenderTextOnScreen(
 		meshList[(int)GeoType::TextMod2],
@@ -592,7 +593,8 @@ void Scene::RenderCoverText(){
 		textSize0,
 		(float)windowWidth * 0.5f,
 		(float)windowHeight * 0.5f + textSize0 * 0.75f,
-		TextAlignment::Center
+		TextAlignment::Center,
+		-0.1f
 	);
 	RenderTextOnScreen(
 		meshList[(int)GeoType::TextMod2],
@@ -601,7 +603,8 @@ void Scene::RenderCoverText(){
 		textSize0,
 		(float)windowWidth * 0.5f,
 		(float)windowHeight * 0.5f - textSize0 * 0.75f,
-		TextAlignment::Center
+		TextAlignment::Center,
+		-0.1f
 	);
 	RenderTextOnScreen(
 		meshList[(int)GeoType::TextMod1],
@@ -610,7 +613,8 @@ void Scene::RenderCoverText(){
 		textSize2,
 		(float)windowWidth * 0.5f,
 		(float)windowHeight * 0.5f - textSize0 - textSize2 * 2.0f,
-		TextAlignment::Center
+		TextAlignment::Center,
+		-0.1f
 	);
 }
 
@@ -753,7 +757,8 @@ void Scene::RenderEntityLvl(const Entity* const entity){
 		meshList[(int)GeoType::TextMod1],
 		"Lvl " + std::to_string(entity->im_Attribs.im_Lvl),
 		Color(),
-		TextAlignment::Center
+		TextAlignment::Center,
+		-0.1f
 	);
 
 	modelStack.PopMatrix();
