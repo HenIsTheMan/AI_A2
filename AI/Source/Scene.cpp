@@ -178,14 +178,14 @@ void Scene::Update(const double updateDt, const double renderDt){
 			if(!isKeyDownQ && App::Key('Q')){
 				entityFactory->SpawnRandUnit(Obj::EntityCreationAttribs<Vector3, float>{
 					Obj::EntityTeam::Player,
-					Obj::EntityFacingDir::Right,
+					Obj::EntityFacingDir::UL,
 					1,
 					Vector3(0.0f, 0.0f, 0.0f),
 					5.0f
 				});
 				entityFactory->SpawnRandUnit(Obj::EntityCreationAttribs<Vector3, float>{
 					Obj::EntityTeam::Player,
-					Obj::EntityFacingDir::Right,
+					Obj::EntityFacingDir::UL,
 					1,
 					Vector3(1.0f, 1.0f, 0.0f),
 					5.0f
@@ -740,22 +740,142 @@ void Scene::RenderEntityArt(const Entity* const entity){
 			break;
 		case Obj::EntityFacingDir::UL:
 			if(gridType == HexGrid<float>::GridType::FlatTop){
+				if((int)entity->im_Attribs.im_LocalPos.x & 1){
+					modelStack.Rotate(
+						60.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				} else{
+					modelStack.Rotate(
+						120.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				}
 			} else{
+				if((int)entity->im_Attribs.im_LocalPos.y & 1){
+					modelStack.Rotate(
+						330.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				} else{
+					modelStack.Rotate(
+						30.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				}
 			}
 			break;
 		case Obj::EntityFacingDir::UR:
 			if(gridType == HexGrid<float>::GridType::FlatTop){
+				if((int)entity->im_Attribs.im_LocalPos.x & 1){
+					modelStack.Rotate(
+						300.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				} else{
+					modelStack.Rotate(
+						240.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				}
 			} else{
+				if((int)entity->im_Attribs.im_LocalPos.y & 1){
+					modelStack.Rotate(
+						330.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				} else{
+					modelStack.Rotate(
+						30.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				}
 			}
 			break;
 		case Obj::EntityFacingDir::DL:
 			if(gridType == HexGrid<float>::GridType::FlatTop){
+				if((int)entity->im_Attribs.im_LocalPos.x & 1){
+					modelStack.Rotate(
+						60.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				} else{
+					modelStack.Rotate(
+						120.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				}
 			} else{
+				if((int)entity->im_Attribs.im_LocalPos.y & 1){
+					modelStack.Rotate(
+						210.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				} else{
+					modelStack.Rotate(
+						150.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				}
 			}
 			break;
 		case Obj::EntityFacingDir::DR:
 			if(gridType == HexGrid<float>::GridType::FlatTop){
+				if((int)entity->im_Attribs.im_LocalPos.x & 1){
+					modelStack.Rotate(
+						300.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				} else{
+					modelStack.Rotate(
+						240.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				}
 			} else{
+				if((int)entity->im_Attribs.im_LocalPos.y & 1){
+					modelStack.Rotate(
+						210.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				} else{
+					modelStack.Rotate(
+						150.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				}
 			}
 			break;
 	}
