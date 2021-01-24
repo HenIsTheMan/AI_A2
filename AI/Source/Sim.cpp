@@ -69,13 +69,13 @@ void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow
 
 						currTime += (float)timer.getElapsedTime();
 
-						const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
+						const int result = App::Key(VK_OEM_4) - App::Key(VK_OEM_6);
 						delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
 
-						if(!isKeySpace && App::Key(VK_SPACE)){
+						if(!isKeySpace && App::Key(VK_OEM_5)){
 							quickRenderDelay = nullptr;
 							isKeySpace = true;
-						} else if(isKeySpace && !App::Key(VK_SPACE)){
+						} else if(isKeySpace && !App::Key(VK_OEM_5)){
 							isKeySpace = false;
 						}
 					}
@@ -123,13 +123,13 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 			}
 			currTime += (float)timer.getElapsedTime();
 
-			const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
+			const int result = App::Key(VK_OEM_4) - App::Key(VK_OEM_6);
 			delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
 
-			if(!isKeySpace && App::Key(VK_SPACE)){
+			if(!isKeySpace && App::Key(VK_OEM_5)){
 				quickRenderDelay = nullptr;
 				isKeySpace = true;
-			} else if(isKeySpace && !App::Key(VK_SPACE)){
+			} else if(isKeySpace && !App::Key(VK_OEM_5)){
 				isKeySpace = false;
 			}
 		}
@@ -238,13 +238,13 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 					}
 					currTime += (float)timer.getElapsedTime();
 
-					const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
+					const int result = App::Key(VK_OEM_4) - App::Key(VK_OEM_6);
 					delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
 
-					if(!isKeySpace && App::Key(VK_SPACE)){
+					if(!isKeySpace && App::Key(VK_OEM_5)){
 						quickRenderDelay = nullptr;
 						isKeySpace = true;
-					} else if(isKeySpace && !App::Key(VK_SPACE)){
+					} else if(isKeySpace && !App::Key(VK_OEM_5)){
 						isKeySpace = false;
 					}
 				}
@@ -335,13 +335,13 @@ void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRo
 			}
 			currTime += (float)timer.getElapsedTime();
 
-			const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
+			const int result = App::Key(VK_OEM_4) - App::Key(VK_OEM_6);
 			delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
 
-			if(!isKeySpace && App::Key(VK_SPACE)){
+			if(!isKeySpace && App::Key(VK_OEM_5)){
 				quickRenderDelay = nullptr;
 				isKeySpace = true;
-			} else if(isKeySpace && !App::Key(VK_SPACE)){
+			} else if(isKeySpace && !App::Key(VK_OEM_5)){
 				isKeySpace = false;
 			}
 		}
@@ -381,13 +381,13 @@ void Sim::RefineTileLayer(const int gridRows, const int gridCols, const unsigned
 							}
 							currTime += (float)timer.getElapsedTime();
 
-							const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
+							const int result = App::Key(VK_OEM_4) - App::Key(VK_OEM_6);
 							delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
 
-							if(!isKeySpace && App::Key(VK_SPACE)){
+							if(!isKeySpace && App::Key(VK_OEM_5)){
 								quickRenderDelay = nullptr;
 								isKeySpace = true;
-							} else if(isKeySpace && !App::Key(VK_SPACE)){
+							} else if(isKeySpace && !App::Key(VK_OEM_5)){
 								isKeySpace = false;
 							}
 						}
@@ -494,13 +494,13 @@ void Sim::MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, cons
 				}
 				currTime += (float)timer.getElapsedTime();
 
-				const int result = App::Key(VK_OEM_COMMA) - App::Key(VK_OEM_PERIOD);
+				const int result = App::Key(VK_OEM_4) - App::Key(VK_OEM_6);
 				delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
 
-				if(!isKeySpace && App::Key(VK_SPACE)){
+				if(!isKeySpace && App::Key(VK_OEM_5)){
 					quickRenderDelay = nullptr;
 					isKeySpace = true;
-				} else if(isKeySpace && !App::Key(VK_SPACE)){
+				} else if(isKeySpace && !App::Key(VK_OEM_5)){
 					isKeySpace = false;
 				}
 			}

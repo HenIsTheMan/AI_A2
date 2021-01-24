@@ -157,9 +157,11 @@ void SceneSupport::RenderText(Mesh* mesh, std::string text, Color color, TextAli
 	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
 	glUniform1i(im_parameters[(int)UniType::Tex], 0);
 
+	const int* myFontWidth = fontWidth;
+
 	float textWidth = 0.0f;
 	for(unsigned i = 0; i < text.length(); ++i){
-		textWidth += (float)fontWidth[(unsigned)text[i]] / 64.0f;
+		textWidth += (float)myFontWidth[(unsigned)text[i]] / 64.0f;
 	}
 
 	float accum = 0;
@@ -203,12 +205,14 @@ void SceneSupport::RenderTextOnScreen(Mesh* mesh, std::string text, Color color,
 	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
 	glUniform1i(im_parameters[(int)UniType::Tex], 0);
 
+	const int* myFontWidth = fontWidth;
+
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
 	modelStack.Translate(x, y, 0.0f);
 	float textWidth = 0.0f;
 	for(unsigned i = 0; i < text.length(); ++i){
-		textWidth += (float)fontWidth[(unsigned)text[i]] / 64.0f;
+		textWidth += (float)myFontWidth[(unsigned)text[i]] / 64.0f;
 	}
 	modelStack.Scale(size, size, 1.0f);
 

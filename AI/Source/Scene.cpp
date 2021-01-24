@@ -266,35 +266,35 @@ void Scene::UpdateMisc(const double dt){
 		customHue = 0.0f;
 	}
 
-	static bool isKeyDownO = false;
-	static bool isKeyDownP = false;
-	if(!isKeyDownO && App::Key('O')){
+	static bool isKeyDown9 = false;
+	static bool isKeyDown0 = false;
+	if(!isKeyDown9 && App::Key('9')){
 		shldRenderTileArt = !shldRenderTileArt;
-		isKeyDownO = true;
-	} else if(isKeyDownO && !App::Key('O')){
-		isKeyDownO = false;
+		isKeyDown9 = true;
+	} else if(isKeyDown9 && !App::Key('9')){
+		isKeyDown9 = false;
 	}
-	if(!isKeyDownP && App::Key('P')){
+	if(!isKeyDown0 && App::Key('0')){
 		shldRenderFog = !shldRenderFog;
-		isKeyDownP = true;
-	} else if(isKeyDownP && !App::Key('P')){
-		isKeyDownP = false;
+		isKeyDown0 = true;
+	} else if(isKeyDown0 && !App::Key('0')){
+		isKeyDown0 = false;
 	}
 
 	float& simSpd = sim->spd;
-	static bool isKeyDownZ = false;
-	static bool isKeyDownX = false;
-	if(!isKeyDownZ && App::Key('Z')){
+	static bool isKeyDownPlus = false;
+	static bool isKeyDownMinus = false;
+	if(!isKeyDownPlus && App::Key(VK_OEM_PLUS)){
 		simSpd += 0.1f;
-		isKeyDownZ = true;
-	} else if(isKeyDownZ && !App::Key('Z')){
-		isKeyDownZ = false;
+		isKeyDownPlus = true;
+	} else if(isKeyDownPlus && !App::Key(VK_OEM_PLUS)){
+		isKeyDownPlus = false;
 	}
-	if(!isKeyDownX && App::Key('X')){
+	if(!isKeyDownMinus && App::Key(VK_OEM_MINUS)){
 		simSpd -= 0.1f;
-		isKeyDownX = true;
-	} else if(isKeyDownX && !App::Key('X')){
-		isKeyDownX = false;
+		isKeyDownMinus = true;
+	} else if(isKeyDownMinus && !App::Key(VK_OEM_MINUS)){
+		isKeyDownMinus = false;
 	}
 	simSpd = Math::Clamp(simSpd, 0.2f, 4.0f);
 
@@ -596,7 +596,7 @@ void Scene::RenderCoverText(){
 	);
 	RenderTextOnScreen(
 		meshList[(int)GeoType::TextMod2],
-		"Change sim mode (< and/or >)",
+		"Change sim mode (LeftArrow and RightArrow)",
 		Color(),
 		textSize0,
 		(float)windowWidth * 0.5f,
@@ -1116,7 +1116,7 @@ void Scene::RenderTile(const std::vector<TileType>& tileLayer, const int r, cons
 }
 
 void Scene::RenderSceneText(){
-	static Mesh* const textMesh = meshList[(int)GeoType::Text];
+	static Mesh* const textMesh = meshList[(int)GeoType::TextMod1];
 	static float textSize = (float)windowWidth * 0.02f;
 
 	RenderTextOnScreen(
@@ -1176,12 +1176,15 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		"F1: Toggle fullscreen",
 		"F2: Change polygon mode",
 		"F3: Toggle visibility of app window",
+		"[: Slow down making of sim map",
+		"]: Spd up making of sim map",
+		"Backslash: Finish curr step in making...",
 		"WASD: Move cam",
 		"R: Reset cam",
-		"O: Toggle tile art",
-		"P: Toggle fog",
-		"Z: Increase sim spd",
-		"X: Decrease sim spd",
+		"9: Toggle tile art",
+		"0: Toggle fog",
+		"+: Increase sim spd",
+		"-: Decrease sim spd",
 		"C: Change sim turn manually",
 		"V: Change sim time of day manually",
 		"B: Reset sim turn elapsed time",
