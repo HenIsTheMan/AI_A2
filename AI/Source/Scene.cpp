@@ -1247,22 +1247,16 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 		"AI",
 		"Environment"
 	};
-	static std::string timeOfDayTexts[(int)SimTimeOfDay::Amt]{
-		"Day",
-		"Rainy",
-		"Night",
-	};
 
 	const std::string texts[]{
 		(std::string)"Sim " + runtimeStatusTexts[(int)sim->status],
 		"Sim mode: " + modeTexts[(int)sim->mode],
 		"Sim spd: " + std::to_string(sim->spd).substr(0, std::to_string((int)sim->spd).length() + 3),
-		"Sim turn: " + turnTexts[(int)sim->turn],
-		"Sim turn elapsed time: " + std::to_string(sim->turnElapsedTime).substr(0, std::to_string((int)sim->turnElapsedTime).length() + 3),
-		"Sim turn duration: " + std::to_string(sim->turnDuration).substr(0, std::to_string((int)sim->turnDuration).length() + 3),
-		"Sim time of day: " + timeOfDayTexts[(int)sim->timeOfDay],
 		"Sim time of day elapsed time: " + std::to_string(sim->timeOfDayElapsedTime).substr(0, std::to_string((int)sim->timeOfDayElapsedTime).length() + 3),
 		"Sim time of day duration: " + std::to_string(sim->timeOfDayDuration).substr(0, std::to_string((int)sim->timeOfDayDuration).length() + 3),
+		"Sim turn elapsed time: " + std::to_string(sim->turnElapsedTime).substr(0, std::to_string((int)sim->turnElapsedTime).length() + 3),
+		"Sim turn duration: " + std::to_string(sim->turnDuration).substr(0, std::to_string((int)sim->turnDuration).length() + 3),
+		"Sim turn: " + turnTexts[(int)sim->turn],
 	};
 	const size_t size = sizeof(texts) / sizeof(texts[0]);
 
