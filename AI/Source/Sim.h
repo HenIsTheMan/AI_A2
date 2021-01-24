@@ -12,6 +12,8 @@
 #include "FogType.hpp"
 #include "TileType.hpp"
 
+#include "Publisher.h"
+
 class Sim final{
 public:
 	struct{
@@ -48,6 +50,8 @@ private:
 
 	int fogWeights[(int)FogType::Amt];
 	int tileWeights[(int)TileType::Amt];
+
+	Publisher* publisher;
 
 	std::vector<FogType> fogLayer;
 	std::vector<TileType> tileLayer;

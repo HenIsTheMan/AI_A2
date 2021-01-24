@@ -7,12 +7,16 @@
 #include "MyMath.h"
 #include "TileCost.hpp"
 
+#include "EventAddCredits.h"
+#include "ListenerFlags.hpp"
+
 extern bool endLoop;
 
 Sim::Sim():
 	isKeySpace(false),
 	fogWeights(),
 	tileWeights(),
+	publisher(Publisher::RetrieveGlobalObjPtr()),
 	fogLayer(),
 	tileLayer(),
 	timer()
@@ -527,9 +531,13 @@ void Sim::Update(const double dt){
 
 		turnElapsedTime = 0.0f;
 
-		//Add credits using an event??
 		switch(mode){
 			case SimMode::ProtectTheKing:
+				if(turn == SimTurn::Player){
+					(void)publisher->Notify((long int)ListenerFlags::Scene, new EventAddCredits(true, 100));
+				} else if(turn == SimTurn::AI){
+					(void)publisher->Notify((long int)ListenerFlags::Scene, new EventAddCredits(false, 100));
+				}
 				break;
 			case SimMode::LastTeamStanding:
 				break;

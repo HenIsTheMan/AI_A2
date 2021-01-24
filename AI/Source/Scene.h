@@ -14,7 +14,7 @@
 
 using Entity = Obj::Entity<Vector3, float>; //Can because Entity<Vector3, float> is in another namespace
 
-class Scene final: public SceneSupport{
+class Scene final: public SceneSupport, public Listener{
 public:
 	Scene();
 	~Scene();
@@ -80,4 +80,6 @@ private:
 	void RenderSimInfoText(Mesh* const textMesh, const Color& textColor, const float textSize);
 
 	void MakeSimMap() const;
+
+	int OnEvent(Event* myEvent, const bool destroyEvent = false) override;
 };

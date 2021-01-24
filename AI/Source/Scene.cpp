@@ -5,6 +5,9 @@
 
 #include "Easing.hpp"
 
+#include "EventAddCredits.h"
+#include "ListenerFlags.hpp"
+
 extern double mouseScrollWheelYOffset;
 extern int windowWidth;
 extern int windowHeight;
@@ -94,11 +97,14 @@ void Scene::Init(){
 	grid->SetLineThickness(gridLineThickness);
 	grid->SetRows(gridRows);
 	grid->SetCols(gridCols);
+
+	publisher->AddListener((long int)ListenerFlags::Scene, this);
 }
 
 void Scene::Update(const double updateDt, const double renderDt){
 	SceneSupport::Update(updateDt, renderDt);
 
+	OnEvent(FetchEvent(), true);
 	UpdateMisc(updateDt);
 
 	switch(sim->status){
@@ -1307,4 +1313,29 @@ void Scene::MakeSimMap() const{
 	delete quickRenderDelay3;
 
 	sim->status = SimRuntimeStatus::Ongoing;
+}
+
+int Scene::OnEvent(Event* myEvent, const bool destroyEvent){
+	if(!myEvent){
+		return -1;
+	}
+
+	int val = -1;
+
+	switch(myEvent->GetID()){
+		case EventID::EventAddCredits: {
+			const EventAddCredits* const eventAddCredits = static_cast<const EventAddCredits*>(myEvent);
+
+			const int credits = eventAddCredits->GetCredits();
+			(eventAddCredits->GetToPlayer() ? creditsPlayer : creditsAI) += credits;
+
+			break;
+		}
+	}
+
+	if(destroyEvent && myEvent){
+		delete myEvent;
+		myEvent = nullptr;
+	}
+	return val;
 }

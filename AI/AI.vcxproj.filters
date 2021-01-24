@@ -46,6 +46,9 @@
     <ClCompile Include="Source\EntryPt.cpp">
       <Filter>Misc</Filter>
     </ClCompile>
+    <ClCompile Include="Source\EventAddCredits.cpp">
+      <Filter>Event\Events</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Cam.h">
@@ -167,6 +170,9 @@
     </ClInclude>
     <ClInclude Include="Source\App.h">
       <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EventAddCredits.h">
+      <Filter>Event\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
