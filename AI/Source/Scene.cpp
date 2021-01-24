@@ -625,12 +625,10 @@ void Scene::RenderEntities(){
 				0.25f + individualDepthOffset
 			);
 			modelStack.Scale(
-				gridCellScaleX,
-				gridCellScaleY,
+				gridCellScaleX * 0.8f,
+				gridCellScaleY * 0.8f,
 				1.0f
 			);
-
-			RenderMesh(meshList[(int)GeoType::Hex], true, Color(), 1.0f);
 		} else{
 			modelStack.Translate(
 				xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * localPos.x + ((int)localPos.y & 1) * grid->CalcAltOffsetX(),
@@ -638,24 +636,14 @@ void Scene::RenderEntities(){
 				0.25f + individualDepthOffset
 			);
 			modelStack.Scale(
-				gridCellScaleY,
-				gridCellScaleX,
+				gridCellScaleY * 0.8f,
+				gridCellScaleX * 0.8f,
 				1.0f
 			);
-
-			modelStack.PushMatrix();
-
-			modelStack.Rotate(
-				90.0f,
-				0.0f,
-				0.0f,
-				1.0f
-			);
-
-			RenderMesh(meshList[(int)GeoType::Hex], true, Color(), 1.0f);
-
-			modelStack.PopMatrix();
 		}
+
+		RenderMesh(meshList[(int)GeoType::Circle], true, Color(), 1.0f);
+
 			const float ratio = entity->im_Attribs.im_CurrHealth / entity->im_Attribs.im_MaxHealth;
 			modelStack.PushMatrix();
 

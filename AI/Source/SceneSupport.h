@@ -37,6 +37,7 @@ public:
 		NightBG,
 		Fog,
 		Quad,
+		Circle,
 		Hex,
 		WallTile,
 		SoilTile,
