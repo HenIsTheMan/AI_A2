@@ -79,7 +79,7 @@ private:
 	void RenderGridInfoText(Mesh* const textMesh, const Color& textColor, const float textSize);
 	void RenderSimInfoText(Mesh* const textMesh, const Color& textColor, const float textSize);
 
-	void MakeSimMap() const;
+	void MakeSimMap();
 
 	int OnEvent(Event* myEvent, const bool destroyEvent = false) override;
 };

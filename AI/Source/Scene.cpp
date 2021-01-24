@@ -1280,7 +1280,7 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 	}
 }
 
-void Scene::MakeSimMap() const{
+void Scene::MakeSimMap(){
 	sim->status = SimRuntimeStatus::MakingTheMap;
 
 	sim->ChangeFogWeight((int)FogType::Inexistent, 5);
@@ -1313,6 +1313,20 @@ void Scene::MakeSimMap() const{
 	delete quickRenderDelay3;
 
 	sim->status = SimRuntimeStatus::Ongoing;
+
+	switch(sim->mode){
+		case SimMode::ProtectTheKing:
+			if(sim->turn == SimTurn::Player){
+				creditsPlayer += 100;
+			} else if(sim->turn == SimTurn::AI){
+				creditsAI += 100;
+			}
+			break;
+		case SimMode::LastTeamStanding:
+			break;
+		case SimMode::GreatestAreaPainted:
+			break;
+	}
 }
 
 int Scene::OnEvent(Event* myEvent, const bool destroyEvent){
