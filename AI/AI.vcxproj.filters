@@ -247,6 +247,8 @@
     <None Include="Source\ObjPool.inl">
       <Filter>Obj</Filter>
     </None>
-    <None Include="Source\EntityFactory.inl" />
+    <None Include="Source\EntityFactory.inl">
+      <Filter>Obj</Filter>
+    </None>
   </ItemGroup>
 </Project>

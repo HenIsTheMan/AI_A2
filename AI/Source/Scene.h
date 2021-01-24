@@ -77,6 +77,7 @@ private:
 	void RenderMap();
 	void RenderFog(const std::vector<FogType>& fogLayer, const int r, const int c);
 	void RenderTile(const std::vector<TileType>& tileLayer, const int r, const int c);
+	void RenderGridCellOfMouse();
 
 	void RenderSceneText();
 	void RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, const float textSize);

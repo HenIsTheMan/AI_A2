@@ -391,6 +391,8 @@ void Scene::Render(){
 		-(float)windowHeight * 0.5f,
 		0.0f
 	);
+
+	RenderGridCellOfMouse();
 	
 	RenderBG();
 	switch(sim->status){
@@ -1321,6 +1323,64 @@ void Scene::RenderTile(const std::vector<TileType>& tileLayer, const int r, cons
 			}
 			break;
 	}
+}
+
+void Scene::RenderGridCellOfMouse(){
+	//* Better if done in Update
+	double mouseX;
+	double mouseY;
+	App::GetCursorPos(&mouseX, &mouseY);
+
+	const float horizSize = (float)windowWidth * (float)orthoProjectionScaleFactor;
+	const float vertSize = (float)windowHeight * (float)orthoProjectionScaleFactor;
+	const float leftVal = ((float)windowWidth - horizSize) * 0.5f;
+	const float rightVal = leftVal + horizSize;
+	const float bottomVal = ((float)windowHeight - vertSize) * 0.5f;
+	const float topVal = bottomVal + vertSize;
+
+	const float trueMouseX = (float)mouseX * ((rightVal - leftVal) / (float)windowWidth) + leftVal + im_Cam.pos.x;
+	const float trueMouseY = (float)mouseY * ((topVal - bottomVal) / (float)windowHeight) + bottomVal - im_Cam.pos.y;
+	//*/
+
+	const float gridWidth = grid->CalcWidth();
+	const float gridHeight = grid->CalcHeight();
+
+	const float xOffset = ((float)windowWidth - gridWidth) * 0.5f;
+	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f;
+
+	//if(trueMouseX > xOffset + gridLineThickness * 0.5f && trueMouseX < xOffset + gridWidth - gridLineThickness * 0.5f
+		//&& trueMouseY > yOffset + gridLineThickness * 0.5f && trueMouseY < yOffset + gridHeight - gridLineThickness * 0.5f){
+		const float unitX = gridCellScaleX + gridLineThickness;
+		const float unitY = gridCellScaleY + gridLineThickness;
+
+		const float mouseRow = std::floor(((float)windowHeight - trueMouseY - yOffset - gridLineThickness * 0.5f) / unitY);
+		const float mouseCol = std::floor((trueMouseX - xOffset - gridLineThickness * 0.5f) / unitX);
+		const float xTranslate = mouseCol * unitX
+			+ xOffset
+			+ gridCellScaleX * 0.5f
+			+ gridLineThickness;
+		const float yTranslate = mouseRow * unitY
+			+ yOffset
+			+ gridCellScaleY * 0.5f
+			+ gridLineThickness;
+
+		modelStack.PushMatrix();
+
+		modelStack.Translate(
+			xTranslate,
+			yTranslate,
+			0.1f
+		);
+		modelStack.Scale(
+			gridCellScaleX,
+			gridCellScaleY,
+			1.0f
+		);
+
+		RenderMesh(meshList[(int)GeoType::Hex], true, Color(), 0.5f);
+
+		modelStack.PopMatrix();
+	//}
 }
 
 void Scene::RenderSceneText(){
