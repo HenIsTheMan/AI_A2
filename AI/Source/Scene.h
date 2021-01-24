@@ -54,7 +54,7 @@ private:
 
 	Sim* sim;
 	HexGrid<float>* grid;
-	Obj::EntityFactory* entityFactory;
+	Obj::EntityFactory<Vector3, float>* entityFactory;
 	Obj::ObjPool<Entity>* entityPool;
 	Publisher* publisher;
 

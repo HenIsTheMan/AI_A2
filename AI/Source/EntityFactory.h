@@ -7,23 +7,24 @@
 
 #include "Singleton.h"
 
-using Entity = Obj::Entity<Vector3, float>; //Can because Entity<Vector3, float> is in another namespace
-
 namespace Obj{
-	class EntityFactory final: public Singleton<EntityFactory>{
-		friend Singleton<EntityFactory>;
+	template<class T, typename Type>
+	class EntityFactory final: public Singleton<EntityFactory<T, Type>>{
+		friend Singleton<EntityFactory<T, Type>>;
 	public:
-		~EntityFactory();
+		~EntityFactory<T, Type>();
 
-		void SpawnKnight(const EntityCreationAttribs& attribs);
-		void SpawnGunner(const EntityCreationAttribs& attribs);
-		void SpawnHealer(const EntityCreationAttribs& attribs);
-		void SpawnKing(const EntityCreationAttribs& attribs);
+		void SpawnKnight(const EntityCreationAttribs<T, Type>& attribs);
+		void SpawnGunner(const EntityCreationAttribs<T, Type>& attribs);
+		void SpawnHealer(const EntityCreationAttribs<T, Type>& attribs);
+		void SpawnKing(const EntityCreationAttribs<T, Type>& attribs);
 
-		void SpawnRandUnit(const EntityCreationAttribs& attribs);
+		void SpawnRandUnit(const EntityCreationAttribs<T, Type>& attribs);
 	private:
-		Obj::ObjPool<::Entity>* entityPool;
+		ObjPool<Entity<T, Type>>* entityPool;
 
-		EntityFactory();
+		EntityFactory<T, Type>();
 	};
 }
+
+#include "EntityFactory.inl"

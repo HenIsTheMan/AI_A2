@@ -49,9 +49,6 @@
     <ClCompile Include="Source\EventAddCredits.cpp">
       <Filter>Event\Events</Filter>
     </ClCompile>
-    <ClCompile Include="Source\EntityFactory.cpp">
-      <Filter>Obj</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Cam.h">
@@ -250,5 +247,6 @@
     <None Include="Source\ObjPool.inl">
       <Filter>Obj</Filter>
     </None>
+    <None Include="Source\EntityFactory.inl" />
   </ItemGroup>
 </Project>

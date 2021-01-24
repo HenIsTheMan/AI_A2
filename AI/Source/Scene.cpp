@@ -40,7 +40,7 @@ Scene::Scene():
 	gridMaxCols(20),
 	sim(new Sim()),
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
-	entityFactory(Obj::EntityFactory::RetrieveGlobalObjPtr()),
+	entityFactory(Obj::EntityFactory<Vector3, float>::RetrieveGlobalObjPtr()),
 	entityPool(Obj::ObjPool<Entity>::RetrieveGlobalObjPtr()),
 	publisher(Publisher::RetrieveGlobalObjPtr()),
 	activeEntities(entityPool->GetActiveObjs()),
@@ -176,7 +176,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 			static bool isKeyDownQ = false;
 			if(!isKeyDownQ && App::Key('Q')){
-				entityFactory->SpawnRandUnit(Obj::EntityCreationAttribs<Vector3, float>{
+				entityFactory->SpawnKnight(Obj::EntityCreationAttribs<Vector3, float>{
 					Obj::EntityTeam::Player,
 					Obj::EntityFacingDir::Up,
 					1,

@@ -2,13 +2,11 @@
 
 #include "Vector3.h"
 
-#include "EntityTeam.hpp"
-
 namespace Obj{
 	template<class T, typename Type>
 	struct EntityCreationAttribs final{ //Passive DS (PDS)/Plain Old DS (PODS)/Plain Old Data (POD)
-		EntityCreationAttribs() = default;
-		EntityCreationAttribs() = default;
+		EntityCreationAttribs<T, Type>() = default;
+		~EntityCreationAttribs<T, Type>() = default;
 
 		EntityTeam im_Team = EntityTeam::None;
 		EntityFacingDir im_FacingDir = EntityFacingDir::Invalid;
