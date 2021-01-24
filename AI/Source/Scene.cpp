@@ -178,9 +178,16 @@ void Scene::Update(const double updateDt, const double renderDt){
 			if(!isKeyDownQ && App::Key('Q')){
 				entityFactory->SpawnRandUnit(Obj::EntityCreationAttribs<Vector3, float>{
 					Obj::EntityTeam::Player,
-					Obj::EntityFacingDir::Up,
+					Obj::EntityFacingDir::Down,
 					1,
 					Vector3(0.0f, 0.0f, 0.0f),
+					5.0f
+				});
+				entityFactory->SpawnRandUnit(Obj::EntityCreationAttribs<Vector3, float>{
+					Obj::EntityTeam::Player,
+					Obj::EntityFacingDir::Down,
+					1,
+					Vector3(1.0f, 1.0f, 0.0f),
 					5.0f
 				});
 				isKeyDownQ = true;
@@ -646,14 +653,14 @@ void Scene::RenderEntityArt(const Entity* const entity){
 			if(gridType == HexGrid<float>::GridType::SharpTop){
 				if((int)entity->im_Attribs.im_LocalPos.y & 1){
 					modelStack.Rotate(
-						15.0f,
+						22.5f,
 						0.0f,
 						0.0f,
 						1.0f
 					);
 				} else{
 					modelStack.Rotate(
-						345.0f,
+						337.5f,
 						0.0f,
 						0.0f,
 						1.0f
@@ -670,6 +677,21 @@ void Scene::RenderEntityArt(const Entity* const entity){
 					1.0f
 				);
 			} else{
+				if((int)entity->im_Attribs.im_LocalPos.y & 1){
+					modelStack.Rotate(
+						157.5f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				} else{
+					modelStack.Rotate(
+						202.5f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				}
 			}
 			break;
 		case Obj::EntityFacingDir::Left:
