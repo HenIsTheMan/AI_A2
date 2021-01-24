@@ -37,7 +37,6 @@ namespace Obj{
 		int im_VisionRange = 0;
 
 		T im_LocalPos = T();
-		T im_LocalScale = T();
 
 		Type im_ActionMag = Type();
 		Type im_CurrHealth = Type();

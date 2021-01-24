@@ -641,6 +641,48 @@ void Scene::RenderEntityArt(const Entity* const entity){
 		0.0f,
 		0.05f
 	);
+	switch(entity->im_Attribs.im_FacingDir){
+		case Obj::EntityFacingDir::Up:
+			if(gridType == HexGrid<float>::GridType::FlatTop){
+			} else{
+			}
+			break;
+		case Obj::EntityFacingDir::Down:
+			if(gridType == HexGrid<float>::GridType::FlatTop){
+			} else{
+			}
+			break;
+		case Obj::EntityFacingDir::Left:
+			if(gridType == HexGrid<float>::GridType::FlatTop){
+			} else{
+			}
+			break;
+		case Obj::EntityFacingDir::Right:
+			if(gridType == HexGrid<float>::GridType::FlatTop){
+			} else{
+			}
+			break;
+		case Obj::EntityFacingDir::UL:
+			if(gridType == HexGrid<float>::GridType::FlatTop){
+			} else{
+			}
+			break;
+		case Obj::EntityFacingDir::UR:
+			if(gridType == HexGrid<float>::GridType::FlatTop){
+			} else{
+			}
+			break;
+		case Obj::EntityFacingDir::DL:
+			if(gridType == HexGrid<float>::GridType::FlatTop){
+			} else{
+			}
+			break;
+		case Obj::EntityFacingDir::DR:
+			if(gridType == HexGrid<float>::GridType::FlatTop){
+			} else{
+			}
+			break;
+	}
 	modelStack.Scale(
 		0.6f,
 		0.6f,
