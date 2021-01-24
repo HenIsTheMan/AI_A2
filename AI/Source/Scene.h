@@ -5,6 +5,7 @@
 #include "SceneSupport.h"
 
 #include "Entity.h"
+#include "EntityFactory.h"
 #include "Rounding.hpp"
 
 #include "Sim.h"
@@ -53,6 +54,7 @@ private:
 
 	Sim* sim;
 	HexGrid<float>* grid;
+	Obj::EntityFactory* entityFactory;
 	Obj::ObjPool<Entity>* entityPool;
 	Publisher* publisher;
 
@@ -83,7 +85,6 @@ private:
 	void RenderSimInfoText(Mesh* const textMesh, const Color& textColor, const float textSize);
 
 	void MakeSimMap();
-	void SpawnRandUnit();
 
 	int OnEvent(Event* myEvent, const bool destroyEvent = false) override;
 };

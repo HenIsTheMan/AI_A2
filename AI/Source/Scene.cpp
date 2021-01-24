@@ -40,6 +40,7 @@ Scene::Scene():
 	gridMaxCols(20),
 	sim(new Sim()),
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
+	entityFactory(Obj::EntityFactory::RetrieveGlobalObjPtr()),
 	entityPool(Obj::ObjPool<Entity>::RetrieveGlobalObjPtr()),
 	publisher(Publisher::RetrieveGlobalObjPtr()),
 	activeEntities(entityPool->GetActiveObjs()),
@@ -57,6 +58,11 @@ Scene::~Scene(){
 	if(grid != nullptr){
 		delete grid;
 		grid = nullptr;
+	}
+
+	if(entityFactory != nullptr){
+		entityFactory->Destroy();
+		entityFactory = nullptr;
 	}
 
 	if(entityPool != nullptr){
@@ -170,7 +176,13 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 			static bool isKeyDownQ = false;
 			if(!isKeyDownQ && App::Key('Q')){
-				SpawnRandUnit();
+				entityFactory->SpawnRandUnit(Obj::EntityCreationAttribs<Vector3, float>{
+					Obj::EntityTeam::Player,
+					Obj::EntityFacingDir::Up,
+					1,
+					Vector3(0.0f, 0.0f, 0.0f),
+					5.0f
+				});
 				isKeyDownQ = true;
 			} else if(isKeyDownQ && !App::Key('Q')){
 				isKeyDownQ = false;
@@ -338,10 +350,28 @@ void Scene::UpdateEntities(const double dt){
 
 				break;
 			case Obj::EntityType::Gunner:
+				entity->im_Attribs.im_CurrHealth -= (float)dt;
+
+				if(entity->im_Attribs.im_CurrHealth <= 0.0f){
+					entitiesToDeactivate.emplace_back(entity);
+				}
+
 				break;
 			case Obj::EntityType::Healer:
+				entity->im_Attribs.im_CurrHealth -= (float)dt;
+
+				if(entity->im_Attribs.im_CurrHealth <= 0.0f){
+					entitiesToDeactivate.emplace_back(entity);
+				}
+
 				break;
 			case Obj::EntityType::King:
+				entity->im_Attribs.im_CurrHealth -= (float)dt;
+
+				if(entity->im_Attribs.im_CurrHealth <= 0.0f){
+					entitiesToDeactivate.emplace_back(entity);
+				}
+
 				break;
 		}
 	}
@@ -1337,23 +1367,6 @@ void Scene::MakeSimMap(){
 		case SimMode::GreatestAreaPainted:
 			break;
 	}
-}
-
-void Scene::SpawnRandUnit(){
-	Entity* const entity = entityPool->ActivateObj();
-
-	entity->im_Attribs.im_Type = Obj::EntityType::Knight; //Img
-	entity->im_Attribs.im_Team = Obj::EntityTeam::Player; //Color of BG
-	entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up; //Rotation
-	entity->im_Attribs.im_Lvl = 3; //Text
-
-	entity->im_Attribs.im_LocalPos.x = 0.0f;
-	entity->im_Attribs.im_LocalPos.y = 0.0f;
-
-	entity->im_Attribs.im_CurrHealth = 5.0f;
-	entity->im_Attribs.im_MaxHealth = entity->im_Attribs.im_CurrHealth;
-
-	//entity->im_Attribs.im_CurrState //Text
 }
 
 int Scene::OnEvent(Event* myEvent, const bool destroyEvent){

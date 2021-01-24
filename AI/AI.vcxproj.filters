@@ -49,6 +49,9 @@
     <ClCompile Include="Source\EventAddCredits.cpp">
       <Filter>Event\Events</Filter>
     </ClCompile>
+    <ClCompile Include="Source\EntityFactory.cpp">
+      <Filter>Obj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Cam.h">
@@ -173,6 +176,12 @@
     </ClInclude>
     <ClInclude Include="Source\EventAddCredits.h">
       <Filter>Event\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EntityFactory.h">
+      <Filter>Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EntityCreationAttribs.hpp">
+      <Filter>Obj</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

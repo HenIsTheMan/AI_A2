@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="Source\App.cpp" />
     <ClCompile Include="Source\Cam.cpp" />
+    <ClCompile Include="Source\EntityFactory.cpp" />
     <ClCompile Include="Source\EventAddCredits.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\Sim.cpp" />
@@ -168,7 +169,9 @@
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\EntityActionType.hpp" />
     <ClInclude Include="Source\EntityAttribs.hpp" />
+    <ClInclude Include="Source\EntityCreationAttribs.hpp" />
     <ClInclude Include="Source\EntityFacingDir.hpp" />
+    <ClInclude Include="Source\EntityFactory.h" />
     <ClInclude Include="Source\EntityMovementType.hpp" />
     <ClInclude Include="Source\EntityTeam.hpp" />
     <ClInclude Include="Source\EntityType.hpp" />
