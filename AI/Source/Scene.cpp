@@ -379,7 +379,7 @@ void Scene::UpdateEntities(const double dt){
 		entity->im_Attribs.im_Type = Obj::EntityType::Knight; //Img
 		entity->im_Attribs.im_Team = Obj::EntityTeam::Player; //Color of BG
 		entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up; //Rotation
-		entity->im_Attribs.lvl = 3; //Text
+		entity->im_Attribs.im_Lvl = 3; //Text
 
 		entity->im_Attribs.im_LocalPos.x = 0.0f;
 		entity->im_Attribs.im_LocalPos.y = 0.0f;
@@ -702,7 +702,7 @@ void Scene::RenderHealthBar(const Entity* const entity){
 
 	modelStack.Translate(
 		0.0f,
-		gridType == HexGrid<float>::GridType::FlatTop ? 0.3f : 0.25f,
+		0.3f,
 		0.1f
 	);
 	modelStack.Scale(
@@ -715,7 +715,7 @@ void Scene::RenderHealthBar(const Entity* const entity){
 		modelStack.PushMatrix();
 
 		modelStack.Translate(
-			-(1.f - ratio) * 0.5f,
+			-(1.0f - ratio) * 0.5f,
 			0.0f,
 			0.0f
 		);
@@ -736,6 +736,27 @@ void Scene::RenderHealthBar(const Entity* const entity){
 }
 
 void Scene::RenderEntityLvl(const Entity* const entity){
+	modelStack.PushMatrix();
+
+	modelStack.Translate(
+		0.0f,
+		-0.4f,
+		0.1f
+	);
+	modelStack.Scale(
+		0.4f,
+		0.4f,
+		1.0f
+	);
+
+	RenderText(
+		meshList[(int)GeoType::TextMod1],
+		"Lvl " + std::to_string(entity->im_Attribs.im_Lvl),
+		Color(),
+		TextAlignment::Center
+	);
+
+	modelStack.PopMatrix();
 }
 
 void Scene::RenderMap(){
