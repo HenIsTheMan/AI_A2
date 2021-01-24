@@ -178,14 +178,14 @@ void Scene::Update(const double updateDt, const double renderDt){
 			if(!isKeyDownQ && App::Key('Q')){
 				entityFactory->SpawnRandUnit(Obj::EntityCreationAttribs<Vector3, float>{
 					Obj::EntityTeam::Player,
-					Obj::EntityFacingDir::Down,
+					Obj::EntityFacingDir::Right,
 					1,
 					Vector3(0.0f, 0.0f, 0.0f),
 					5.0f
 				});
 				entityFactory->SpawnRandUnit(Obj::EntityCreationAttribs<Vector3, float>{
 					Obj::EntityTeam::Player,
-					Obj::EntityFacingDir::Down,
+					Obj::EntityFacingDir::Right,
 					1,
 					Vector3(1.0f, 1.0f, 0.0f),
 					5.0f
@@ -349,32 +349,24 @@ void Scene::UpdateEntities(const double dt){
 	for(Entity* const& entity: activeEntities){
 		switch(entity->im_Attribs.im_Type){
 			case Obj::EntityType::Knight:
-				entity->im_Attribs.im_CurrHealth -= (float)dt;
-
 				if(entity->im_Attribs.im_CurrHealth <= 0.0f){
 					entitiesToDeactivate.emplace_back(entity);
 				}
 
 				break;
 			case Obj::EntityType::Gunner:
-				entity->im_Attribs.im_CurrHealth -= (float)dt;
-
 				if(entity->im_Attribs.im_CurrHealth <= 0.0f){
 					entitiesToDeactivate.emplace_back(entity);
 				}
 
 				break;
 			case Obj::EntityType::Healer:
-				entity->im_Attribs.im_CurrHealth -= (float)dt;
-
 				if(entity->im_Attribs.im_CurrHealth <= 0.0f){
 					entitiesToDeactivate.emplace_back(entity);
 				}
 
 				break;
 			case Obj::EntityType::King:
-				entity->im_Attribs.im_CurrHealth -= (float)dt;
-
 				if(entity->im_Attribs.im_CurrHealth <= 0.0f){
 					entitiesToDeactivate.emplace_back(entity);
 				}
@@ -653,14 +645,14 @@ void Scene::RenderEntityArt(const Entity* const entity){
 			if(gridType == HexGrid<float>::GridType::SharpTop){
 				if((int)entity->im_Attribs.im_LocalPos.y & 1){
 					modelStack.Rotate(
-						22.5f,
+						30.0f,
 						0.0f,
 						0.0f,
 						1.0f
 					);
 				} else{
 					modelStack.Rotate(
-						337.5f,
+						330.0f,
 						0.0f,
 						0.0f,
 						1.0f
@@ -679,14 +671,14 @@ void Scene::RenderEntityArt(const Entity* const entity){
 			} else{
 				if((int)entity->im_Attribs.im_LocalPos.y & 1){
 					modelStack.Rotate(
-						157.5f,
+						150.0f,
 						0.0f,
 						0.0f,
 						1.0f
 					);
 				} else{
 					modelStack.Rotate(
-						202.5f,
+						210.0f,
 						0.0f,
 						0.0f,
 						1.0f
@@ -696,12 +688,54 @@ void Scene::RenderEntityArt(const Entity* const entity){
 			break;
 		case Obj::EntityFacingDir::Left:
 			if(gridType == HexGrid<float>::GridType::FlatTop){
+				if((int)entity->im_Attribs.im_LocalPos.x & 1){
+					modelStack.Rotate(
+						120.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				} else{
+					modelStack.Rotate(
+						60.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				}
 			} else{
+				modelStack.Rotate(
+					90.0f,
+					0.0f,
+					0.0f,
+					1.0f
+				);
 			}
 			break;
 		case Obj::EntityFacingDir::Right:
 			if(gridType == HexGrid<float>::GridType::FlatTop){
+				if((int)entity->im_Attribs.im_LocalPos.x & 1){
+					modelStack.Rotate(
+						240.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				} else{
+					modelStack.Rotate(
+						300.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				}
 			} else{
+				modelStack.Rotate(
+					270.0f,
+					0.0f,
+					0.0f,
+					1.0f
+				);
 			}
 			break;
 		case Obj::EntityFacingDir::UL:
