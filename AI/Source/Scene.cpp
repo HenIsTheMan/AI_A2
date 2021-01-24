@@ -176,7 +176,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 			static bool isKeyDownQ = false;
 			if(!isKeyDownQ && App::Key('Q')){
-				entityFactory->SpawnKnight(Obj::EntityCreationAttribs<Vector3, float>{
+				entityFactory->SpawnRandUnit(Obj::EntityCreationAttribs<Vector3, float>{
 					Obj::EntityTeam::Player,
 					Obj::EntityFacingDir::Up,
 					1,
