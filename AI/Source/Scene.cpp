@@ -20,6 +20,8 @@ Scene::Scene():
 	customHue(0.0f),
 	creditsPlayer(0),
 	creditsAI(0),
+	spawnCostPlayer(10),
+	spawnCostAI(10),
 	gridType(HexGrid<float>::GridType::FlatTop),
 	gridCellScaleX(48.0f),
 	gridCellScaleY(48.0f),
@@ -1075,6 +1077,16 @@ void Scene::RenderSceneText(){
 		Color(),
 		textSize,
 		(float)windowWidth * 0.5f,
+		(float)windowHeight - textSize,
+		TextAlignment::Center,
+		-0.1f
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"AI's Spawn Cost: " + std::to_string(spawnCostAI),
+		Color(),
+		textSize,
+		(float)windowWidth * 0.5f,
 		(float)windowHeight - textSize * 2.0f,
 		TextAlignment::Center,
 		-0.1f
@@ -1082,6 +1094,16 @@ void Scene::RenderSceneText(){
 	RenderTextOnScreen(
 		textMesh,
 		"Your Credits: " + std::to_string(creditsPlayer),
+		Color(),
+		textSize,
+		(float)windowWidth * 0.5f,
+		0.0f,
+		TextAlignment::Center,
+		-0.1f
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"Your Spawn Cost: " + std::to_string(spawnCostPlayer),
 		Color(),
 		textSize,
 		(float)windowWidth * 0.5f,

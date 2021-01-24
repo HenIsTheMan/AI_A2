@@ -27,8 +27,11 @@ private:
 	bool shldRenderTileArt;
 	bool shldRenderFog;
 	float customHue;
+
 	int creditsPlayer;
 	int creditsAI;
+	int spawnCostPlayer;
+	int spawnCostAI;
 
 	HexGrid<float>::GridType gridType;
 	float gridCellScaleX;
