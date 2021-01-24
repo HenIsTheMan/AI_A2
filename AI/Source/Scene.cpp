@@ -1120,22 +1120,24 @@ void Scene::RenderSceneText(){
 	static float textSize = (float)windowWidth * 0.02f;
 
 	RenderTextOnScreen(
-		meshList[(int)GeoType::Text],
+		textMesh,
 		"AI's Credits: " + std::to_string(creditsAI),
 		Color(),
 		textSize,
 		(float)windowWidth * 0.5f,
 		(float)windowHeight - textSize * 2.0f,
-		TextAlignment::Center
+		TextAlignment::Center,
+		-0.1f
 	);
 	RenderTextOnScreen(
-		meshList[(int)GeoType::Text],
+		textMesh,
 		"Your Credits: " + std::to_string(creditsPlayer),
 		Color(),
 		textSize,
 		(float)windowWidth * 0.5f,
 		textSize,
-		TextAlignment::Center
+		TextAlignment::Center,
+		-0.1f
 	);
 
 	RenderDebugInfoText(textMesh, Color(0.0f, 1.0f, 0.0f), textSize);
@@ -1151,7 +1153,9 @@ void Scene::RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, co
 		textColor,
 		textSize,
 		0.0f,
-		textSize * 0.0f
+		textSize * 0.0f,
+		TextAlignment::Left,
+		-0.1f
 	);
 	RenderTextOnScreen(
 		textMesh,
@@ -1159,7 +1163,9 @@ void Scene::RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, co
 		textColor,
 		textSize,
 		0.0f,
-		textSize * 1.0f
+		textSize * 1.0f,
+		TextAlignment::Left,
+		-0.1f
 	);
 	RenderTextOnScreen(
 		textMesh,
@@ -1167,7 +1173,9 @@ void Scene::RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, co
 		textColor,
 		textSize,
 		0.0f,
-		textSize * 2.0f
+		textSize * 2.0f,
+		TextAlignment::Left,
+		-0.1f
 	);
 }
 
@@ -1203,7 +1211,9 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 			textColor,
 			textSize,
 			0.0f,
-			(float)windowHeight - textSize * float(i + 1)
+			(float)windowHeight - textSize * float(i + 1),
+			TextAlignment::Left,
+			-0.1f
 		);
 	}
 }
@@ -1216,7 +1226,8 @@ void Scene::RenderGridInfoText(Mesh* const textMesh, const Color& textColor, con
 		textSize,
 		(float)windowWidth,
 		textSize * 6.0f,
-		TextAlignment::Right
+		TextAlignment::Right,
+		-0.1f
 	);
 	RenderTextOnScreen(
 		textMesh,
@@ -1225,7 +1236,8 @@ void Scene::RenderGridInfoText(Mesh* const textMesh, const Color& textColor, con
 		textSize,
 		(float)windowWidth,
 		textSize * 5.0f,
-		TextAlignment::Right
+		TextAlignment::Right,
+		-0.1f
 	);
 	RenderTextOnScreen(
 		textMesh,
@@ -1234,7 +1246,8 @@ void Scene::RenderGridInfoText(Mesh* const textMesh, const Color& textColor, con
 		textSize,
 		(float)windowWidth,
 		textSize * 4.0f,
-		TextAlignment::Right
+		TextAlignment::Right,
+		-0.1f
 	);
 	RenderTextOnScreen(
 		textMesh,
@@ -1243,7 +1256,8 @@ void Scene::RenderGridInfoText(Mesh* const textMesh, const Color& textColor, con
 		textSize,
 		(float)windowWidth,
 		textSize * 3.0f,
-		TextAlignment::Right
+		TextAlignment::Right,
+		-0.1f
 	);
 	RenderTextOnScreen(
 		textMesh,
@@ -1252,7 +1266,8 @@ void Scene::RenderGridInfoText(Mesh* const textMesh, const Color& textColor, con
 		textSize,
 		(float)windowWidth,
 		textSize * 2.0f,
-		TextAlignment::Right
+		TextAlignment::Right,
+		-0.1f
 	);
 	RenderTextOnScreen(
 		textMesh,
@@ -1261,7 +1276,8 @@ void Scene::RenderGridInfoText(Mesh* const textMesh, const Color& textColor, con
 		textSize,
 		(float)windowWidth,
 		textSize * 1.0f,
-		TextAlignment::Right
+		TextAlignment::Right,
+		-0.1f
 	);
 	RenderTextOnScreen(
 		textMesh,
@@ -1270,7 +1286,8 @@ void Scene::RenderGridInfoText(Mesh* const textMesh, const Color& textColor, con
 		textSize,
 		(float)windowWidth,
 		textSize * 0.0f,
-		TextAlignment::Right
+		TextAlignment::Right,
+		-0.1f
 	);
 }
 
@@ -1320,7 +1337,8 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 			textSize,
 			(float)windowWidth,
 			(float)windowHeight - textSize * float(i + 1),
-			TextAlignment::Right
+			TextAlignment::Right,
+			-0.1f
 		);
 	}
 }
