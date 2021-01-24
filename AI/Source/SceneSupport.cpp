@@ -97,6 +97,7 @@ void SceneSupport::Init(){
 	meshList[(int)GeoType::Fog]->textureID = LoadImg("Imgs//Fog.png");
 	meshList[(int)GeoType::Quad] = MeshBuilder::GenerateQuad("Quad", Color(), 1.0f);
 	meshList[(int)GeoType::Circle] = MeshBuilder::GenCircle(Color(), 30, 0.5f);
+
 	meshList[(int)GeoType::Hex] = MeshBuilder::GenHex(Color(), 0.5f);
 	meshList[(int)GeoType::WallTile] = MeshBuilder::GenHex(Color(), 0.5f);
 	meshList[(int)GeoType::WallTile]->textureID = LoadImg("Imgs//Wall.png");
@@ -110,6 +111,15 @@ void SceneSupport::Init(){
 	meshList[(int)GeoType::GrassTile]->textureID = LoadImg("Imgs//Grass.png");
 	meshList[(int)GeoType::MudTile] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
 	meshList[(int)GeoType::MudTile]->textureID = LoadImg("Imgs//Mud.png");
+
+	meshList[(int)GeoType::Knight] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
+	meshList[(int)GeoType::Knight]->textureID = LoadImg("Imgs//Knight.png");
+	meshList[(int)GeoType::Gunner] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
+	meshList[(int)GeoType::Gunner]->textureID = LoadImg("Imgs//Gunner.png");
+	meshList[(int)GeoType::Healer] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
+	meshList[(int)GeoType::Healer]->textureID = LoadImg("Imgs//Healer.png");
+	meshList[(int)GeoType::King] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
+	meshList[(int)GeoType::King]->textureID = LoadImg("Imgs//King.png");
 }
 
 void SceneSupport::Update(const double updateDt, const double renderDt){

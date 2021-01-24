@@ -376,13 +376,18 @@ void Scene::UpdateEntities(const double dt){
 	if(!hasSpawned){
 		Entity* const entity = entityPool->ActivateObj();
 
-		entity->im_Attribs.im_Type = Obj::EntityType::Knight;
+		entity->im_Attribs.im_Type = Obj::EntityType::Knight; //Img
+		entity->im_Attribs.im_Team = Obj::EntityTeam::Player; //Color of BG
+		entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up; //Rotation
+		entity->im_Attribs.lvl = 3; //Text
 
 		entity->im_Attribs.im_LocalPos.x = 0.0f;
 		entity->im_Attribs.im_LocalPos.y = 0.0f;
 
 		entity->im_Attribs.im_CurrHealth = 5.0f;
 		entity->im_Attribs.im_MaxHealth = entity->im_Attribs.im_CurrHealth;
+
+		//entity->im_Attribs.im_CurrState //Text
 
 		hasSpawned = true;
 	}
@@ -406,7 +411,7 @@ void Scene::UpdateEntities(const double dt){
 		}
 	}
 
-	for(Entity* const& entity: entitiesToDeactivate){
+	for(Entity* const entity: entitiesToDeactivate){
 		entityPool->DeactivateObj(entity);
 	}
 	entitiesToDeactivate.clear();
@@ -609,16 +614,16 @@ void Scene::RenderCoverText(){
 	);
 }
 
-void Scene::RenderEntities(){
-	static float individualDepthOffset = 0.0f;
+static float individualDepthOffset = 0.0f;
 
+void Scene::RenderEntities(){
 	const float gridWidth = grid->CalcWidth();
 	const float gridHeight = grid->CalcHeight();
 
 	const float xOffset = ((float)windowWidth - gridWidth) * 0.5f;
 	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f;
 
-	for(const Entity* const& entity: activeEntities){
+	for(const Entity* const entity: activeEntities){
 		modelStack.PushMatrix();
 		const Vector3 localPos = Vector3(entity->im_Attribs.im_LocalPos.x, entity->im_Attribs.im_LocalPos.y, 0.0f);
 
@@ -646,44 +651,9 @@ void Scene::RenderEntities(){
 			);
 		}
 
-		RenderMesh(meshList[(int)GeoType::Circle], true, Color(), 1.0f);
-
-			const float ratio = entity->im_Attribs.im_CurrHealth / entity->im_Attribs.im_MaxHealth;
-			modelStack.PushMatrix();
-
-			modelStack.Translate(
-				0.0f,
-				gridType == HexGrid<float>::GridType::FlatTop ? 0.3f : 0.25f,
-				0.25f + individualDepthOffset
-			);
-			modelStack.Scale(
-				0.5f,
-				0.07f,
-				1.0f
-			);
-
-			if(entity->im_Attribs.im_CurrHealth > 0.0f){
-				modelStack.PushMatrix();
-
-				modelStack.Translate(
-					-(1.f - ratio) * 0.5f,
-					0.0f,
-					0.0f
-				);
-				modelStack.Scale(
-					ratio - 0.04f,
-					0.8f,
-					1.0f
-				);
-
-				RenderMesh(meshList[(int)GeoType::Quad], true, Color::HSVToRGB({ratio * 120.0f, 1.0f, 1.0f}), 1.0f);
-
-				modelStack.PopMatrix();
-			}
-
-			RenderMesh(meshList[(int)GeoType::Quad], true, Color(0.1f, 0.1f, 0.1f), 1.0f);
-
-			modelStack.PopMatrix();
+		RenderMesh(meshList[(int)GeoType::Circle], true, entity->im_Attribs.im_Team == Obj::EntityTeam::AI ? Color(0.4f, 0.0f, 0.0f) : Color(0.0f, 0.4f, 0.0f), 1.0f);
+		RenderEntityArt(entity);
+		RenderHealthBar(entity);
 
 		modelStack.PopMatrix();
 
@@ -691,6 +661,77 @@ void Scene::RenderEntities(){
 	}
 
 	individualDepthOffset = 0.0f;
+}
+
+void Scene::RenderEntityArt(const Entity* const entity){
+	modelStack.PushMatrix();
+
+	modelStack.Translate(
+		0.0f,
+		0.0f,
+		0.05f
+	);
+	modelStack.Scale(
+		0.6f,
+		0.6f,
+		1.0f
+	);
+
+	switch(entity->im_Attribs.im_Type){
+		case Obj::EntityType::Knight:
+			RenderMesh(meshList[(int)GeoType::Knight], false);
+			break;
+		case Obj::EntityType::Gunner:
+			RenderMesh(meshList[(int)GeoType::Gunner], false);
+			break;
+		case Obj::EntityType::Healer:
+			RenderMesh(meshList[(int)GeoType::Healer], false);
+			break;
+		case Obj::EntityType::King:
+			RenderMesh(meshList[(int)GeoType::King], false);
+			break;
+	}
+
+	modelStack.PopMatrix();
+}
+
+void Scene::RenderHealthBar(const Entity* const entity){
+	const float ratio = entity->im_Attribs.im_CurrHealth / entity->im_Attribs.im_MaxHealth;
+	modelStack.PushMatrix();
+
+	modelStack.Translate(
+		0.0f,
+		gridType == HexGrid<float>::GridType::FlatTop ? 0.3f : 0.25f,
+		0.25f + individualDepthOffset
+	);
+	modelStack.Scale(
+		0.5f,
+		0.07f,
+		1.0f
+	);
+
+	if(entity->im_Attribs.im_CurrHealth > 0.0f){
+		modelStack.PushMatrix();
+
+		modelStack.Translate(
+			-(1.f - ratio) * 0.5f,
+			0.0f,
+			0.0f
+		);
+		modelStack.Scale(
+			ratio - 0.04f,
+			0.8f,
+			1.0f
+		);
+
+		RenderMesh(meshList[(int)GeoType::Quad], true, Color::HSVToRGB({ratio * 120.0f, 1.0f, 1.0f}), 1.0f);
+
+		modelStack.PopMatrix();
+	}
+
+	RenderMesh(meshList[(int)GeoType::Quad], true, Color(0.1f, 0.1f, 0.1f), 1.0f);
+
+	modelStack.PopMatrix();
 }
 
 void Scene::RenderMap(){
@@ -921,7 +962,7 @@ void Scene::RenderTile(const std::vector<TileType>& tileLayer, const int r, cons
 					1.0f
 				);
 
-				RenderMesh(meshList[(int)GeoType::SoilTile], true, Color(), 1.0f);
+				RenderMesh(meshList[(int)GeoType::SoilTile], false);
 
 				modelStack.PopMatrix();
 			}
@@ -981,7 +1022,7 @@ void Scene::RenderTile(const std::vector<TileType>& tileLayer, const int r, cons
 					1.0f
 				);
 
-				RenderMesh(meshList[(int)GeoType::WaterTile], true, Color(), 1.0f);
+				RenderMesh(meshList[(int)GeoType::WaterTile], false);
 
 				modelStack.PopMatrix();
 			}
@@ -1041,7 +1082,7 @@ void Scene::RenderTile(const std::vector<TileType>& tileLayer, const int r, cons
 					1.0f
 				);
 
-				RenderMesh(meshList[(int)GeoType::MudTile], true, Color(), 1.0f);
+				RenderMesh(meshList[(int)GeoType::MudTile], false);
 
 				modelStack.PopMatrix();
 			}

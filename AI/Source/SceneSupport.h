@@ -45,6 +45,10 @@ public:
 		WaterTile,
 		GrassTile,
 		MudTile,
+		Knight,
+		Gunner,
+		Healer,
+		King,
 		Amt
 	};
 

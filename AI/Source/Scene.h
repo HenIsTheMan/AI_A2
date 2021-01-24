@@ -66,6 +66,8 @@ private:
 	void RenderCoverMap();
 	void RenderCoverText();
 	void RenderEntities();
+	void RenderEntityArt(const Entity* const entity);
+	void RenderHealthBar(const Entity* const entity);
 	void RenderMap();
 	void RenderFog(const std::vector<FogType>& fogLayer, const int r, const int c);
 	void RenderTile(const std::vector<TileType>& tileLayer, const int r, const int c);
