@@ -524,10 +524,31 @@ void Sim::Update(const double dt){
 		} else{
 			turn = savedTurn == SimTurn::Player ? SimTurn::AI : SimTurn::Player;
 		}
+
 		turnElapsedTime = 0.0f;
+
+		//Add credits using an event??
+		switch(mode){
+			case SimMode::ProtectTheKing:
+				break;
+			case SimMode::LastTeamStanding:
+				break;
+			case SimMode::GreatestAreaPainted:
+				break;
+		}
 	}
+
 	if(timeOfDayElapsedTime >= timeOfDayDuration){
 		timeOfDay = (SimTimeOfDay)Math::RandIntMinMax((int)SimTimeOfDay::Day, (int)SimTimeOfDay::Amt - 1);
 		timeOfDayElapsedTime = 0.0f;
+	}
+
+	switch(mode){
+		case SimMode::ProtectTheKing:
+			break;
+		case SimMode::LastTeamStanding:
+			break;
+		case SimMode::GreatestAreaPainted:
+			break;
 	}
 }
