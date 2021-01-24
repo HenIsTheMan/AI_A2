@@ -83,6 +83,7 @@ private:
 	void RenderSimInfoText(Mesh* const textMesh, const Color& textColor, const float textSize);
 
 	void MakeSimMap();
+	void SpawnRandUnit();
 
 	int OnEvent(Event* myEvent, const bool destroyEvent = false) override;
 };

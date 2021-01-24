@@ -168,6 +168,14 @@ void Scene::Update(const double updateDt, const double renderDt){
 				isKeyDownSpace = false;
 			}
 
+			static bool isKeyDownQ = false;
+			if(!isKeyDownQ && App::Key('Q')){
+				SpawnRandUnit();
+				isKeyDownQ = true;
+			} else if(isKeyDownQ && !App::Key('Q')){
+				isKeyDownQ = false;
+			}
+
 			sim->Update(updateDt); //Not (dt * sim->spd) as...
 			UpdateEntities(updateDt * sim->spd);
 
@@ -319,26 +327,6 @@ void Scene::UpdateMisc(const double dt){
 }
 
 void Scene::UpdateEntities(const double dt){
-	static bool hasSpawned = false;
-	if(!hasSpawned){
-		Entity* const entity = entityPool->ActivateObj();
-
-		entity->im_Attribs.im_Type = Obj::EntityType::Knight; //Img
-		entity->im_Attribs.im_Team = Obj::EntityTeam::Player; //Color of BG
-		entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up; //Rotation
-		entity->im_Attribs.im_Lvl = 3; //Text
-
-		entity->im_Attribs.im_LocalPos.x = 0.0f;
-		entity->im_Attribs.im_LocalPos.y = 0.0f;
-
-		entity->im_Attribs.im_CurrHealth = 5.0f;
-		entity->im_Attribs.im_MaxHealth = entity->im_Attribs.im_CurrHealth;
-
-		//entity->im_Attribs.im_CurrState //Text
-
-		hasSpawned = true;
-	}
-
 	for(Entity* const& entity: activeEntities){
 		switch(entity->im_Attribs.im_Type){
 			case Obj::EntityType::Knight:
@@ -1349,6 +1337,23 @@ void Scene::MakeSimMap(){
 		case SimMode::GreatestAreaPainted:
 			break;
 	}
+}
+
+void Scene::SpawnRandUnit(){
+	Entity* const entity = entityPool->ActivateObj();
+
+	entity->im_Attribs.im_Type = Obj::EntityType::Knight; //Img
+	entity->im_Attribs.im_Team = Obj::EntityTeam::Player; //Color of BG
+	entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up; //Rotation
+	entity->im_Attribs.im_Lvl = 3; //Text
+
+	entity->im_Attribs.im_LocalPos.x = 0.0f;
+	entity->im_Attribs.im_LocalPos.y = 0.0f;
+
+	entity->im_Attribs.im_CurrHealth = 5.0f;
+	entity->im_Attribs.im_MaxHealth = entity->im_Attribs.im_CurrHealth;
+
+	//entity->im_Attribs.im_CurrState //Text
 }
 
 int Scene::OnEvent(Event* myEvent, const bool destroyEvent){
