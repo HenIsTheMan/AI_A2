@@ -614,9 +614,9 @@ void Scene::RenderCoverText(){
 	);
 }
 
-static float individualDepthOffset = 0.0f;
-
 void Scene::RenderEntities(){
+	static float individualDepthOffset = 0.0f;
+
 	const float gridWidth = grid->CalcWidth();
 	const float gridHeight = grid->CalcHeight();
 
@@ -654,6 +654,7 @@ void Scene::RenderEntities(){
 		RenderMesh(meshList[(int)GeoType::Circle], true, entity->im_Attribs.im_Team == Obj::EntityTeam::AI ? Color(0.4f, 0.0f, 0.0f) : Color(0.0f, 0.4f, 0.0f), 1.0f);
 		RenderEntityArt(entity);
 		RenderHealthBar(entity);
+		RenderEntityLvl(entity);
 
 		modelStack.PopMatrix();
 
@@ -702,7 +703,7 @@ void Scene::RenderHealthBar(const Entity* const entity){
 	modelStack.Translate(
 		0.0f,
 		gridType == HexGrid<float>::GridType::FlatTop ? 0.3f : 0.25f,
-		0.25f + individualDepthOffset
+		0.1f
 	);
 	modelStack.Scale(
 		0.5f,
@@ -732,6 +733,9 @@ void Scene::RenderHealthBar(const Entity* const entity){
 	RenderMesh(meshList[(int)GeoType::Quad], true, Color(0.1f, 0.1f, 0.1f), 1.0f);
 
 	modelStack.PopMatrix();
+}
+
+void Scene::RenderEntityLvl(const Entity* const entity){
 }
 
 void Scene::RenderMap(){
