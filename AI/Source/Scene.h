@@ -54,6 +54,7 @@ private:
 	Publisher* publisher;
 
 	const std::vector<Entity*>& activeEntities;
+	std::vector<Entity*> entitiesToDeactivate;
 
 	std::thread* myThread;
 

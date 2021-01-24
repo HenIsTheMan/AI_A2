@@ -38,6 +38,7 @@ Scene::Scene():
 	entityPool(ObjPool<Entity>::RetrieveGlobalObjPtr()),
 	publisher(Publisher::RetrieveGlobalObjPtr()),
 	activeEntities(entityPool->GetActiveObjs()),
+	entitiesToDeactivate(),
 	myThread(nullptr)
 {
 }
@@ -74,6 +75,7 @@ void Scene::Init(){
 	SceneSupport::Init();
 
 	const size_t entityPoolSize = 40000;
+	entitiesToDeactivate.reserve(entityPoolSize);
 	entityPool->Init(entityPoolSize, entityPoolSize);
 
 	sim->status = SimRuntimeStatus::Waiting;
@@ -384,6 +386,12 @@ void Scene::UpdateEntities(const double dt){
 	for(Entity* const& entity: activeEntities){
 		switch(entity->im_Attribs.im_Type){
 			case Obj::EntityType::Knight:
+				entity->im_Attribs.im_CurrHealth -= (float)dt;
+
+				if(entity->im_Attribs.im_CurrHealth <= 0.0f){
+					entitiesToDeactivate.emplace_back(entity);
+				}
+
 				break;
 			case Obj::EntityType::Gunner:
 				break;
@@ -393,6 +401,11 @@ void Scene::UpdateEntities(const double dt){
 				break;
 		}
 	}
+
+	for(Entity* const& entity: entitiesToDeactivate){
+		entityPool->DeactivateObj(entity);
+	}
+	entitiesToDeactivate.clear();
 }
 
 void Scene::Render(){
@@ -646,8 +659,8 @@ void Scene::RenderEntities(){
 				0.25f + individualDepthOffset
 			);
 			modelStack.Scale(
-				0.9f,
-				0.05f,
+				0.5f,
+				0.07f,
 				1.0f
 			);
 
@@ -660,16 +673,17 @@ void Scene::RenderEntities(){
 					0.0f
 				);
 				modelStack.Scale(
-					ratio - 0.05f,
-					0.5f,
+					ratio - 0.04f,
+					0.8f,
 					1.0f
 				);
 
-				RenderMesh(meshList[(int)GeoType::Quad], true, Color(ratio < 0.5f ? 1.0f : (1.0f - ratio) * 2.0f, ratio > 0.5f ? 1.0f : ratio * 2.0f, 0.0f), 1.0f);
-				modelStack.PopMatrix();
+				RenderMesh(meshList[(int)GeoType::Quad], true, Color::HSVToRGB({ratio * 120.0f, 1.0f, 1.0f}), 1.0f);
 
-				RenderMesh(meshList[(int)GeoType::Quad], true, Color(0.1f, 0.1f, 0.1f), 1.0f);
+				modelStack.PopMatrix();
 			}
+
+			RenderMesh(meshList[(int)GeoType::Quad], true, Color(0.1f, 0.1f, 0.1f), 1.0f);
 
 			modelStack.PopMatrix();
 
