@@ -50,7 +50,7 @@ private:
 
 	Sim* sim;
 	HexGrid<float>* grid;
-	ObjPool<Entity>* entityPool;
+	Obj::ObjPool<Entity>* entityPool;
 	Publisher* publisher;
 
 	const std::vector<Entity*>& activeEntities;

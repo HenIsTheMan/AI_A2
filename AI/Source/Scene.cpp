@@ -35,7 +35,7 @@ Scene::Scene():
 	gridMaxCols(20),
 	sim(new Sim()),
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
-	entityPool(ObjPool<Entity>::RetrieveGlobalObjPtr()),
+	entityPool(Obj::ObjPool<Entity>::RetrieveGlobalObjPtr()),
 	publisher(Publisher::RetrieveGlobalObjPtr()),
 	activeEntities(entityPool->GetActiveObjs()),
 	entitiesToDeactivate(),
@@ -375,11 +375,15 @@ void Scene::UpdateEntities(const double dt){
 	static bool hasSpawned = false;
 	if(!hasSpawned){
 		Entity* const entity = entityPool->ActivateObj();
+
 		entity->im_Attribs.im_Type = Obj::EntityType::Knight;
+
 		entity->im_Attribs.im_LocalPos.x = 0.0f;
 		entity->im_Attribs.im_LocalPos.y = 0.0f;
+
 		entity->im_Attribs.im_CurrHealth = 5.0f;
 		entity->im_Attribs.im_MaxHealth = entity->im_Attribs.im_CurrHealth;
+
 		hasSpawned = true;
 	}
 

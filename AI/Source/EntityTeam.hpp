@@ -1,8 +1,10 @@
 #pragma once
 
-enum struct EntityTeam: short{
-	None,
-	Player,
-	AI,
-	Amt
-};
+namespace Obj{
+	enum struct EntityTeam: short{
+		None,
+		Player,
+		AI,
+		Amt
+	};
+}
