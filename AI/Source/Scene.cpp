@@ -1350,32 +1350,50 @@ void Scene::RenderGridCellOfMouse(){
 
 	//if(trueMouseX > xOffset + gridLineThickness * 0.5f && trueMouseX < xOffset + gridWidth - gridLineThickness * 0.5f
 		//&& trueMouseY > yOffset + gridLineThickness * 0.5f && trueMouseY < yOffset + gridHeight - gridLineThickness * 0.5f){
-		const float unitX = gridCellScaleX + gridLineThickness;
-		const float unitY = gridCellScaleY + gridLineThickness;
+		float unitX = gridLineThickness;
+		float unitY = gridLineThickness;
+		if(gridType == HexGrid<float>::GridType::FlatTop){
+			unitX += grid->CalcCellSharpToSharpLen();
+			unitY += grid->CalcCellFlatToFlatLen();
+		} else{
+			unitX += grid->CalcCellFlatToFlatLen();
+			unitY += grid->CalcCellSharpToSharpLen();
+		}
 
 		const float mouseRow = std::floor(((float)windowHeight - trueMouseY - yOffset - gridLineThickness * 0.5f) / unitY);
 		const float mouseCol = std::floor((trueMouseX - xOffset - gridLineThickness * 0.5f) / unitX);
-		const float xTranslate = mouseCol * unitX
-			+ xOffset
-			+ gridCellScaleX * 0.5f
-			+ gridLineThickness;
-		const float yTranslate = mouseRow * unitY
-			+ yOffset
-			+ gridCellScaleY * 0.5f
-			+ gridLineThickness;
 
 		modelStack.PushMatrix();
 
-		modelStack.Translate(
-			xTranslate,
-			yTranslate,
-			0.1f
-		);
-		modelStack.Scale(
-			gridCellScaleX,
-			gridCellScaleY,
-			1.0f
-		);
+		if(gridType == HexGrid<float>::GridType::FlatTop){
+			modelStack.Translate(
+				xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)mouseCol,
+				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)mouseRow + ((int)mouseCol & 1) * grid->CalcAltOffsetY(),
+				0.1f
+			);
+			modelStack.Scale(
+				gridCellScaleX,
+				gridCellScaleY,
+				1.0f
+			);
+		} else{
+			modelStack.Translate(
+				xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)mouseCol + ((int)mouseRow & 1) * grid->CalcAltOffsetX(),
+				yOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)mouseRow,
+				0.1f
+			);
+			modelStack.Rotate(
+				90.0f,
+				0.0f,
+				0.0f,
+				1.0f
+			);
+			modelStack.Scale(
+				gridCellScaleY,
+				gridCellScaleX,
+				1.0f
+			);
+		}
 
 		RenderMesh(meshList[(int)GeoType::Hex], true, Color(), 0.5f);
 
