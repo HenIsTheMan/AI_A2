@@ -643,12 +643,32 @@ void Scene::RenderEntityArt(const Entity* const entity){
 	);
 	switch(entity->im_Attribs.im_FacingDir){
 		case Obj::EntityFacingDir::Up:
-			if(gridType == HexGrid<float>::GridType::FlatTop){
-			} else{
+			if(gridType == HexGrid<float>::GridType::SharpTop){
+				if((int)entity->im_Attribs.im_LocalPos.y & 1){
+					modelStack.Rotate(
+						15.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				} else{
+					modelStack.Rotate(
+						345.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+				}
 			}
 			break;
 		case Obj::EntityFacingDir::Down:
 			if(gridType == HexGrid<float>::GridType::FlatTop){
+				modelStack.Rotate(
+					180.0f,
+					0.0f,
+					0.0f,
+					1.0f
+				);
 			} else{
 			}
 			break;
