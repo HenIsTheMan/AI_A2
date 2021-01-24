@@ -376,8 +376,8 @@ void Scene::UpdateEntities(const double dt){
 	if(!hasSpawned){
 		Entity* const entity = entityPool->ActivateObj();
 		entity->im_Attribs.im_Type = Obj::EntityType::Knight;
-		entity->im_Attribs.im_LocalPos.x = 2.0f;
-		entity->im_Attribs.im_LocalPos.y = 2.0f;
+		entity->im_Attribs.im_LocalPos.x = 0.0f;
+		entity->im_Attribs.im_LocalPos.y = 0.0f;
 		entity->im_Attribs.im_CurrHealth = 5.0f;
 		entity->im_Attribs.im_MaxHealth = entity->im_Attribs.im_CurrHealth;
 		hasSpawned = true;
@@ -625,37 +625,43 @@ void Scene::RenderEntities(){
 				0.25f + individualDepthOffset
 			);
 			modelStack.Scale(
-				gridCellScaleX + gridLineThickness * 2.5f,
-				gridCellScaleY + gridLineThickness * 2.5f,
+				gridCellScaleX,
+				gridCellScaleY,
 				1.0f
 			);
+
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(), 1.0f);
 		} else{
 			modelStack.Translate(
 				xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * localPos.x + ((int)localPos.y & 1) * grid->CalcAltOffsetX(),
 				yOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * localPos.y,
 				0.25f + individualDepthOffset
 			);
+			modelStack.Scale(
+				gridCellScaleY,
+				gridCellScaleX,
+				1.0f
+			);
+
+			modelStack.PushMatrix();
+
 			modelStack.Rotate(
 				90.0f,
 				0.0f,
 				0.0f,
 				1.0f
 			);
-			modelStack.Scale(
-				gridCellScaleY + gridLineThickness * 2.5f,
-				gridCellScaleX + gridLineThickness * 2.5f,
-				1.0f
-			);
+
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(), 1.0f);
+
+			modelStack.PopMatrix();
 		}
-
-		RenderMesh(meshList[(int)GeoType::Hex], true, Color(), 1.0f);
-
 			const float ratio = entity->im_Attribs.im_CurrHealth / entity->im_Attribs.im_MaxHealth;
 			modelStack.PushMatrix();
 
 			modelStack.Translate(
 				0.0f,
-				0.3f,
+				gridType == HexGrid<float>::GridType::FlatTop ? 0.3f : 0.25f,
 				0.25f + individualDepthOffset
 			);
 			modelStack.Scale(
