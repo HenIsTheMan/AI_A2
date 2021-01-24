@@ -81,10 +81,10 @@ void Scene::Init(){
 	sim->status = SimRuntimeStatus::Waiting;
 	sim->mode = SimMode::ProtectTheKing;
 	sim->spd = 1.0f;
-	sim->turnDuration = 5.0f;
+	sim->turnDuration = 10.0f;
 	sim->turnElapsedTime = 0.0f;
 	sim->turn = (bool)Math::RandIntMinMax(0, 1) ? SimTurn::Player : SimTurn::AI;
-	sim->timeOfDayDuration = 10.0f;
+	sim->timeOfDayDuration = 20.0f;
 	sim->timeOfDayElapsedTime = 0.0f;
 	sim->timeOfDay = (SimTimeOfDay)Math::RandIntMinMax((int)SimTimeOfDay::Day, (int)SimTimeOfDay::Amt - 1);
 
@@ -297,78 +297,6 @@ void Scene::UpdateMisc(const double dt){
 		isKeyDownMinus = false;
 	}
 	simSpd = Math::Clamp(simSpd, 0.2f, 4.0f);
-
-	static bool isKeyDownC = false;
-	static bool isKeyDownV = false;
-	if(!isKeyDownC && App::Key('C')){
-		static SimTurn savedTurn = SimTurn::Amt;
-		if(sim->turn != SimTurn::Environment){
-			if(Math::RandIntMinMax(1, 10) <= 2){
-				savedTurn = sim->turn;
-				sim->turn = SimTurn::Environment;
-			} else{
-				sim->turn = sim->turn == SimTurn::Player ? SimTurn::AI : SimTurn::Player;
-			}
-		} else{
-			sim->turn = savedTurn == SimTurn::Player ? SimTurn::AI : SimTurn::Player;
-		}
-
-		isKeyDownC = true;
-	} else if(isKeyDownC && !App::Key('C')){
-		isKeyDownC = false;
-	}
-	if(!isKeyDownV && App::Key('V')){
-		sim->timeOfDay = (SimTimeOfDay)Math::RandIntMinMax((int)SimTimeOfDay::Day, (int)SimTimeOfDay::Amt - 1);
-		isKeyDownV = true;
-	} else if(isKeyDownV && !App::Key('V')){
-		isKeyDownV = false;
-	}
-
-	static bool isKeyDownB = false;
-	static bool isKeyDownN = false;
-	if(!isKeyDownB && App::Key('B')){
-		sim->turnElapsedTime = 0.0f;
-		isKeyDownB = true;
-	} else if(isKeyDownB && !App::Key('B')){
-		isKeyDownB = false;
-	}
-	if(!isKeyDownN && App::Key('N')){
-		sim->timeOfDayElapsedTime = 0.0f;
-		isKeyDownN = true;
-	} else if(isKeyDownN && !App::Key('N')){
-		isKeyDownN = false;
-	}
-
-	static bool isKeyDownT = false;
-	static bool isKeyDownY = false;
-	static bool isKeyDownU = false;
-	static bool isKeyDownI = false;
-	if(!isKeyDownT && App::Key('T')){
-		sim->turnDuration += 0.1f;
-		isKeyDownT = true;
-	} else if(isKeyDownT && !App::Key('T')){
-		isKeyDownT = false;
-	}
-	if(!isKeyDownY && App::Key('Y')){
-		sim->turnDuration -= 0.1f;
-		isKeyDownY = true;
-	} else if(isKeyDownY && !App::Key('Y')){
-		isKeyDownY = false;
-	}
-	if(!isKeyDownU && App::Key('U')){
-		sim->timeOfDayDuration += 0.1f;
-		RoundedTo2dp(sim->timeOfDayDuration);
-		isKeyDownU = true;
-	} else if(isKeyDownU && !App::Key('U')){
-		isKeyDownU = false;
-	}
-	if(!isKeyDownI && App::Key('I')){
-		sim->timeOfDayDuration -= 0.1f;
-		RoundedTo2dp(sim->timeOfDayDuration);
-		isKeyDownI = true;
-	} else if(isKeyDownI && !App::Key('I')){
-		isKeyDownI = false;
-	}
 }
 
 void Scene::UpdateEntities(const double dt){
@@ -1198,14 +1126,6 @@ void Scene::RenderControlsText(Mesh* const textMesh, const Color& textColor, con
 		"0: Toggle fog",
 		"+: Increase sim spd",
 		"-: Decrease sim spd",
-		"C: Change sim turn manually",
-		"V: Change sim time of day manually",
-		"B: Reset sim turn elapsed time",
-		"N: Reset sim time of day elapsed time",
-		"T: Increase sim turn duration",
-		"Y: Decrease sim turn duration",
-		"U: Increase sim time of day duration",
-		"I: Decrease sim time of day duration",
 	};
 	static size_t size = sizeof(texts) / sizeof(texts[0]);
 
