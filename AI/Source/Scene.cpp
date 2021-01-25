@@ -8,6 +8,8 @@
 #include "EventAddCredits.h"
 #include "ListenerFlags.hpp"
 
+#include "KnightCreationAttribs.h"
+
 extern double mouseScrollWheelYOffset;
 extern int windowWidth;
 extern int windowHeight;
@@ -171,20 +173,8 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 			static bool isKeyDownQ = false;
 			if(!isKeyDownQ && App::Key('Q')){
-				entityFactory->SpawnRandUnit(Obj::EntityCreationAttribs<Vector3, float>{
-					Obj::EntityTeam::Player,
-					Obj::EntityFacingDir::UL,
-					1,
-					Vector3(0.0f, 0.0f, 0.0f),
-					5.0f
-				});
-				entityFactory->SpawnRandUnit(Obj::EntityCreationAttribs<Vector3, float>{
-					Obj::EntityTeam::Player,
-					Obj::EntityFacingDir::UL,
-					1,
-					Vector3(1.0f, 1.0f, 0.0f),
-					5.0f
-				});
+				entityFactory->SpawnRandUnit(Obj::KnightCreationAttribs<Vector3, float>());
+
 				isKeyDownQ = true;
 			} else if(isKeyDownQ && !App::Key('Q')){
 				isKeyDownQ = false;

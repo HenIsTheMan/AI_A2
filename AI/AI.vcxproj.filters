@@ -118,19 +118,16 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Entity.h">
-      <Filter>Obj</Filter>
+      <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\EntityAttribs.hpp">
-      <Filter>Obj</Filter>
+      <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\EntityTeam.hpp">
-      <Filter>Obj</Filter>
+      <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\EntityType.hpp">
-      <Filter>Obj</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ObjPool.h">
-      <Filter>Obj</Filter>
+      <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\Easing.hpp">
       <Filter>Misc</Filter>
@@ -139,16 +136,16 @@
       <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Source\EntityFacingDir.hpp">
-      <Filter>Obj</Filter>
+      <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\EntityActionType.hpp">
-      <Filter>Obj</Filter>
+      <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\EntityMovementType.hpp">
-      <Filter>Obj</Filter>
+      <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\EntityVisionType.hpp">
-      <Filter>Obj</Filter>
+      <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\Sim.h">
       <Filter>Sim</Filter>
@@ -169,10 +166,22 @@
       <Filter>Event\Events</Filter>
     </ClInclude>
     <ClInclude Include="Source\EntityFactory.h">
-      <Filter>Obj</Filter>
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ObjPool.h">
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Source\EntityCreationAttribs.hpp">
-      <Filter>Obj</Filter>
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GunnerCreationAttribs.h">
+      <Filter>Entity\CreationAttribs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HealerCreationAttribs.h">
+      <Filter>Entity\CreationAttribs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\KnightCreationAttribs.h">
+      <Filter>Entity\CreationAttribs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -197,9 +206,6 @@
     <Filter Include="Event\Events\Pre-events">
       <UniqueIdentifier>{52777eee-28d2-498c-bd93-5e6aa1918a0a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Obj">
-      <UniqueIdentifier>{14dcf655-cd65-4a91-8e2e-c0a7b40258a4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Misc">
       <UniqueIdentifier>{4cbf9812-0b34-4709-963a-225b9ab37d8d}</UniqueIdentifier>
     </Filter>
@@ -221,6 +227,12 @@
     <Filter Include="Misc\Others\Shaders">
       <UniqueIdentifier>{66b8b471-8130-446e-a930-3e71384e6365}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entity">
+      <UniqueIdentifier>{14dcf655-cd65-4a91-8e2e-c0a7b40258a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity\CreationAttribs">
+      <UniqueIdentifier>{ae5e80a8-1856-44d4-b64a-6a956bee3c90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\StateMachine.inl">
@@ -236,13 +248,22 @@
       <Filter>Misc</Filter>
     </None>
     <None Include="Source\Entity.inl">
-      <Filter>Obj</Filter>
-    </None>
-    <None Include="Source\ObjPool.inl">
-      <Filter>Obj</Filter>
+      <Filter>Entity</Filter>
     </None>
     <None Include="Source\EntityFactory.inl">
-      <Filter>Obj</Filter>
+      <Filter>Entity</Filter>
+    </None>
+    <None Include="Source\ObjPool.inl">
+      <Filter>Misc</Filter>
+    </None>
+    <None Include="Source\GunnerCreationAttribs.inl">
+      <Filter>Entity\CreationAttribs</Filter>
+    </None>
+    <None Include="Source\HealerCreationAttribs.inl">
+      <Filter>Entity\CreationAttribs</Filter>
+    </None>
+    <None Include="Source\KnightCreationAttribs.inl">
+      <Filter>Entity\CreationAttribs</Filter>
     </None>
   </ItemGroup>
 </Project>
