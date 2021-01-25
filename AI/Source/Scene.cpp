@@ -442,6 +442,11 @@ void Scene::Render(){
 			break;
 		case SimRuntimeStatus::Ongoing:
 			RenderMap();
+			if(shldRenderFog){
+				glDepthFunc(GL_ALWAYS);
+				RenderFog();
+				glDepthFunc(GL_LESS);
+			}
 			RenderEntities();
 			if(sim->turn == SimTurn::Player){
 				RenderGridCellOfMouse();
@@ -1076,9 +1081,61 @@ void Scene::RenderMap(){
 			modelStack.PopMatrix();
 		}
 	}
+}
 
-	if(shldRenderFog){
-		//??
+void Scene::RenderFog(){
+	const float offsetX = sinf(10.0f * elapsedTime);
+	const float offsetY = cosf(10.0f * elapsedTime);
+
+	static float startAngle = -400.0f;
+	static float endAngle = 400.0f;
+	const float lerpFactor = EaseInOutSine((sinf(0.4f * elapsedTime) + cosf(0.4f * elapsedTime)) * 0.25f + 0.5f);
+	const float angle = (1.0f - lerpFactor) * startAngle + lerpFactor * endAngle;
+
+	for(int r = 0; r < gridRows; ++r){
+		for(int c = 0; c < gridCols; ++c){
+			modelStack.PushMatrix();
+
+			if(gridType == HexGrid<float>::GridType::FlatTop){
+				modelStack.Translate(
+					gridOffsetX + (gridCellSideLen * 1.5f + gridLineThickness) * (float)c + offsetX,
+					gridOffsetY + (gridCellFlatToFlatLen + gridLineThickness) * (float)r + (c & 1) * gridAltOffsetY + offsetY,
+					0.1f
+				);
+				modelStack.Rotate(
+					angle,
+					0.0f,
+					0.0f,
+					1.0f
+				);
+				modelStack.Scale(
+					gridCellScaleX,
+					gridCellScaleY,
+					1.0f
+				);
+			} else{
+				modelStack.Translate(
+					gridOffsetX + (gridCellFlatToFlatLen + gridLineThickness) * (float)c + (r & 1) * gridAltOffsetX + offsetX,
+					gridOffsetY + (gridCellSideLen * 1.5f + gridLineThickness) * (float)r + offsetY,
+					0.1f
+				);
+				modelStack.Rotate(
+					angle,
+					0.0f,
+					0.0f,
+					1.0f
+				);
+				modelStack.Scale(
+					gridCellScaleY,
+					gridCellScaleX,
+					1.0f
+				);
+			}
+
+			RenderMesh(meshList[(int)GeoType::Fog], true, Color(1.0f, 0.63f, 0.63f), 0.8f);
+
+			modelStack.PopMatrix();
+		}
 	}
 }
 

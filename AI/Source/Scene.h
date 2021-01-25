@@ -88,6 +88,7 @@ private:
 	void RenderHealthBar(const Entity* const entity);
 	void RenderEntityLvl(const Entity* const entity);
 	void RenderMap();
+	void RenderFog();
 	void RenderTile(const std::vector<TileType>& tileLayer, const int r, const int c);
 	void RenderGridCellOfMouse();
 	void RenderSelectedGridCell();
