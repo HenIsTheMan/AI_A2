@@ -1,4 +1,8 @@
 namespace Obj{
+	EntityFacingDir ChooseRandFacingDir(){
+		return (EntityFacingDir)Math::RandIntMinMax(1, (int)EntityFacingDir::Amt - 1);
+	}
+
 	template <class T>
 	T FindValidLocalPos(const int gridCols, const Sim* const sim){
 		assert(false);

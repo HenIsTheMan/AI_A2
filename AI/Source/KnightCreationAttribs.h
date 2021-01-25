@@ -8,7 +8,7 @@ namespace Obj{
 	template <class T, typename Type>
 	struct KnightCreationAttribs final: public IEntityCreationAttribs<T, Type>{
 	public:
-		KnightCreationAttribs<T, Type>();
+		KnightCreationAttribs<T, Type>() = delete;
 		KnightCreationAttribs<T, Type>(const int gridCols, const Sim* const sim);
 		~KnightCreationAttribs<T, Type>() = default;
 	};
