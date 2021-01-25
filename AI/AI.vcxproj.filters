@@ -105,9 +105,6 @@
     <ClInclude Include="Source\Vertex.h">
       <Filter>Misc\Others\Geo</Filter>
     </ClInclude>
-    <ClInclude Include="Source\FogType.hpp">
-      <Filter>Misc</Filter>
-    </ClInclude>
     <ClInclude Include="Source\HexGrid.h">
       <Filter>Misc</Filter>
     </ClInclude>

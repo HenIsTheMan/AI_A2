@@ -14,85 +14,20 @@ extern bool endLoop;
 
 Sim::Sim():
 	isKeySpace(false),
-	fogWeights(),
 	tileWeights(),
 	publisher(Publisher::RetrieveGlobalObjPtr()),
-	fogLayer(),
 	tileLayer(),
 	timer()
 {
 	timer.startTimer();
 }
 
-void Sim::ChangeFogWeight(const int index, const int fogWeight){
-	fogWeights[index] = fogWeight;
-}
-
 void Sim::ChangeTileWeight(const int index, const int tileWeight){
 	tileWeights[index] = tileWeight;
 }
 
-const std::vector<FogType>& Sim::GetFogLayer() const{
-	return fogLayer;
-}
-
 const std::vector<TileType>& Sim::GetTileLayer() const{
 	return tileLayer;
-}
-
-void Sim::GenFogLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key, const float* quickRenderDelay){
-	int fogSumOfWeights = 0;
-	for(int i = 0; i < (int)FogType::Amt; ++i){
-		fogSumOfWeights += fogWeights[i];
-	}
-	if(fogSumOfWeights == 0){
-		(void)puts("fogSumOfWeights == 0");
-		return;
-	}
-	srand(key);
-
-	const int gridTotalCells = gridRows * gridCols;
-	fogLayer.reserve(gridTotalCells);
-
-	for(int i = 0; i < gridTotalCells; ++i){
-		int val = rand() % fogSumOfWeights + 1;
-
-		for(int i = 0; i < (int)FogType::Amt; ++i){
-			const int fogWeight = fogWeights[i];
-			if(val <= fogWeight){
-				fogLayer.emplace_back((FogType)i);
-
-				if(quickRenderDelay != nullptr){
-					float currTime = 0.0f;
-					float delay = FLT_MAX;
-
-					while(quickRenderDelay != nullptr && currTime < delay){
-						if(endLoop){
-							return;
-						}
-
-						currTime += (float)timer.getElapsedTime();
-
-						const int result = App::Key(VK_OEM_4) - App::Key(VK_OEM_6);
-						delay = *quickRenderDelay * (result == 0 ? 1.0f : 1.25f + 0.75f * result);
-
-						if(!isKeySpace && App::Key(VK_OEM_5)){
-							quickRenderDelay = nullptr;
-							isKeySpace = true;
-						} else if(isKeySpace && !App::Key(VK_OEM_5)){
-							isKeySpace = false;
-						}
-					}
-				}
-
-				break;
-			}
-			val -= fogWeight;
-		}
-	}
-
-	fogLayer[startRow * gridCols + startCol] = FogType::Inexistent;
-	fogLayer[gridTotalCells - 1] = FogType::Inexistent; //End
 }
 
 void Sim::GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key, const float* quickRenderDelay, const bool isFlatTop){

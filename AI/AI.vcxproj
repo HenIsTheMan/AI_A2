@@ -176,7 +176,6 @@
     <ClInclude Include="Source\EntityType.hpp" />
     <ClInclude Include="Source\EntityVisionType.hpp" />
     <ClInclude Include="Source\EventAddCredits.h" />
-    <ClInclude Include="Source\FogType.hpp" />
     <ClInclude Include="Source\HexGrid.h" />
     <ClInclude Include="Source\ObjPool.h" />
     <ClInclude Include="Source\Rounding.hpp" />

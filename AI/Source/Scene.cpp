@@ -1062,93 +1062,7 @@ void Scene::RenderMap(){
 	}
 
 	if(shldRenderFog){
-		glDepthFunc(GL_ALWAYS);
-
-		const std::vector<FogType>& fogLayer = sim->GetFogLayer();
-		const int fogLayerSize = (int)fogLayer.size();
-
-		for(int r = 0; r < gridRows; ++r){
-			for(int c = 0; c < gridCols; ++c){
-				if(r * gridCols + c >= fogLayerSize){
-					continue;
-				}
-
-				modelStack.PushMatrix();
-
-				if(gridType == HexGrid<float>::GridType::FlatTop){
-					modelStack.Translate(
-						gridOffsetX + (gridCellSideLen * 1.5f + gridLineThickness) * (float)c,
-						gridOffsetY + (gridCellFlatToFlatLen + gridLineThickness) * (float)r + (c & 1) * gridAltOffsetY,
-						0.1f
-					);
-				} else{
-					modelStack.Translate(
-						gridOffsetX + (gridCellFlatToFlatLen + gridLineThickness) * (float)c + (r & 1) * gridAltOffsetX,
-						gridOffsetY + (gridCellSideLen * 1.5f + gridLineThickness) * (float)r,
-						0.1f
-					);
-				}
-				modelStack.Scale(
-					gridCellScaleX,
-					gridCellScaleY,
-					1.0f
-				);
-
-				RenderFog(fogLayer, r, c);
-
-				modelStack.PopMatrix();
-			}
-		}
-
-		glDepthFunc(GL_LESS);
-	}
-}
-
-void Scene::RenderFog(const std::vector<FogType>& fogLayer, const int r, const int c){
-	switch(fogLayer[r * gridCols + c]){
-		case FogType::Thin:
-			modelStack.PushMatrix();
-
-			modelStack.Translate(
-				0.0f,
-				0.0f,
-				0.1f
-			);
-			modelStack.Rotate(
-				elapsedTime * 160.0f,
-				0.0f,
-				0.0f,
-				1.0f
-			);
-			modelStack.Scale(
-				0.9f,
-				0.9f,
-				0.9f
-			);
-
-			RenderMesh(meshList[(int)GeoType::Fog], true, Color(1.0f, 0.63f, 0.63f), 0.8f);
-
-			modelStack.PopMatrix();
-			break;
-		case FogType::Thick:
-			modelStack.PushMatrix();
-
-			modelStack.Translate(
-				0.0f,
-				0.0f,
-				0.1f
-			);
-			modelStack.Rotate(
-				elapsedTime * -80.0f,
-				0.0f,
-				0.0f,
-				1.0f
-			);
-
-			RenderMesh(meshList[(int)GeoType::Fog], true, Color(0.63f, 0.63f, 1.0f), 0.6f);
-
-			modelStack.PopMatrix();
-			break;
+		//??
 	}
 }
 
@@ -1598,10 +1512,6 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 void Scene::MakeSimMap(){
 	sim->status = SimRuntimeStatus::MakingTheMap;
 
-	sim->ChangeFogWeight((int)FogType::Inexistent, 5);
-	sim->ChangeFogWeight((int)FogType::Thin, 20);
-	sim->ChangeFogWeight((int)FogType::Thick, 20);
-
 	sim->ChangeTileWeight((int)TileType::Invalid, 0);
 	sim->ChangeTileWeight((int)TileType::Wall, 70);
 	sim->ChangeTileWeight((int)TileType::Empty, 10);
@@ -1615,17 +1525,14 @@ void Scene::MakeSimMap(){
 	const float* const quickRenderDelay0 = new float(0.05f);
 	const float* const quickRenderDelay1 = new float(0.02f);
 	const float* const quickRenderDelay2 = new float(0.04f);
-	const float* const quickRenderDelay3 = new float(0.01f);
 	sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay0, isFlatTop);
 	sim->RefineTileLayer(gridRows, gridCols, 2169, quickRenderDelay1);
 	sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 14, 4, 1, quickRenderDelay2, isFlatTop);
 	sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 4, 5, 2, quickRenderDelay2, isFlatTop);
 	sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 10, 12, 3, quickRenderDelay2, isFlatTop);
-	sim->GenFogLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay3);
 	delete quickRenderDelay0;
 	delete quickRenderDelay1;
 	delete quickRenderDelay2;
-	delete quickRenderDelay3;
 
 	sim->status = SimRuntimeStatus::Ongoing;
 
