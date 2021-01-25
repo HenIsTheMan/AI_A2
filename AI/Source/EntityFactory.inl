@@ -22,9 +22,15 @@ namespace Obj{
 		entity->im_Attribs.im_FacingDir = attribs.im_FacingDir;
 		entity->im_Attribs.im_Lvl = attribs.im_Lvl;
 
+		entity->im_Attribs.im_ActionType = attribs.im_ActionType;
+		entity->im_Attribs.im_ActionRange = attribs.im_ActionRange;
+		entity->im_Attribs.im_VisionType = attribs.im_VisionType;
+		entity->im_Attribs.im_VisionRange = attribs.im_VisionRange;
+
 		entity->im_Attribs.im_LocalPos.x = attribs.im_LocalPos.x;
 		entity->im_Attribs.im_LocalPos.y = attribs.im_LocalPos.y;
 
+		entity->im_Attribs.im_ActionMag = attribs.im_ActionMag;
 		entity->im_Attribs.im_CurrHealth = attribs.im_Health;
 		entity->im_Attribs.im_MaxHealth = entity->im_Attribs.im_CurrHealth;
 
@@ -40,9 +46,15 @@ namespace Obj{
 		entity->im_Attribs.im_FacingDir = attribs.im_FacingDir;
 		entity->im_Attribs.im_Lvl = attribs.im_Lvl;
 
+		entity->im_Attribs.im_ActionType = attribs.im_ActionType;
+		entity->im_Attribs.im_ActionRange = attribs.im_ActionRange;
+		entity->im_Attribs.im_VisionType = attribs.im_VisionType;
+		entity->im_Attribs.im_VisionRange = attribs.im_VisionRange;
+
 		entity->im_Attribs.im_LocalPos.x = attribs.im_LocalPos.x;
 		entity->im_Attribs.im_LocalPos.y = attribs.im_LocalPos.y;
 
+		entity->im_Attribs.im_ActionMag = attribs.im_ActionMag;
 		entity->im_Attribs.im_CurrHealth = attribs.im_Health;
 		entity->im_Attribs.im_MaxHealth = entity->im_Attribs.im_CurrHealth;
 
@@ -58,9 +70,15 @@ namespace Obj{
 		entity->im_Attribs.im_FacingDir = attribs.im_FacingDir;
 		entity->im_Attribs.im_Lvl = attribs.im_Lvl;
 
+		entity->im_Attribs.im_ActionType = attribs.im_ActionType;
+		entity->im_Attribs.im_ActionRange = attribs.im_ActionRange;
+		entity->im_Attribs.im_VisionType = attribs.im_VisionType;
+		entity->im_Attribs.im_VisionRange = attribs.im_VisionRange;
+
 		entity->im_Attribs.im_LocalPos.x = attribs.im_LocalPos.x;
 		entity->im_Attribs.im_LocalPos.y = attribs.im_LocalPos.y;
 
+		entity->im_Attribs.im_ActionMag = attribs.im_ActionMag;
 		entity->im_Attribs.im_CurrHealth = attribs.im_Health;
 		entity->im_Attribs.im_MaxHealth = entity->im_Attribs.im_CurrHealth;
 

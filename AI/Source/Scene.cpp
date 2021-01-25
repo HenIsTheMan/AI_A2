@@ -55,6 +55,7 @@ Scene::Scene():
 	entityFactory(Obj::EntityFactory<Vector3, float>::RetrieveGlobalObjPtr()),
 	entityPool(Obj::ObjPool<Entity>::RetrieveGlobalObjPtr()),
 	publisher(Publisher::RetrieveGlobalObjPtr()),
+	fogLayer(),
 	entitiesToDeactivate(),
 	myThread(nullptr)
 {
@@ -132,6 +133,10 @@ void Scene::Update(const double updateDt, const double renderDt){
 			if(canMakeSimMap && App::IsMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)){
 				myThread = new std::thread(&Scene::MakeSimMap, this);
 				sim->InitEntityLayer(gridRows, gridCols);
+
+				const int gridTotalCells = gridRows * gridCols;
+				fogLayer.reserve(gridTotalCells);
+				fogLayer.resize(gridTotalCells);
 
 				canMakeSimMap = false;
 			}
@@ -1090,11 +1095,35 @@ void Scene::RenderFog(){
 	const float lerpFactor = EaseInOutSine((sinf(0.4f * elapsedTime) + cosf(0.4f * elapsedTime)) * 0.25f + 0.5f);
 	const float angle = (1.0f - lerpFactor) * startAngle + lerpFactor * endAngle;
 
+	std::fill(fogLayer.begin(), fogLayer.end(), true);
 	static const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
+	const int entityLayerSize = (int)entityLayer.size();
+
+	for(int i = 0; i < entityLayerSize; ++i){
+		if(entityLayer[i] != nullptr){
+			fogLayer[i] = false;
+		}
+	}
+
+	if(selectedRow >= 0 && selectedCol >= 0){
+		const Entity* const entity = entityLayer[selectedRow * gridCols + selectedCol];
+		if(entity != nullptr){
+			switch(entity->im_Attribs.im_VisionType){
+				case Obj::EntityVisionType::Unidirectional:
+					//??
+					break;
+				case Obj::EntityVisionType::Omnidirectional:
+					//??
+					break;
+				default:
+					assert(false);
+			}
+		}
+	}
 
 	for(int r = 0; r < gridRows; ++r){
 		for(int c = 0; c < gridCols; ++c){
-			if(entityLayer[r * gridCols + c] != nullptr){
+			if(!fogLayer[r * gridCols + c]){
 				continue;
 			}
 

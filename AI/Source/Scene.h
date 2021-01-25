@@ -71,6 +71,7 @@ private:
 	Obj::EntityFactory<Vector3, float>* entityFactory;
 	Obj::ObjPool<Entity>* entityPool;
 	Publisher* publisher;
+	std::vector<bool> fogLayer;
 
 	std::vector<Entity*> entitiesToDeactivate;
 
