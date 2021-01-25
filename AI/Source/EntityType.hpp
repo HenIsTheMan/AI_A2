@@ -6,7 +6,6 @@ namespace Obj{
 		Knight,
 		Gunner,
 		Healer,
-		King,
 		Amt
 	};
 }

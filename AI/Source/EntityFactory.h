@@ -17,7 +17,6 @@ namespace Obj{
 		void SpawnKnight(const EntityCreationAttribs<T, Type>& attribs);
 		void SpawnGunner(const EntityCreationAttribs<T, Type>& attribs);
 		void SpawnHealer(const EntityCreationAttribs<T, Type>& attribs);
-		void SpawnKing(const EntityCreationAttribs<T, Type>& attribs);
 
 		void SpawnRandUnit(const EntityCreationAttribs<T, Type>& attribs);
 	private:

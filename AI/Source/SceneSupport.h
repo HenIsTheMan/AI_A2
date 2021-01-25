@@ -47,7 +47,6 @@ public:
 		Knight,
 		Gunner,
 		Healer,
-		King,
 		Amt
 	};
 

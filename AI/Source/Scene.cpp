@@ -404,12 +404,6 @@ void Scene::UpdateEntities(const double dt){
 				}
 
 				break;
-			case Obj::EntityType::King:
-				if(entity->im_Attribs.im_CurrHealth <= 0.0f){
-					entitiesToDeactivate.emplace_back(entity);
-				}
-
-				break;
 		}
 	}
 
@@ -923,9 +917,6 @@ void Scene::RenderEntityArt(const Entity* const entity){
 			break;
 		case Obj::EntityType::Healer:
 			RenderMesh(meshList[(int)GeoType::Healer], false);
-			break;
-		case Obj::EntityType::King:
-			RenderMesh(meshList[(int)GeoType::King], false);
 			break;
 	}
 

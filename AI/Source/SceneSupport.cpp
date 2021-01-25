@@ -113,8 +113,6 @@ void SceneSupport::Init(){
 	meshList[(int)GeoType::Gunner]->textureID = LoadImg("Imgs//Gunner.png");
 	meshList[(int)GeoType::Healer] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
 	meshList[(int)GeoType::Healer]->textureID = LoadImg("Imgs//Healer.png");
-	meshList[(int)GeoType::King] = MeshBuilder::GenerateQuad("", Color(), 1.0f);
-	meshList[(int)GeoType::King]->textureID = LoadImg("Imgs//King.png");
 }
 
 static int polyMode = GL_FILL;
