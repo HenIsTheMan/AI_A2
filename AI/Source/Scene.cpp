@@ -225,18 +225,26 @@ void Scene::Update(const double updateDt, const double renderDt){
 		unitY += gridCellSideLen * 1.5f;
 	}
 
+	///Here??
+	gridCellFlatToFlatLen = grid->CalcCellFlatToFlatLen();
+	gridCellSideLen = grid->CalcCellSideLen();
+	gridAltOffsetX = grid->CalcAltOffsetX();
+	gridAltOffsetY = grid->CalcAltOffsetY();
+
 	if(gridType == HexGrid<float>::GridType::FlatTop){
-		mouseCol = std::floorf((trueMouseX - gridOffsetX + unitX * 0.5f) / unitX);
+		const float fakeMouseCol = std::floorf((trueMouseX - gridOffsetX + unitX * 0.5f) / unitX);
+		const float remainder = fmodf((float)windowHeight - trueMouseY - gridOffsetY - ((int)fakeMouseCol & 1) * gridAltOffsetY + gridAltOffsetY, unitY);
+
+		system("cls");
+		std::cout << remainder;
+
+		const float gradient = sqrtf(gridCellSideLen * gridCellSideLen - (gridCellFlatToFlatLen * 0.5f) * (gridCellFlatToFlatLen * 0.5f)) / gridCellFlatToFlatLen;
+		mouseCol = std::floorf((trueMouseX - gridOffsetX + unitX * 0.5f) / (unitX + (remainder > gridCellFlatToFlatLen * 0.5f ? remainder * gradient: remainder * -gradient)));
 		mouseRow = std::floorf(((float)windowHeight - trueMouseY - gridOffsetY - ((int)mouseCol & 1) * gridAltOffsetY + gridAltOffsetY) / unitY);
 	} else{
 		mouseRow = std::floorf(((float)windowHeight - trueMouseY - gridOffsetY + unitY * 0.5f) / unitY);
 		mouseCol = std::floorf((trueMouseX - gridOffsetX - ((int)mouseRow & 1) * gridAltOffsetX + gridAltOffsetX) / unitX);
 	}
-
-	gridCellFlatToFlatLen = grid->CalcCellFlatToFlatLen();
-	gridCellSideLen = grid->CalcCellSideLen();
-	gridAltOffsetX = grid->CalcAltOffsetX();
-	gridAltOffsetY = grid->CalcAltOffsetY();
 
 	mouseScrollWheelYOffset = 0.0;
 }
@@ -433,14 +441,17 @@ void Scene::Render(){
 		case SimRuntimeStatus::Ongoing:
 			RenderMap();
 			RenderEntities();
-			if(sim->turn == SimTurn::Player){
-				RenderGridCellOfMouse();
-			}
+			/*if(sim->turn == SimTurn::Player){
+
+			}*/
 			break;
 		case SimRuntimeStatus::MakingTheMap:
 			RenderMap();
 			break;
 	}
+
+	RenderGridCellOfMouse();
+
 	RenderSceneText();
 
 	modelStack.PopMatrix();
