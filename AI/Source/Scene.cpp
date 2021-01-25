@@ -1092,8 +1092,14 @@ void Scene::RenderFog(){
 	const float lerpFactor = EaseInOutSine((sinf(0.4f * elapsedTime) + cosf(0.4f * elapsedTime)) * 0.25f + 0.5f);
 	const float angle = (1.0f - lerpFactor) * startAngle + lerpFactor * endAngle;
 
+	static const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
+
 	for(int r = 0; r < gridRows; ++r){
 		for(int c = 0; c < gridCols; ++c){
+			if(entityLayer[r * gridCols + c] != nullptr){
+				continue;
+			}
+
 			modelStack.PushMatrix();
 
 			if(gridType == HexGrid<float>::GridType::FlatTop){
@@ -1162,7 +1168,7 @@ void Scene::RenderTile(const std::vector<TileType>& tileLayer, const int r, cons
 			}
 			break;
 		case TileType::Soil:
-			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.8f, 0.52f, 0.25f), 1.0f);
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.7f, 0.4f, 0.11f), 1.0f);
 
 			if(shldRenderTileArt){
 				modelStack.PushMatrix();
@@ -1282,7 +1288,7 @@ void Scene::RenderTile(const std::vector<TileType>& tileLayer, const int r, cons
 			}
 			break;
 		case TileType::Mud:
-			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.4f, 0.26f, 0.13f), 1.0f);
+			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.4f, 0.2f, 0.1f), 1.0f);
 
 			if(shldRenderTileArt){
 				modelStack.PushMatrix();
