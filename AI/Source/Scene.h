@@ -101,7 +101,7 @@ private:
 	void RenderSimInfoText(Mesh* const textMesh, const Color& textColor, const float textSize);
 
 	void MakeSimMap();
-	void ClearFogUnidirectional(const int row, const int col, const int range);
+	void ClearFogUnidirectional(const int row, const int col, const int range, const Obj::EntityFacingDir facingDir);
 	void ClearFogOmnidirectional(const int row, const int col, const int range);
 
 	int OnEvent(Event* myEvent, const bool destroyEvent = false) override;

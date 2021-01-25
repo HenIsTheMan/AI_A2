@@ -1066,7 +1066,7 @@ void Scene::RenderFog(){
 		if(entity != nullptr){
 			switch(entity->im_Attribs.im_VisionType){
 				case Obj::EntityVisionType::Unidirectional:
-					ClearFogUnidirectional((int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x, entity->im_Attribs.im_VisionRange);
+					ClearFogUnidirectional((int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x, entity->im_Attribs.im_VisionRange, entity->im_Attribs.im_FacingDir);
 					break;
 				case Obj::EntityVisionType::Omnidirectional:
 					ClearFogOmnidirectional((int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x, entity->im_Attribs.im_VisionRange);
@@ -1651,7 +1651,72 @@ void Scene::MakeSimMap(){
 	}
 }
 
-void Scene::ClearFogUnidirectional(const int row, const int col, const int range){
+void Scene::ClearFogUnidirectional(const int row, const int col, const int range, const Obj::EntityFacingDir facingDir){
+	if(gridType == HexGrid<float>::GridType::FlatTop){
+		if((col & 1) == 1){
+			switch(facingDir){
+				case Obj::EntityFacingDir::Up:
+					break;
+				case Obj::EntityFacingDir::Down:
+					break;
+				case Obj::EntityFacingDir::Left:
+					break;
+				case Obj::EntityFacingDir::Right:
+					break;
+				case Obj::EntityFacingDir::UL:
+					break;
+				case Obj::EntityFacingDir::UR:
+					break;
+			}
+		} else{
+			switch(facingDir){
+				case Obj::EntityFacingDir::Up:
+					break;
+				case Obj::EntityFacingDir::Down:
+					break;
+				case Obj::EntityFacingDir::Left:
+					break;
+				case Obj::EntityFacingDir::Right:
+					break;
+				case Obj::EntityFacingDir::DL:
+					break;
+				case Obj::EntityFacingDir::DR:
+					break;
+			}
+		}
+	} else{
+		if((row & 1) == 1){
+			switch(facingDir){
+				case Obj::EntityFacingDir::Up:
+					break;
+				case Obj::EntityFacingDir::Down:
+					break;
+				case Obj::EntityFacingDir::Left:
+					break;
+				case Obj::EntityFacingDir::Right:
+					break;
+				case Obj::EntityFacingDir::DR:
+					break;
+				case Obj::EntityFacingDir::UR:
+					break;
+			}
+		} else{
+			switch(facingDir){
+				case Obj::EntityFacingDir::Up:
+					break;
+				case Obj::EntityFacingDir::Down:
+					break;
+				case Obj::EntityFacingDir::Left:
+					break;
+				case Obj::EntityFacingDir::Right:
+					break;
+				case Obj::EntityFacingDir::DL:
+					break;
+				case Obj::EntityFacingDir::UL:
+					break;
+			}
+		}
+	}
 }
 
 void Scene::ClearFogOmnidirectional(const int row, const int col, const int range){
