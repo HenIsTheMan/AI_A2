@@ -677,245 +677,207 @@ void Scene::RenderEntityArt(const Entity* const entity){
 		0.0f,
 		0.05f
 	);
-	switch(entity->im_Attribs.im_FacingDir){
-		case Obj::EntityFacingDir::Up:
-			if(gridType == HexGrid<float>::GridType::SharpTop){
-				if((int)entity->im_Attribs.im_LocalPos.y & 1){
+
+	if(gridType == HexGrid<float>::GridType::FlatTop){
+		if(((int)entity->im_Attribs.im_LocalPos.x & 1) == 1){
+			switch(entity->im_Attribs.im_FacingDir){
+				case Obj::EntityFacingDir::Up:
+					//Do nth
+					break;
+				case Obj::EntityFacingDir::Down:
 					modelStack.Rotate(
-						30.0f,
+						180.0f,
 						0.0f,
 						0.0f,
 						1.0f
 					);
-				} else{
-					modelStack.Rotate(
-						330.0f,
-						0.0f,
-						0.0f,
-						1.0f
-					);
-				}
-			}
-			break;
-		case Obj::EntityFacingDir::Down:
-			if(gridType == HexGrid<float>::GridType::FlatTop){
-				modelStack.Rotate(
-					180.0f,
-					0.0f,
-					0.0f,
-					1.0f
-				);
-			} else{
-				if((int)entity->im_Attribs.im_LocalPos.y & 1){
-					modelStack.Rotate(
-						150.0f,
-						0.0f,
-						0.0f,
-						1.0f
-					);
-				} else{
-					modelStack.Rotate(
-						210.0f,
-						0.0f,
-						0.0f,
-						1.0f
-					);
-				}
-			}
-			break;
-		case Obj::EntityFacingDir::Left:
-			if(gridType == HexGrid<float>::GridType::FlatTop){
-				if((int)entity->im_Attribs.im_LocalPos.x & 1){
+					break;
+				case Obj::EntityFacingDir::Left:
 					modelStack.Rotate(
 						120.0f,
 						0.0f,
 						0.0f,
 						1.0f
 					);
-				} else{
-					modelStack.Rotate(
-						60.0f,
-						0.0f,
-						0.0f,
-						1.0f
-					);
-				}
-			} else{
-				modelStack.Rotate(
-					90.0f,
-					0.0f,
-					0.0f,
-					1.0f
-				);
-			}
-			break;
-		case Obj::EntityFacingDir::Right:
-			if(gridType == HexGrid<float>::GridType::FlatTop){
-				if((int)entity->im_Attribs.im_LocalPos.x & 1){
+					break;
+				case Obj::EntityFacingDir::Right:
 					modelStack.Rotate(
 						240.0f,
 						0.0f,
 						0.0f,
 						1.0f
 					);
-				} else{
-					modelStack.Rotate(
-						300.0f,
-						0.0f,
-						0.0f,
-						1.0f
-					);
-				}
-			} else{
-				modelStack.Rotate(
-					270.0f,
-					0.0f,
-					0.0f,
-					1.0f
-				);
-			}
-			break;
-		case Obj::EntityFacingDir::UL:
-			if(gridType == HexGrid<float>::GridType::FlatTop){
-				if((int)entity->im_Attribs.im_LocalPos.x & 1){
+					break;
+				case Obj::EntityFacingDir::UL:
 					modelStack.Rotate(
 						60.0f,
 						0.0f,
 						0.0f,
 						1.0f
 					);
-				} else{
+					break;
+				case Obj::EntityFacingDir::UR:
+					modelStack.Rotate(
+						300.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+			}
+		} else{
+			switch(entity->im_Attribs.im_FacingDir){
+				case Obj::EntityFacingDir::Up:
+					//Do nth
+					break;
+				case Obj::EntityFacingDir::Down:
+					modelStack.Rotate(
+						180.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::Left:
+					modelStack.Rotate(
+						60.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::Right:
+					modelStack.Rotate(
+						300.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::DL:
 					modelStack.Rotate(
 						120.0f,
 						0.0f,
 						0.0f,
 						1.0f
 					);
-				}
-			} else{
-				if((int)entity->im_Attribs.im_LocalPos.y & 1){
-					modelStack.Rotate(
-						330.0f,
-						0.0f,
-						0.0f,
-						1.0f
-					);
-				} else{
-					modelStack.Rotate(
-						30.0f,
-						0.0f,
-						0.0f,
-						1.0f
-					);
-				}
-			}
-			break;
-		case Obj::EntityFacingDir::UR:
-			if(gridType == HexGrid<float>::GridType::FlatTop){
-				if((int)entity->im_Attribs.im_LocalPos.x & 1){
-					modelStack.Rotate(
-						300.0f,
-						0.0f,
-						0.0f,
-						1.0f
-					);
-				} else{
+					break;
+				case Obj::EntityFacingDir::DR:
 					modelStack.Rotate(
 						240.0f,
 						0.0f,
 						0.0f,
 						1.0f
 					);
-				}
-			} else{
-				if((int)entity->im_Attribs.im_LocalPos.y & 1){
-					modelStack.Rotate(
-						330.0f,
-						0.0f,
-						0.0f,
-						1.0f
-					);
-				} else{
+					break;
+			}
+		}
+	} else{
+		if(((int)entity->im_Attribs.im_LocalPos.y & 1) == 1){
+			switch(entity->im_Attribs.im_FacingDir){
+				case Obj::EntityFacingDir::Up:
 					modelStack.Rotate(
 						30.0f,
 						0.0f,
 						0.0f,
 						1.0f
 					);
-				}
-			}
-			break;
-		case Obj::EntityFacingDir::DL:
-			if(gridType == HexGrid<float>::GridType::FlatTop){
-				if((int)entity->im_Attribs.im_LocalPos.x & 1){
-					modelStack.Rotate(
-						60.0f,
-						0.0f,
-						0.0f,
-						1.0f
-					);
-				} else{
-					modelStack.Rotate(
-						120.0f,
-						0.0f,
-						0.0f,
-						1.0f
-					);
-				}
-			} else{
-				if((int)entity->im_Attribs.im_LocalPos.y & 1){
-					modelStack.Rotate(
-						210.0f,
-						0.0f,
-						0.0f,
-						1.0f
-					);
-				} else{
+					break;
+				case Obj::EntityFacingDir::Down:
 					modelStack.Rotate(
 						150.0f,
 						0.0f,
 						0.0f,
 						1.0f
 					);
-				}
-			}
-			break;
-		case Obj::EntityFacingDir::DR:
-			if(gridType == HexGrid<float>::GridType::FlatTop){
-				if((int)entity->im_Attribs.im_LocalPos.x & 1){
+					break;
+				case Obj::EntityFacingDir::Left:
 					modelStack.Rotate(
-						300.0f,
+						90.0f,
 						0.0f,
 						0.0f,
 						1.0f
 					);
-				} else{
+					break;
+				case Obj::EntityFacingDir::Right:
 					modelStack.Rotate(
-						240.0f,
+						270.0f,
 						0.0f,
 						0.0f,
 						1.0f
 					);
-				}
-			} else{
-				if((int)entity->im_Attribs.im_LocalPos.y & 1){
+					break;
+				case Obj::EntityFacingDir::DR:
 					modelStack.Rotate(
 						210.0f,
 						0.0f,
 						0.0f,
 						1.0f
 					);
-				} else{
+					break;
+				case Obj::EntityFacingDir::UR:
+					modelStack.Rotate(
+						330.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+			}
+		} else{
+			switch(entity->im_Attribs.im_FacingDir){
+				case Obj::EntityFacingDir::Up:
+					modelStack.Rotate(
+						330.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::Down:
+					modelStack.Rotate(
+						210.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::Left:
+					modelStack.Rotate(
+						90.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::Right:
+					modelStack.Rotate(
+						270.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::DL:
 					modelStack.Rotate(
 						150.0f,
 						0.0f,
 						0.0f,
 						1.0f
 					);
-				}
+					break;
+				case Obj::EntityFacingDir::UL:
+					modelStack.Rotate(
+						30.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
 			}
-			break;
+		}
 	}
+
 	modelStack.Scale(
 		0.6f,
 		0.6f,
