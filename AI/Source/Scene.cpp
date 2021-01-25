@@ -38,6 +38,12 @@ Scene::Scene():
 	gridMinCols(12),
 	gridMaxRows(20),
 	gridMaxCols(20),
+	gridWidth(0.0f),
+	gridHeight(0.0f),
+	gridOffsetX(0.0f),
+	gridOffsetY(0.0f),
+	mouseRow(0.0f),
+	mouseCol(0.0f),
 	sim(new Sim()),
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
 	entityFactory(Obj::EntityFactory<Vector3, float>::RetrieveGlobalObjPtr()),
@@ -200,6 +206,44 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 			break;
 	}
+
+	gridWidth = grid->CalcWidth();
+	gridHeight = grid->CalcHeight();
+	gridOffsetX = ((float)windowWidth - gridWidth) * 0.5f;
+	gridOffsetY = ((float)windowHeight - gridHeight) * 0.5f;
+
+	double mouseX;
+	double mouseY;
+	App::GetCursorPos(&mouseX, &mouseY);
+
+	const float horizSize = (float)windowWidth * (float)orthoProjectionScaleFactor;
+	const float vertSize = (float)windowHeight * (float)orthoProjectionScaleFactor;
+	const float leftVal = ((float)windowWidth - horizSize) * 0.5f;
+	const float rightVal = leftVal + horizSize;
+	const float bottomVal = ((float)windowHeight - vertSize) * 0.5f;
+	const float topVal = bottomVal + vertSize;
+
+	const float trueMouseX = (float)mouseX * ((rightVal - leftVal) / (float)windowWidth) + leftVal + im_Cam.pos.x;
+	const float trueMouseY = (float)mouseY * ((topVal - bottomVal) / (float)windowHeight) + bottomVal - im_Cam.pos.y;
+
+	float unitX = gridLineThickness;
+	float unitY = gridLineThickness;
+	if(gridType == HexGrid<float>::GridType::FlatTop){
+		unitX += grid->CalcCellSideLen() * 1.5f;
+		unitY += grid->CalcCellFlatToFlatLen();
+	} else{
+		unitX += grid->CalcCellFlatToFlatLen();
+		unitY += grid->CalcCellSideLen() * 1.5f;
+	}
+
+	if(gridType == HexGrid<float>::GridType::FlatTop){
+		mouseCol = std::floorf((trueMouseX - gridOffsetX + unitX * 0.5f) / unitX);
+		mouseRow = std::floorf(((float)windowHeight - trueMouseY - gridOffsetY - ((int)mouseCol & 1) * grid->CalcAltOffsetY() + grid->CalcAltOffsetY()) / unitY);
+	} else{
+		mouseRow = std::floorf(((float)windowHeight - trueMouseY - gridOffsetY + unitY * 0.5f) / unitY);
+		mouseCol = std::floorf((trueMouseX - gridOffsetX - ((int)mouseRow & 1) * grid->CalcAltOffsetX() + grid->CalcAltOffsetX()) / unitX);
+	}
+
 	mouseScrollWheelYOffset = 0.0;
 }
 
@@ -448,20 +492,14 @@ void Scene::RenderBG(){
 }
 
 void Scene::RenderCoverMap(){
-	const float gridWidth = grid->CalcWidth();
-	const float gridHeight = grid->CalcHeight();
-
-	const float xOffset = ((float)windowWidth - gridWidth) * 0.5f;
-	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f;
-
 	for(int r = 0; r < gridRows; ++r){
 		for(int c = 0; c < gridCols; ++c){
 			modelStack.PushMatrix();
 
 			if(gridType == HexGrid<float>::GridType::FlatTop){
 				modelStack.Translate(
-					xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c,
-					yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
+					gridOffsetX + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c,
+					gridOffsetY + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
 					0.05f
 				);
 				modelStack.Scale(
@@ -471,8 +509,8 @@ void Scene::RenderCoverMap(){
 				);
 			} else{
 				modelStack.Translate(
-					xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)c + (r & 1) * grid->CalcAltOffsetX(),
-					yOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)r,
+					gridOffsetX + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)c + (r & 1) * grid->CalcAltOffsetX(),
+					gridOffsetY + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)r,
 					0.05f
 				);
 				modelStack.Rotate(
@@ -496,8 +534,8 @@ void Scene::RenderCoverMap(){
 
 			if(gridType == HexGrid<float>::GridType::FlatTop){
 				modelStack.Translate(
-					xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c,
-					yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
+					gridOffsetX + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c,
+					gridOffsetY + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
 					0.1f
 				);
 				modelStack.Scale(
@@ -507,8 +545,8 @@ void Scene::RenderCoverMap(){
 				);
 			} else{
 				modelStack.Translate(
-					xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)c + (r & 1) * grid->CalcAltOffsetX(),
-					yOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)r,
+					gridOffsetX + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)c + (r & 1) * grid->CalcAltOffsetX(),
+					gridOffsetY + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)r,
 					0.1f
 				);
 				modelStack.Rotate(
@@ -588,20 +626,14 @@ void Scene::RenderCoverText(){
 void Scene::RenderEntities(){
 	static float individualDepthOffset = 0.0f;
 
-	const float gridWidth = grid->CalcWidth();
-	const float gridHeight = grid->CalcHeight();
-
-	const float xOffset = ((float)windowWidth - gridWidth) * 0.5f;
-	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f;
-
 	for(const Entity* const entity: activeEntities){
 		modelStack.PushMatrix();
 		const Vector3 localPos = Vector3(entity->im_Attribs.im_LocalPos.x, entity->im_Attribs.im_LocalPos.y, 0.0f);
 
 		if(gridType == HexGrid<float>::GridType::FlatTop){
 			modelStack.Translate(
-				xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * localPos.x,
-				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * localPos.y + ((int)localPos.x & 1) * grid->CalcAltOffsetY(),
+				gridOffsetX + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * localPos.x,
+				gridOffsetY + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * localPos.y + ((int)localPos.x & 1) * grid->CalcAltOffsetY(),
 				0.25f + individualDepthOffset
 			);
 			modelStack.Scale(
@@ -611,8 +643,8 @@ void Scene::RenderEntities(){
 			);
 		} else{
 			modelStack.Translate(
-				xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * localPos.x + ((int)localPos.y & 1) * grid->CalcAltOffsetX(),
-				yOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * localPos.y,
+				gridOffsetX + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * localPos.x + ((int)localPos.y & 1) * grid->CalcAltOffsetX(),
+				gridOffsetY + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * localPos.y,
 				0.25f + individualDepthOffset
 			);
 			modelStack.Scale(
@@ -971,12 +1003,6 @@ void Scene::RenderEntityLvl(const Entity* const entity){
 }
 
 void Scene::RenderMap(){
-	const float gridWidth = grid->CalcWidth();
-	const float gridHeight = grid->CalcHeight();
-
-	const float xOffset = ((float)windowWidth - gridWidth) * 0.5f;
-	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f;
-
 	const std::vector<TileType>& tileLayer = sim->GetTileLayer();
 	const int tileLayerSize = (int)tileLayer.size();
 
@@ -986,8 +1012,8 @@ void Scene::RenderMap(){
 
 			if(gridType == HexGrid<float>::GridType::FlatTop){
 				modelStack.Translate(
-					xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c,
-					yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
+					gridOffsetX + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c,
+					gridOffsetY + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
 					0.05f
 				);
 				modelStack.Scale(
@@ -997,8 +1023,8 @@ void Scene::RenderMap(){
 				);
 			} else{
 				modelStack.Translate(
-					xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)c + (r & 1) * grid->CalcAltOffsetX(),
-					yOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)r,
+					gridOffsetX + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)c + (r & 1) * grid->CalcAltOffsetX(),
+					gridOffsetY + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)r,
 					0.05f
 				);
 				modelStack.Rotate(
@@ -1026,8 +1052,8 @@ void Scene::RenderMap(){
 
 			if(gridType == HexGrid<float>::GridType::FlatTop){
 				modelStack.Translate(
-					xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c,
-					yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
+					gridOffsetX + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c,
+					gridOffsetY + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
 					0.1f
 				);
 				modelStack.Scale(
@@ -1037,8 +1063,8 @@ void Scene::RenderMap(){
 				);
 			} else{
 				modelStack.Translate(
-					xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)c + (r & 1) * grid->CalcAltOffsetX(),
-					yOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)r,
+					gridOffsetX + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)c + (r & 1) * grid->CalcAltOffsetX(),
+					gridOffsetY + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)r,
 					0.1f
 				);
 				modelStack.Rotate(
@@ -1076,14 +1102,14 @@ void Scene::RenderMap(){
 
 				if(gridType == HexGrid<float>::GridType::FlatTop){
 					modelStack.Translate(
-						xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c,
-						yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
+						gridOffsetX + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)c,
+						gridOffsetY + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)r + (c & 1) * grid->CalcAltOffsetY(),
 						0.1f
 					);
 				} else{
 					modelStack.Translate(
-						xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)c + (r & 1) * grid->CalcAltOffsetX(),
-						yOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)r,
+						gridOffsetX + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)c + (r & 1) * grid->CalcAltOffsetX(),
+						gridOffsetY + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)r,
 						0.1f
 					);
 				}
@@ -1327,55 +1353,13 @@ void Scene::RenderTile(const std::vector<TileType>& tileLayer, const int r, cons
 }
 
 void Scene::RenderGridCellOfMouse(){
-	//* Better if done in Update
-	double mouseX;
-	double mouseY;
-	App::GetCursorPos(&mouseX, &mouseY);
-
-	const float horizSize = (float)windowWidth * (float)orthoProjectionScaleFactor;
-	const float vertSize = (float)windowHeight * (float)orthoProjectionScaleFactor;
-	const float leftVal = ((float)windowWidth - horizSize) * 0.5f;
-	const float rightVal = leftVal + horizSize;
-	const float bottomVal = ((float)windowHeight - vertSize) * 0.5f;
-	const float topVal = bottomVal + vertSize;
-
-	const float trueMouseX = (float)mouseX * ((rightVal - leftVal) / (float)windowWidth) + leftVal + im_Cam.pos.x;
-	const float trueMouseY = (float)mouseY * ((topVal - bottomVal) / (float)windowHeight) + bottomVal - im_Cam.pos.y;
-
-	const float gridWidth = grid->CalcWidth();
-	const float gridHeight = grid->CalcHeight();
-
-	const float xOffset = ((float)windowWidth - gridWidth) * 0.5f;
-	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f;
-
-	float unitX = gridLineThickness;
-	float unitY = gridLineThickness;
-	if(gridType == HexGrid<float>::GridType::FlatTop){
-		unitX += grid->CalcCellSideLen() * 1.5f;
-		unitY += grid->CalcCellFlatToFlatLen();
-	} else{
-		unitX += grid->CalcCellFlatToFlatLen();
-		unitY += grid->CalcCellSideLen() * 1.5f;
-	}
-
-	float mouseRow = 0.0f;
-	float mouseCol = 0.0f;
-	if(gridType == HexGrid<float>::GridType::FlatTop){
-		mouseCol = std::floor((trueMouseX - xOffset + unitX * 0.5f) / unitX);
-		mouseRow = std::floor(((float)windowHeight - trueMouseY - yOffset - ((int)mouseCol & 1) * grid->CalcAltOffsetY() + grid->CalcAltOffsetY()) / unitY);
-	} else{
-		mouseRow = std::floor(((float)windowHeight - trueMouseY - yOffset + unitY * 0.5f) / unitY);
-		mouseCol = std::floor((trueMouseX - xOffset - ((int)mouseRow & 1) * grid->CalcAltOffsetX() + grid->CalcAltOffsetX()) / unitX);
-	}
-	//*/
-
 	if(mouseRow >= 0 && mouseRow <= gridRows - 1 && mouseCol >= 0 && mouseCol <= gridCols - 1){
 		modelStack.PushMatrix();
 
 		if(gridType == HexGrid<float>::GridType::FlatTop){
 			modelStack.Translate(
-				xOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)mouseCol,
-				yOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)mouseRow + ((int)mouseCol & 1) * grid->CalcAltOffsetY(),
+				gridOffsetX + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)mouseCol,
+				gridOffsetY + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)mouseRow + ((int)mouseCol & 1) * grid->CalcAltOffsetY(),
 				0.4f
 			);
 			modelStack.Scale(
@@ -1385,8 +1369,8 @@ void Scene::RenderGridCellOfMouse(){
 			);
 		} else{
 			modelStack.Translate(
-				xOffset + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)mouseCol + ((int)mouseRow & 1) * grid->CalcAltOffsetX(),
-				yOffset + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)mouseRow,
+				gridOffsetX + (grid->CalcCellFlatToFlatLen() + gridLineThickness) * (float)mouseCol + ((int)mouseRow & 1) * grid->CalcAltOffsetX(),
+				gridOffsetY + (grid->CalcCellSideLen() * 1.5f + gridLineThickness) * (float)mouseRow,
 				0.4f
 			);
 			modelStack.Rotate(

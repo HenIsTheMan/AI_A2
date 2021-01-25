@@ -52,6 +52,13 @@ private:
 	int gridMaxRows;
 	int gridMaxCols;
 
+	float gridWidth;
+	float gridHeight;
+	float gridOffsetX;
+	float gridOffsetY;
+	float mouseRow;
+	float mouseCol;
+
 	Sim* sim;
 	HexGrid<float>* grid;
 	Obj::EntityFactory<Vector3, float>* entityFactory;
