@@ -178,7 +178,6 @@
     <ClInclude Include="Source\EventAddCredits.h" />
     <ClInclude Include="Source\FogType.hpp" />
     <ClInclude Include="Source\HexGrid.h" />
-    <ClInclude Include="Source\SimMode.hpp" />
     <ClInclude Include="Source\ObjPool.h" />
     <ClInclude Include="Source\Rounding.hpp" />
     <ClInclude Include="Source\SimRuntimeStatus.hpp" />

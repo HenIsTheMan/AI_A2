@@ -4,7 +4,6 @@
 
 #include "timer.h"
 
-#include "SimMode.hpp"
 #include "SimRuntimeStatus.hpp"
 #include "SimTimeOfDay.hpp"
 #include "SimTurn.hpp"
@@ -18,7 +17,6 @@ class Sim final{
 public:
 	struct{
 		SimRuntimeStatus status = SimRuntimeStatus::Amt;
-		SimMode mode = SimMode::Amt;
 		float spd = 0.0f;
 		float turnDuration = 0.0f;
 		float turnElapsedTime = 0.0f;

@@ -531,32 +531,15 @@ void Sim::Update(const double dt){
 
 		turnElapsedTime = 0.0f;
 
-		switch(mode){
-			case SimMode::ProtectTheKing:
-				if(turn == SimTurn::Player){
-					(void)publisher->Notify((long int)ListenerFlags::Scene, new EventAddCredits(true, 100));
-				} else if(turn == SimTurn::AI){
-					(void)publisher->Notify((long int)ListenerFlags::Scene, new EventAddCredits(false, 100));
-				}
-				break;
-			case SimMode::LastTeamStanding:
-				break;
-			case SimMode::GreatestAreaPainted:
-				break;
+		if(turn == SimTurn::Player){
+			(void)publisher->Notify((long int)ListenerFlags::Scene, new EventAddCredits(true, 100));
+		} else if(turn == SimTurn::AI){
+			(void)publisher->Notify((long int)ListenerFlags::Scene, new EventAddCredits(false, 100));
 		}
 	}
 
 	if(timeOfDayElapsedTime >= timeOfDayDuration){
 		timeOfDay = (SimTimeOfDay)Math::RandIntMinMax((int)SimTimeOfDay::Day, (int)SimTimeOfDay::Amt - 1);
 		timeOfDayElapsedTime = 0.0f;
-	}
-
-	switch(mode){
-		case SimMode::ProtectTheKing:
-			break;
-		case SimMode::LastTeamStanding:
-			break;
-		case SimMode::GreatestAreaPainted:
-			break;
 	}
 }

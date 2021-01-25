@@ -100,7 +100,6 @@ void Scene::Init(){
 	entityPool->Init(entityPoolSize, entityPoolSize);
 
 	sim->status = SimRuntimeStatus::Waiting;
-	sim->mode = SimMode::ProtectTheKing;
 	sim->spd = 1.0f;
 	sim->turnDuration = 10.0f;
 	sim->turnElapsedTime = 0.0f;
@@ -128,26 +127,6 @@ void Scene::Update(const double updateDt, const double renderDt){
 	switch(sim->status){
 		case SimRuntimeStatus::Waiting: {
 			UpdateGridAttribs();
-
-			static bool isKeyDownLeft = false;
-			static bool isKeyDownRight = false;
-
-			if(!isKeyDownLeft && App::Key(VK_LEFT)){
-				const int simModeInt = (int)sim->mode;
-				sim->mode = simModeInt == (int)SimMode::None + 1 ? SimMode((int)SimMode::Amt - 1) : SimMode(simModeInt - 1);
-
-				isKeyDownLeft = true;
-			} else if(isKeyDownLeft && !App::Key(VK_LEFT)){
-				isKeyDownLeft = false;
-			}
-			if(!isKeyDownRight && App::Key(VK_RIGHT)){
-				const int simModeInt = (int)sim->mode;
-				sim->mode = simModeInt == (int)SimMode::Amt - 1 ? SimMode((int)SimMode::None + 1) : SimMode(simModeInt + 1);
-
-				isKeyDownRight = true;
-			} else if(isKeyDownRight && !App::Key(VK_RIGHT)){
-				isKeyDownRight = false;
-			}
 
 			if(canMakeSimMap && App::IsMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)){
 				myThread = new std::thread(&Scene::MakeSimMap, this);
@@ -178,6 +157,12 @@ void Scene::Update(const double updateDt, const double renderDt){
 				if(sim->turn == SimTurn::Player){
 					sim->turn = Math::RandIntMinMax(1, 10) <= 2 ? SimTurn::Environment : SimTurn::AI;
 					sim->turnElapsedTime = 0.0f;
+
+					if(sim->turn == SimTurn::Player){
+						creditsPlayer += 100;
+					} else if(sim->turn == SimTurn::AI){
+						creditsAI += 100;
+					}
 				}
 				isKeyDownSpace = true;
 			} else if(isKeyDownSpace && !App::Key(VK_SPACE)){
@@ -1597,12 +1582,6 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 		"is ongoing",
 		"has ended",
 	};
-	static std::string modeTexts[(int)SimMode::Amt]{
-		"None",
-		"Protect The King!",
-		"-- Last Team Standing --",
-		"~ Greatest Area Painted ~"
-	};
 	static std::string turnTexts[(int)SimTurn::Amt]{
 		"Nil",
 		"Player",
@@ -1612,7 +1591,6 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 
 	const std::string texts[]{
 		(std::string)"Sim " + runtimeStatusTexts[(int)sim->status],
-		"Sim mode: " + modeTexts[(int)sim->mode],
 		"Sim spd: " + std::to_string(sim->spd).substr(0, std::to_string((int)sim->spd).length() + 3),
 		"Sim time of day elapsed time: " + std::to_string(sim->timeOfDayElapsedTime).substr(0, std::to_string((int)sim->timeOfDayElapsedTime).length() + 3),
 		"Sim time of day duration: " + std::to_string(sim->timeOfDayDuration).substr(0, std::to_string((int)sim->timeOfDayDuration).length() + 3),
@@ -1670,18 +1648,10 @@ void Scene::MakeSimMap(){
 
 	sim->status = SimRuntimeStatus::Ongoing;
 
-	switch(sim->mode){
-		case SimMode::ProtectTheKing:
-			if(sim->turn == SimTurn::Player){
-				creditsPlayer += 100;
-			} else if(sim->turn == SimTurn::AI){
-				creditsAI += 100;
-			}
-			break;
-		case SimMode::LastTeamStanding:
-			break;
-		case SimMode::GreatestAreaPainted:
-			break;
+	if(sim->turn == SimTurn::Player){
+		creditsPlayer += 100;
+	} else if(sim->turn == SimTurn::AI){
+		creditsAI += 100;
 	}
 }
 

@@ -162,9 +162,6 @@
     <ClInclude Include="Source\SimRuntimeStatus.hpp">
       <Filter>Sim</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SimMode.hpp">
-      <Filter>Sim</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SimTurn.hpp">
       <Filter>Sim</Filter>
     </ClInclude>
