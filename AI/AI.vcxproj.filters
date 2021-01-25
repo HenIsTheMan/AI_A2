@@ -172,16 +172,19 @@
       <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Source\GunnerCreationAttribs.h">
-      <Filter>Entity\CreationAttribs</Filter>
+      <Filter>Entity\EntityCreation\CreationAttribs</Filter>
     </ClInclude>
     <ClInclude Include="Source\HealerCreationAttribs.h">
-      <Filter>Entity\CreationAttribs</Filter>
+      <Filter>Entity\EntityCreation\CreationAttribs</Filter>
     </ClInclude>
     <ClInclude Include="Source\KnightCreationAttribs.h">
-      <Filter>Entity\CreationAttribs</Filter>
+      <Filter>Entity\EntityCreation\CreationAttribs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EntityCreationHelpers.h">
+      <Filter>Entity\EntityCreation</Filter>
     </ClInclude>
     <ClInclude Include="Source\IEntityCreationAttribs.hpp">
-      <Filter>Entity</Filter>
+      <Filter>Entity\EntityCreation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -230,7 +233,10 @@
     <Filter Include="Entity">
       <UniqueIdentifier>{14dcf655-cd65-4a91-8e2e-c0a7b40258a4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Entity\CreationAttribs">
+    <Filter Include="Entity\EntityCreation">
+      <UniqueIdentifier>{8da4ecc9-aba2-4054-89a5-6e33f126f3cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity\EntityCreation\CreationAttribs">
       <UniqueIdentifier>{ae5e80a8-1856-44d4-b64a-6a956bee3c90}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -257,13 +263,16 @@
       <Filter>Misc</Filter>
     </None>
     <None Include="Source\GunnerCreationAttribs.inl">
-      <Filter>Entity\CreationAttribs</Filter>
+      <Filter>Entity\EntityCreation\CreationAttribs</Filter>
     </None>
     <None Include="Source\HealerCreationAttribs.inl">
-      <Filter>Entity\CreationAttribs</Filter>
+      <Filter>Entity\EntityCreation\CreationAttribs</Filter>
     </None>
     <None Include="Source\KnightCreationAttribs.inl">
-      <Filter>Entity\CreationAttribs</Filter>
+      <Filter>Entity\EntityCreation\CreationAttribs</Filter>
+    </None>
+    <None Include="Source\EntityCreationHelpers.inl">
+      <Filter>Entity\EntityCreation</Filter>
     </None>
   </ItemGroup>
 </Project>

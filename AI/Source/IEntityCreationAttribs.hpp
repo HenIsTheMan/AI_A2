@@ -6,7 +6,7 @@
 #include "EntityFacingDir.hpp"
 
 namespace Obj{
-	template<class T, typename Type>
+	template <class T, typename Type>
 	class IEntityCreationAttribs{ //Passive DS (PDS)/Plain Old DS (PODS)/Plain Old Data (POD)
 	public:
 		virtual ~IEntityCreationAttribs<T, Type>() = default;

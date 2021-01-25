@@ -168,6 +168,7 @@
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\EntityActionType.hpp" />
     <ClInclude Include="Source\EntityAttribs.hpp" />
+    <ClInclude Include="Source\EntityCreationHelpers.h" />
     <ClInclude Include="Source\EntityFacingDir.hpp" />
     <ClInclude Include="Source\EntityFactory.h" />
     <ClInclude Include="Source\EntityMovementType.hpp" />
@@ -218,6 +219,7 @@
     <None Include="Shaders\AI.fragS" />
     <None Include="Shaders\AI.vertexS" />
     <None Include="Source\Entity.inl" />
+    <None Include="Source\EntityCreationHelpers.inl" />
     <None Include="Source\EntityFactory.inl" />
     <None Include="Source\GunnerCreationAttribs.inl" />
     <None Include="Source\HealerCreationAttribs.inl" />

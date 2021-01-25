@@ -10,7 +10,7 @@
 #include "Singleton.h"
 
 namespace Obj{
-	template<class T, typename Type>
+	template <class T, typename Type>
 	class EntityFactory final: public Singleton<EntityFactory<T, Type>>{
 		friend Singleton<EntityFactory<T, Type>>;
 	public:

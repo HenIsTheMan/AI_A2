@@ -1,11 +1,11 @@
 namespace Obj{
-	template<class T, typename Type>
+	template <class T, typename Type>
 	EntityFactory<T, Type>::EntityFactory():
 		entityPool(ObjPool<Entity<T, Type>>::RetrieveGlobalObjPtr())
 	{
 	}
 
-	template<class T, typename Type>
+	template <class T, typename Type>
 	EntityFactory<T, Type>::~EntityFactory(){
 		if(entityPool != nullptr){
 			entityPool->Destroy();
@@ -13,7 +13,7 @@ namespace Obj{
 		}
 	}
 
-	template<class T, typename Type>
+	template <class T, typename Type>
 	::Entity* EntityFactory<T, Type>::SpawnKnight(const KnightCreationAttribs<T, Type>& attribs){
 		::Entity* const entity = entityPool->ActivateObj();
 
@@ -31,7 +31,7 @@ namespace Obj{
 		return entity;
 	}
 
-	template<class T, typename Type>
+	template <class T, typename Type>
 	::Entity* EntityFactory<T, Type>::SpawnGunner(const GunnerCreationAttribs<T, Type>& attribs){
 		::Entity* const entity = entityPool->ActivateObj();
 
@@ -49,7 +49,7 @@ namespace Obj{
 		return entity;
 	}
 
-	template<class T, typename Type>
+	template <class T, typename Type>
 	::Entity* EntityFactory<T, Type>::SpawnHealer(const HealerCreationAttribs<T, Type>& attribs){
 		::Entity* const entity = entityPool->ActivateObj();
 
@@ -67,7 +67,7 @@ namespace Obj{
 		return entity;
 	}
 
-	template<class T, typename Type>
+	template <class T, typename Type>
 	::Entity* EntityFactory<T, Type>::SpawnRandUnit(){
 		switch(Math::RandIntMinMax(0, 2)){
 			case 0:

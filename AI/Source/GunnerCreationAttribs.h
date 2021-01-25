@@ -2,11 +2,14 @@
 
 #include "IEntityCreationAttribs.hpp"
 
+#include "EntityCreationHelpers.h"
+
 namespace Obj{
-	template<class T, typename Type>
+	template <class T, typename Type>
 	struct GunnerCreationAttribs final: public IEntityCreationAttribs<T, Type>{
 	public:
 		GunnerCreationAttribs<T, Type>();
+		GunnerCreationAttribs<T, Type>(const Sim* const sim);
 		~GunnerCreationAttribs<T, Type>() = default;
 	};
 }

@@ -16,7 +16,7 @@ namespace Math{ //For math helper functions
 	inline float RadianToDegree(float value){
 		return value * 180.0f / PI;
 	}
-	template<typename T>
+	template <typename T>
 	T Wrap(T val, T minVal, T maxVal){
 		if(val < minVal){
 			return maxVal;
@@ -25,7 +25,7 @@ namespace Math{ //For math helper functions
 		}
 		return val;
 	}
-	template<typename T>
+	template <typename T>
 	T Clamp(T val, T minVal, T maxVal){
 		if(val < minVal){
 			return minVal;
@@ -34,15 +34,15 @@ namespace Math{ //For math helper functions
 		}
 		return val;
 	}
-	template<typename T>
+	template <typename T>
 	T Min(T x, T y){
 		return (x < y ? x : y);
 	}
-	template<typename T>
+	template <typename T>
 	T Max(T x, T y){
 		return (x > y ? x : y);
 	}
-	template<typename T>
+	template <typename T>
 	T Square(T x){
 		return x * x;
 	}
