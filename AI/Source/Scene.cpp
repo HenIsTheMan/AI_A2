@@ -570,42 +570,32 @@ void Scene::RenderCoverText(){
 	const float textSize2 = (1.0f - lerpFactor2) * startTextSize + lerpFactor2 * endTextSize;
 
 	RenderTextOnScreen(
-		meshList[(int)GeoType::TextMod1],
+		meshList[(int)GeoType::TextMod],
 		"Press Middle Mouse Button (MMB) to start!",
 		Color(),
 		textSize1,
 		(float)windowWidth * 0.5f,
-		(float)windowHeight * 0.5f + textSize0 + textSize1 * 2.0f,
+		(float)windowHeight * 0.5f + textSize0 + textSize1,
 		TextAlignment::Center,
 		-0.1f
 	);
 	RenderTextOnScreen(
-		meshList[(int)GeoType::TextMod2],
+		meshList[(int)GeoType::TextMod],
 		"Modify hex grid (1 - 8, ~)",
 		Color(),
 		textSize0,
 		(float)windowWidth * 0.5f,
-		(float)windowHeight * 0.5f + textSize0 * 0.75f,
+		(float)windowHeight * 0.5f,
 		TextAlignment::Center,
 		-0.1f
 	);
 	RenderTextOnScreen(
-		meshList[(int)GeoType::TextMod2],
-		"Change sim mode (LeftArrow and RightArrow)",
-		Color(),
-		textSize0,
-		(float)windowWidth * 0.5f,
-		(float)windowHeight * 0.5f - textSize0 * 0.75f,
-		TextAlignment::Center,
-		-0.1f
-	);
-	RenderTextOnScreen(
-		meshList[(int)GeoType::TextMod1],
+		meshList[(int)GeoType::TextMod],
 		"Press Middle Mouse Button (MMB) to start!",
 		Color(),
 		textSize2,
 		(float)windowWidth * 0.5f,
-		(float)windowHeight * 0.5f - textSize0 - textSize2 * 2.0f,
+		(float)windowHeight * 0.5f - textSize0 - textSize2,
 		TextAlignment::Center,
 		-0.1f
 	);
@@ -977,7 +967,7 @@ void Scene::RenderEntityLvl(const Entity* const entity){
 	);
 
 	RenderText(
-		meshList[(int)GeoType::TextMod1],
+		meshList[(int)GeoType::TextMod],
 		"Lvl " + std::to_string(entity->im_Attribs.im_Lvl),
 		Color(),
 		TextAlignment::Center,
@@ -1378,7 +1368,7 @@ void Scene::RenderGridCellOfMouse(){
 }
 
 void Scene::RenderSceneText(){
-	static Mesh* const textMesh = meshList[(int)GeoType::TextMod1];
+	static Mesh* const textMesh = meshList[(int)GeoType::TextMod];
 	static float textSize = (float)windowWidth * 0.02f;
 
 	RenderTextOnScreen(
