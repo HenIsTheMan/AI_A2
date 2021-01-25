@@ -8,8 +8,6 @@
 #include "EventAddCredits.h"
 #include "ListenerFlags.hpp"
 
-#include "KnightCreationAttribs.h"
-
 extern double mouseScrollWheelYOffset;
 extern int windowWidth;
 extern int windowHeight;

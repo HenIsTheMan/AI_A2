@@ -9,7 +9,7 @@ namespace Obj{
 	struct HealerCreationAttribs final: public IEntityCreationAttribs<T, Type>{
 	public:
 		HealerCreationAttribs<T, Type>() = delete;
-		HealerCreationAttribs<T, Type>(const int gridCols, const Sim* const sim);
+		HealerCreationAttribs<T, Type>(const int lvl, const int gridCols, const Sim* const sim);
 		~HealerCreationAttribs<T, Type>() = default;
 	};
 }
