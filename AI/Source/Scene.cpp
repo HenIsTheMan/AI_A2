@@ -174,7 +174,11 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 			static bool isKeyDownQ = false;
 			if(!isKeyDownQ && App::Key('Q')){
-				sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim));
+				if(sim->turn == SimTurn::Player && creditsPlayer >= spawnCostPlayer){
+					sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim));
+					creditsPlayer -= spawnCostPlayer;
+					spawnCostPlayer += 10;
+				}
 
 				isKeyDownQ = true;
 			} else if(isKeyDownQ && !App::Key('Q')){
@@ -381,7 +385,6 @@ void Scene::UpdateEntities(const double dt){
 			continue;
 		}
 
-		entity->im_Attribs.im_CurrHealth -= (float)dt;
 		if(entity->im_Attribs.im_CurrHealth <= 0.0f){
 			entitiesToDeactivate.emplace_back(entity);
 		}
