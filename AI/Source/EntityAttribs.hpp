@@ -39,11 +39,13 @@ namespace Obj{
 		Type im_CurrHealth = Type();
 		Type im_MaxHealth = Type();
 
+		//* ??
 		Entity<T, Type>* im_EntityTarget = nullptr;
 		T im_GridCellTargetLocalPos = T();
 
 		StateMachine<StateID, Entity<T, Type>>* im_StateMachine = nullptr;
 		State* im_CurrState = nullptr;
 		State* im_NextState = nullptr;
+		//*/
 	};
 }

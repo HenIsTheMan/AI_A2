@@ -9,6 +9,20 @@ namespace Obj{
 
 		IEntityCreationAttribs<T, Type>::im_LocalPos = FindValidLocalPos<T>(gridCols, sim);
 
-		IEntityCreationAttribs<T, Type>::im_Health = 5.0f;
+		switch(lvl){
+			case 1:
+				IEntityCreationAttribs<T, Type>::im_ActionType = EntityActionType::UnidirectionalAttack;
+				IEntityCreationAttribs<T, Type>::im_ActionRange = 1;
+				IEntityCreationAttribs<T, Type>::im_VisionType = EntityVisionType::Omnidirectional;
+				IEntityCreationAttribs<T, Type>::im_VisionRange = 1;
+
+				IEntityCreationAttribs<T, Type>::im_ActionMag = 5.0f;
+				IEntityCreationAttribs<T, Type>::im_Health = 5.0f;
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+		}
 	}
 }

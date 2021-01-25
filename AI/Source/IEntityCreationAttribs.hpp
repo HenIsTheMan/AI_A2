@@ -15,8 +15,14 @@ namespace Obj{
 		EntityFacingDir im_FacingDir = EntityFacingDir::Invalid;
 		int im_Lvl = 1;
 
+		EntityActionType im_ActionType = EntityActionType::Nil;
+		int im_ActionRange = 0;
+		EntityVisionType im_VisionType = EntityVisionType::Nil;
+		int im_VisionRange = 0;
+
 		T im_LocalPos = T();
 
+		Type im_ActionMag = Type();
 		Type im_Health = Type();
 	protected:
 		IEntityCreationAttribs<T, Type>() = default;
