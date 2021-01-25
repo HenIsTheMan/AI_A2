@@ -19,9 +19,9 @@ namespace Obj{
 
 		int val = -1;
 
-		switch(myEvent->GetID()){
-
-		}
+		/*switch(myEvent->GetID()){
+			default:
+		}*/
 
 		if(destroyEvent && myEvent){
 			delete myEvent;

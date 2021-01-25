@@ -33,11 +33,6 @@ namespace Obj{
 	}
 
 	template <class T>
-	const std::vector<T*>& ObjPool<T>::GetActiveObjs() const{
-		return activeObjs;
-	}
-
-	template <class T>
 	T* ObjPool<T>::ActivateObj(){
 		if(inactiveObjs.empty()){
 			assert(false && "inactiveObjs is empty!");

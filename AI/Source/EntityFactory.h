@@ -16,11 +16,11 @@ namespace Obj{
 	public:
 		~EntityFactory<T, Type>();
 
-		void SpawnKnight(const KnightCreationAttribs<T, Type>& attribs);
-		void SpawnGunner(const GunnerCreationAttribs<T, Type>& attribs);
-		void SpawnHealer(const HealerCreationAttribs<T, Type>& attribs);
+		::Entity* SpawnKnight(const KnightCreationAttribs<T, Type>& attribs);
+		::Entity* SpawnGunner(const GunnerCreationAttribs<T, Type>& attribs);
+		::Entity* SpawnHealer(const HealerCreationAttribs<T, Type>& attribs);
 
-		void SpawnRandUnit();
+		::Entity* SpawnRandUnit();
 	private:
 		ObjPool<Entity<T, Type>>* entityPool;
 

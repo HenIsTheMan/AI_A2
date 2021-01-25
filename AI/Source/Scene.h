@@ -70,7 +70,6 @@ private:
 	Obj::ObjPool<Entity>* entityPool;
 	Publisher* publisher;
 
-	const std::vector<Entity*>& activeEntities;
 	std::vector<Entity*> entitiesToDeactivate;
 
 	std::thread* myThread;

@@ -16,6 +16,7 @@ Sim::Sim():
 	isKeySpace(false),
 	tileWeights(),
 	publisher(Publisher::RetrieveGlobalObjPtr()),
+	entityLayer(),
 	tileLayer(),
 	timer()
 {
@@ -24,6 +25,26 @@ Sim::Sim():
 
 void Sim::ChangeTileWeight(const int index, const int tileWeight){
 	tileWeights[index] = tileWeight;
+}
+
+void Sim::InitEntityLayer(const int gridRows, const int gridCols){
+	const int gridTotalCells = gridRows * gridCols;
+	entityLayer.reserve(gridTotalCells);
+	for(int i = 0; i < gridTotalCells; ++i){
+		entityLayer.emplace_back(nullptr);
+	}
+}
+
+void Sim::OnEntityActivated(const int gridCols, Entity* const entity){
+	entityLayer[(int)entity->im_Attribs.im_LocalPos.y * gridCols + (int)entity->im_Attribs.im_LocalPos.x] = entity;
+}
+
+void Sim::OnEntityDeactivated(const int gridCols, const int row, const int col){
+	entityLayer[row * gridCols + col] = nullptr;
+}
+
+const std::vector<Entity*>& Sim::GetEntityLayer() const{
+	return entityLayer;
 }
 
 const std::vector<TileType>& Sim::GetTileLayer() const{

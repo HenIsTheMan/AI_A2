@@ -13,8 +13,6 @@ namespace Obj{
 
 		void Init(const size_t& inactiveSize, const size_t& activeSize);
 
-		const std::vector<T*>& GetActiveObjs() const;
-
 		T* ActivateObj();
 		void DeactivateObj(const T* const obj);
 	private:

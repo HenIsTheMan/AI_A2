@@ -12,6 +12,8 @@
 
 #include "Publisher.h"
 
+#include "Entity.h"
+
 class Sim final{
 public:
 	struct{
@@ -31,12 +33,16 @@ public:
 	void Update(const double dt);
 
 	void ChangeTileWeight(const int index, const int tileWeight);
+	void InitEntityLayer(const int gridRows, const int gridCols);
+	void OnEntityActivated(const int gridCols, Entity* const entity);
+	void OnEntityDeactivated(const int gridCols, const int row, const int col);
 
 	void GenTileLayer(const int gridRows, const int gridCols, const int startRow, const int startCol, const unsigned int key, const float* quickRenderDelay, const bool isFlatTop);
 	void RefineTileLayer(const int gridRows, const int gridCols, const unsigned int key, const float* quickRenderDelay);
 	void MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, const int row, const int col, const int radius, const float* quickRenderDelay, const bool isFlatTop);
 
 	//* Getters
+	const std::vector<Entity*>& GetEntityLayer() const;
 	const std::vector<TileType>& GetTileLayer() const;
 	//*/
 private:
@@ -46,6 +52,7 @@ private:
 
 	Publisher* publisher;
 
+	std::vector<Entity*> entityLayer;
 	std::vector<TileType> tileLayer;
 
 	StopWatch timer;

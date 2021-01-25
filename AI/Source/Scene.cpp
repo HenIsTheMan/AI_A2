@@ -55,7 +55,6 @@ Scene::Scene():
 	entityFactory(Obj::EntityFactory<Vector3, float>::RetrieveGlobalObjPtr()),
 	entityPool(Obj::ObjPool<Entity>::RetrieveGlobalObjPtr()),
 	publisher(Publisher::RetrieveGlobalObjPtr()),
-	activeEntities(entityPool->GetActiveObjs()),
 	entitiesToDeactivate(),
 	myThread(nullptr)
 {
@@ -132,6 +131,8 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 			if(canMakeSimMap && App::IsMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)){
 				myThread = new std::thread(&Scene::MakeSimMap, this);
+				sim->InitEntityLayer(gridRows, gridCols);
+
 				canMakeSimMap = false;
 			}
 
@@ -173,7 +174,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 			static bool isKeyDownQ = false;
 			if(!isKeyDownQ && App::Key('Q')){
-				entityFactory->SpawnRandUnit();
+				sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit());
 
 				isKeyDownQ = true;
 			} else if(isKeyDownQ && !App::Key('Q')){
@@ -374,30 +375,29 @@ void Scene::UpdateMisc(const double dt){
 }
 
 void Scene::UpdateEntities(const double dt){
-	for(Entity* const& entity: activeEntities){
+	const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
+	for(Entity* const& entity: entityLayer){
+		if(entity == nullptr){
+			continue;
+		}
+
+		entity->im_Attribs.im_CurrHealth -= (float)dt;
+		if(entity->im_Attribs.im_CurrHealth <= 0.0f){
+			entitiesToDeactivate.emplace_back(entity);
+		}
+
 		switch(entity->im_Attribs.im_Type){
 			case Obj::EntityType::Knight:
-				if(entity->im_Attribs.im_CurrHealth <= 0.0f){
-					entitiesToDeactivate.emplace_back(entity);
-				}
-
 				break;
 			case Obj::EntityType::Gunner:
-				if(entity->im_Attribs.im_CurrHealth <= 0.0f){
-					entitiesToDeactivate.emplace_back(entity);
-				}
-
 				break;
 			case Obj::EntityType::Healer:
-				if(entity->im_Attribs.im_CurrHealth <= 0.0f){
-					entitiesToDeactivate.emplace_back(entity);
-				}
-
 				break;
 		}
 	}
 
 	for(Entity* const entity: entitiesToDeactivate){
+		sim->OnEntityDeactivated(gridCols, (int)entity->im_Attribs.im_LocalPos.x, (int)entity->im_Attribs.im_LocalPos.y);
 		entityPool->DeactivateObj(entity);
 	}
 	entitiesToDeactivate.clear();
@@ -593,8 +593,13 @@ void Scene::RenderCoverText(){
 
 void Scene::RenderEntities(){
 	static float individualDepthOffset = 0.0f;
+	const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
 
-	for(const Entity* const entity: activeEntities){
+	for(const Entity* const entity: entityLayer){
+		if(entity == nullptr){
+			continue;
+		}
+
 		modelStack.PushMatrix();
 		const Vector3 localPos = Vector3(entity->im_Attribs.im_LocalPos.x, entity->im_Attribs.im_LocalPos.y, 0.0f);
 

@@ -14,8 +14,8 @@ namespace Obj{
 	}
 
 	template<class T, typename Type>
-	void EntityFactory<T, Type>::SpawnKnight(const KnightCreationAttribs<T, Type>& attribs){
-		Entity<T, Type>* const entity = entityPool->ActivateObj();
+	::Entity* EntityFactory<T, Type>::SpawnKnight(const KnightCreationAttribs<T, Type>& attribs){
+		::Entity* const entity = entityPool->ActivateObj();
 
 		entity->im_Attribs.im_Type = Obj::EntityType::Knight;
 		entity->im_Attribs.im_Team = attribs.im_Team;
@@ -27,11 +27,13 @@ namespace Obj{
 
 		entity->im_Attribs.im_CurrHealth = attribs.im_Health;
 		entity->im_Attribs.im_MaxHealth = entity->im_Attribs.im_CurrHealth;
+
+		return entity;
 	}
 
 	template<class T, typename Type>
-	void EntityFactory<T, Type>::SpawnGunner(const GunnerCreationAttribs<T, Type>& attribs){
-		Entity<T, Type>* const entity = entityPool->ActivateObj();
+	::Entity* EntityFactory<T, Type>::SpawnGunner(const GunnerCreationAttribs<T, Type>& attribs){
+		::Entity* const entity = entityPool->ActivateObj();
 
 		entity->im_Attribs.im_Type = Obj::EntityType::Gunner;
 		entity->im_Attribs.im_Team = attribs.im_Team;
@@ -43,11 +45,13 @@ namespace Obj{
 
 		entity->im_Attribs.im_CurrHealth = attribs.im_Health;
 		entity->im_Attribs.im_MaxHealth = entity->im_Attribs.im_CurrHealth;
+
+		return entity;
 	}
 
 	template<class T, typename Type>
-	void EntityFactory<T, Type>::SpawnHealer(const HealerCreationAttribs<T, Type>& attribs){
-		Entity<T, Type>* const entity = entityPool->ActivateObj();
+	::Entity* EntityFactory<T, Type>::SpawnHealer(const HealerCreationAttribs<T, Type>& attribs){
+		::Entity* const entity = entityPool->ActivateObj();
 
 		entity->im_Attribs.im_Type = Obj::EntityType::Healer;
 		entity->im_Attribs.im_Team = attribs.im_Team;
@@ -59,20 +63,20 @@ namespace Obj{
 
 		entity->im_Attribs.im_CurrHealth = attribs.im_Health;
 		entity->im_Attribs.im_MaxHealth = entity->im_Attribs.im_CurrHealth;
+
+		return entity;
 	}
 
 	template<class T, typename Type>
-	void EntityFactory<T, Type>::SpawnRandUnit(){
+	::Entity* EntityFactory<T, Type>::SpawnRandUnit(){
 		switch(Math::RandIntMinMax(0, 2)){
 			case 0:
-				SpawnKnight(KnightCreationAttribs<Vector3, float>());
-				break;
+				return SpawnKnight(KnightCreationAttribs<Vector3, float>());
 			case 1:
-				SpawnGunner(GunnerCreationAttribs<Vector3, float>());
-				break;
+				return SpawnGunner(GunnerCreationAttribs<Vector3, float>());
 			case 2:
-				SpawnHealer(HealerCreationAttribs<Vector3, float>());
-				break;
+				return SpawnHealer(HealerCreationAttribs<Vector3, float>());
 		}
+		return nullptr;
 	}
 }
