@@ -1099,25 +1099,25 @@ void Scene::RenderFog(){
 	static const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
 	const int entityLayerSize = (int)entityLayer.size();
 
-	for(int i = 0; i < entityLayerSize; ++i){
-		if(entityLayer[i] != nullptr){
-			fogLayer[i] = false;
-		}
-	}
-
 	if(selectedRow >= 0 && selectedCol >= 0){
 		const Entity* const entity = entityLayer[selectedRow * gridCols + selectedCol];
 		if(entity != nullptr){
 			switch(entity->im_Attribs.im_VisionType){
 				case Obj::EntityVisionType::Unidirectional:
-					//??
+					ClearFogUnidirectional((int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x, entity->im_Attribs.im_VisionRange);
 					break;
 				case Obj::EntityVisionType::Omnidirectional:
-					//??
+					ClearFogOmnidirectional((int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x, entity->im_Attribs.im_VisionRange);
 					break;
 				default:
 					assert(false);
 			}
+		}
+	}
+
+	for(int i = 0; i < entityLayerSize; ++i){
+		if(entityLayer[i] != nullptr){
+			fogLayer[i] = false;
 		}
 	}
 
@@ -1686,6 +1686,90 @@ void Scene::MakeSimMap(){
 		creditsPlayer += 100;
 	} else if(sim->turn == SimTurn::AI){
 		creditsAI += 100;
+	}
+}
+
+void Scene::ClearFogUnidirectional(const int row, const int col, const int range){
+}
+
+void Scene::ClearFogOmnidirectional(const int row, const int col, const int range){
+	std::vector<std::pair<int, int>> myVec;
+	myVec.emplace_back(std::make_pair(0, row * gridCols + col));
+
+	while(!myVec.empty()){
+		const std::pair<int, int> myPair = myVec.front();
+		if(!fogLayer[myPair.second]){
+			myVec.erase(myVec.begin());
+			continue;
+		}
+		fogLayer[myPair.second] = false;
+
+		if(myPair.first != range){
+			const int myCol = myPair.second % gridCols;
+			const int myRow = myPair.second / gridCols;
+
+			const int upIndex = (myRow + 1) * gridCols + myCol;
+			const int downIndex = (myRow - 1) * gridCols + myCol;
+			const int leftIndex = myRow * gridCols + (myCol - 1);
+			const int rightIndex = myRow * gridCols + (myCol + 1);
+
+			if(myRow < gridRows - 1){
+				myVec.emplace_back(std::make_pair(myPair.first + 1, upIndex));
+			}
+			if(myRow > 0){
+				myVec.emplace_back(std::make_pair(myPair.first + 1, downIndex));
+			}
+			if(myCol > 0){
+				myVec.emplace_back(std::make_pair(myPair.first + 1, leftIndex));
+			}
+			if(myCol < gridCols - 1){
+				myVec.emplace_back(std::make_pair(myPair.first + 1, rightIndex));
+			}
+
+			if(gridType == HexGrid<float>::GridType::FlatTop){
+				if(myCol & 1){
+					const int ULIndex = (myRow + 1) * gridCols + (myCol - 1);
+					const int URIndex = (myRow + 1) * gridCols + (myCol + 1);
+					if(myCol > 0 && myRow < gridRows - 1){
+						myVec.emplace_back(std::make_pair(myPair.first + 1, ULIndex));
+					}
+					if(myCol < gridCols - 1 && myRow < gridRows - 1){
+						myVec.emplace_back(std::make_pair(myPair.first + 1, URIndex));
+					}
+				} else{
+					const int DLIndex = (myRow - 1) * gridCols + (myCol - 1);
+					const int DRIndex = (myRow - 1) * gridCols + (myCol + 1);
+					if(myCol > 0 && myRow > 0){
+						myVec.emplace_back(std::make_pair(myPair.first + 1, DLIndex));
+					}
+					if(myCol < gridCols - 1 && myRow > 0){
+						myVec.emplace_back(std::make_pair(myPair.first + 1, DRIndex));
+					}
+				}
+			} else{
+				if(myRow & 1){
+					const int DRIndex = (myRow - 1) * gridCols + (myCol + 1);
+					const int URIndex = (myRow + 1) * gridCols + (myCol + 1);
+					if(myCol < gridCols - 1 && myRow > 0){
+						myVec.emplace_back(std::make_pair(myPair.first + 1, DRIndex));
+					}
+					if(myCol < gridCols - 1 && myRow < gridRows - 1){
+						myVec.emplace_back(std::make_pair(myPair.first + 1, URIndex));
+					}
+				} else{
+					const int DLIndex = (myRow - 1) * gridCols + (myCol - 1);
+					const int ULIndex = (myRow + 1) * gridCols + (myCol - 1);
+					if(myCol > 0 && myRow > 0){
+						myVec.emplace_back(std::make_pair(myPair.first + 1, DLIndex));
+					}
+					if(myCol > 0 && myRow < gridRows - 1){
+						myVec.emplace_back(std::make_pair(myPair.first + 1, ULIndex));
+					}
+				}
+			}
+		}
+
+		myVec.erase(myVec.begin());
 	}
 }
 
