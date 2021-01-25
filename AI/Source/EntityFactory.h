@@ -21,6 +21,7 @@ namespace Obj{
 		::Entity* SpawnHealer(const HealerCreationAttribs<T, Type>& attribs);
 
 		::Entity* SpawnRandUnit();
+		::Entity* SpawnRandUnit(const int gridCols, const Sim* const sim);
 	private:
 		ObjPool<Entity<T, Type>>* entityPool;
 

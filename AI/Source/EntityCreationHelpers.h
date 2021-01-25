@@ -2,14 +2,18 @@
 
 #include "Vector3.h"
 
+#include "Entity.h"
 #include "Sim.h"
+#include "TileCost.hpp"
+
+using Entity = Obj::Entity<Vector3, float>; //Can because Entity<Vector3, float> is in another namespace
 
 namespace Obj{
 	template <class T>
-	static T FindValidLocalPos(const Sim* const sim);
+	static T FindValidLocalPos(const int gridCols, const Sim* const sim);
 
 	template <>
-	static Vector3 FindValidLocalPos(const Sim* const sim);
+	static Vector3 FindValidLocalPos(const int gridCols, const Sim* const sim);
 }
 
 #include "EntityCreationHelpers.inl"

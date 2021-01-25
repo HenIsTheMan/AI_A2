@@ -9,7 +9,7 @@ namespace Obj{
 	struct KnightCreationAttribs final: public IEntityCreationAttribs<T, Type>{
 	public:
 		KnightCreationAttribs<T, Type>();
-		KnightCreationAttribs<T, Type>(const Sim* const sim);
+		KnightCreationAttribs<T, Type>(const int gridCols, const Sim* const sim);
 		~KnightCreationAttribs<T, Type>() = default;
 	};
 }

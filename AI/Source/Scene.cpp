@@ -174,7 +174,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 			static bool isKeyDownQ = false;
 			if(!isKeyDownQ && App::Key('Q')){
-				sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit());
+				sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim)); //??
 
 				isKeyDownQ = true;
 			} else if(isKeyDownQ && !App::Key('Q')){
