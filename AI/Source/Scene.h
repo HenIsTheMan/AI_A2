@@ -59,6 +59,11 @@ private:
 	float mouseRow;
 	float mouseCol;
 
+	float gridCellFlatToFlatLen;
+	float gridCellSideLen;
+	float gridAltOffsetX;
+	float gridAltOffsetY;
+
 	Sim* sim;
 	HexGrid<float>* grid;
 	Obj::EntityFactory<Vector3, float>* entityFactory;
