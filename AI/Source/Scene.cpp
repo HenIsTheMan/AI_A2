@@ -174,7 +174,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 			static bool isKeyDownQ = false;
 			if(!isKeyDownQ && App::Key('Q')){
-				sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim)); //??
+				sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim));
 
 				isKeyDownQ = true;
 			} else if(isKeyDownQ && !App::Key('Q')){
@@ -397,7 +397,7 @@ void Scene::UpdateEntities(const double dt){
 	}
 
 	for(Entity* const entity: entitiesToDeactivate){
-		sim->OnEntityDeactivated(gridCols, (int)entity->im_Attribs.im_LocalPos.x, (int)entity->im_Attribs.im_LocalPos.y);
+		sim->OnEntityDeactivated(gridCols, (int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x);
 		entityPool->DeactivateObj(entity);
 	}
 	entitiesToDeactivate.clear();
