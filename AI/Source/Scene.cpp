@@ -46,6 +46,8 @@ Scene::Scene():
 	gridOffsetY(0.0f),
 	mouseRow(0.0f),
 	mouseCol(0.0f),
+	selectedRow(-1),
+	selectedCol(-1),
 	gridCellFlatToFlatLen(0.0f),
 	gridCellSideLen(0.0f),
 	gridAltOffsetX(0.0f),
@@ -167,6 +169,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 						creditsAI += 100;
 					}
 				}
+
 				isKeyDownSpace = true;
 			} else if(isKeyDownSpace && !App::Key(VK_SPACE)){
 				isKeyDownSpace = false;
@@ -183,6 +186,20 @@ void Scene::Update(const double updateDt, const double renderDt){
 				isKeyDownQ = true;
 			} else if(isKeyDownQ && !App::Key('Q')){
 				isKeyDownQ = false;
+			}
+
+			static bool isLMB = false;
+			if(!isLMB && App::IsMousePressed(GLFW_MOUSE_BUTTON_LEFT)){
+				selectedRow = (int)mouseRow;
+				selectedCol = (int)mouseCol;
+
+				isLMB = true;
+			} else if(isLMB && !App::IsMousePressed(GLFW_MOUSE_BUTTON_LEFT)){
+				isLMB = false;
+			}
+
+			if(sim->turn != SimTurn::Player){
+				selectedRow = selectedCol = -1;
 			}
 
 			sim->Update(updateDt); //Not (dt * sim->spd) as...
@@ -428,6 +445,7 @@ void Scene::Render(){
 			RenderEntities();
 			if(sim->turn == SimTurn::Player){
 				RenderGridCellOfMouse();
+				RenderSelectedGridCell();
 			}
 			break;
 		case SimRuntimeStatus::MakingTheMap:
@@ -1245,9 +1263,9 @@ void Scene::RenderGridCellOfMouse(){
 
 		if(gridType == HexGrid<float>::GridType::FlatTop){
 			modelStack.Translate(
-				gridOffsetX + (gridCellSideLen * 1.5f + gridLineThickness) * (float)mouseCol,
-				gridOffsetY + (gridCellFlatToFlatLen + gridLineThickness) * (float)mouseRow + ((int)mouseCol & 1) * gridAltOffsetY,
-				0.4f
+				gridOffsetX + (gridCellSideLen * 1.5f + gridLineThickness) * mouseCol,
+				gridOffsetY + (gridCellFlatToFlatLen + gridLineThickness) * mouseRow + ((int)mouseCol & 1) * gridAltOffsetY,
+				0.39f
 			);
 			modelStack.Scale(
 				gridCellScaleX + gridLineThickness * 2.5f,
@@ -1256,9 +1274,9 @@ void Scene::RenderGridCellOfMouse(){
 			);
 		} else{
 			modelStack.Translate(
-				gridOffsetX + (gridCellFlatToFlatLen + gridLineThickness) * (float)mouseCol + ((int)mouseRow & 1) * gridAltOffsetX,
-				gridOffsetY + (gridCellSideLen * 1.5f + gridLineThickness) * (float)mouseRow,
-				0.4f
+				gridOffsetX + (gridCellFlatToFlatLen + gridLineThickness) * mouseCol + ((int)mouseRow & 1) * gridAltOffsetX,
+				gridOffsetY + (gridCellSideLen * 1.5f + gridLineThickness) * mouseRow,
+				0.39f
 			);
 			modelStack.Rotate(
 				90.0f,
@@ -1274,6 +1292,46 @@ void Scene::RenderGridCellOfMouse(){
 		}
 
 		RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.0f, 1.0f, 0.0f), 0.4f);
+
+		modelStack.PopMatrix();
+	}
+}
+
+void Scene::RenderSelectedGridCell(){
+	if(selectedRow >= 0 && selectedCol >= 0){
+		modelStack.PushMatrix();
+
+		if(gridType == HexGrid<float>::GridType::FlatTop){
+			modelStack.Translate(
+				gridOffsetX + (gridCellSideLen * 1.5f + gridLineThickness) * (float)selectedCol,
+				gridOffsetY + (gridCellFlatToFlatLen + gridLineThickness) * (float)selectedRow + (selectedCol & 1) * gridAltOffsetY,
+				0.4f
+			);
+			modelStack.Scale(
+				gridCellScaleX + gridLineThickness * 2.5f,
+				gridCellScaleY + gridLineThickness * 2.5f,
+				1.0f
+			);
+		} else{
+			modelStack.Translate(
+				gridOffsetX + (gridCellFlatToFlatLen + gridLineThickness) * (float)selectedCol + (selectedRow & 1) * gridAltOffsetX,
+				gridOffsetY + (gridCellSideLen * 1.5f + gridLineThickness) * (float)selectedRow,
+				0.4f
+			);
+			modelStack.Rotate(
+				90.0f,
+				0.0f,
+				0.0f,
+				1.0f
+			);
+			modelStack.Scale(
+				gridCellScaleY + gridLineThickness * 2.5f,
+				gridCellScaleX + gridLineThickness * 2.5f,
+				1.0f
+			);
+		}
+
+		RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.0f, 0.0f, 1.0f), 0.4f);
 
 		modelStack.PopMatrix();
 	}

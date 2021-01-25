@@ -58,6 +58,8 @@ private:
 	float gridOffsetY;
 	float mouseRow;
 	float mouseCol;
+	int selectedRow;
+	int selectedCol;
 
 	float gridCellFlatToFlatLen;
 	float gridCellSideLen;
@@ -88,6 +90,7 @@ private:
 	void RenderMap();
 	void RenderTile(const std::vector<TileType>& tileLayer, const int r, const int c);
 	void RenderGridCellOfMouse();
+	void RenderSelectedGridCell();
 
 	void RenderSceneText();
 	void RenderDebugInfoText(Mesh* const textMesh, const Color& textColor, const float textSize);
