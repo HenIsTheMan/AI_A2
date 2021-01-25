@@ -180,24 +180,11 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 			static bool isKeyDownQ = false;
 			if(!isKeyDownQ && App::Key('Q')){
-				/*if(sim->turn == SimTurn::Player && creditsPlayer >= spawnCostPlayer){
+				if(sim->turn == SimTurn::Player && creditsPlayer >= spawnCostPlayer){
 					sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim));
 					creditsPlayer -= spawnCostPlayer;
 					spawnCostPlayer += 10;
-				}*/
-
-				sim->OnEntityActivated(gridCols, entityFactory->SpawnTemp(Obj::KnightCreationAttribs<Vector3, float>(1, gridCols, sim), Vector3(1.0f, 1.0f, 0.0f), Obj::EntityFacingDir::Up));
-				sim->OnEntityActivated(gridCols, entityFactory->SpawnTemp(Obj::KnightCreationAttribs<Vector3, float>(1, gridCols, sim), Vector3(1.0f, 2.0f, 0.0f), Obj::EntityFacingDir::Up));
-				sim->OnEntityActivated(gridCols, entityFactory->SpawnTemp(Obj::KnightCreationAttribs<Vector3, float>(1, gridCols, sim), Vector3(1.0f, 3.0f, 0.0f), Obj::EntityFacingDir::Down));
-				sim->OnEntityActivated(gridCols, entityFactory->SpawnTemp(Obj::KnightCreationAttribs<Vector3, float>(1, gridCols, sim), Vector3(1.0f, 4.0f, 0.0f), Obj::EntityFacingDir::Down));
-				sim->OnEntityActivated(gridCols, entityFactory->SpawnTemp(Obj::KnightCreationAttribs<Vector3, float>(1, gridCols, sim), Vector3(1.0f, 5.0f, 0.0f), Obj::EntityFacingDir::UL));
-				sim->OnEntityActivated(gridCols, entityFactory->SpawnTemp(Obj::KnightCreationAttribs<Vector3, float>(1, gridCols, sim), Vector3(1.0f, 6.0f, 0.0f), Obj::EntityFacingDir::UL));
-				sim->OnEntityActivated(gridCols, entityFactory->SpawnTemp(Obj::KnightCreationAttribs<Vector3, float>(1, gridCols, sim), Vector3(1.0f, 7.0f, 0.0f), Obj::EntityFacingDir::UR));
-				sim->OnEntityActivated(gridCols, entityFactory->SpawnTemp(Obj::KnightCreationAttribs<Vector3, float>(1, gridCols, sim), Vector3(1.0f, 8.0f, 0.0f), Obj::EntityFacingDir::UR));
-				sim->OnEntityActivated(gridCols, entityFactory->SpawnTemp(Obj::KnightCreationAttribs<Vector3, float>(1, gridCols, sim), Vector3(1.0f, 9.0f, 0.0f), Obj::EntityFacingDir::DL));
-				sim->OnEntityActivated(gridCols, entityFactory->SpawnTemp(Obj::KnightCreationAttribs<Vector3, float>(1, gridCols, sim), Vector3(1.0f, 10.0f, 0.0f), Obj::EntityFacingDir::DL));
-				sim->OnEntityActivated(gridCols, entityFactory->SpawnTemp(Obj::KnightCreationAttribs<Vector3, float>(1, gridCols, sim), Vector3(1.0f, 11.0f, 0.0f), Obj::EntityFacingDir::DR));
-				sim->OnEntityActivated(gridCols, entityFactory->SpawnTemp(Obj::KnightCreationAttribs<Vector3, float>(1, gridCols, sim), Vector3(1.0f, 12.0f, 0.0f), Obj::EntityFacingDir::DR));
+				}
 
 				isKeyDownQ = true;
 			} else if(isKeyDownQ && !App::Key('Q')){
