@@ -20,8 +20,22 @@ namespace Obj{
 				IEntityCreationAttribs<T, Type>::im_Health = 4.0f;
 				break;
 			case 2:
+				IEntityCreationAttribs<T, Type>::im_ActionType = EntityActionType::UnidirectionalAttack;
+				IEntityCreationAttribs<T, Type>::im_ActionRange = 1;
+				IEntityCreationAttribs<T, Type>::im_VisionType = EntityVisionType::Omnidirectional;
+				IEntityCreationAttribs<T, Type>::im_VisionRange = 2;
+
+				IEntityCreationAttribs<T, Type>::im_ActionMag = 2.0f;
+				IEntityCreationAttribs<T, Type>::im_Health = 8.0f;
 				break;
 			case 3:
+				IEntityCreationAttribs<T, Type>::im_ActionType = EntityActionType::UnidirectionalAttack;
+				IEntityCreationAttribs<T, Type>::im_ActionRange = 1;
+				IEntityCreationAttribs<T, Type>::im_VisionType = EntityVisionType::Omnidirectional;
+				IEntityCreationAttribs<T, Type>::im_VisionRange = 3;
+
+				IEntityCreationAttribs<T, Type>::im_ActionMag = 3.0f;
+				IEntityCreationAttribs<T, Type>::im_Health = 16.0f;
 				break;
 		}
 	}
