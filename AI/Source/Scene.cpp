@@ -392,8 +392,6 @@ void Scene::Render(){
 		0.0f
 	);
 
-	RenderGridCellOfMouse();
-	
 	RenderBG();
 	switch(sim->status){
 		case SimRuntimeStatus::Waiting:
@@ -403,6 +401,9 @@ void Scene::Render(){
 		case SimRuntimeStatus::Ongoing:
 			RenderMap();
 			RenderEntities();
+			if(sim->turn == SimTurn::Player){
+				RenderGridCellOfMouse();
+			}
 			break;
 		case SimRuntimeStatus::MakingTheMap:
 			RenderMap();
@@ -1340,7 +1341,6 @@ void Scene::RenderGridCellOfMouse(){
 
 	const float trueMouseX = (float)mouseX * ((rightVal - leftVal) / (float)windowWidth) + leftVal + im_Cam.pos.x;
 	const float trueMouseY = (float)mouseY * ((topVal - bottomVal) / (float)windowHeight) + bottomVal - im_Cam.pos.y;
-	//*/
 
 	const float gridWidth = grid->CalcWidth();
 	const float gridHeight = grid->CalcHeight();
@@ -1348,28 +1348,28 @@ void Scene::RenderGridCellOfMouse(){
 	const float xOffset = ((float)windowWidth - gridWidth) * 0.5f;
 	const float yOffset = ((float)windowHeight - gridHeight) * 0.5f;
 
-	//if(trueMouseX > xOffset + gridLineThickness * 0.5f && trueMouseX < xOffset + gridWidth - gridLineThickness * 0.5f
-		//&& trueMouseY > yOffset + gridLineThickness * 0.5f && trueMouseY < yOffset + gridHeight - gridLineThickness * 0.5f){
-		float unitX = gridLineThickness;
-		float unitY = gridLineThickness;
-		if(gridType == HexGrid<float>::GridType::FlatTop){
-			unitX += grid->CalcCellSideLen() * 1.5f;
-			unitY += grid->CalcCellFlatToFlatLen();
-		} else{
-			unitX += grid->CalcCellFlatToFlatLen();
-			unitY += grid->CalcCellSideLen() * 1.5f;
-		}
+	float unitX = gridLineThickness;
+	float unitY = gridLineThickness;
+	if(gridType == HexGrid<float>::GridType::FlatTop){
+		unitX += grid->CalcCellSideLen() * 1.5f;
+		unitY += grid->CalcCellFlatToFlatLen();
+	} else{
+		unitX += grid->CalcCellFlatToFlatLen();
+		unitY += grid->CalcCellSideLen() * 1.5f;
+	}
 
-		float mouseRow = 0.0f;
-		float mouseCol = 0.0f;
-		if(gridType == HexGrid<float>::GridType::FlatTop){
-			mouseCol = std::floor((trueMouseX - xOffset + unitX * 0.5f) / unitX);
-			mouseRow = std::floor(((float)windowHeight - trueMouseY - yOffset - ((int)mouseCol & 1) * grid->CalcAltOffsetY() + grid->CalcAltOffsetY()) / unitY);
-		} else{
-			mouseRow = std::floor(((float)windowHeight - trueMouseY - yOffset + unitY * 0.5f) / unitY);
-			mouseCol = std::floor((trueMouseX - xOffset - ((int)mouseRow & 1) * grid->CalcAltOffsetX() + grid->CalcAltOffsetX()) / unitX);
-		}
+	float mouseRow = 0.0f;
+	float mouseCol = 0.0f;
+	if(gridType == HexGrid<float>::GridType::FlatTop){
+		mouseCol = std::floor((trueMouseX - xOffset + unitX * 0.5f) / unitX);
+		mouseRow = std::floor(((float)windowHeight - trueMouseY - yOffset - ((int)mouseCol & 1) * grid->CalcAltOffsetY() + grid->CalcAltOffsetY()) / unitY);
+	} else{
+		mouseRow = std::floor(((float)windowHeight - trueMouseY - yOffset + unitY * 0.5f) / unitY);
+		mouseCol = std::floor((trueMouseX - xOffset - ((int)mouseRow & 1) * grid->CalcAltOffsetX() + grid->CalcAltOffsetX()) / unitX);
+	}
+	//*/
 
+	if(mouseRow >= 0 && mouseRow <= gridRows - 1 && mouseCol >= 0 && mouseCol <= gridCols - 1){
 		modelStack.PushMatrix();
 
 		if(gridType == HexGrid<float>::GridType::FlatTop){
@@ -1379,8 +1379,8 @@ void Scene::RenderGridCellOfMouse(){
 				0.4f
 			);
 			modelStack.Scale(
-				gridCellScaleX,
-				gridCellScaleY,
+				gridCellScaleX + gridLineThickness * 2.5f,
+				gridCellScaleY + gridLineThickness * 2.5f,
 				1.0f
 			);
 		} else{
@@ -1396,16 +1396,16 @@ void Scene::RenderGridCellOfMouse(){
 				1.0f
 			);
 			modelStack.Scale(
-				gridCellScaleY,
-				gridCellScaleX,
+				gridCellScaleY + gridLineThickness * 2.5f,
+				gridCellScaleX + gridLineThickness * 2.5f,
 				1.0f
 			);
 		}
 
-		RenderMesh(meshList[(int)GeoType::Hex], true, Color(), 0.5f);
+		RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.0f, 1.0f, 0.0f), 0.4f);
 
 		modelStack.PopMatrix();
-	//}
+	}
 }
 
 void Scene::RenderSceneText(){
