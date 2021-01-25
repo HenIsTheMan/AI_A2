@@ -141,9 +141,6 @@
     <ClInclude Include="Source\EntityActionType.hpp">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="Source\EntityMovementType.hpp">
-      <Filter>Entity</Filter>
-    </ClInclude>
     <ClInclude Include="Source\EntityVisionType.hpp">
       <Filter>Entity</Filter>
     </ClInclude>

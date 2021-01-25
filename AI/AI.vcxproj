@@ -171,7 +171,6 @@
     <ClInclude Include="Source\EntityCreationHelpers.h" />
     <ClInclude Include="Source\EntityFacingDir.hpp" />
     <ClInclude Include="Source\EntityFactory.h" />
-    <ClInclude Include="Source\EntityMovementType.hpp" />
     <ClInclude Include="Source\EntityTeam.hpp" />
     <ClInclude Include="Source\EntityType.hpp" />
     <ClInclude Include="Source\EntityVisionType.hpp" />

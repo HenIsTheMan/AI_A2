@@ -5,7 +5,6 @@
 #include "EntityFacingDir.hpp"
 
 #include "EntityActionType.hpp"
-#include "EntityMovementType.hpp"
 #include "EntityVisionType.hpp"
 
 #include "State.h"
@@ -31,8 +30,6 @@ namespace Obj{
 
 		EntityActionType im_ActionType = EntityActionType::Nil;
 		int im_ActionRange = 0;
-		EntityMovementType im_MovementType = EntityMovementType::Nil;
-		int im_MovementRange = 0;
 		EntityVisionType im_VisionType = EntityVisionType::Nil;
 		int im_VisionRange = 0;
 
