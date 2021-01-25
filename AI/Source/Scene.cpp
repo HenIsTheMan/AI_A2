@@ -173,7 +173,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 			static bool isKeyDownQ = false;
 			if(!isKeyDownQ && App::Key('Q')){
-				entityFactory->SpawnRandUnit(Obj::KnightCreationAttribs<Vector3, float>());
+				entityFactory->SpawnRandUnit();
 
 				isKeyDownQ = true;
 			} else if(isKeyDownQ && !App::Key('Q')){

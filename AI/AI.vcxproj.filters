@@ -171,9 +171,6 @@
     <ClInclude Include="Source\ObjPool.h">
       <Filter>Misc</Filter>
     </ClInclude>
-    <ClInclude Include="Source\EntityCreationAttribs.hpp">
-      <Filter>Entity</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GunnerCreationAttribs.h">
       <Filter>Entity\CreationAttribs</Filter>
     </ClInclude>
@@ -182,6 +179,9 @@
     </ClInclude>
     <ClInclude Include="Source\KnightCreationAttribs.h">
       <Filter>Entity\CreationAttribs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\IEntityCreationAttribs.hpp">
+      <Filter>Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

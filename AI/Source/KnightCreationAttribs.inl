@@ -1,12 +1,14 @@
 namespace Obj{
 	template<class T, typename Type>
 	KnightCreationAttribs<T, Type>::KnightCreationAttribs():
-		EntityCreationAttribs<T, Type>()
+		IEntityCreationAttribs<T, Type>()
 	{
-		EntityCreationAttribs<T, Type>::im_Team = EntityTeam::Player;
-		EntityCreationAttribs<T, Type>::im_FacingDir = EntityFacingDir::UL;
-		EntityCreationAttribs<T, Type>::im_Lvl = 1;
+		IEntityCreationAttribs<T, Type>::im_Team = EntityTeam::Player;
+		IEntityCreationAttribs<T, Type>::im_FacingDir = EntityFacingDir::UL;
+		IEntityCreationAttribs<T, Type>::im_Lvl = 1;
 
-		EntityCreationAttribs<T, Type>::im_Health = 5.0f;
+		IEntityCreationAttribs<T, Type>::im_LocalPos = T();
+
+		IEntityCreationAttribs<T, Type>::im_Health = 5.0f;
 	}
 }

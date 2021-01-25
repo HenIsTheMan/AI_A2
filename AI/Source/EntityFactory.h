@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Entity.h"
-#include "EntityCreationAttribs.hpp"
+#include "KnightCreationAttribs.h"
+#include "GunnerCreationAttribs.h"
+#include "HealerCreationAttribs.h"
 
 #include "ObjPool.h"
 
@@ -14,11 +16,11 @@ namespace Obj{
 	public:
 		~EntityFactory<T, Type>();
 
-		void SpawnKnight(const EntityCreationAttribs<T, Type>& attribs);
-		void SpawnGunner(const EntityCreationAttribs<T, Type>& attribs);
-		void SpawnHealer(const EntityCreationAttribs<T, Type>& attribs);
+		void SpawnKnight(const KnightCreationAttribs<T, Type>& attribs);
+		void SpawnGunner(const GunnerCreationAttribs<T, Type>& attribs);
+		void SpawnHealer(const HealerCreationAttribs<T, Type>& attribs);
 
-		void SpawnRandUnit(const EntityCreationAttribs<T, Type>& attribs);
+		void SpawnRandUnit();
 	private:
 		ObjPool<Entity<T, Type>>* entityPool;
 

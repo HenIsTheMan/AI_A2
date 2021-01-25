@@ -168,7 +168,6 @@
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\EntityActionType.hpp" />
     <ClInclude Include="Source\EntityAttribs.hpp" />
-    <ClInclude Include="Source\EntityCreationAttribs.hpp" />
     <ClInclude Include="Source\EntityFacingDir.hpp" />
     <ClInclude Include="Source\EntityFactory.h" />
     <ClInclude Include="Source\EntityMovementType.hpp" />
@@ -179,6 +178,7 @@
     <ClInclude Include="Source\GunnerCreationAttribs.h" />
     <ClInclude Include="Source\HealerCreationAttribs.h" />
     <ClInclude Include="Source\HexGrid.h" />
+    <ClInclude Include="Source\IEntityCreationAttribs.hpp" />
     <ClInclude Include="Source\KnightCreationAttribs.h" />
     <ClInclude Include="Source\ObjPool.h" />
     <ClInclude Include="Source\Rounding.hpp" />
