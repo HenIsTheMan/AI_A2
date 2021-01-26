@@ -555,9 +555,17 @@ void Sim::UpdateSoil(TileType& type){
 }
 
 void Sim::UpdateFire(TileType& type){
+	if(timeOfDay == SimTimeOfDay::Rainy && Math::RandIntMinMax(1, 100) <= 45){
+		type = TileType::Water;
+	} else if(Math::RandIntMinMax(1, 100) <= 20){
+		type = TileType::Soil;
+	}
 }
 
 void Sim::UpdateWater(TileType& type){
+	if(timeOfDay == SimTimeOfDay::Day && Math::RandIntMinMax(1, 100) <= 45){
+		type = TileType::Mud;
+	}
 }
 
 void Sim::UpdateGrass(TileType& type){

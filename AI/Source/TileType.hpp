@@ -5,9 +5,9 @@ enum struct TileType: int{
 	Wall,
 	Empty,
 	Soil,
-	Fire, //Can burn Grass, Can be put out by rain, Can spread
-	Water, //Formed from Empty by rain, Can flow
-	Grass, //Formed from Soil by Water and day
+	Fire, //Can burn Grass to spread, Can spread naturally, can spawn naturally during the day
+	Water, //Can spawn with rain
+	Grass, //Formed from Soil by Water and day, can spread with water and/or rain, can wither without water and/or rain
 	Mud,
 	Amt
 };
