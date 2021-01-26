@@ -520,11 +520,14 @@ void Sim::UpdateEnvironment(){
 	static float tileUpdateBT = 0.0f;
 
 	if(tileUpdateBT <= elapsedTime){
-		const TileType selectedTileType = (TileType)Math::RandIntMinMax((int)TileType::Soil, (int)TileType::Amt - 1);
+		const TileType selectedTileType = (TileType)Math::RandIntMinMax((int)TileType::Empty, (int)TileType::Amt - 1);
 
 		for(TileType& type: tileLayer){
 			if(type == selectedTileType){
 				switch(type){
+					case TileType::Empty:
+						UpdateEmpty(type);
+						break;
 					case TileType::Soil:
 						UpdateSoil(type);
 						break;
@@ -548,31 +551,58 @@ void Sim::UpdateEnvironment(){
 	}
 }
 
+void Sim::UpdateEmpty(TileType& type){
+	if(Math::RandIntMinMax(1, 100) <= 40){
+		if(timeOfDay == SimTimeOfDay::Rainy){
+			type = TileType::Water;
+		} else if(timeOfDay == SimTimeOfDay::Day){
+			type = TileType::Fire;
+		}
+	}
+}
+
 void Sim::UpdateSoil(TileType& type){
-	if(timeOfDay == SimTimeOfDay::Rainy && Math::RandIntMinMax(1, 100) <= 35){
-		type = TileType::Mud;
+	switch(timeOfDay){
+		case SimTimeOfDay::Day:
+			if(Math::RandIntMinMax(1, 100) <= 60){
+				type = TileType::Grass;
+			}
+			break;
+		case SimTimeOfDay::Rainy:
+			if(Math::RandIntMinMax(1, 100) <= 70){
+				type = TileType::Mud;
+			}
+			break;
+		case SimTimeOfDay::Night:
+			if(Math::RandIntMinMax(1, 100) <= 30){
+				type = TileType::Grass;
+			}
+			break;
 	}
 }
 
 void Sim::UpdateFire(TileType& type){
-	if(timeOfDay == SimTimeOfDay::Rainy && Math::RandIntMinMax(1, 100) <= 45){
+	if(Math::RandIntMinMax(1, 100) <= 20){
+		type = TileType::Empty;
+	} else if(timeOfDay == SimTimeOfDay::Rainy && Math::RandIntMinMax(1, 100) <= 45){
 		type = TileType::Water;
-	} else if(Math::RandIntMinMax(1, 100) <= 20){
-		type = TileType::Soil;
 	}
 }
 
 void Sim::UpdateWater(TileType& type){
 	if(timeOfDay == SimTimeOfDay::Day && Math::RandIntMinMax(1, 100) <= 45){
-		type = TileType::Mud;
+		type = TileType::Empty;
 	}
 }
 
 void Sim::UpdateGrass(TileType& type){
+	if(timeOfDay == SimTimeOfDay::Day && Math::RandIntMinMax(1, 100) <= 42){
+		type = TileType::Fire;
+	}
 }
 
 void Sim::UpdateMud(TileType& type){
-	if(timeOfDay == SimTimeOfDay::Day && Math::RandIntMinMax(1, 100) <= 40){
+	if(timeOfDay == SimTimeOfDay::Day && Math::RandIntMinMax(1, 100) <= 70){
 		type = TileType::Soil;
 	}
 }

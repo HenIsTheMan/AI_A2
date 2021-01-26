@@ -61,6 +61,7 @@ private:
 	StopWatch timer;
 
 	void UpdateEnvironment();
+	void UpdateEmpty(TileType& type);
 	void UpdateSoil(TileType& type);
 	void UpdateFire(TileType& type);
 	void UpdateWater(TileType& type);
