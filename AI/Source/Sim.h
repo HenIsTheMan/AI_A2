@@ -58,4 +58,11 @@ private:
 	std::vector<TileType> tileLayer;
 
 	StopWatch timer;
+
+	void UpdateEnvironment();
+	void UpdateSoil(TileType& tile);
+	void UpdateFire(TileType& tile);
+	void UpdateWater(TileType& tile);
+	void UpdateGrass(TileType& tile);
+	void UpdateMud(TileType& tile);
 };

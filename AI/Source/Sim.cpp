@@ -480,6 +480,7 @@ void Sim::Update(const double dt){
 			break;
 		case SimTurn::Environment:
 			turnDuration = turnDurationEnvironment;
+			UpdateEnvironment();
 			break;
 		case SimTurn::Player:
 			turnDuration = turnDurationPlayer;
@@ -511,4 +512,47 @@ void Sim::Update(const double dt){
 		timeOfDay = (SimTimeOfDay)Math::RandIntMinMax((int)SimTimeOfDay::Day, (int)SimTimeOfDay::Amt - 1);
 		timeOfDayElapsedTime = 0.0f;
 	}
+}
+
+void Sim::UpdateEnvironment(){
+	static float tileUpdateBT = 0.0f;
+
+	if(tileUpdateBT <= turnElapsedTime){
+		for(TileType& tile: tileLayer){
+			switch(tile){
+				case TileType::Soil:
+					UpdateSoil(tile);
+					break;
+				case TileType::Fire:
+					UpdateFire(tile);
+					break;
+				case TileType::Water:
+					UpdateWater(tile);
+					break;
+				case TileType::Grass:
+					UpdateGrass(tile);
+					break;
+				case TileType::Mud:
+					UpdateMud(tile);
+					break;
+			}
+		}
+
+		tileUpdateBT = turnElapsedTime + Math::RandFloatMinMax(1.0f, 2.0f);
+	}
+}
+
+void Sim::UpdateSoil(TileType& tile){
+}
+
+void Sim::UpdateFire(TileType& tile){
+}
+
+void Sim::UpdateWater(TileType& tile){
+}
+
+void Sim::UpdateGrass(TileType& tile){
+}
+
+void Sim::UpdateMud(TileType& tile){
 }
