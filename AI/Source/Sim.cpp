@@ -489,7 +489,7 @@ void Sim::Update(const double dt){
 
 	if(turnElapsedTime >= turnDuration){
 		if(turn != SimTurn::Environment){
-			if(Math::RandIntMinMax(1, 10) <= 2){
+			if(Math::RandIntMinMax(1, 10) <= 4){
 				savedTurn = turn;
 				turn = SimTurn::Environment;
 			} else{
@@ -518,23 +518,27 @@ void Sim::UpdateEnvironment(){
 	static float tileUpdateBT = 0.0f;
 
 	if(tileUpdateBT <= turnElapsedTime){
-		for(TileType& tile: tileLayer){
-			switch(tile){
-				case TileType::Soil:
-					UpdateSoil(tile);
-					break;
-				case TileType::Fire:
-					UpdateFire(tile);
-					break;
-				case TileType::Water:
-					UpdateWater(tile);
-					break;
-				case TileType::Grass:
-					UpdateGrass(tile);
-					break;
-				case TileType::Mud:
-					UpdateMud(tile);
-					break;
+		const TileType selectedTileType = (TileType)Math::RandIntMinMax((int)TileType::Soil, (int)TileType::Amt - 1);
+
+		for(TileType& type: tileLayer){
+			if(type == selectedTileType){
+				switch(type){
+					case TileType::Soil:
+						UpdateSoil(type);
+						break;
+					case TileType::Fire:
+						UpdateFire(type);
+						break;
+					case TileType::Water:
+						UpdateWater(type);
+						break;
+					case TileType::Grass:
+						UpdateGrass(type);
+						break;
+					case TileType::Mud:
+						UpdateMud(type);
+						break;
+				}
 			}
 		}
 
@@ -542,17 +546,23 @@ void Sim::UpdateEnvironment(){
 	}
 }
 
-void Sim::UpdateSoil(TileType& tile){
+void Sim::UpdateSoil(TileType& type){
+	if(timeOfDay == SimTimeOfDay::Rainy && Math::RandIntMinMax(1, 4) <= 3){
+		type = TileType::Mud;
+	}
 }
 
-void Sim::UpdateFire(TileType& tile){
+void Sim::UpdateFire(TileType& type){
 }
 
-void Sim::UpdateWater(TileType& tile){
+void Sim::UpdateWater(TileType& type){
 }
 
-void Sim::UpdateGrass(TileType& tile){
+void Sim::UpdateGrass(TileType& type){
 }
 
-void Sim::UpdateMud(TileType& tile){
+void Sim::UpdateMud(TileType& type){
+	if(timeOfDay == SimTimeOfDay::Day && Math::RandIntMinMax(1, 5) <= 3){
+		type = TileType::Soil;
+	}
 }

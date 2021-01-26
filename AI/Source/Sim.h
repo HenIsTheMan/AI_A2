@@ -60,9 +60,9 @@ private:
 	StopWatch timer;
 
 	void UpdateEnvironment();
-	void UpdateSoil(TileType& tile);
-	void UpdateFire(TileType& tile);
-	void UpdateWater(TileType& tile);
-	void UpdateGrass(TileType& tile);
-	void UpdateMud(TileType& tile);
+	void UpdateSoil(TileType& type);
+	void UpdateFire(TileType& type);
+	void UpdateWater(TileType& type);
+	void UpdateGrass(TileType& type);
+	void UpdateMud(TileType& type);
 };

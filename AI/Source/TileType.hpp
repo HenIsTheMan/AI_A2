@@ -4,10 +4,10 @@ enum struct TileType: int{
 	Invalid,
 	Wall,
 	Empty,
-	Soil, //Formed from mud...
+	Soil,
 	Fire, //Can burn Grass, Can be put out by rain, Can spread
 	Water, //Formed from Empty by rain, Can flow
 	Grass, //Formed from Soil by Water and day
-	Mud, //Formed from Soil by rain
+	Mud,
 	Amt
 };

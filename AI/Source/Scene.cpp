@@ -142,7 +142,7 @@ void Scene::Init(){
 	sim->spd = 1.0f;
 	sim->turnDurationAI = 4.0f;
 	sim->turnDurationEnvironment = 4.0f;
-	sim->turnDurationPlayer = 30.0f;
+	sim->turnDurationPlayer = 4.0f;
 	sim->turnElapsedTime = 0.0f;
 	sim->turn = (bool)Math::RandIntMinMax(0, 1) ? SimTurn::Player : SimTurn::AI;
 	sim->timeOfDayDuration = 20.0f;
@@ -229,7 +229,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 			static bool isKeyDownSpace = false;
 			if(!isKeyDownSpace && App::Key(VK_SPACE)){
 				if(sim->turn == SimTurn::Player){
-					sim->turn = Math::RandIntMinMax(1, 10) <= 2 ? SimTurn::Environment : SimTurn::AI;
+					sim->turn = Math::RandIntMinMax(1, 10) <= 4 ? SimTurn::Environment : SimTurn::AI;
 					sim->turnElapsedTime = 0.0f;
 
 					if(sim->turn == SimTurn::Player){
