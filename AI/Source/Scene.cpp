@@ -8,6 +8,25 @@
 #include "EventAddCredits.h"
 #include "ListenerFlags.hpp"
 
+#include "StateAttackKnight.h"
+#include "StateChaseKnight.h"
+#include "StateDeadKnight.h"
+#include "StateEscapeKnight.h"
+#include "StateIdleKnight.h"
+#include "StatePatrolKnight.h"
+
+#include "StateAttackGunner.h"
+#include "StateChaseGunner.h"
+#include "StateDeadGunner.h"
+#include "StateEscapeGunner.h"
+#include "StateIdleGunner.h"
+#include "StatePatrolGunner.h"
+
+#include "StateDeadHealer.h"
+#include "StateFollowHealer.h"
+#include "StateHealHealer.h"
+#include "StateWanderHealer.h"
+
 extern double mouseScrollWheelYOffset;
 extern int windowWidth;
 extern int windowHeight;
@@ -50,6 +69,9 @@ Scene::Scene():
 	gridCellSideLen(0.0f),
 	gridAltOffsetX(0.0f),
 	gridAltOffsetY(0.0f),
+	knightSM(new SM()),
+	gunnerSM(new SM()),
+	healerSM(new SM()),
 	sim(new Sim()),
 	grid(new HexGrid<float>(HexGrid<float>::GridType::Amt, 0.0f, 0.0f, 0.0f, 0, 0)),
 	entityFactory(Obj::EntityFactory<Vector3, float>::RetrieveGlobalObjPtr()),
@@ -62,6 +84,21 @@ Scene::Scene():
 }
 
 Scene::~Scene(){
+	if(knightSM != nullptr){
+		delete knightSM;
+		knightSM = nullptr;
+	}
+
+	if(gunnerSM != nullptr){
+		delete gunnerSM;
+		gunnerSM = nullptr;
+	}
+
+	if(healerSM != nullptr){
+		delete healerSM;
+		healerSM = nullptr;
+	}
+
 	if(sim != nullptr){
 		delete sim;
 		sim = nullptr;
@@ -116,6 +153,25 @@ void Scene::Init(){
 	grid->SetLineThickness(gridLineThickness);
 	grid->SetRows(gridRows);
 	grid->SetCols(gridCols);
+
+	knightSM->AddState(new State(StateID::StateAttackKnight, StateAttackKnight::Enter, StateAttackKnight::Update, StateAttackKnight::Exit));
+	knightSM->AddState(new State(StateID::StateChaseKnight, StateChaseKnight::Enter, StateChaseKnight::Update, StateChaseKnight::Exit));
+	knightSM->AddState(new State(StateID::StateDeadKnight, StateDeadKnight::Enter, StateDeadKnight::Update, StateDeadKnight::Exit));
+	knightSM->AddState(new State(StateID::StateEscapeKnight, StateEscapeKnight::Enter, StateEscapeKnight::Update, StateEscapeKnight::Exit));
+	knightSM->AddState(new State(StateID::StateIdleKnight, StateIdleKnight::Enter, StateIdleKnight::Update, StateIdleKnight::Exit));
+	knightSM->AddState(new State(StateID::StatePatrolKnight, StatePatrolKnight::Enter, StatePatrolKnight::Update, StatePatrolKnight::Exit));
+
+	gunnerSM->AddState(new State(StateID::StateAttackGunner, StateAttackGunner::Enter, StateAttackGunner::Update, StateAttackGunner::Exit));
+	gunnerSM->AddState(new State(StateID::StateChaseGunner, StateChaseGunner::Enter, StateChaseGunner::Update, StateChaseGunner::Exit));
+	gunnerSM->AddState(new State(StateID::StateDeadGunner, StateDeadGunner::Enter, StateDeadGunner::Update, StateDeadGunner::Exit));
+	gunnerSM->AddState(new State(StateID::StateEscapeGunner, StateEscapeGunner::Enter, StateEscapeGunner::Update, StateEscapeGunner::Exit));
+	gunnerSM->AddState(new State(StateID::StateIdleGunner, StateIdleGunner::Enter, StateIdleGunner::Update, StateIdleGunner::Exit));
+	gunnerSM->AddState(new State(StateID::StatePatrolGunner, StatePatrolGunner::Enter, StatePatrolGunner::Update, StatePatrolGunner::Exit));
+
+	healerSM->AddState(new State(StateID::StateDeadHealer, StateDeadHealer::Enter, StateDeadHealer::Update, StateDeadHealer::Exit));
+	healerSM->AddState(new State(StateID::StateFollowHealer, StateFollowHealer::Enter, StateFollowHealer::Update, StateFollowHealer::Exit));
+	healerSM->AddState(new State(StateID::StateHealHealer, StateHealHealer::Enter, StateHealHealer::Update, StateHealHealer::Exit));
+	healerSM->AddState(new State(StateID::StateWanderHealer, StateWanderHealer::Enter, StateWanderHealer::Update, StateWanderHealer::Exit));
 
 	publisher->AddListener((long int)ListenerFlags::Scene, this);
 }

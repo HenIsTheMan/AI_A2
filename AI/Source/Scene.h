@@ -13,7 +13,10 @@
 #include "ObjPool.h"
 #include "Publisher.h"
 
+#include "StateMachine.h"
+
 using Entity = Obj::Entity<Vector3, float>; //Can because Entity<Vector3, float> is in another namespace
+using SM = StateMachine<StateID, Entity>;
 
 class Scene final: public SceneSupport, public Listener{
 public:
@@ -65,6 +68,11 @@ private:
 	float gridCellSideLen;
 	float gridAltOffsetX;
 	float gridAltOffsetY;
+
+	///Shared SMs
+	SM* knightSM;
+	SM* gunnerSM;
+	SM* healerSM;
 
 	Sim* sim;
 	HexGrid<float>* grid;

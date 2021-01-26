@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Vector3.h"
-#include "StateID.hpp" //Shld not be here
+#include "StateID.hpp"
 
 namespace Obj{
 	template <class T, typename Type>
