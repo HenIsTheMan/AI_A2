@@ -1652,70 +1652,257 @@ void Scene::MakeSimMap(){
 }
 
 void Scene::ClearFogUnidirectional(const int row, const int col, const int range, const Obj::EntityFacingDir facingDir){
-	if(gridType == HexGrid<float>::GridType::FlatTop){
-		if((col & 1) == 1){
-			switch(facingDir){
-				case Obj::EntityFacingDir::Up:
-					break;
-				case Obj::EntityFacingDir::Down:
-					break;
-				case Obj::EntityFacingDir::Left:
-					break;
-				case Obj::EntityFacingDir::Right:
-					break;
-				case Obj::EntityFacingDir::UL:
-					break;
-				case Obj::EntityFacingDir::UR:
-					break;
-			}
-		} else{
-			switch(facingDir){
-				case Obj::EntityFacingDir::Up:
-					break;
-				case Obj::EntityFacingDir::Down:
-					break;
-				case Obj::EntityFacingDir::Left:
-					break;
-				case Obj::EntityFacingDir::Right:
-					break;
-				case Obj::EntityFacingDir::DL:
-					break;
-				case Obj::EntityFacingDir::DR:
-					break;
-			}
+	std::vector<std::pair<int, int>> myVec;
+	myVec.emplace_back(std::make_pair(0, row * gridCols + col));
+
+	while(!myVec.empty()){
+		const std::pair<int, int> myPair = myVec.front();
+		if(!fogLayer[myPair.second]){
+			myVec.erase(myVec.begin());
+			continue;
 		}
-	} else{
-		if((row & 1) == 1){
-			switch(facingDir){
-				case Obj::EntityFacingDir::Up:
-					break;
-				case Obj::EntityFacingDir::Down:
-					break;
-				case Obj::EntityFacingDir::Left:
-					break;
-				case Obj::EntityFacingDir::Right:
-					break;
-				case Obj::EntityFacingDir::DR:
-					break;
-				case Obj::EntityFacingDir::UR:
-					break;
+		fogLayer[myPair.second] = false;
+
+		if(myPair.first != range){
+			const int myCol = myPair.second % gridCols;
+			const int myRow = myPair.second / gridCols;
+
+			if(gridType == HexGrid<float>::GridType::FlatTop){
+				if((col & 1) == 1){
+					switch(facingDir){
+						case Obj::EntityFacingDir::Up:
+							if(myRow < gridRows - 1){
+								const int upIndex = (myRow + 1) * gridCols + myCol;
+								myVec.emplace_back(std::make_pair(myPair.first + 1, upIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::Down:
+							if(myRow > 0){
+								const int downIndex = (myRow - 1) * gridCols + myCol;
+								myVec.emplace_back(std::make_pair(myPair.first + 1, downIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::Left:
+							if(myCol > 0){
+								const int leftIndex = myRow * gridCols + (myCol - 1);
+								myVec.emplace_back(std::make_pair(myPair.first + 1, leftIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::Right:
+							if(myCol < gridCols - 1){
+								const int rightIndex = myRow * gridCols + (myCol + 1);
+								myVec.emplace_back(std::make_pair(myPair.first + 1, rightIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::UL:
+							if(myCol > 0 && myRow < gridRows - 1){
+								const int ULIndex = (myRow + 1) * gridCols + (myCol - 1);
+								myVec.emplace_back(std::make_pair(myPair.first + 1, ULIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::UR:
+							if(myCol < gridCols - 1 && myRow < gridRows - 1){
+								const int URIndex = (myRow + 1) * gridCols + (myCol + 1);
+								myVec.emplace_back(std::make_pair(myPair.first + 1, URIndex));
+							}
+							break;
+					}
+				} else{
+					switch(facingDir){
+						case Obj::EntityFacingDir::Up:
+							if(myRow < gridRows - 1){
+								const int upIndex = (myRow + 1) * gridCols + myCol;
+								myVec.emplace_back(std::make_pair(myPair.first + 1, upIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::Down:
+							if(myRow > 0){
+								const int downIndex = (myRow - 1) * gridCols + myCol;
+								myVec.emplace_back(std::make_pair(myPair.first + 1, downIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::Left:
+							if(myCol > 0){
+								const int leftIndex = myRow * gridCols + (myCol - 1);
+								myVec.emplace_back(std::make_pair(myPair.first + 1, leftIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::Right:
+							if(myCol < gridCols - 1){
+								const int rightIndex = myRow * gridCols + (myCol + 1);
+								myVec.emplace_back(std::make_pair(myPair.first + 1, rightIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::DL:
+							if(myCol > 0 && myRow > 0){
+								const int DLIndex = (myRow - 1) * gridCols + (myCol - 1);
+								myVec.emplace_back(std::make_pair(myPair.first + 1, DLIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::DR:
+							if(myCol < gridCols - 1 && myRow > 0){
+								const int DRIndex = (myRow - 1) * gridCols + (myCol + 1);
+								myVec.emplace_back(std::make_pair(myPair.first + 1, DRIndex));
+							}
+							break;
+					}
+				}
+			} else{
+				if((row & 1) == 1){
+					switch(facingDir){
+						case Obj::EntityFacingDir::Up:
+							if(myRow < gridRows - 1){
+								const int upIndex = (myRow + 1) * gridCols + myCol;
+								myVec.emplace_back(std::make_pair(myPair.first + 1, upIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::Down:
+							if(myRow > 0){
+								const int downIndex = (myRow - 1) * gridCols + myCol;
+								myVec.emplace_back(std::make_pair(myPair.first + 1, downIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::Left:
+							if(myCol > 0){
+								const int leftIndex = myRow * gridCols + (myCol - 1);
+								myVec.emplace_back(std::make_pair(myPair.first + 1, leftIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::Right:
+							if(myCol < gridCols - 1){
+								const int rightIndex = myRow * gridCols + (myCol + 1);
+								myVec.emplace_back(std::make_pair(myPair.first + 1, rightIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::DR:
+							if(myCol < gridCols - 1 && myRow > 0){
+								const int DRIndex = (myRow - 1) * gridCols + (myCol + 1);
+								myVec.emplace_back(std::make_pair(myPair.first + 1, DRIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::UR:
+							if(myCol < gridCols - 1 && myRow < gridRows - 1){
+								const int URIndex = (myRow + 1) * gridCols + (myCol + 1);
+								myVec.emplace_back(std::make_pair(myPair.first + 1, URIndex));
+							}
+							break;
+					}
+				} else{
+					switch(facingDir){
+						case Obj::EntityFacingDir::Up:
+							if(myRow < gridRows - 1){
+								const int upIndex = (myRow + 1) * gridCols + myCol;
+								myVec.emplace_back(std::make_pair(myPair.first + 1, upIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::Down:
+							if(myRow > 0){
+								const int downIndex = (myRow - 1) * gridCols + myCol;
+								myVec.emplace_back(std::make_pair(myPair.first + 1, downIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::Left:
+							if(myCol > 0){
+								const int leftIndex = myRow * gridCols + (myCol - 1);
+								myVec.emplace_back(std::make_pair(myPair.first + 1, leftIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::Right:
+							if(myCol < gridCols - 1){
+								const int rightIndex = myRow * gridCols + (myCol + 1);
+								myVec.emplace_back(std::make_pair(myPair.first + 1, rightIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::DL:
+							if(myCol > 0 && myRow > 0){
+								const int DLIndex = (myRow - 1) * gridCols + (myCol - 1);
+								myVec.emplace_back(std::make_pair(myPair.first + 1, DLIndex));
+							}
+							break;
+						case Obj::EntityFacingDir::UL:
+							if(myCol > 0 && myRow < gridRows - 1){
+								const int ULIndex = (myRow + 1) * gridCols + (myCol - 1);
+								myVec.emplace_back(std::make_pair(myPair.first + 1, ULIndex));
+							}
+							break;
+					}
+				}
 			}
-		} else{
-			switch(facingDir){
-				case Obj::EntityFacingDir::Up:
-					break;
-				case Obj::EntityFacingDir::Down:
-					break;
-				case Obj::EntityFacingDir::Left:
-					break;
-				case Obj::EntityFacingDir::Right:
-					break;
-				case Obj::EntityFacingDir::DL:
-					break;
-				case Obj::EntityFacingDir::UL:
-					break;
+
+			/*if(facingDir == Obj::EntityFacingDir::Up && myRow < gridRows - 1){
+				const int upIndex = (myRow + 1) * gridCols + myCol;
+				myVec.emplace_back(std::make_pair(myPair.first + 1, upIndex));
+				continue;
 			}
+			if(facingDir == Obj::EntityFacingDir::Down && myRow > 0){
+				const int downIndex = (myRow - 1) * gridCols + myCol;
+				myVec.emplace_back(std::make_pair(myPair.first + 1, downIndex));
+				continue;
+			}
+			if(facingDir == Obj::EntityFacingDir::Left && myCol > 0){
+				const int leftIndex = myRow * gridCols + (myCol - 1);
+				myVec.emplace_back(std::make_pair(myPair.first + 1, leftIndex));
+				continue;
+			}
+			if(facingDir == Obj::EntityFacingDir::Right && myCol < gridCols - 1){
+				const int rightIndex = myRow * gridCols + (myCol + 1);
+				myVec.emplace_back(std::make_pair(myPair.first + 1, rightIndex));
+				continue;
+			}
+
+			if(gridType == HexGrid<float>::GridType::FlatTop){
+				if(myCol & 1){
+					if(facingDir == Obj::EntityFacingDir::UL && myCol > 0 && myRow < gridRows - 1){
+						const int ULIndex = (myRow + 1) * gridCols + (myCol - 1);
+						myVec.emplace_back(std::make_pair(myPair.first + 1, ULIndex));
+						continue;
+					}
+					if(facingDir == Obj::EntityFacingDir::UR && myCol < gridCols - 1 && myRow < gridRows - 1){
+						const int URIndex = (myRow + 1) * gridCols + (myCol + 1);
+						myVec.emplace_back(std::make_pair(myPair.first + 1, URIndex));
+						continue;
+					}
+				} else{
+					if(facingDir == Obj::EntityFacingDir::DL && myCol > 0 && myRow > 0){
+						const int DLIndex = (myRow - 1) * gridCols + (myCol - 1);
+						myVec.emplace_back(std::make_pair(myPair.first + 1, DLIndex));
+						continue;
+					}
+					if(facingDir == Obj::EntityFacingDir::DR && myCol < gridCols - 1 && myRow > 0){
+						const int DRIndex = (myRow - 1) * gridCols + (myCol + 1);
+						myVec.emplace_back(std::make_pair(myPair.first + 1, DRIndex));
+						continue;
+					}
+				}
+			} else{
+				if(myRow & 1){
+					if(facingDir == Obj::EntityFacingDir::DR && myCol < gridCols - 1 && myRow > 0){
+						const int DRIndex = (myRow - 1) * gridCols + (myCol + 1);
+						myVec.emplace_back(std::make_pair(myPair.first + 1, DRIndex));
+						continue;
+					}
+					if(facingDir == Obj::EntityFacingDir::UR && myCol < gridCols - 1 && myRow < gridRows - 1){
+						const int URIndex = (myRow + 1) * gridCols + (myCol + 1);
+						myVec.emplace_back(std::make_pair(myPair.first + 1, URIndex));
+						continue;
+					}
+				} else{
+					if(facingDir == Obj::EntityFacingDir::DL && myCol > 0 && myRow > 0){
+						const int DLIndex = (myRow - 1) * gridCols + (myCol - 1);
+						myVec.emplace_back(std::make_pair(myPair.first + 1, DLIndex));
+						continue;
+					}
+					if(facingDir == Obj::EntityFacingDir::UL && myCol > 0 && myRow < gridRows - 1){
+						const int ULIndex = (myRow + 1) * gridCols + (myCol - 1);
+						myVec.emplace_back(std::make_pair(myPair.first + 1, ULIndex));
+						continue;
+					}
+				}
+			}
+		}*/
 		}
+
+		myVec.erase(myVec.begin());
 	}
 }
 
