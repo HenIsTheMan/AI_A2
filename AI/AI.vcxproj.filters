@@ -231,11 +231,11 @@
     <ClInclude Include="Source\StatePatrolKnight.h">
       <Filter>State\States\KnightStates</Filter>
     </ClInclude>
-    <ClInclude Include="Source\StateWanderHealer.h">
-      <Filter>State\States\HealerStates</Filter>
-    </ClInclude>
     <ClInclude Include="Source\StateHelpers.h">
       <Filter>State</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateIdleHealer.h">
+      <Filter>State\States\HealerStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -376,12 +376,12 @@
     <None Include="Source\StatePatrolKnight.inl">
       <Filter>State\States\KnightStates</Filter>
     </None>
-    <None Include="Source\StateWanderHealer.inl">
-      <Filter>State\States\HealerStates</Filter>
-    </None>
     <None Include="cpp.hint" />
     <None Include="Source\StateDeadKnight.inl">
       <Filter>State\States\KnightStates</Filter>
+    </None>
+    <None Include="Source\StateIdleHealer.inl">
+      <Filter>State\States\HealerStates</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -25,7 +25,7 @@
 #include "StateDeadHealer.h"
 #include "StateFollowHealer.h"
 #include "StateHealHealer.h"
-#include "StateWanderHealer.h"
+#include "StateIdleHealer.h"
 
 extern double mouseScrollWheelYOffset;
 extern int windowWidth;
@@ -171,7 +171,7 @@ void Scene::Init(){
 	healerSM->AddState(new State(StateID::StateDeadHealer, StateDeadHealer::Enter, StateDeadHealer::Update, StateDeadHealer::Exit));
 	healerSM->AddState(new State(StateID::StateFollowHealer, StateFollowHealer::Enter, StateFollowHealer::Update, StateFollowHealer::Exit));
 	healerSM->AddState(new State(StateID::StateHealHealer, StateHealHealer::Enter, StateHealHealer::Update, StateHealHealer::Exit));
-	healerSM->AddState(new State(StateID::StateWanderHealer, StateWanderHealer::Enter, StateWanderHealer::Update, StateWanderHealer::Exit));
+	healerSM->AddState(new State(StateID::StateIdleHealer, StateIdleHealer::Enter, StateIdleHealer::Update, StateIdleHealer::Exit));
 
 	entityFactory->SetKnightSM(knightSM);
 	entityFactory->SetGunnerSM(gunnerSM);

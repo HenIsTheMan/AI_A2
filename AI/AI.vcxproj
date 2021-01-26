@@ -220,7 +220,7 @@
     <ClInclude Include="Source\StateMachine.h" />
     <ClInclude Include="Source\StatePatrolGunner.h" />
     <ClInclude Include="Source\StatePatrolKnight.h" />
-    <ClInclude Include="Source\StateWanderHealer.h" />
+    <ClInclude Include="Source\StateIdleHealer.h" />
     <ClInclude Include="Source\TileCost.hpp" />
     <ClInclude Include="Source\TileType.hpp" />
     <ClInclude Include="Source\SimTimeOfDay.hpp" />
@@ -260,7 +260,7 @@
     <None Include="Source\StateMachine.inl" />
     <None Include="Source\StatePatrolGunner.inl" />
     <None Include="Source\StatePatrolKnight.inl" />
-    <None Include="Source\StateWanderHealer.inl" />
+    <None Include="Source\StateIdleHealer.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
