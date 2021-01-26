@@ -1833,62 +1833,49 @@ void Scene::ClearFogOmnidirectional(const int row, const int col, const int rang
 			const int myCol = myPair.second % gridCols;
 			const int myRow = myPair.second / gridCols;
 
-			const int upIndex = (myRow + 1) * gridCols + myCol;
-			const int downIndex = (myRow - 1) * gridCols + myCol;
-			const int leftIndex = myRow * gridCols + (myCol - 1);
-			const int rightIndex = myRow * gridCols + (myCol + 1);
-
-			if(myRow < gridRows - 1){
-				myVec.emplace_back(std::make_pair(myPair.first + 1, upIndex));
+			if(myRow < gridRows - 1){ //Up
+				myVec.emplace_back(std::make_pair(myPair.first + 1, (myRow + 1) * gridCols + myCol));
 			}
-			if(myRow > 0){
-				myVec.emplace_back(std::make_pair(myPair.first + 1, downIndex));
+			if(myRow > 0){ //Down
+				myVec.emplace_back(std::make_pair(myPair.first + 1, (myRow - 1) * gridCols + myCol));
 			}
-			if(myCol > 0){
-				myVec.emplace_back(std::make_pair(myPair.first + 1, leftIndex));
+			if(myCol > 0){ //Left
+				myVec.emplace_back(std::make_pair(myPair.first + 1, myRow * gridCols + (myCol - 1)));
 			}
-			if(myCol < gridCols - 1){
-				myVec.emplace_back(std::make_pair(myPair.first + 1, rightIndex));
+			if(myCol < gridCols - 1){ //Right
+				myVec.emplace_back(std::make_pair(myPair.first + 1, myRow * gridCols + (myCol + 1)));
 			}
 
 			if(gridType == HexGrid<float>::GridType::FlatTop){
 				if(myCol & 1){
-					const int ULIndex = (myRow + 1) * gridCols + (myCol - 1);
-					const int URIndex = (myRow + 1) * gridCols + (myCol + 1);
-					if(myCol > 0 && myRow < gridRows - 1){
-						myVec.emplace_back(std::make_pair(myPair.first + 1, ULIndex));
+					if(myCol > 0 && myRow < gridRows - 1){ //UL
+						myVec.emplace_back(std::make_pair(myPair.first + 1, (myRow + 1) * gridCols + (myCol - 1)));
 					}
-					if(myCol < gridCols - 1 && myRow < gridRows - 1){
-						myVec.emplace_back(std::make_pair(myPair.first + 1, URIndex));
+					if(myCol < gridCols - 1 && myRow < gridRows - 1){ //UR
+						myVec.emplace_back(std::make_pair(myPair.first + 1, (myRow + 1) * gridCols + (myCol + 1)));
 					}
 				} else{
-					const int DLIndex = (myRow - 1) * gridCols + (myCol - 1);
-					const int DRIndex = (myRow - 1) * gridCols + (myCol + 1);
-					if(myCol > 0 && myRow > 0){
-						myVec.emplace_back(std::make_pair(myPair.first + 1, DLIndex));
+					if(myCol > 0 && myRow > 0){ //DL
+						myVec.emplace_back(std::make_pair(myPair.first + 1, (myRow - 1) * gridCols + (myCol - 1)));
 					}
-					if(myCol < gridCols - 1 && myRow > 0){
-						myVec.emplace_back(std::make_pair(myPair.first + 1, DRIndex));
+					if(myCol < gridCols - 1 && myRow > 0){ //DR
+						myVec.emplace_back(std::make_pair(myPair.first + 1, (myRow - 1) * gridCols + (myCol + 1)));
 					}
 				}
 			} else{
 				if(myRow & 1){
-					const int DRIndex = (myRow - 1) * gridCols + (myCol + 1);
-					const int URIndex = (myRow + 1) * gridCols + (myCol + 1);
-					if(myCol < gridCols - 1 && myRow > 0){
-						myVec.emplace_back(std::make_pair(myPair.first + 1, DRIndex));
+					if(myCol < gridCols - 1 && myRow > 0){ //DR
+						myVec.emplace_back(std::make_pair(myPair.first + 1, (myRow - 1) * gridCols + (myCol + 1)));
 					}
-					if(myCol < gridCols - 1 && myRow < gridRows - 1){
-						myVec.emplace_back(std::make_pair(myPair.first + 1, URIndex));
+					if(myCol < gridCols - 1 && myRow < gridRows - 1){ //UR
+						myVec.emplace_back(std::make_pair(myPair.first + 1, (myRow + 1) * gridCols + (myCol + 1)));
 					}
 				} else{
-					const int DLIndex = (myRow - 1) * gridCols + (myCol - 1);
-					const int ULIndex = (myRow + 1) * gridCols + (myCol - 1);
-					if(myCol > 0 && myRow > 0){
-						myVec.emplace_back(std::make_pair(myPair.first + 1, DLIndex));
+					if(myCol > 0 && myRow > 0){ //DL
+						myVec.emplace_back(std::make_pair(myPair.first + 1, (myRow - 1) * gridCols + (myCol - 1)));
 					}
-					if(myCol > 0 && myRow < gridRows - 1){
-						myVec.emplace_back(std::make_pair(myPair.first + 1, ULIndex));
+					if(myCol > 0 && myRow < gridRows - 1){ //UL
+						myVec.emplace_back(std::make_pair(myPair.first + 1, (myRow + 1) * gridCols + (myCol - 1)));
 					}
 				}
 			}
