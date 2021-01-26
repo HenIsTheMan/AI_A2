@@ -1,3 +1,5 @@
+bool StateIdleHealer::sm_IsFlatTop = false;
+
 void StateIdleHealer::Enter(Entity* const entity){
 }
 

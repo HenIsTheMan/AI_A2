@@ -1,3 +1,5 @@
+bool StateIdleKnight::sm_IsFlatTop = false;
+
 void StateIdleKnight::Enter(Entity* const entity){
 }
 

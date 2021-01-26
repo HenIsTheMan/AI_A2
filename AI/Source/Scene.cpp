@@ -198,7 +198,10 @@ void Scene::Update(const double updateDt, const double renderDt){
 				fogLayer.reserve(gridTotalCells);
 				fogLayer.resize(gridTotalCells);
 
-				StateIdleGunner::sm_IsFlatTop = gridType == HexGrid<float>::GridType::FlatTop;
+				const bool isFlatTop = gridType == HexGrid<float>::GridType::FlatTop;
+				StateIdleKnight::sm_IsFlatTop = isFlatTop;
+				StateIdleGunner::sm_IsFlatTop = isFlatTop;
+				StateIdleHealer::sm_IsFlatTop = isFlatTop;
 
 				canMakeSimMap = false;
 			}
