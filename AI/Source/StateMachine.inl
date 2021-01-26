@@ -31,6 +31,7 @@ void StateMachine<T, Type>::CheckForStateTransition(Type* const entity){
 			entity->im_Attribs.im_CurrState->Enter(entity);
 		} else{
 			entity->im_Attribs.im_CurrState = entity->im_Attribs.im_NextState;
+			entity->im_Attribs.im_CurrState->Enter(entity);
 		}
 	}
 }

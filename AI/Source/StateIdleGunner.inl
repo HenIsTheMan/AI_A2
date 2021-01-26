@@ -1,6 +1,8 @@
 bool StateIdleGunner::sm_IsFlatTop = false;
 
 void StateIdleGunner::Enter(Entity* const entity){
+	entity->im_Attribs.im_IdleChangeFacingDirDelay = Math::RandFloatMinMax(2.1f, 2.7f);
+	entity->im_Attribs.im_IdleChangeFacingDirBT = entity->im_Attribs.im_TimeAlive + entity->im_Attribs.im_IdleChangeFacingDirDelay;
 }
 
 void StateIdleGunner::Update(Entity* const entity, const double dt){

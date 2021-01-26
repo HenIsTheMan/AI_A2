@@ -38,7 +38,7 @@ namespace Obj{
 		entity->im_Attribs.im_MaxHealth = entity->im_Attribs.im_CurrHealth;
 
 		entity->im_Attribs.im_StateMachine = knightSM;
-		entity->im_Attribs.im_CurrState = entity->im_Attribs.im_NextState = knightSM->AcquireState(StateID::StateIdleKnight);
+		entity->im_Attribs.im_NextState = knightSM->AcquireState(StateID::StateIdleKnight);
 
 		return entity;
 	}
@@ -65,7 +65,7 @@ namespace Obj{
 		entity->im_Attribs.im_MaxHealth = entity->im_Attribs.im_CurrHealth;
 
 		entity->im_Attribs.im_StateMachine = gunnerSM;
-		entity->im_Attribs.im_CurrState = entity->im_Attribs.im_NextState = gunnerSM->AcquireState(StateID::StateIdleGunner);
+		entity->im_Attribs.im_NextState = gunnerSM->AcquireState(StateID::StateIdleGunner);
 
 		return entity;
 	}
@@ -92,7 +92,7 @@ namespace Obj{
 		entity->im_Attribs.im_MaxHealth = entity->im_Attribs.im_CurrHealth;
 
 		entity->im_Attribs.im_StateMachine = healerSM;
-		entity->im_Attribs.im_CurrState = entity->im_Attribs.im_NextState = healerSM->AcquireState(StateID::StateIdleHealer);
+		entity->im_Attribs.im_NextState = healerSM->AcquireState(StateID::StateIdleHealer);
 
 		return entity;
 	}
