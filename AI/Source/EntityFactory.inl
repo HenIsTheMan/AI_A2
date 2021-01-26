@@ -1,7 +1,10 @@
 namespace Obj{
 	template <class T, typename Type>
 	EntityFactory<T, Type>::EntityFactory():
-		entityPool(ObjPool<Entity<T, Type>>::RetrieveGlobalObjPtr())
+		entityPool(ObjPool<Entity<T, Type>>::RetrieveGlobalObjPtr()),
+		knightSM(nullptr),
+		gunnerSM(nullptr),
+		healerSM(nullptr)
 	{
 	}
 
@@ -96,5 +99,20 @@ namespace Obj{
 				return SpawnHealer(HealerCreationAttribs<Vector3, float>(1, gridCols, sim, isFlatTop));
 		}
 		return nullptr;
+	}
+
+	template <class T, typename Type>
+	void EntityFactory<T, Type>::SetKnightSM(SM* const knightSM){
+		this->knightSM = knightSM;
+	}
+
+	template <class T, typename Type>
+	void EntityFactory<T, Type>::SetGunnerSM(SM* const gunnerSM){
+		this->gunnerSM = gunnerSM;
+	}
+
+	template <class T, typename Type>
+	void EntityFactory<T, Type>::SetHealerSM(SM* const healerSM){
+		this->healerSM = healerSM;
 	}
 }

@@ -13,10 +13,7 @@
 #include "ObjPool.h"
 #include "Publisher.h"
 
-#include "StateMachine.h"
-
 using Entity = Obj::Entity<Vector3, float>; //Can because Entity<Vector3, float> is in another namespace
-using SM = StateMachine<StateID, Entity>;
 
 class Scene final: public SceneSupport, public Listener{
 public:

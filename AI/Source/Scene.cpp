@@ -173,6 +173,10 @@ void Scene::Init(){
 	healerSM->AddState(new State(StateID::StateHealHealer, StateHealHealer::Enter, StateHealHealer::Update, StateHealHealer::Exit));
 	healerSM->AddState(new State(StateID::StateWanderHealer, StateWanderHealer::Enter, StateWanderHealer::Update, StateWanderHealer::Exit));
 
+	entityFactory->SetKnightSM(knightSM);
+	entityFactory->SetGunnerSM(gunnerSM);
+	entityFactory->SetHealerSM(healerSM);
+
 	publisher->AddListener((long int)ListenerFlags::Scene, this);
 }
 

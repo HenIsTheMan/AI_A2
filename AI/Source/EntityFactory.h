@@ -9,6 +9,10 @@
 
 #include "Singleton.h"
 
+#include "StateMachine.h"
+
+using SM = StateMachine<StateID, Entity>;
+
 namespace Obj{
 	template <class T, typename Type>
 	class EntityFactory final: public Singleton<EntityFactory<T, Type>>{
@@ -21,8 +25,19 @@ namespace Obj{
 		::Entity* SpawnHealer(const HealerCreationAttribs<T, Type>& attribs);
 
 		::Entity* SpawnRandUnit(const int gridCols, const Sim* const sim, const bool isFlatTop);
+
+		//* Setters
+		void SetKnightSM(SM* const knightSM);
+		void SetGunnerSM(SM* const gunnerSM);
+		void SetHealerSM(SM* const healerSM);
+		//*/
 	private:
 		ObjPool<Entity<T, Type>>* entityPool;
+
+		///Shared SMs
+		SM* knightSM;
+		SM* gunnerSM;
+		SM* healerSM;
 
 		EntityFactory<T, Type>();
 	};
