@@ -511,7 +511,18 @@ void Sim::Update(const double dt){
 	}
 
 	if(timeOfDayElapsedTime >= timeOfDayDuration){
-		timeOfDay = (SimTimeOfDay)Math::RandIntMinMax((int)SimTimeOfDay::Day, (int)SimTimeOfDay::Amt - 1);
+		switch(timeOfDay){
+			case SimTimeOfDay::Day:
+				timeOfDay = (bool)Math::RandIntMinMax(0, 1) ? SimTimeOfDay::Rainy : SimTimeOfDay::Night;
+				break;
+			case SimTimeOfDay::Rainy:
+				timeOfDay = (bool)Math::RandIntMinMax(0, 1) ? SimTimeOfDay::Day : SimTimeOfDay::Night;
+				break;
+			case SimTimeOfDay::Night:
+				timeOfDay = (bool)Math::RandIntMinMax(0, 1) ? SimTimeOfDay::Rainy : SimTimeOfDay::Day;
+				break;
+		}
+
 		timeOfDayElapsedTime = 0.0f;
 	}
 }
@@ -547,12 +558,12 @@ void Sim::UpdateEnvironment(){
 			}
 		}
 
-		tileUpdateBT = elapsedTime + Math::RandFloatMinMax(1.0f, 2.0f);
+		tileUpdateBT = elapsedTime + Math::RandFloatMinMax(0.4f, 0.5f);
 	}
 }
 
 void Sim::UpdateEmpty(TileType& type){
-	if(Math::RandIntMinMax(1, 100) <= 40){
+	if(Math::RandIntMinMax(1, 100) <= 4){
 		if(timeOfDay == SimTimeOfDay::Rainy){
 			type = TileType::Water;
 		} else if(timeOfDay == SimTimeOfDay::Day){
