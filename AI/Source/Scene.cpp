@@ -103,9 +103,9 @@ void Scene::Init(){
 
 	sim->status = SimRuntimeStatus::Waiting;
 	sim->spd = 1.0f;
-	sim->turnDuration = 99999.0f;
+	sim->turnDuration = 10.0f;
 	sim->turnElapsedTime = 0.0f;
-	sim->turn = SimTurn::Player;
+	sim->turn = (bool)Math::RandIntMinMax(0, 1) ? SimTurn::Player : SimTurn::AI;
 	sim->timeOfDayDuration = 20.0f;
 	sim->timeOfDayElapsedTime = 0.0f;
 	sim->timeOfDay = (SimTimeOfDay)Math::RandIntMinMax((int)SimTimeOfDay::Day, (int)SimTimeOfDay::Amt - 1);
@@ -182,8 +182,8 @@ void Scene::Update(const double updateDt, const double renderDt){
 			if(!isKeyDownQ && App::Key('Q')){
 				if(sim->turn == SimTurn::Player && creditsPlayer >= spawnCostPlayer){
 					sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim, gridType == HexGrid<float>::GridType::FlatTop));
-					//creditsPlayer -= spawnCostPlayer;
-					//spawnCostPlayer += 10;
+					creditsPlayer -= spawnCostPlayer;
+					spawnCostPlayer += 10;
 				}
 
 				isKeyDownQ = true;
@@ -1673,62 +1673,80 @@ void Scene::ClearFogUnidirectional(const int row, const int col, const int range
 				if(((col & 1) && (myCol & 1)) || ((~col & 1) && (~myCol & 1))){
 					facingDirProxy = facingDir;
 				} else{
-					switch(facingDir){
-						case Obj::EntityFacingDir::Left:
-							if((col & 1) == 1){
-								facingDirProxy = Obj::EntityFacingDir::DL;
-							} else{
+					if((myCol & 1) == 1){
+						switch(facingDir){
+							case Obj::EntityFacingDir::Left:
 								facingDirProxy = Obj::EntityFacingDir::UL;
-							}
-							break;
-						case Obj::EntityFacingDir::Right:
-							if((col & 1) == 1){
-								facingDirProxy = Obj::EntityFacingDir::DR;
-							} else{
+								break;
+							case Obj::EntityFacingDir::Right:
 								facingDirProxy = Obj::EntityFacingDir::UR;
-							}
-							break;
-						case Obj::EntityFacingDir::UL:
-						case Obj::EntityFacingDir::DL:
-							facingDirProxy = Obj::EntityFacingDir::Left;
-							break;
-						case Obj::EntityFacingDir::UR:
-						case Obj::EntityFacingDir::DR:
-							facingDirProxy = Obj::EntityFacingDir::Right;
-							break;
-						default:
-							facingDirProxy = facingDir;
+								break;
+							case Obj::EntityFacingDir::UL:
+								facingDirProxy = Obj::EntityFacingDir::Left;
+								break;
+							case Obj::EntityFacingDir::UR:
+								facingDirProxy = Obj::EntityFacingDir::Right;
+								break;
+							default:
+								facingDirProxy = facingDir;
+						}
+					} else{
+						switch(facingDir){
+							case Obj::EntityFacingDir::Left:
+								facingDirProxy = Obj::EntityFacingDir::DL;
+								break;
+							case Obj::EntityFacingDir::Right:
+								facingDirProxy = Obj::EntityFacingDir::DR;
+								break;
+							case Obj::EntityFacingDir::DL:
+								facingDirProxy = Obj::EntityFacingDir::Left;
+								break;
+							case Obj::EntityFacingDir::DR:
+								facingDirProxy = Obj::EntityFacingDir::Right;
+								break;
+							default:
+								facingDirProxy = facingDir;
+						}
 					}
 				}
 			} else{
 				if(((row & 1) && (myRow & 1)) || ((~row & 1) && (~myRow & 1))){
 					facingDirProxy = facingDir;
 				} else{
-					switch(facingDir){
-						case Obj::EntityFacingDir::Up:
-							if((row & 1) == 1){
-								facingDirProxy = Obj::EntityFacingDir::UL;
-							} else{
+					if((myRow & 1) == 1){
+						switch(facingDir){
+							case Obj::EntityFacingDir::Up:
 								facingDirProxy = Obj::EntityFacingDir::UR;
-							}
-							break;
-						case Obj::EntityFacingDir::Down:
-							if((row & 1) == 1){
-								facingDirProxy = Obj::EntityFacingDir::DL;
-							} else{
+								break;
+							case Obj::EntityFacingDir::Down:
 								facingDirProxy = Obj::EntityFacingDir::DR;
-							}
-							break;
-						case Obj::EntityFacingDir::UL:
-						case Obj::EntityFacingDir::UR:
-							facingDirProxy = Obj::EntityFacingDir::Up;
-							break;
-						case Obj::EntityFacingDir::DL:
-						case Obj::EntityFacingDir::DR:
-							facingDirProxy = Obj::EntityFacingDir::Down;
-							break;
-						default:
-							facingDirProxy = facingDir;
+								break;
+							case Obj::EntityFacingDir::UR:
+								facingDirProxy = Obj::EntityFacingDir::Up;
+								break;
+							case Obj::EntityFacingDir::DR:
+								facingDirProxy = Obj::EntityFacingDir::Down;
+								break;
+							default:
+								facingDirProxy = facingDir;
+						}
+					} else{
+						switch(facingDir){
+							case Obj::EntityFacingDir::Up:
+								facingDirProxy = Obj::EntityFacingDir::UL;
+								break;
+							case Obj::EntityFacingDir::Down:
+								facingDirProxy = Obj::EntityFacingDir::DL;
+								break;
+							case Obj::EntityFacingDir::UL:
+								facingDirProxy = Obj::EntityFacingDir::Up;
+								break;
+							case Obj::EntityFacingDir::DL:
+								facingDirProxy = Obj::EntityFacingDir::Down;
+								break;
+							default:
+								facingDirProxy = facingDir;
+						}
 					}
 				}
 			}
