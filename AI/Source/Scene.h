@@ -85,6 +85,10 @@ private:
 	void UpdateGridAttribs();
 	void UpdateMisc(const double dt);
 	void UpdateEntities(const double dt);
+	void UpdateStates();
+	void UpdateKnightStates();
+	void UpdateGunnerStates();
+	void UpdateHealerStates();
 
 	void RenderBG();
 	void RenderCoverMap();

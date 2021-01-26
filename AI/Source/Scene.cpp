@@ -266,6 +266,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 			}
 
 			sim->Update(updateDt); //Not (dt * sim->spd) as...
+			UpdateStates();
 			UpdateEntities(updateDt * sim->spd);
 
 			break;
@@ -470,11 +471,19 @@ void Scene::UpdateEntities(const double dt){
 		}
 
 		switch(entity->im_Attribs.im_Type){
-			case Obj::EntityType::Knight:
+			using Obj::EntityType;
+
+			case EntityType::Knight:
+				knightSM->CheckForStateTransition(entity);
+				knightSM->UpdateCurrState(entity, dt);
 				break;
-			case Obj::EntityType::Gunner:
+			case EntityType::Gunner:
+				gunnerSM->CheckForStateTransition(entity);
+				gunnerSM->UpdateCurrState(entity, dt);
 				break;
-			case Obj::EntityType::Healer:
+			case EntityType::Healer:
+				healerSM->CheckForStateTransition(entity);
+				healerSM->UpdateCurrState(entity, dt);
 				break;
 		}
 	}
@@ -484,6 +493,24 @@ void Scene::UpdateEntities(const double dt){
 		entityPool->DeactivateObj(entity);
 	}
 	entitiesToDeactivate.clear();
+}
+
+void Scene::UpdateStates(){
+	UpdateKnightStates();
+	UpdateGunnerStates();
+	UpdateHealerStates();
+}
+
+void Scene::UpdateKnightStates(){
+	/*StateSkeleIdle* const stateSkeleIdle = ((StateSkeleIdle*)skeleSM->GetState(StateID::StateSkeleIdle));
+	stateSkeleIdle->im_ElapsedTime = elapsedTime;
+	stateSkeleIdle->im_Grid = &grid;*/
+}
+
+void Scene::UpdateGunnerStates(){
+}
+
+void Scene::UpdateHealerStates(){
 }
 
 void Scene::Render(){
