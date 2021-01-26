@@ -467,12 +467,23 @@ void Scene::UpdateMisc(const double dt){
 
 void Scene::UpdateEntities(const double dt){
 	const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
-	for(Entity* const& entity: entityLayer){
+	const std::vector<TileType>& tileLayer = sim->GetTileLayer();
+	const int entityLayerSize = (int)entityLayer.size();
+
+	for(int i = 0; i < entityLayerSize; ++i){
+		Entity* const& entity = entityLayer[i];
+
 		if(entity == nullptr){
 			continue;
 		}
+
+		if(tileLayer[i] == TileType::Fire){
+			entity->im_Attribs.im_CurrHealth -= 2.0f;
+		}
+
 		if(entity->im_Attribs.im_CurrHealth <= 0.0f){
 			entitiesToDeactivate.emplace_back(entity);
+			continue;
 		}
 
 		entity->im_Attribs.im_TimeAlive += (float)dt;
