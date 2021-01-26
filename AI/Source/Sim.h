@@ -49,6 +49,7 @@ public:
 	//*/
 private:
 	bool isKeySpace;
+	float elapsedTime;
 
 	int tileWeights[(int)TileType::Amt];
 

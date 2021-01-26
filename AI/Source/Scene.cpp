@@ -142,7 +142,7 @@ void Scene::Init(){
 	sim->spd = 1.0f;
 	sim->turnDurationAI = 4.0f;
 	sim->turnDurationEnvironment = 4.0f;
-	sim->turnDurationPlayer = 4.0f;
+	sim->turnDurationPlayer = 30.0f;
 	sim->turnElapsedTime = 0.0f;
 	sim->turn = (bool)Math::RandIntMinMax(0, 1) ? SimTurn::Player : SimTurn::AI;
 	sim->timeOfDayDuration = 20.0f;

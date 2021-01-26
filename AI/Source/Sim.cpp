@@ -14,6 +14,7 @@ extern bool endLoop;
 
 Sim::Sim():
 	isKeySpace(false),
+	elapsedTime(0.0f),
 	tileWeights(),
 	publisher(Publisher::RetrieveGlobalObjPtr()),
 	entityLayer(),
@@ -469,6 +470,7 @@ void Sim::MakeRadialHoleInTileLayer(const int gridRows, const int gridCols, cons
 }
 
 void Sim::Update(const double dt){
+	elapsedTime += (float)dt;
 	turnElapsedTime += (float)dt;
 	timeOfDayElapsedTime += (float)dt;
 
@@ -517,7 +519,7 @@ void Sim::Update(const double dt){
 void Sim::UpdateEnvironment(){
 	static float tileUpdateBT = 0.0f;
 
-	if(tileUpdateBT <= turnElapsedTime){
+	if(tileUpdateBT <= elapsedTime){
 		const TileType selectedTileType = (TileType)Math::RandIntMinMax((int)TileType::Soil, (int)TileType::Amt - 1);
 
 		for(TileType& type: tileLayer){
@@ -542,12 +544,12 @@ void Sim::UpdateEnvironment(){
 			}
 		}
 
-		tileUpdateBT = turnElapsedTime + Math::RandFloatMinMax(1.0f, 2.0f);
+		tileUpdateBT = elapsedTime + Math::RandFloatMinMax(1.0f, 2.0f);
 	}
 }
 
 void Sim::UpdateSoil(TileType& type){
-	if(timeOfDay == SimTimeOfDay::Rainy && Math::RandIntMinMax(1, 4) <= 3){
+	if(timeOfDay == SimTimeOfDay::Rainy && Math::RandIntMinMax(1, 100) <= 35){
 		type = TileType::Mud;
 	}
 }
@@ -562,7 +564,7 @@ void Sim::UpdateGrass(TileType& type){
 }
 
 void Sim::UpdateMud(TileType& type){
-	if(timeOfDay == SimTimeOfDay::Day && Math::RandIntMinMax(1, 5) <= 3){
+	if(timeOfDay == SimTimeOfDay::Day && Math::RandIntMinMax(1, 100) <= 40){
 		type = TileType::Soil;
 	}
 }
