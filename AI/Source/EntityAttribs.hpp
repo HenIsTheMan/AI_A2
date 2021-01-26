@@ -38,14 +38,18 @@ namespace Obj{
 		Type im_ActionMag = Type();
 		Type im_CurrHealth = Type();
 		Type im_MaxHealth = Type();
+		Type im_TimeAlive = Type();
 
-		//* ??
+		//* Vars for specific entities only (help la, I wanna do ECS alr)
+		Type im_IdleChangeFacingDirBT = Type();
+		Type im_IdleChangeFacingDirDelay = Type();
+		//*/
+
 		Entity<T, Type>* im_EntityTarget = nullptr;
 		T im_GridCellTargetLocalPos = T();
 
 		StateMachine<StateID, Entity<T, Type>>* im_StateMachine = nullptr;
 		State* im_CurrState = nullptr;
 		State* im_NextState = nullptr;
-		//*/
 	};
 }

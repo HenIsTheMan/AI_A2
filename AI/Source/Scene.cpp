@@ -198,6 +198,8 @@ void Scene::Update(const double updateDt, const double renderDt){
 				fogLayer.reserve(gridTotalCells);
 				fogLayer.resize(gridTotalCells);
 
+				StateIdleGunner::sm_IsFlatTop = gridType == HexGrid<float>::GridType::FlatTop;
+
 				canMakeSimMap = false;
 			}
 
@@ -465,10 +467,11 @@ void Scene::UpdateEntities(const double dt){
 		if(entity == nullptr){
 			continue;
 		}
-
 		if(entity->im_Attribs.im_CurrHealth <= 0.0f){
 			entitiesToDeactivate.emplace_back(entity);
 		}
+
+		entity->im_Attribs.im_TimeAlive += (float)dt;
 
 		switch(entity->im_Attribs.im_Type){
 			using Obj::EntityType;
