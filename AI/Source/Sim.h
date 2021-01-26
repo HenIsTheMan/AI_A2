@@ -19,7 +19,9 @@ public:
 	struct{
 		SimRuntimeStatus status = SimRuntimeStatus::Amt;
 		float spd = 0.0f;
-		float turnDuration = 0.0f;
+		float turnDurationAI = 0.0f;
+		float turnDurationEnvironment = 0.0f;
+		float turnDurationPlayer = 0.0f;
 		float turnElapsedTime = 0.0f;
 		SimTurn turn = SimTurn::Amt;
 		float timeOfDayDuration = 0.0f;

@@ -140,7 +140,9 @@ void Scene::Init(){
 
 	sim->status = SimRuntimeStatus::Waiting;
 	sim->spd = 1.0f;
-	sim->turnDuration = 10.0f;
+	sim->turnDurationAI = 4.0f;
+	sim->turnDurationEnvironment = 4.0f;
+	sim->turnDurationPlayer = 30.0f;
 	sim->turnElapsedTime = 0.0f;
 	sim->turn = (bool)Math::RandIntMinMax(0, 1) ? SimTurn::Player : SimTurn::AI;
 	sim->timeOfDayDuration = 20.0f;
@@ -187,7 +189,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 	UpdateMisc(updateDt);
 
 	switch(sim->status){
-		case SimRuntimeStatus::Waiting: {
+		case SimRuntimeStatus::Waiting:
 			UpdateGridAttribs();
 
 			if(canMakeSimMap && App::IsMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)){
@@ -207,7 +209,6 @@ void Scene::Update(const double updateDt, const double renderDt){
 			}
 
 			break;
-		}
 		case SimRuntimeStatus::MakingTheMap:
 			im_Cam.Update(updateDt);
 			if(App::Key('R')){
@@ -1688,10 +1689,12 @@ void Scene::RenderSimInfoText(Mesh* const textMesh, const Color& textColor, cons
 	const std::string texts[]{
 		(std::string)"Sim " + runtimeStatusTexts[(int)sim->status],
 		"Sim spd: " + std::to_string(sim->spd).substr(0, std::to_string((int)sim->spd).length() + 3),
-		"Sim time of day elapsed time: " + std::to_string(sim->timeOfDayElapsedTime).substr(0, std::to_string((int)sim->timeOfDayElapsedTime).length() + 3),
 		"Sim time of day duration: " + std::to_string(sim->timeOfDayDuration).substr(0, std::to_string((int)sim->timeOfDayDuration).length() + 3),
+		"Sim turn duration (AI): " + std::to_string(sim->turnDurationAI).substr(0, std::to_string((int)sim->turnDurationAI).length() + 3),
+		"Sim turn duration (Environment): " + std::to_string(sim->turnDurationEnvironment).substr(0, std::to_string((int)sim->turnDurationEnvironment).length() + 3),
+		"Sim turn duration (Player): " + std::to_string(sim->turnDurationPlayer).substr(0, std::to_string((int)sim->turnDurationPlayer).length() + 3),
+		"Sim time of day elapsed time: " + std::to_string(sim->timeOfDayElapsedTime).substr(0, std::to_string((int)sim->timeOfDayElapsedTime).length() + 3),
 		"Sim turn elapsed time: " + std::to_string(sim->turnElapsedTime).substr(0, std::to_string((int)sim->turnElapsedTime).length() + 3),
-		"Sim turn duration: " + std::to_string(sim->turnDuration).substr(0, std::to_string((int)sim->turnDuration).length() + 3),
 		"Sim turn: " + turnTexts[(int)sim->turn],
 	};
 	const size_t size = sizeof(texts) / sizeof(texts[0]);

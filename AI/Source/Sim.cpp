@@ -473,6 +473,19 @@ void Sim::Update(const double dt){
 	timeOfDayElapsedTime += (float)dt;
 
 	static SimTurn savedTurn = SimTurn::Amt;
+	float turnDuration = 0.0f;
+	switch(turn){
+		case SimTurn::AI:
+			turnDuration = turnDurationAI;
+			break;
+		case SimTurn::Environment:
+			turnDuration = turnDurationEnvironment;
+			break;
+		case SimTurn::Player:
+			turnDuration = turnDurationPlayer;
+			break;
+	}
+
 	if(turnElapsedTime >= turnDuration){
 		if(turn != SimTurn::Environment){
 			if(Math::RandIntMinMax(1, 10) <= 2){
