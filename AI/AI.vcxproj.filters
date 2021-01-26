@@ -352,9 +352,6 @@
     <None Include="Source\StateDeadHealer.inl">
       <Filter>State\States\HealerStates</Filter>
     </None>
-    <None Include="Source\StateDeadKnight.inl">
-      <Filter>State\States\KnightStates</Filter>
-    </None>
     <None Include="Source\StateEscapeGunner.inl">
       <Filter>State\States\GunnerStates</Filter>
     </None>
@@ -383,5 +380,8 @@
       <Filter>State\States\HealerStates</Filter>
     </None>
     <None Include="cpp.hint" />
+    <None Include="Source\StateDeadKnight.inl">
+      <Filter>State\States\KnightStates</Filter>
+    </None>
   </ItemGroup>
 </Project>
