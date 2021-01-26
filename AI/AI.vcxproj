@@ -162,6 +162,7 @@
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SpriteAni.cpp" />
     <ClCompile Include="Source\State.cpp" />
+    <ClCompile Include="Source\StateHelpers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Easing.hpp" />
@@ -201,8 +202,25 @@
     <ClInclude Include="Source\shader.h" />
     <ClInclude Include="Source\SpriteAni.h" />
     <ClInclude Include="Source\State.h" />
+    <ClInclude Include="Source\StateAttackGunner.h" />
+    <ClInclude Include="Source\StateAttackKnight.h" />
+    <ClInclude Include="Source\StateChaseGunner.h" />
+    <ClInclude Include="Source\StateChaseKnight.h" />
+    <ClInclude Include="Source\StateDeadGunner.h" />
+    <ClInclude Include="Source\StateDeadHealer.h" />
+    <ClInclude Include="Source\StateDeadKnight.h" />
+    <ClInclude Include="Source\StateEscapeGunner.h" />
+    <ClInclude Include="Source\StateEscapeKnight.h" />
+    <ClInclude Include="Source\StateFollowHealer.h" />
+    <ClInclude Include="Source\StateHealHealer.h" />
+    <ClInclude Include="Source\StateHelpers.h" />
     <ClInclude Include="Source\StateID.hpp" />
+    <ClInclude Include="Source\StateIdleGunner.h" />
+    <ClInclude Include="Source\StateIdleKnight.h" />
     <ClInclude Include="Source\StateMachine.h" />
+    <ClInclude Include="Source\StatePatrolGunner.h" />
+    <ClInclude Include="Source\StatePatrolKnight.h" />
+    <ClInclude Include="Source\StateWanderHealer.h" />
     <ClInclude Include="Source\TileCost.hpp" />
     <ClInclude Include="Source\TileType.hpp" />
     <ClInclude Include="Source\SimTimeOfDay.hpp" />
@@ -215,6 +233,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="cpp.hint" />
     <None Include="Shaders\AI.fragS" />
     <None Include="Shaders\AI.vertexS" />
     <None Include="Source\Entity.inl" />
@@ -225,7 +244,23 @@
     <None Include="Source\HexGrid.inl" />
     <None Include="Source\KnightCreationAttribs.inl" />
     <None Include="Source\ObjPool.inl" />
+    <None Include="Source\StateAttackGunner.inl" />
+    <None Include="Source\StateAttackKnight.inl" />
+    <None Include="Source\StateChaseGunner.inl" />
+    <None Include="Source\StateChaseKnight.inl" />
+    <None Include="Source\StateDeadGunner.inl" />
+    <None Include="Source\StateDeadHealer.inl" />
+    <None Include="Source\StateDeadKnight.inl" />
+    <None Include="Source\StateEscapeGunner.inl" />
+    <None Include="Source\StateEscapeKnight.inl" />
+    <None Include="Source\StateFollowHealer.inl" />
+    <None Include="Source\StateHealHealer.inl" />
+    <None Include="Source\StateIdleGunner.inl" />
+    <None Include="Source\StateIdleKnight.inl" />
     <None Include="Source\StateMachine.inl" />
+    <None Include="Source\StatePatrolGunner.inl" />
+    <None Include="Source\StatePatrolKnight.inl" />
+    <None Include="Source\StateWanderHealer.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

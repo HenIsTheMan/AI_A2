@@ -49,6 +49,9 @@
     <ClCompile Include="Source\EventAddCredits.cpp">
       <Filter>Event\Events</Filter>
     </ClCompile>
+    <ClCompile Include="Source\StateHelpers.cpp">
+      <Filter>State</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Cam.h">
@@ -183,6 +186,57 @@
     <ClInclude Include="Source\IEntityCreationAttribs.hpp">
       <Filter>Entity\EntityCreation</Filter>
     </ClInclude>
+    <ClInclude Include="Source\StateAttackGunner.h">
+      <Filter>State\States\GunnerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateAttackKnight.h">
+      <Filter>State\States\KnightStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateChaseGunner.h">
+      <Filter>State\States\GunnerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateChaseKnight.h">
+      <Filter>State\States\KnightStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateDeadGunner.h">
+      <Filter>State\States\GunnerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateDeadHealer.h">
+      <Filter>State\States\HealerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateDeadKnight.h">
+      <Filter>State\States\KnightStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateEscapeGunner.h">
+      <Filter>State\States\GunnerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateEscapeKnight.h">
+      <Filter>State\States\KnightStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateFollowHealer.h">
+      <Filter>State\States\HealerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateHealHealer.h">
+      <Filter>State\States\HealerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateIdleGunner.h">
+      <Filter>State\States\GunnerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateIdleKnight.h">
+      <Filter>State\States\KnightStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StatePatrolGunner.h">
+      <Filter>State\States\GunnerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StatePatrolKnight.h">
+      <Filter>State\States\KnightStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateWanderHealer.h">
+      <Filter>State\States\HealerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateHelpers.h">
+      <Filter>State</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
@@ -236,6 +290,15 @@
     <Filter Include="Entity\EntityCreation\CreationAttribs">
       <UniqueIdentifier>{ae5e80a8-1856-44d4-b64a-6a956bee3c90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="State\States\KnightStates">
+      <UniqueIdentifier>{029c27cd-90a3-4483-9aba-f5986f6bdd19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State\States\GunnerStates">
+      <UniqueIdentifier>{d0d44d21-e259-4197-97c4-84de2137fd13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State\States\HealerStates">
+      <UniqueIdentifier>{c8840ca2-b19d-4861-8801-09113e00887c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\StateMachine.inl">
@@ -271,5 +334,54 @@
     <None Include="Source\EntityCreationHelpers.inl">
       <Filter>Entity\EntityCreation</Filter>
     </None>
+    <None Include="Source\StateAttackGunner.inl">
+      <Filter>State\States\GunnerStates</Filter>
+    </None>
+    <None Include="Source\StateAttackKnight.inl">
+      <Filter>State\States\KnightStates</Filter>
+    </None>
+    <None Include="Source\StateChaseGunner.inl">
+      <Filter>State\States\GunnerStates</Filter>
+    </None>
+    <None Include="Source\StateChaseKnight.inl">
+      <Filter>State\States\KnightStates</Filter>
+    </None>
+    <None Include="Source\StateDeadGunner.inl">
+      <Filter>State\States\GunnerStates</Filter>
+    </None>
+    <None Include="Source\StateDeadHealer.inl">
+      <Filter>State\States\HealerStates</Filter>
+    </None>
+    <None Include="Source\StateDeadKnight.inl">
+      <Filter>State\States\KnightStates</Filter>
+    </None>
+    <None Include="Source\StateEscapeGunner.inl">
+      <Filter>State\States\GunnerStates</Filter>
+    </None>
+    <None Include="Source\StateEscapeKnight.inl">
+      <Filter>State\States\KnightStates</Filter>
+    </None>
+    <None Include="Source\StateFollowHealer.inl">
+      <Filter>State\States\HealerStates</Filter>
+    </None>
+    <None Include="Source\StateHealHealer.inl">
+      <Filter>State\States\HealerStates</Filter>
+    </None>
+    <None Include="Source\StateIdleGunner.inl">
+      <Filter>State\States\GunnerStates</Filter>
+    </None>
+    <None Include="Source\StateIdleKnight.inl">
+      <Filter>State\States\KnightStates</Filter>
+    </None>
+    <None Include="Source\StatePatrolGunner.inl">
+      <Filter>State\States\GunnerStates</Filter>
+    </None>
+    <None Include="Source\StatePatrolKnight.inl">
+      <Filter>State\States\KnightStates</Filter>
+    </None>
+    <None Include="Source\StateWanderHealer.inl">
+      <Filter>State\States\HealerStates</Filter>
+    </None>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>
