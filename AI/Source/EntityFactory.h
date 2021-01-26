@@ -20,7 +20,7 @@ namespace Obj{
 		::Entity* SpawnGunner(const GunnerCreationAttribs<T, Type>& attribs);
 		::Entity* SpawnHealer(const HealerCreationAttribs<T, Type>& attribs);
 
-		::Entity* SpawnRandUnit(const int gridCols, const Sim* const sim);
+		::Entity* SpawnRandUnit(const int gridCols, const Sim* const sim, const bool isFlatTop);
 	private:
 		ObjPool<Entity<T, Type>>* entityPool;
 

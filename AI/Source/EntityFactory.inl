@@ -86,14 +86,14 @@ namespace Obj{
 	}
 
 	template <class T, typename Type>
-	::Entity* EntityFactory<T, Type>::SpawnRandUnit(const int gridCols, const Sim* const sim){
+	::Entity* EntityFactory<T, Type>::SpawnRandUnit(const int gridCols, const Sim* const sim, const bool isFlatTop){
 		switch(Math::RandIntMinMax(0, 2)){
 			case 0:
-				return SpawnKnight(KnightCreationAttribs<Vector3, float>(1, gridCols, sim));
+				return SpawnKnight(KnightCreationAttribs<Vector3, float>(1, gridCols, sim, isFlatTop));
 			case 1:
-				return SpawnGunner(GunnerCreationAttribs<Vector3, float>(1, gridCols, sim));
+				return SpawnGunner(GunnerCreationAttribs<Vector3, float>(1, gridCols, sim, isFlatTop));
 			case 2:
-				return SpawnHealer(HealerCreationAttribs<Vector3, float>(1, gridCols, sim));
+				return SpawnHealer(HealerCreationAttribs<Vector3, float>(1, gridCols, sim, isFlatTop));
 		}
 		return nullptr;
 	}

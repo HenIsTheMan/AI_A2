@@ -181,7 +181,7 @@ void Scene::Update(const double updateDt, const double renderDt){
 			static bool isKeyDownQ = false;
 			if(!isKeyDownQ && App::Key('Q')){
 				if(sim->turn == SimTurn::Player && creditsPlayer >= spawnCostPlayer){
-					sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim));
+					sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim, gridType == HexGrid<float>::GridType::FlatTop));
 					creditsPlayer -= spawnCostPlayer;
 					spawnCostPlayer += 10;
 				}

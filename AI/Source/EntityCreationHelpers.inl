@@ -1,6 +1,97 @@
 namespace Obj{
-	EntityFacingDir ChooseRandFacingDir(){
-		return (EntityFacingDir)Math::RandIntMinMax(1, (int)EntityFacingDir::Amt - 1);
+	EntityFacingDir ChooseRandFacingDir(const bool isFlatTop, const int row, const int col){
+		if(isFlatTop){
+			if((col & 1) == 1){
+				switch(Math::RandIntMinMax(1, 6)){
+					case 1:
+						return EntityFacingDir::Up;
+						break;
+					case 2:
+						return EntityFacingDir::Down;
+						break;
+					case 3:
+						return EntityFacingDir::Left;
+						break;
+					case 4:
+						return EntityFacingDir::Right;
+						break;
+					case 5:
+						return EntityFacingDir::UL;
+						break;
+					case 6:
+						return EntityFacingDir::UR;
+						break;
+				}
+			} else{
+				switch(Math::RandIntMinMax(1, 6)){
+					case 1:
+						return EntityFacingDir::Up;
+						break;
+					case 2:
+						return EntityFacingDir::Down;
+						break;
+					case 3:
+						return EntityFacingDir::Left;
+						break;
+					case 4:
+						return EntityFacingDir::Right;
+						break;
+					case 5:
+						return EntityFacingDir::DL;
+						break;
+					case 6:
+						return EntityFacingDir::DR;
+						break;
+				}
+			}
+		} else{
+			if((row & 1) == 1){
+				switch(Math::RandIntMinMax(1, 6)){
+					case 1:
+						return EntityFacingDir::Up;
+						break;
+					case 2:
+						return EntityFacingDir::Down;
+						break;
+					case 3:
+						return EntityFacingDir::Left;
+						break;
+					case 4:
+						return EntityFacingDir::Right;
+						break;
+					case 5:
+						return EntityFacingDir::DR;
+						break;
+					case 6:
+						return EntityFacingDir::UR;
+						break;
+				}
+			} else{
+				switch(Math::RandIntMinMax(1, 6)){
+					case 1:
+						return EntityFacingDir::Up;
+						break;
+					case 2:
+						return EntityFacingDir::Down;
+						break;
+					case 3:
+						return EntityFacingDir::Left;
+						break;
+					case 4:
+						return EntityFacingDir::Right;
+						break;
+					case 5:
+						return EntityFacingDir::DL;
+						break;
+					case 6:
+						return EntityFacingDir::UL;
+						break;
+				}
+			}
+		}
+
+		(void)puts("Returning EntityFacingDir::Invalid!");
+		return EntityFacingDir::Invalid;
 	}
 
 	template <class T>
