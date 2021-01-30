@@ -1239,7 +1239,9 @@ void Scene::RenderFog(){
 
 	if(selectedRow >= 0 && selectedCol >= 0){
 		const Entity* const entity = entityLayer[selectedRow * gridCols + selectedCol];
-		if(entity != nullptr){
+		if(entity != nullptr
+			&& ((entity->im_Attribs.im_Team == Obj::EntityTeam::Player && sim->turn == SimTurn::Player)
+			|| (entity->im_Attribs.im_Team == Obj::EntityTeam::AI && sim->turn == SimTurn::AI))){
 			switch(entity->im_Attribs.im_VisionType){
 				case Obj::EntityVisionType::Unidirectional:
 					ClearFogUnidirectional((int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x, entity->im_Attribs.im_VisionRange, entity->im_Attribs.im_FacingDir);
