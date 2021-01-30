@@ -748,15 +748,15 @@ void Scene::UpdateEntities(const double dt){
 
 				} else if((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.y == (int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.y){
 
-					/*if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
+					if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
 						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Right;
 					} else{
 						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Left;
-					}*/
+					}
 
 				} else{
 
-					/*if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y){
+					if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y){
 						if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
 							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
 						} else{
@@ -768,7 +768,7 @@ void Scene::UpdateEntities(const double dt){
 						} else{
 							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
 						}
-					}*/
+					}
 
 				}
 			} else{
@@ -1117,7 +1117,7 @@ void Scene::RenderEntities(){
 		}
 
 		RenderMesh(meshList[(int)GeoType::Circle], true, entityMoving->im_Attribs.im_Team == Obj::EntityTeam::AI ? Color(0.4f, 0.0f, 0.0f) : Color(0.0f, 0.4f, 0.0f), 1.0f);
-		RenderEntityArt(entityMoving);
+		RenderEntityArtMoving(entityMoving);
 		RenderHealthBar(entityMoving);
 		RenderEntityLvl(entityMoving);
 
@@ -1334,6 +1334,133 @@ void Scene::RenderEntityArt(const Entity* const entity){
 					break;
 			}
 		}
+	}
+
+	modelStack.Scale(
+		0.6f,
+		0.6f,
+		1.0f
+	);
+
+	switch(entity->im_Attribs.im_Type){
+		case Obj::EntityType::Knight:
+			RenderMesh(meshList[(int)GeoType::Knight], false);
+			break;
+		case Obj::EntityType::Gunner:
+			RenderMesh(meshList[(int)GeoType::Gunner], false);
+			break;
+		case Obj::EntityType::Healer:
+			RenderMesh(meshList[(int)GeoType::Healer], false);
+			break;
+	}
+
+	modelStack.PopMatrix();
+}
+
+void Scene::RenderEntityArtMoving(const Entity* const entity){
+	modelStack.PushMatrix();
+
+	modelStack.Translate(
+		0.0f,
+		0.0f,
+		0.05f
+	);
+
+	if(gridType == HexGrid<float>::GridType::FlatTop){
+		if(((int)entity->im_Attribs.im_GridCellStartLocalPos.x & 1) == 1){
+			switch(entity->im_Attribs.im_FacingDir){
+				case Obj::EntityFacingDir::Up:
+					//Do nth
+					break;
+				case Obj::EntityFacingDir::Down:
+					modelStack.Rotate(
+						180.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::Left:
+					modelStack.Rotate(
+						120.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::Right:
+					modelStack.Rotate(
+						240.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::UL:
+					modelStack.Rotate(
+						60.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::UR:
+					modelStack.Rotate(
+						300.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+			}
+		} else{
+			switch(entity->im_Attribs.im_FacingDir){
+				case Obj::EntityFacingDir::Up:
+					//Do nth
+					break;
+				case Obj::EntityFacingDir::Down:
+					modelStack.Rotate(
+						180.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::Left:
+					modelStack.Rotate(
+						60.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::Right:
+					modelStack.Rotate(
+						300.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::DL:
+					modelStack.Rotate(
+						120.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::DR:
+					modelStack.Rotate(
+						240.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+			}
+		}
+	} else{
 	}
 
 	modelStack.Scale(

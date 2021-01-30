@@ -110,6 +110,7 @@ private:
 	void RenderCoverText();
 	void RenderEntities();
 	void RenderEntityArt(const Entity* const entity);
+	void RenderEntityArtMoving(const Entity* const entity);
 	void RenderHealthBar(const Entity* const entity);
 	void RenderEntityLvl(const Entity* const entity);
 	void RenderMap();
