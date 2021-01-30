@@ -47,6 +47,7 @@ namespace Obj{
 
 		Entity<T, Type>* im_EntityTarget = nullptr;
 		T im_GridCellTargetLocalPos = T();
+		T im_GridCellStartLocalPos = T();
 
 		StateMachine<StateID, Entity<T, Type>>* im_StateMachine = nullptr;
 		State* im_CurrState = nullptr;

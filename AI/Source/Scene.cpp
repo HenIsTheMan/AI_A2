@@ -149,9 +149,9 @@ void Scene::Init(){
 	sim->spd = 1.0f;
 	sim->turnDurationAI = 4.0f;
 	sim->turnDurationEnvironment = 10.0f;
-	sim->turnDurationPlayer = 30.0f;
+	sim->turnDurationPlayer = 99999.0f;
 	sim->turnElapsedTime = 0.0f;
-	sim->turn = (bool)Math::RandIntMinMax(0, 1) ? SimTurn::Player : SimTurn::AI;
+	sim->turn = SimTurn::Player;
 	sim->timeOfDayDuration = 4.0f;
 	sim->timeOfDayElapsedTime = 0.0f;
 	sim->timeOfDay = (SimTimeOfDay)Math::RandIntMinMax((int)SimTimeOfDay::Day, (int)SimTimeOfDay::Amt - 1);
@@ -426,6 +426,7 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 						}
 
 						entityMoving->im_Attribs.im_GridCellTargetLocalPos = myShortestPath.front();
+						entityMoving->im_Attribs.im_GridCellStartLocalPos = entityMoving->im_Attribs.im_LocalPos;
 						myShortestPath.erase(myShortestPath.begin());
 					}
 
@@ -677,6 +678,7 @@ void Scene::UpdateEntities(const double dt){
 				entityMoving = nullptr;
 			} else{
 				entityMoving->im_Attribs.im_GridCellTargetLocalPos = myShortestPath.front();
+				entityMoving->im_Attribs.im_GridCellStartLocalPos = entityMoving->im_Attribs.im_LocalPos;
 				myShortestPath.erase(myShortestPath.begin());
 			}
 		} else{
@@ -976,9 +978,20 @@ void Scene::RenderEntities(){
 		const Vector3 localPos = Vector3(entityMoving->im_Attribs.im_LocalPos.x, entityMoving->im_Attribs.im_LocalPos.y, 0.0f);
 
 		if(gridType == HexGrid<float>::GridType::FlatTop){
+			float offset = 0.0f;
+			if(localPos.x - entityMoving->im_Attribs.im_GridCellTargetLocalPos.x <= Math::EPSILON
+				&& entityMoving->im_Attribs.im_GridCellTargetLocalPos.x - localPos.x <= Math::EPSILON){
+				offset = ((int)localPos.x & 1) * gridAltOffsetY;
+			} else{
+				offset = (int(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x ? entityMoving->im_Attribs.im_GridCellTargetLocalPos.x : entityMoving->im_Attribs.im_GridCellStartLocalPos.x) & 1
+					? localPos.x - std::floorf(localPos.x)
+					: -(localPos.x - std::ceilf(localPos.x)))
+					* gridAltOffsetY;
+			}
+
 			modelStack.Translate(
 				gridOffsetX + (gridCellSideLen * 1.5f + gridLineThickness) * localPos.x,
-				gridOffsetY + (gridCellFlatToFlatLen + gridLineThickness) * localPos.y + ((int)localPos.x & 1) * gridAltOffsetY,
+				gridOffsetY + (gridCellFlatToFlatLen + gridLineThickness) * localPos.y + offset,
 				0.25f + individualDepthOffset
 			);
 			modelStack.Scale(
