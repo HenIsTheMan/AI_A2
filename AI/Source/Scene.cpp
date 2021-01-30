@@ -147,7 +147,7 @@ void Scene::Init(){
 	sim->spd = 1.0f;
 	sim->turnDurationAI = 4.0f;
 	sim->turnDurationEnvironment = 10.0f;
-	sim->turnDurationPlayer = 4.0f;
+	sim->turnDurationPlayer = 30.0f;
 	sim->turnElapsedTime = 0.0f;
 	sim->turn = (bool)Math::RandIntMinMax(0, 1) ? SimTurn::Player : SimTurn::AI;
 	sim->timeOfDayDuration = 4.0f;
@@ -325,6 +325,8 @@ void Scene::UpdateSimOngoingTurnAI(const double dt){
 void Scene::UpdateSimOngoingTurnEnvironment(const double dt){
 }
 
+static Entity* entityMoving = nullptr;
+
 void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 	static bool isKeyDownSpace = false;
 	if(!isKeyDownSpace && App::Key(VK_SPACE)){
@@ -356,6 +358,10 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 		selectedRow = (int)mouseRow;
 		selectedCol = (int)mouseCol;
 
+		selectedTargetRow = -1;
+		selectedTargetCol = -1;
+		entityMoving = nullptr;
+
 		isLMB = true;
 	} else if(isLMB && !App::IsMousePressed(GLFW_MOUSE_BUTTON_LEFT)){
 		isLMB = false;
@@ -363,8 +369,11 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 
 	static bool isRMB = false;
 	if(!isRMB && App::IsMousePressed(GLFW_MOUSE_BUTTON_RIGHT)){
-		selectedTargetRow = (int)mouseRow;
-		selectedTargetCol = (int)mouseCol;
+		if(selectedRow >= 0 && selectedCol >= 0){
+			selectedTargetRow = (int)mouseRow;
+			selectedTargetCol = (int)mouseCol;
+			entityMoving = sim->GetEntityLayer()[selectedRow * gridCols + selectedCol];
+		}
 
 		isRMB = true;
 	} else if(isRMB && !App::IsMousePressed(GLFW_MOUSE_BUTTON_RIGHT)){
@@ -835,7 +844,7 @@ void Scene::RenderEntities(){
 	const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
 
 	for(const Entity* const entity: entityLayer){
-		if(entity == nullptr){
+		if(entity == nullptr || entity == entityMoving){
 			continue;
 		}
 
