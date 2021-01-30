@@ -669,11 +669,12 @@ void Scene::UpdateEntities(const double dt){
 				roundf(entityLocalPos.z)
 			); //Snap entity's local pos
 
-			selectedRow = (int)entityLocalPos.y;
-			selectedCol = (int)entityLocalPos.x;
-
 			if(myShortestPath.empty()){
+				selectedRow = (int)entityLocalPos.y;
+				selectedCol = (int)entityLocalPos.x;
+
 				selectedTargetRow = selectedTargetCol = -1;
+
 				sim->OnEntityActivated(gridCols, entityMoving);
 				entityMoving = nullptr;
 			} else{
@@ -976,14 +977,16 @@ void Scene::RenderEntities(){
 	if(entityMoving != nullptr){
 		modelStack.PushMatrix();
 		const Vector3 localPos = Vector3(entityMoving->im_Attribs.im_LocalPos.x, entityMoving->im_Attribs.im_LocalPos.y, 0.0f);
+		static float offset = 0.0f;
 
 		if(gridType == HexGrid<float>::GridType::FlatTop){
-			float offset = 0.0f;
 			if(localPos.x - entityMoving->im_Attribs.im_GridCellTargetLocalPos.x <= Math::EPSILON
 				&& entityMoving->im_Attribs.im_GridCellTargetLocalPos.x - localPos.x <= Math::EPSILON){
 				offset = ((int)localPos.x & 1) * gridAltOffsetY;
 			} else{
-				offset = (int(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x ? entityMoving->im_Attribs.im_GridCellTargetLocalPos.x : entityMoving->im_Attribs.im_GridCellStartLocalPos.x) & 1
+				offset = (int(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x
+					? entityMoving->im_Attribs.im_GridCellTargetLocalPos.x
+					: entityMoving->im_Attribs.im_GridCellStartLocalPos.x) & 1
 					? localPos.x - std::floorf(localPos.x)
 					: -(localPos.x - std::ceilf(localPos.x)))
 					* gridAltOffsetY;
@@ -1000,8 +1003,20 @@ void Scene::RenderEntities(){
 				1.0f
 			);
 		} else{
+			if(localPos.y - entityMoving->im_Attribs.im_GridCellTargetLocalPos.y <= Math::EPSILON
+				&& entityMoving->im_Attribs.im_GridCellTargetLocalPos.y - localPos.y <= Math::EPSILON){
+				offset = ((int)localPos.y & 1) * gridAltOffsetX;
+			} else{
+				offset = (int(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y
+					? entityMoving->im_Attribs.im_GridCellTargetLocalPos.y
+					: entityMoving->im_Attribs.im_GridCellStartLocalPos.y) & 1
+					? localPos.y - std::floorf(localPos.y)
+					: -(localPos.y - std::ceilf(localPos.y)))
+					* gridAltOffsetX;
+			}
+
 			modelStack.Translate(
-				gridOffsetX + (gridCellFlatToFlatLen + gridLineThickness) * localPos.x + ((int)localPos.y & 1) * gridAltOffsetX,
+				gridOffsetX + (gridCellFlatToFlatLen + gridLineThickness) * localPos.x + offset,
 				gridOffsetY + (gridCellSideLen * 1.5f + gridLineThickness) * localPos.y,
 				0.25f + individualDepthOffset
 			);
