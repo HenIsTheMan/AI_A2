@@ -669,7 +669,7 @@ void Scene::UpdateEntities(const double dt){
 		return;
 	}
 
-	for(Entity* const entity: entitiesToDeactivate){
+	for(Entity* const entity : entitiesToDeactivate){
 		sim->OnEntityDeactivated(gridCols, (int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x);
 		entityPool->DeactivateObj(entity);
 	}
@@ -722,6 +722,30 @@ void Scene::UpdateEntities(const double dt){
 						break;
 				}
 			} else{
+				switch(entityMoving->im_Attribs.im_FacingDir){
+					case Obj::EntityFacingDir::Up:
+						if(((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.y & 1) == 1){
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
+						} else{
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
+						}
+						break;
+					case Obj::EntityFacingDir::Down:
+						if(((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.y & 1) == 1){
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
+						} else{
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
+						}
+						break;
+					case Obj::EntityFacingDir::UL:
+					case Obj::EntityFacingDir::UR:
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up;
+						break;
+					case Obj::EntityFacingDir::DL:
+					case Obj::EntityFacingDir::DR:
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Down;
+						break;
+				}
 			}
 
 			if(myShortestPath.empty()){
@@ -737,41 +761,38 @@ void Scene::UpdateEntities(const double dt){
 				myShortestPath.erase(myShortestPath.begin());
 			}
 		} else{
-			if(gridType == HexGrid<float>::GridType::FlatTop){
-				if((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.x == (int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.x){
+			if((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.x == (int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.x){
 
-					if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y){
-						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up;
-					} else{
-						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Down;
-					}
-
-				} else if((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.y == (int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.y){
-
-					if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
-						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Right;
-					} else{
-						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Left;
-					}
-
+				if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y){
+					entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up;
 				} else{
-
-					if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y){
-						if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
-							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
-						} else{
-							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
-						}
-					} else{
-						if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
-							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
-						} else{
-							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
-						}
-					}
-
+					entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Down;
 				}
+
+			} else if((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.y == (int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.y){
+
+				if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
+					entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Right;
+				} else{
+					entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Left;
+				}
+
 			} else{
+
+				if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y){
+					if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
+					} else{
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
+					}
+				} else{
+					if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
+					} else{
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
+					}
+				}
+
 			}
 		}
 	}
@@ -1461,6 +1482,109 @@ void Scene::RenderEntityArtMoving(const Entity* const entity){
 			}
 		}
 	} else{
+		if(((int)entity->im_Attribs.im_GridCellStartLocalPos.y & 1) == 1){
+			switch(entity->im_Attribs.im_FacingDir){
+				case Obj::EntityFacingDir::Up:
+					modelStack.Rotate(
+						30.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::Down:
+					modelStack.Rotate(
+						150.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::Left:
+					modelStack.Rotate(
+						90.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::Right:
+					modelStack.Rotate(
+						270.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::DR:
+					modelStack.Rotate(
+						210.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::UR:
+					modelStack.Rotate(
+						330.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+			}
+		} else{
+			switch(entity->im_Attribs.im_FacingDir){
+				case Obj::EntityFacingDir::Up:
+					modelStack.Rotate(
+						330.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::Down:
+					modelStack.Rotate(
+						210.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::Left:
+					modelStack.Rotate(
+						90.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::Right:
+					modelStack.Rotate(
+						270.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::DL:
+					modelStack.Rotate(
+						150.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+				case Obj::EntityFacingDir::UL:
+					modelStack.Rotate(
+						30.0f,
+						0.0f,
+						0.0f,
+						1.0f
+					);
+					break;
+			}
+		}
 	}
 
 	modelStack.Scale(
