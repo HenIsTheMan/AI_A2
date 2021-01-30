@@ -374,6 +374,10 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 			selectedTargetCol = (int)mouseCol;
 			entityMoving = sim->GetEntityLayer()[selectedRow * gridCols + selectedCol];
 		}
+		if(entityMoving != nullptr){
+			entityMoving->im_Attribs.im_GridCellTargetLocalPos = Vector3((float)selectedTargetCol, (float)selectedTargetRow, 0.0f);
+			sim->OnEntityDeactivated(gridCols, (int)entityMoving->im_Attribs.im_LocalPos.y, (int)entityMoving->im_Attribs.im_LocalPos.x);
+		}
 
 		isRMB = true;
 	} else if(isRMB && !App::IsMousePressed(GLFW_MOUSE_BUTTON_RIGHT)){
@@ -597,6 +601,27 @@ void Scene::UpdateEntities(const double dt){
 		entityPool->DeactivateObj(entity);
 	}
 	entitiesToDeactivate.clear();
+
+	if(entityMoving != nullptr){
+		const Vector3& entityLocalPos = entityMoving->im_Attribs.im_LocalPos;
+		const Vector3 entityDir = (entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos).Normalized();
+
+		entityMoving->im_Attribs.im_LocalPos = entityLocalPos + 50.0f * entityDir * (float)dt;
+
+		if((entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityMoving->im_Attribs.im_LocalPos).Length() < 50.0f * (float)dt){ //LenSquared??
+			entityMoving->im_Attribs.im_LocalPos = Vector3(
+				roundf(entityMoving->im_Attribs.im_LocalPos.x),
+				roundf(entityMoving->im_Attribs.im_LocalPos.y),
+				roundf(entityMoving->im_Attribs.im_LocalPos.z)
+			); //Snap entity's local pos
+
+			selectedTargetRow = selectedTargetCol = -1;
+
+			sim->OnEntityActivated(gridCols, entityMoving);
+
+			entityMoving = nullptr;
+		}
+	}
 }
 
 void Scene::UpdateStates(){
@@ -844,7 +869,7 @@ void Scene::RenderEntities(){
 	const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
 
 	for(const Entity* const entity: entityLayer){
-		if(entity == nullptr || entity == entityMoving){
+		if(entity == nullptr){
 			continue;
 		}
 
@@ -883,6 +908,42 @@ void Scene::RenderEntities(){
 		modelStack.PopMatrix();
 
 		individualDepthOffset += 0.01f;
+	}
+
+	if(entityMoving != nullptr){
+		modelStack.PushMatrix();
+		const Vector3 localPos = Vector3(entityMoving->im_Attribs.im_LocalPos.x, entityMoving->im_Attribs.im_LocalPos.y, 0.0f);
+
+		if(gridType == HexGrid<float>::GridType::FlatTop){
+			modelStack.Translate(
+				gridOffsetX + (gridCellSideLen * 1.5f + gridLineThickness) * localPos.x,
+				gridOffsetY + (gridCellFlatToFlatLen + gridLineThickness) * localPos.y + ((int)localPos.x & 1) * gridAltOffsetY,
+				0.25f + individualDepthOffset
+			);
+			modelStack.Scale(
+				gridCellScaleX * 0.8f,
+				gridCellScaleY * 0.8f,
+				1.0f
+			);
+		} else{
+			modelStack.Translate(
+				gridOffsetX + (gridCellFlatToFlatLen + gridLineThickness) * localPos.x + ((int)localPos.y & 1) * gridAltOffsetX,
+				gridOffsetY + (gridCellSideLen * 1.5f + gridLineThickness) * localPos.y,
+				0.25f + individualDepthOffset
+			);
+			modelStack.Scale(
+				gridCellScaleY * 0.8f,
+				gridCellScaleX * 0.8f,
+				1.0f
+			);
+		}
+
+		RenderMesh(meshList[(int)GeoType::Circle], true, entityMoving->im_Attribs.im_Team == Obj::EntityTeam::AI ? Color(0.4f, 0.0f, 0.0f) : Color(0.0f, 0.4f, 0.0f), 1.0f);
+		RenderEntityArt(entityMoving);
+		RenderHealthBar(entityMoving);
+		RenderEntityLvl(entityMoving);
+
+		modelStack.PopMatrix();
 	}
 
 	individualDepthOffset = 0.0f;
