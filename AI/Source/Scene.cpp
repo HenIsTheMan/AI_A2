@@ -380,48 +380,49 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 				selectedTargetRow = (int)mouseRow;
 				selectedTargetCol = (int)mouseCol;
 				entityMoving = sim->GetEntityLayer()[selectedRow * gridCols + selectedCol];
-			}
-			if(entityMoving != nullptr){
-				//entityMoving->im_Attribs.im_GridCellTargetLocalPos = Vector3((float)selectedTargetCol, (float)selectedTargetRow, 0.0f);
-				sim->OnEntityDeactivated(gridCols, (int)entityMoving->im_Attribs.im_LocalPos.y, (int)entityMoving->im_Attribs.im_LocalPos.x);
-				selectedRow = selectedCol = -1;
 
-				MyAStar.Reset();
-				myShortestPath.clear();
-				const std::vector<TileType>& tileLayer = sim->GetTileLayer();
+				if(entityMoving != nullptr){
+					sim->OnEntityDeactivated(gridCols, (int)entityMoving->im_Attribs.im_LocalPos.y, (int)entityMoving->im_Attribs.im_LocalPos.x);
+					selectedRow = selectedCol = -1;
 
-				for(int r = 0; r < gridRows; ++r){
-					for(int c = 0; c < gridCols; ++c){
-						const int cost = (int)tileCosts[(int)tileLayer[r * gridCols + c]];
+					MyAStar.Reset();
+					myShortestPath.clear();
 
-						(void)MyAStar.CreateNode(CreateAStarNodeParams<Vector3, float>{
-							cost < 0 ? AStarNodeType::Inaccessible : AStarNodeType::Accessible,
+					for(int r = 0; r < gridRows; ++r){
+						for(int c = 0; c < gridCols; ++c){
+							const int cost = (int)tileCosts[(int)sim->GetTileLayer()[r * gridCols + c]];
+
+							(void)MyAStar.CreateNode(CreateAStarNodeParams<Vector3, float>{
+								cost < 0 ? AStarNodeType::Inaccessible : AStarNodeType::Accessible,
 								'(' + std::to_string(c) + ", " + std::to_string(r) + ')' + " Cost: " + std::to_string(cost),
 								(float)cost,
 								Vector3((float)c, (float)r, 0.0f),
-						});
+							});
+						}
 					}
-				}
 
-				MyAStar.SetStart(Vector3((float)selectedCol, (float)selectedRow, 0.0f));
-				MyAStar.SetEnd(Vector3((float)selectedTargetCol, (float)selectedTargetRow, 0.0f));
+					MyAStar.SetStart(Vector3((float)selectedCol, (float)selectedRow, 0.0f));
+					MyAStar.SetEnd(Vector3((float)selectedTargetCol, (float)selectedTargetRow, 0.0f));
+					MyAStar.SetNeighboursForHexGrid(
+						Vector3(0.0f, 0.0f, 0.0f),
+						Vector3((float)gridCols - 1.0f, 0.0f, 0.0f),
+						Vector3(0.0f, (float)gridRows - 1.0f, 0.0f),
+						Vector3((float)gridCols - 1.0f, (float)gridRows - 1.0f, 0.0f),
+						1.0f,
+						1.0f
+					);
 
-				MyAStar.SetNeighboursForHexGrid(
-					Vector3(0.0f, 0.0f, 0.0f),
-					Vector3((float)gridCols, 0.0f, 0.0f),
-					Vector3(0.0f, (float)gridRows, 0.0f),
-					Vector3((float)gridCols, (float)gridRows, 0.0f),
-					1.0f,
-					1.0f
-				);
+					if(MyAStar.CalcShortestPath()){
+						std::cout << '\n';
+						MyAStar.PrintPath();
 
-				if(MyAStar.CalcShortestPath()){
-					std::cout << '\n';
-					MyAStar.PrintPath();
+						const std::vector<AStarNode<Vector3, float>*>& shortestPath = MyAStar.GetShortestPath();
+						for(const AStarNode<Vector3, float>* const node : shortestPath){
+							myShortestPath.emplace_back(node->GetPos());
+						}
 
-					const std::vector<AStarNode<Vector3, float>*>& shortestPath = MyAStar.GetShortestPath();
-					for(const AStarNode<Vector3, float>* const node: shortestPath){
-						myShortestPath.emplace_back(node->GetPos());
+						entityMoving->im_Attribs.im_GridCellTargetLocalPos = myShortestPath.front();
+						myShortestPath.erase(myShortestPath.begin());
 					}
 				}
 			}
@@ -652,24 +653,27 @@ void Scene::UpdateEntities(const double dt){
 
 	if(entityMoving != nullptr){
 		const Vector3& entityLocalPos = entityMoving->im_Attribs.im_LocalPos;
-		const Vector3 entityDir = (entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos).Normalized();
 
-		entityMoving->im_Attribs.im_LocalPos = entityLocalPos + 4.0f * entityDir * (float)dt;
-
-		if((entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityMoving->im_Attribs.im_LocalPos).Length() < 4.0f * (float)dt){ //LenSquared??
+		if((entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos).Length() < 4.0f * (float)dt){ //LenSquared??
 			entityMoving->im_Attribs.im_LocalPos = Vector3(
-				roundf(entityMoving->im_Attribs.im_LocalPos.x),
-				roundf(entityMoving->im_Attribs.im_LocalPos.y),
-				roundf(entityMoving->im_Attribs.im_LocalPos.z)
+				roundf(entityLocalPos.x),
+				roundf(entityLocalPos.y),
+				roundf(entityLocalPos.z)
 			); //Snap entity's local pos
 
-			selectedRow = (int)entityMoving->im_Attribs.im_LocalPos.y;
-			selectedCol = (int)entityMoving->im_Attribs.im_LocalPos.x;
-			selectedTargetRow = selectedTargetCol = -1;
+			selectedRow = (int)entityLocalPos.y;
+			selectedCol = (int)entityLocalPos.x;
 
-			sim->OnEntityActivated(gridCols, entityMoving);
-
-			entityMoving = nullptr;
+			if(myShortestPath.empty()){
+				selectedTargetRow = selectedTargetCol = -1;
+				sim->OnEntityActivated(gridCols, entityMoving);
+				entityMoving = nullptr;
+			} else{
+				entityMoving->im_Attribs.im_GridCellTargetLocalPos = myShortestPath.front();
+				myShortestPath.erase(myShortestPath.begin());
+			}
+		} else{
+			entityMoving->im_Attribs.im_LocalPos = entityLocalPos + 4.0f * (entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos).Normalized() * (float)dt;
 		}
 	}
 }
