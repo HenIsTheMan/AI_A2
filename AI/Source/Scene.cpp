@@ -384,15 +384,18 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 				selectedTargetRow = (int)mouseRow;
 				selectedTargetCol = (int)mouseCol;
 
-				const int indexSelected = selectedRow * gridCols + selectedCol;
 				const int indexSelectedTarget = selectedTargetRow * gridCols + selectedTargetCol;
 				const std::vector<TileType>& tileLayer = sim->GetTileLayer();
 				const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
+				Entity* const entitySelected = entityLayer[selectedRow * gridCols + selectedCol];
 
-				if(entityLayer[indexSelected] != nullptr
+				if(entitySelected != nullptr
+					&& ((entitySelected->im_Attribs.im_Team == Obj::EntityTeam::Player && sim->turn == SimTurn::Player)
+					|| (entitySelected->im_Attribs.im_Team == Obj::EntityTeam::AI && sim->turn == SimTurn::AI))
 					&& (int)tileCosts[(int)tileLayer[indexSelectedTarget]] >= (int)TileCost::EmptyCost
-					&& entityLayer[indexSelectedTarget] == nullptr){
-					entityMoving = entityLayer[indexSelected];
+					&& entityLayer[indexSelectedTarget] == nullptr
+				){
+					entityMoving = entitySelected;
 
 					MyAStar.Reset();
 					myShortestPath.clear();
