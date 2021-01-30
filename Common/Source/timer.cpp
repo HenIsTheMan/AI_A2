@@ -10,7 +10,7 @@ StopWatch::StopWatch():
 	if(timeGetDevCaps(&tc, sizeof(TIMECAPS)) != TIMERR_NOERROR){
 		//Error, app can't continue.
 	}
-	wTimerRes = min(max(tc.wPeriodMin, TARGET_RESOLUTION), tc.wPeriodMax);
+	wTimerRes = Math::Min(Math::Max(tc.wPeriodMin, (UINT)TARGET_RESOLUTION), tc.wPeriodMax);
 	timeBeginPeriod(wTimerRes);
 }
 

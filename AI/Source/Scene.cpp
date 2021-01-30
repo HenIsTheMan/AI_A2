@@ -3,6 +3,8 @@
 #include "App.h"
 #include "GLFW/glfw3.h"
 
+#include "AStar.h"
+
 #include "Easing.hpp"
 
 #include "EventAddCredits.h"
@@ -325,6 +327,10 @@ void Scene::UpdateSimOngoingTurnAI(const double dt){
 void Scene::UpdateSimOngoingTurnEnvironment(const double dt){
 }
 
+using namespace Algs;
+static AStar<Vector3, float> MyAStar;
+static std::vector<Vector3> myShortestPath;
+
 static Entity* entityMoving = nullptr;
 
 void Scene::UpdateSimOngoingTurnPlayer(const double dt){
@@ -376,9 +382,48 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 				entityMoving = sim->GetEntityLayer()[selectedRow * gridCols + selectedCol];
 			}
 			if(entityMoving != nullptr){
-				entityMoving->im_Attribs.im_GridCellTargetLocalPos = Vector3((float)selectedTargetCol, (float)selectedTargetRow, 0.0f);
+				//entityMoving->im_Attribs.im_GridCellTargetLocalPos = Vector3((float)selectedTargetCol, (float)selectedTargetRow, 0.0f);
 				sim->OnEntityDeactivated(gridCols, (int)entityMoving->im_Attribs.im_LocalPos.y, (int)entityMoving->im_Attribs.im_LocalPos.x);
 				selectedRow = selectedCol = -1;
+
+				MyAStar.Reset();
+				myShortestPath.clear();
+				const std::vector<TileType>& tileLayer = sim->GetTileLayer();
+
+				for(int r = 0; r < gridRows; ++r){
+					for(int c = 0; c < gridCols; ++c){
+						const int cost = (int)tileCosts[(int)tileLayer[r * gridCols + c]];
+
+						(void)MyAStar.CreateNode(CreateAStarNodeParams<Vector3, float>{
+							cost < 0 ? AStarNodeType::Inaccessible : AStarNodeType::Accessible,
+								'(' + std::to_string(c) + ", " + std::to_string(r) + ')' + " Cost: " + std::to_string(cost),
+								(float)cost,
+								Vector3((float)c, (float)r, 0.0f),
+						});
+					}
+				}
+
+				MyAStar.SetStart(Vector3((float)selectedCol, (float)selectedRow, 0.0f));
+				MyAStar.SetEnd(Vector3((float)selectedTargetCol, (float)selectedTargetRow, 0.0f));
+
+				MyAStar.SetNeighboursForHexGrid(
+					Vector3(0.0f, 0.0f, 0.0f),
+					Vector3((float)gridCols, 0.0f, 0.0f),
+					Vector3(0.0f, (float)gridRows, 0.0f),
+					Vector3((float)gridCols, (float)gridRows, 0.0f),
+					1.0f,
+					1.0f
+				);
+
+				if(MyAStar.CalcShortestPath()){
+					std::cout << '\n';
+					MyAStar.PrintPath();
+
+					const std::vector<AStarNode<Vector3, float>*>& shortestPath = MyAStar.GetShortestPath();
+					for(const AStarNode<Vector3, float>* const node: shortestPath){
+						myShortestPath.emplace_back(node->GetPos());
+					}
+				}
 			}
 		}
 

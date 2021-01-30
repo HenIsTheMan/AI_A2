@@ -166,6 +166,8 @@
     <ClCompile Include="Source\StateHelpers.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\AStar.h" />
+    <ClInclude Include="Source\AStarNode.h" />
     <ClInclude Include="Source\Easing.hpp" />
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\EntityActionType.hpp" />
@@ -238,6 +240,8 @@
     <None Include="cpp.hint" />
     <None Include="Shaders\AI.fragS" />
     <None Include="Shaders\AI.vertexS" />
+    <None Include="Source\AStar.inl" />
+    <None Include="Source\AStarNode.inl" />
     <None Include="Source\Entity.inl" />
     <None Include="Source\EntityCreationHelpers.inl" />
     <None Include="Source\EntityFactory.inl" />

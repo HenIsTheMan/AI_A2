@@ -243,6 +243,12 @@
     <ClInclude Include="Source\EventResetSelected.h">
       <Filter>Event\Events</Filter>
     </ClInclude>
+    <ClInclude Include="Source\AStar.h">
+      <Filter>AStar</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AStarNode.h">
+      <Filter>AStar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
@@ -298,6 +304,9 @@
     </Filter>
     <Filter Include="State\States\HealerStates">
       <UniqueIdentifier>{c8840ca2-b19d-4861-8801-09113e00887c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AStar">
+      <UniqueIdentifier>{9c5daba6-574c-4dbd-a0ef-59c9201727a5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -382,6 +391,12 @@
     </None>
     <None Include="Source\StateIdleHealer.inl">
       <Filter>State\States\HealerStates</Filter>
+    </None>
+    <None Include="Source\AStar.inl">
+      <Filter>AStar</Filter>
+    </None>
+    <None Include="Source\AStarNode.inl">
+      <Filter>AStar</Filter>
     </None>
   </ItemGroup>
 </Project>
