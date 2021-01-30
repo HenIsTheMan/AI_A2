@@ -85,6 +85,9 @@ private:
 	void UpdateSimWaiting(const double dt);
 	void UpdateSimMakingTheMap(const double dt);
 	void UpdateSimOngoing(const double dt);
+	void UpdateSimOngoingTurnAI(const double dt);
+	void UpdateSimOngoingTurnEnvironment(const double dt);
+	void UpdateSimOngoingTurnPlayer(const double dt);
 	void UpdateGridAttribs();
 	void UpdateMisc(const double dt);
 	void UpdateEntities(const double dt);

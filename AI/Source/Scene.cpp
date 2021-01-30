@@ -282,6 +282,32 @@ void Scene::UpdateSimOngoing(const double dt){
 	orthoProjectionScaleFactor -= mouseScrollWheelYOffset * 0.02; //No need dt
 	orthoProjectionScaleFactor = Math::Clamp(orthoProjectionScaleFactor, 0.2, 1.0);
 
+	switch(sim->turn){
+		case SimTurn::AI:
+			UpdateSimOngoingTurnAI(dt);
+			break;
+		case SimTurn::Environment:
+			UpdateSimOngoingTurnEnvironment(dt);
+			break;
+		case SimTurn::Player:
+			UpdateSimOngoingTurnPlayer(dt);
+			break;
+	}
+
+	sim->Update(dt); //Not (dt * sim->spd) as...
+	UpdateStates();
+	UpdateEntities(dt * sim->spd);
+}
+
+void Scene::UpdateSimOngoingTurnAI(const double dt){
+	selectedRow = selectedCol = -1;
+}
+
+void Scene::UpdateSimOngoingTurnEnvironment(const double dt){
+	selectedRow = selectedCol = -1;
+}
+
+void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 	static bool isKeyDownSpace = false;
 	if(!isKeyDownSpace && App::Key(VK_SPACE)){
 		if(sim->turn == SimTurn::Player){
@@ -322,14 +348,6 @@ void Scene::UpdateSimOngoing(const double dt){
 	} else if(isLMB && !App::IsMousePressed(GLFW_MOUSE_BUTTON_LEFT)){
 		isLMB = false;
 	}
-
-	if(sim->turn != SimTurn::Player){
-		selectedRow = selectedCol = -1;
-	}
-
-	sim->Update(dt); //Not (dt * sim->spd) as...
-	UpdateStates();
-	UpdateEntities(dt * sim->spd);
 }
 
 void Scene::UpdateGridAttribs(){
