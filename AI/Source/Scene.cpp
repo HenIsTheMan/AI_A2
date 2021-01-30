@@ -699,14 +699,14 @@ void Scene::UpdateEntities(const double dt){
 			if(gridType == HexGrid<float>::GridType::FlatTop){
 				switch(entityMoving->im_Attribs.im_FacingDir){
 					case Obj::EntityFacingDir::Left:
-						if(((int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.x & 1) == 1){
+						if(((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.x & 1) == 1){
 							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
 						} else{
 							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
 						}
 						break;
 					case Obj::EntityFacingDir::Right:
-						if(((int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.x & 1) == 1){
+						if(((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.x & 1) == 1){
 							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
 						} else{
 							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
