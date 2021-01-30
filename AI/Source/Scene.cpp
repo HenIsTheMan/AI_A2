@@ -478,7 +478,7 @@ void Scene::UpdateEntities(const double dt){
 		}
 
 		if(tileLayer[i] == TileType::Fire){
-			entity->im_Attribs.im_CurrHealth -= 2.0f;
+			entity->im_Attribs.im_CurrHealth -= 1.0f;
 		}
 
 		if(entity->im_Attribs.im_CurrHealth <= 0.0f){
