@@ -408,14 +408,25 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 
 					MyAStar.SetStart(Vector3((float)selectedCol, (float)selectedRow, 0.0f));
 					MyAStar.SetEnd(Vector3((float)selectedTargetCol, (float)selectedTargetRow, 0.0f));
-					MyAStar.SetNeighboursForHexGrid(
-						Vector3(0.0f, 0.0f, 0.0f),
-						Vector3((float)gridCols - 1.0f, 0.0f, 0.0f),
-						Vector3(0.0f, (float)gridRows - 1.0f, 0.0f),
-						Vector3((float)gridCols - 1.0f, (float)gridRows - 1.0f, 0.0f),
-						1.0f,
-						1.0f
-					);
+					if(gridType == HexGrid<float>::GridType::FlatTop){
+						MyAStar.SetNeighboursForHexGridFlatTop(
+							Vector3(0.0f, 0.0f, 0.0f),
+							Vector3((float)gridCols - 1.0f, 0.0f, 0.0f),
+							Vector3(0.0f, (float)gridRows - 1.0f, 0.0f),
+							Vector3((float)gridCols - 1.0f, (float)gridRows - 1.0f, 0.0f),
+							1.0f,
+							1.0f
+						);
+					} else{
+						MyAStar.SetNeighboursForHexGridSharpTop(
+							Vector3(0.0f, 0.0f, 0.0f),
+							Vector3((float)gridCols - 1.0f, 0.0f, 0.0f),
+							Vector3(0.0f, (float)gridRows - 1.0f, 0.0f),
+							Vector3((float)gridCols - 1.0f, (float)gridRows - 1.0f, 0.0f),
+							1.0f,
+							1.0f
+						);
+					}
 
 					if(MyAStar.CalcShortestPath()){
 						MyAStar.PrintPath();

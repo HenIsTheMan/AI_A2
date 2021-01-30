@@ -95,9 +95,9 @@ namespace Algs{
 			}
 		}
 
-		void SetNeighboursForHexGrid(const T& bottomLeft, const T& bottomRight, const T& topLeft, const T& topRight, const Type& gridCellWidth, const Type& gridCellHeight){
+		void SetNeighboursForHexGridFlatTop(const T& bottomLeft, const T& bottomRight, const T& topLeft, const T& topRight, const Type& gridCellWidth, const Type& gridCellHeight){
 			for(AStarNode<T, Type>* const element: toVisit){
-				element->ReserveNeighbours(4);
+				element->ReserveNeighbours(6);
 
 				if(element->pos.x > bottomLeft.x){
 					element->AddNeighbour(FindNode(T(element->pos.x - gridCellWidth, element->pos.y, element->pos.z)));
@@ -125,6 +125,41 @@ namespace Algs{
 					}
 					if(element->pos.x < topRight.x && element->pos.y > bottomRight.y){
 						element->AddNeighbour(FindNode(T(element->pos.x + gridCellWidth, element->pos.y - gridCellHeight, element->pos.z)));
+					}
+				}
+			}
+		}
+
+		void SetNeighboursForHexGridSharpTop(const T& bottomLeft, const T& bottomRight, const T& topLeft, const T& topRight, const Type& gridCellWidth, const Type& gridCellHeight){
+			for(AStarNode<T, Type>* const element: toVisit){
+				element->ReserveNeighbours(6);
+
+				if(element->pos.x > bottomLeft.x){
+					element->AddNeighbour(FindNode(T(element->pos.x - gridCellWidth, element->pos.y, element->pos.z)));
+				}
+				if(element->pos.x < topRight.x){
+					element->AddNeighbour(FindNode(T(element->pos.x + gridCellWidth, element->pos.y, element->pos.z)));
+				}
+				if(element->pos.y > bottomRight.y){
+					element->AddNeighbour(FindNode(T(element->pos.x, element->pos.y - gridCellHeight, element->pos.z)));
+				}
+				if(element->pos.y < topLeft.y){
+					element->AddNeighbour(FindNode(T(element->pos.x, element->pos.y + gridCellHeight, element->pos.z)));
+				}
+
+				if((int)element->pos.y & 1){
+					if(element->pos.x < topRight.x && element->pos.y > bottomRight.y){
+						element->AddNeighbour(FindNode(T(element->pos.x + gridCellWidth, element->pos.y - gridCellHeight, element->pos.z)));
+					}
+					if(element->pos.x < topRight.x && element->pos.y < topLeft.y){
+						element->AddNeighbour(FindNode(T(element->pos.x + gridCellWidth, element->pos.y + gridCellHeight, element->pos.z)));
+					}
+				} else{
+					if(element->pos.x > bottomLeft.x && element->pos.y > bottomRight.y){
+						element->AddNeighbour(FindNode(T(element->pos.x - gridCellWidth, element->pos.y - gridCellHeight, element->pos.z)));
+					}
+					if(element->pos.x > bottomLeft.x && element->pos.y < topLeft.y){
+						element->AddNeighbour(FindNode(T(element->pos.x - gridCellWidth, element->pos.y + gridCellHeight, element->pos.z)));
 					}
 				}
 			}
