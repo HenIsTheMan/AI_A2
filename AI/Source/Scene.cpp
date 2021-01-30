@@ -651,15 +651,15 @@ void Scene::UpdateEntities(const double dt){
 
 			case EntityType::Knight:
 				knightSM->CheckForStateTransition(entity);
-				knightSM->UpdateCurrState(entity, dt);
+				//knightSM->UpdateCurrState(entity, dt);
 				break;
 			case EntityType::Gunner:
 				gunnerSM->CheckForStateTransition(entity);
-				gunnerSM->UpdateCurrState(entity, dt);
+				//gunnerSM->UpdateCurrState(entity, dt);
 				break;
 			case EntityType::Healer:
 				healerSM->CheckForStateTransition(entity);
-				healerSM->UpdateCurrState(entity, dt);
+				//healerSM->UpdateCurrState(entity, dt);
 				break;
 		}
 	}
@@ -682,30 +682,97 @@ void Scene::UpdateEntities(const double dt){
 			++unitsLeftAI;
 		}
 
-		const Vector3& entityLocalPos = entityMoving->im_Attribs.im_LocalPos;
+		Vector3& entityLocalPos = entityMoving->im_Attribs.im_LocalPos;
+		const Vector3 diff = entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos;
+		const float dist = diff.Length();
+		if(!(dist <= Math::EPSILON && -dist <= Math::EPSILON)){
+			entityLocalPos = entityLocalPos + 4.0f * diff.Normalized() * (float)dt;
+		}
 
 		if((entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos).LengthSquared() < 4.0f * (float)dt * 4.0f * (float)dt){
-			entityMoving->im_Attribs.im_LocalPos = Vector3(
+			entityLocalPos = Vector3(
 				roundf(entityLocalPos.x),
 				roundf(entityLocalPos.y),
 				roundf(entityLocalPos.z)
 			); //Snap entity's local pos
+
+			if(gridType == HexGrid<float>::GridType::FlatTop){
+				switch(entityMoving->im_Attribs.im_FacingDir){
+					case Obj::EntityFacingDir::Left:
+						if(((int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.x & 1) == 1){
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
+						} else{
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
+						}
+						break;
+					case Obj::EntityFacingDir::Right:
+						if(((int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.x & 1) == 1){
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
+						} else{
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
+						}
+						break;
+					case Obj::EntityFacingDir::UL:
+					case Obj::EntityFacingDir::DL:
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Left;
+						break;
+					case Obj::EntityFacingDir::UR:
+					case Obj::EntityFacingDir::DR:
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Right;
+						break;
+				}
+			} else{
+			}
 
 			if(myShortestPath.empty()){
 				selectedRow = (int)entityLocalPos.y;
 				selectedCol = (int)entityLocalPos.x;
 
 				selectedTargetRow = selectedTargetCol = -1;
-
 				sim->OnEntityActivated(gridCols, entityMoving);
 				entityMoving = nullptr;
 			} else{
 				entityMoving->im_Attribs.im_GridCellTargetLocalPos = myShortestPath.front();
-				entityMoving->im_Attribs.im_GridCellStartLocalPos = entityMoving->im_Attribs.im_LocalPos;
+				entityMoving->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
 				myShortestPath.erase(myShortestPath.begin());
 			}
 		} else{
-			entityMoving->im_Attribs.im_LocalPos = entityLocalPos + 4.0f * (entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos).Normalized() * (float)dt;
+			//if(gridType == HexGrid<float>::GridType::FlatTop){
+			//	if((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.x == (int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.x){
+
+			//		if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y){
+			//			entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up;
+			//		} else{
+			//			entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Down;
+			//		}
+
+			//	} else if((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.y == (int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.y){
+
+			//		if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
+			//			entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Right;
+			//		} else{
+			//			entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Left;
+			//		}
+
+			//	} else{
+
+			//		/*if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y){
+			//			if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
+			//				entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
+			//			} else{
+			//				entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
+			//			}
+			//		} else{
+			//			if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
+			//				entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
+			//			} else{
+			//				entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
+			//			}
+			//		}*/
+
+			//	}
+			//} else{
+			//}
 		}
 	}
 }
