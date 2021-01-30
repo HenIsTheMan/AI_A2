@@ -47,8 +47,8 @@ Scene::Scene():
 	unitsLeftPlayer(0),
 	unitsLeftAI(0),
 	gridType(HexGrid<float>::GridType::FlatTop),
-	gridCellScaleX(48.0f),
-	gridCellScaleY(48.0f),
+	gridCellScaleX(44.0f),
+	gridCellScaleY(44.0f),
 	gridLineThickness(4.0f),
 	gridRows(17),
 	gridCols(17),
@@ -602,6 +602,7 @@ void Scene::UpdateMisc(const double dt){
 void Scene::UpdateEntities(const double dt){
 	const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
 	const std::vector<TileType>& tileLayer = sim->GetTileLayer();
+	unitsLeftPlayer = unitsLeftAI = 0;
 	const int entityLayerSize = (int)entityLayer.size();
 
 	for(int i = 0; i < entityLayerSize; ++i){
@@ -675,6 +676,12 @@ void Scene::UpdateEntities(const double dt){
 	entitiesToDeactivate.clear();
 
 	if(entityMoving != nullptr){
+		if(entityMoving->im_Attribs.im_Team == Obj::EntityTeam::Player){
+			++unitsLeftPlayer;
+		} else{
+			++unitsLeftAI;
+		}
+
 		const Vector3& entityLocalPos = entityMoving->im_Attribs.im_LocalPos;
 
 		if((entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos).LengthSquared() < 4.0f * (float)dt * 4.0f * (float)dt){
@@ -1855,6 +1862,16 @@ void Scene::RenderSceneText(){
 	);
 	RenderTextOnScreen(
 		textMesh,
+		"unitsLeftAI: " + std::to_string(unitsLeftAI),
+		Color(),
+		textSize,
+		(float)windowWidth * 0.5f,
+		(float)windowHeight - textSize * 3.0f,
+		TextAlignment::Center,
+		-0.1f
+	);
+	RenderTextOnScreen(
+		textMesh,
 		"Your Credits: " + std::to_string(creditsPlayer),
 		Color(),
 		textSize,
@@ -1870,6 +1887,16 @@ void Scene::RenderSceneText(){
 		textSize,
 		(float)windowWidth * 0.5f,
 		textSize,
+		TextAlignment::Center,
+		-0.1f
+	);
+	RenderTextOnScreen(
+		textMesh,
+		"unitsLeftPlayer: " + std::to_string(unitsLeftPlayer),
+		Color(),
+		textSize,
+		(float)windowWidth * 0.5f,
+		textSize * 2.0f,
 		TextAlignment::Center,
 		-0.1f
 	);
