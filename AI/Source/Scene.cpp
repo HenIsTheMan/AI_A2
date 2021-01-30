@@ -737,42 +737,42 @@ void Scene::UpdateEntities(const double dt){
 				myShortestPath.erase(myShortestPath.begin());
 			}
 		} else{
-			//if(gridType == HexGrid<float>::GridType::FlatTop){
-			//	if((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.x == (int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.x){
+			if(gridType == HexGrid<float>::GridType::FlatTop){
+				if((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.x == (int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.x){
 
-			//		if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y){
-			//			entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up;
-			//		} else{
-			//			entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Down;
-			//		}
+					if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y){
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up;
+					} else{
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Down;
+					}
 
-			//	} else if((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.y == (int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.y){
+				} else if((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.y == (int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.y){
 
-			//		if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
-			//			entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Right;
-			//		} else{
-			//			entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Left;
-			//		}
+					/*if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Right;
+					} else{
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Left;
+					}*/
 
-			//	} else{
+				} else{
 
-			//		/*if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y){
-			//			if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
-			//				entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
-			//			} else{
-			//				entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
-			//			}
-			//		} else{
-			//			if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
-			//				entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
-			//			} else{
-			//				entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
-			//			}
-			//		}*/
+					/*if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y){
+						if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
+						} else{
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
+						}
+					} else{
+						if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
+						} else{
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
+						}
+					}*/
 
-			//	}
-			//} else{
-			//}
+				}
+			} else{
+			}
 		}
 	}
 }
