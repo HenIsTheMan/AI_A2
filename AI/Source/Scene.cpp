@@ -402,7 +402,7 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 							const int cost = (int)tileCosts[(int)sim->GetTileLayer()[r * gridCols + c]];
 
 							(void)MyAStar.CreateNode(CreateAStarNodeParams<Vector3, float>{
-								cost < 0 ? AStarNodeType::Inaccessible : AStarNodeType::Accessible,
+								cost < 0 || (!(r == selectedRow && c == selectedCol) && entityLayer[r * gridCols + c] != nullptr) ? AStarNodeType::Inaccessible : AStarNodeType::Accessible,
 								'(' + std::to_string(c) + ", " + std::to_string(r) + ')' + " Cost: " + std::to_string(cost),
 								(float)cost,
 								Vector3((float)c, (float)r, 0.0f),
