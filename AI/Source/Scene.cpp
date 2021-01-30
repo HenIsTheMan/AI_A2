@@ -486,6 +486,24 @@ void Scene::UpdateEntities(const double dt){
 			continue;
 		}
 
+		///Idle if not your turn
+		if((entity->im_Attribs.im_Team == Obj::EntityTeam::Player && sim->turn != SimTurn::Player)
+			|| (entity->im_Attribs.im_Team == Obj::EntityTeam::AI && sim->turn != SimTurn::AI)){
+			using Obj::EntityType;
+
+			switch(entity->im_Attribs.im_Type){
+				case EntityType::Knight:
+					entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleKnight);
+					break;
+				case EntityType::Gunner:
+					entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleGunner);
+					break;
+				case EntityType::Healer:
+					entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleHealer);
+					break;
+			}
+		}
+
 		entity->im_Attribs.im_TimeAlive += (float)dt;
 
 		switch(entity->im_Attribs.im_Type){
@@ -520,9 +538,6 @@ void Scene::UpdateStates(){
 }
 
 void Scene::UpdateKnightStates(){
-	/*StateSkeleIdle* const stateSkeleIdle = ((StateSkeleIdle*)skeleSM->GetState(StateID::StateSkeleIdle));
-	stateSkeleIdle->im_ElapsedTime = elapsedTime;
-	stateSkeleIdle->im_Grid = &grid;*/
 }
 
 void Scene::UpdateGunnerStates(){

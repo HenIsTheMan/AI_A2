@@ -15,9 +15,6 @@ public:
 	void UpdateCurrState(Type* const entity, const double dt);
 
 	State* AcquireState(const T& stateID) const;
-
-	///Getter
-	const State* GetState(const T& stateID) const;
 private:
 	std::unordered_map<T, State*> im_States;
 };

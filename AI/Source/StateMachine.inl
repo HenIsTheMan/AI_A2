@@ -50,10 +50,3 @@ State* StateMachine<T, Type>::AcquireState(const T& stateID) const{
 
 	return im_States.at(stateID);
 }
-
-template <class T, typename Type>
-const State* StateMachine<T, Type>::GetState(const T& stateID) const{
-	assert(im_States.find(stateID) != im_States.end() && "stateID cannot be found!");
-
-	return im_States.at(stateID);
-}
