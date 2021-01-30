@@ -1130,6 +1130,19 @@ void Scene::RenderMap(){
 	const std::vector<TileType>& tileLayer = sim->GetTileLayer();
 	const int tileLayerSize = (int)tileLayer.size();
 
+	static Color turnColor = Color();
+	switch(sim->turn){
+		case SimTurn::AI:
+			turnColor = Color(0.4f, 0.0f, 0.0f);
+			break;
+		case SimTurn::Environment:
+			turnColor = Color(0.0f, 0.0f, 0.0f);
+			break;
+		case SimTurn::Player:
+			turnColor = Color(0.0f, 0.4f, 0.0f);
+			break;
+	}
+
 	for(int r = 0; r < gridRows; ++r){
 		for(int c = 0; c < gridCols; ++c){
 			modelStack.PushMatrix();
@@ -1164,7 +1177,7 @@ void Scene::RenderMap(){
 				);
 			}
 
-			RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.0f, 0.0f, 0.0f), 0.7f);
+			RenderMesh(meshList[(int)GeoType::Hex], true, turnColor, 0.7f);
 
 			modelStack.PopMatrix();
 
