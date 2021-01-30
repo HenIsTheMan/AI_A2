@@ -382,9 +382,6 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 				entityMoving = sim->GetEntityLayer()[selectedRow * gridCols + selectedCol];
 
 				if(entityMoving != nullptr){
-					sim->OnEntityDeactivated(gridCols, (int)entityMoving->im_Attribs.im_LocalPos.y, (int)entityMoving->im_Attribs.im_LocalPos.x);
-					selectedRow = selectedCol = -1;
-
 					MyAStar.Reset();
 					myShortestPath.clear();
 
@@ -424,6 +421,9 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 						entityMoving->im_Attribs.im_GridCellTargetLocalPos = myShortestPath.front();
 						myShortestPath.erase(myShortestPath.begin());
 					}
+
+					sim->OnEntityDeactivated(gridCols, (int)entityMoving->im_Attribs.im_LocalPos.y, (int)entityMoving->im_Attribs.im_LocalPos.x);
+					selectedRow = selectedCol = -1;
 				}
 			}
 		}
