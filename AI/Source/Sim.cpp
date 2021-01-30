@@ -8,6 +8,7 @@
 #include "TileCost.hpp"
 
 #include "EventAddCredits.h"
+#include "EventResetSelected.h"
 #include "ListenerFlags.hpp"
 
 extern bool endLoop;
@@ -502,6 +503,7 @@ void Sim::Update(const double dt){
 		}
 
 		turnElapsedTime = 0.0f;
+		(void)publisher->Notify((long int)ListenerFlags::Scene, new EventResetSelected());
 
 		if(turn == SimTurn::Player){
 			(void)publisher->Notify((long int)ListenerFlags::Scene, new EventAddCredits(true, 100));

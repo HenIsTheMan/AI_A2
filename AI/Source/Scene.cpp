@@ -6,6 +6,7 @@
 #include "Easing.hpp"
 
 #include "EventAddCredits.h"
+#include "EventResetSelected.h"
 #include "ListenerFlags.hpp"
 
 #include "StateAttackKnight.h"
@@ -300,9 +301,7 @@ void Scene::UpdateSimOngoing(const double dt){
 }
 
 void Scene::UpdateSimOngoingTurnAI(const double dt){
-	selectedRow = selectedCol = -1;
 	static float decisionBT = 0.0f;
-
 	if(decisionBT <= elapsedTime){
 		if(creditsAI >= spawnCostAI){
 			sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim, gridType == HexGrid<float>::GridType::FlatTop));
@@ -315,7 +314,6 @@ void Scene::UpdateSimOngoingTurnAI(const double dt){
 }
 
 void Scene::UpdateSimOngoingTurnEnvironment(const double dt){
-	selectedRow = selectedCol = -1;
 }
 
 void Scene::UpdateSimOngoingTurnPlayer(const double dt){
@@ -324,6 +322,7 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 		sim->turn = Math::RandIntMinMax(1, 10) <= 4 ? SimTurn::Environment : SimTurn::AI;
 		sim->turnElapsedTime = 0.0f;
 		creditsPlayer += 100;
+		selectedRow = selectedCol = -1;
 
 		isKeyDownSpace = true;
 	} else if(isKeyDownSpace && !App::Key(VK_SPACE)){
@@ -628,8 +627,8 @@ void Scene::RenderSimOngoing(){
 	}
 	if(sim->turn == SimTurn::Player){
 		RenderGridCellOfMouse();
-		RenderSelectedGridCell();
 	}
+	RenderSelectedGridCell();
 }
 
 void Scene::RenderBG(){
@@ -1524,7 +1523,7 @@ void Scene::RenderGridCellOfMouse(){
 			);
 		}
 
-		RenderMesh(meshList[(int)GeoType::Hex], true, Color(0.0f, 1.0f, 0.0f), 0.4f);
+		RenderMesh(meshList[(int)GeoType::Hex], true, Color(), 0.4f);
 
 		modelStack.PopMatrix();
 	}
@@ -2064,6 +2063,10 @@ int Scene::OnEvent(Event* myEvent, const bool destroyEvent){
 			const int credits = eventAddCredits->GetCredits();
 			(eventAddCredits->GetToPlayer() ? creditsPlayer : creditsAI) += credits;
 
+			break;
+		}
+		case EventID::EventResetSelected: {
+			selectedRow = selectedCol = -1;
 			break;
 		}
 	}

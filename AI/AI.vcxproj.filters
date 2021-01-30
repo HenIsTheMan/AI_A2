@@ -52,6 +52,9 @@
     <ClCompile Include="Source\StateHelpers.cpp">
       <Filter>State</Filter>
     </ClCompile>
+    <ClCompile Include="Source\EventResetSelected.cpp">
+      <Filter>Event\Events</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Cam.h">
@@ -237,6 +240,9 @@
     <ClInclude Include="Source\StateIdleHealer.h">
       <Filter>State\States\HealerStates</Filter>
     </ClInclude>
+    <ClInclude Include="Source\EventResetSelected.h">
+      <Filter>Event\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
@@ -253,12 +259,6 @@
     </Filter>
     <Filter Include="Event\Events">
       <UniqueIdentifier>{13355d01-0992-48a1-87f9-ea6f108904d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Event\Events\Post-events">
-      <UniqueIdentifier>{64bd9565-c811-4bdd-b36b-725d91a0ba79}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Event\Events\Pre-events">
-      <UniqueIdentifier>{52777eee-28d2-498c-bd93-5e6aa1918a0a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Misc">
       <UniqueIdentifier>{4cbf9812-0b34-4709-963a-225b9ab37d8d}</UniqueIdentifier>

@@ -149,6 +149,7 @@
     <ClCompile Include="Source\App.cpp" />
     <ClCompile Include="Source\Cam.cpp" />
     <ClCompile Include="Source\EventAddCredits.cpp" />
+    <ClCompile Include="Source\EventResetSelected.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\Sim.cpp" />
     <ClCompile Include="Source\Event.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Source\EntityType.hpp" />
     <ClInclude Include="Source\EntityVisionType.hpp" />
     <ClInclude Include="Source\EventAddCredits.h" />
+    <ClInclude Include="Source\EventResetSelected.h" />
     <ClInclude Include="Source\GunnerCreationAttribs.h" />
     <ClInclude Include="Source\HealerCreationAttribs.h" />
     <ClInclude Include="Source\HexGrid.h" />
