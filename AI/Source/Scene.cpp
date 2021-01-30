@@ -670,7 +670,7 @@ void Scene::UpdateEntities(const double dt){
 	}
 
 	if(entityMoving != nullptr){
-		if(tileLayer[entityMoving->im_Attribs.im_LocalPos.y * gridCols + entityMoving->im_Attribs.im_LocalPos.x] == TileType::Fire){
+		if(tileLayer[(int)entityMoving->im_Attribs.im_LocalPos.y * gridCols + (int)entityMoving->im_Attribs.im_LocalPos.x] == TileType::Fire){
 			entityMoving->im_Attribs.im_CurrHealth -= (float)dt;
 		}
 
@@ -2428,17 +2428,38 @@ void Scene::MakeSimMap(){
 	sim->ChangeTileWeight((int)TileType::Mud, 20);
 
 	const bool isFlatTop = gridType == HexGrid<float>::GridType::FlatTop;
-	const float* const quickRenderDelay0 = new float(0.05f);
-	const float* const quickRenderDelay1 = new float(0.02f);
-	const float* const quickRenderDelay2 = new float(0.04f);
-	sim->GenTileLayer(gridRows, gridCols, 0, 0, 2169, quickRenderDelay0, isFlatTop);
-	sim->RefineTileLayer(gridRows, gridCols, 2169, quickRenderDelay1);
-	sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 14, 4, 1, quickRenderDelay2, isFlatTop);
-	sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 4, 5, 2, quickRenderDelay2, isFlatTop);
-	sim->MakeRadialHoleInTileLayer(gridRows, gridCols, 10, 12, 3, quickRenderDelay2, isFlatTop);
-	delete quickRenderDelay0;
-	delete quickRenderDelay1;
-	delete quickRenderDelay2;
+	const float quickRenderDelay0 = 0.05f;
+	const float quickRenderDelay1 = 0.02f;
+	const float quickRenderDelay2 = 0.04f;
+
+	Math::InitRNG();
+	sim->GenTileLayer(gridRows, gridCols, 0, 0, Math::RandIntMinMax(0, 4040), &quickRenderDelay0, isFlatTop);
+	sim->RefineTileLayer(gridRows, gridCols, Math::RandIntMinMax(0, 4000), &quickRenderDelay1);
+	
+	const int amtOfHoles = Math::RandIntMinMax(1, 4);
+	if(amtOfHoles == 1){
+		sim->MakeRadialHoleInTileLayer(
+			gridRows,
+			gridCols,
+			Math::RandIntMinMax(gridRows / 2 - 3, gridRows / 2 + 3),
+			Math::RandIntMinMax(gridCols / 2 - 3, gridCols / 2 + 3),
+			3,
+			&quickRenderDelay2,
+			isFlatTop
+		);
+	} else{
+		for(int i = 0; i < amtOfHoles; ++i){
+			sim->MakeRadialHoleInTileLayer(
+				gridRows,
+				gridCols,
+				Math::RandIntMinMax(0, gridRows - 1),
+				Math::RandIntMinMax(0, gridCols - 1),
+				Math::RandIntMinMax(0, 2),
+				&quickRenderDelay2,
+				isFlatTop
+			);
+		}
+	}
 
 	sim->status = SimRuntimeStatus::Ongoing;
 
