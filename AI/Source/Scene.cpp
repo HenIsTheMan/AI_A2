@@ -358,8 +358,7 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 		selectedRow = (int)mouseRow;
 		selectedCol = (int)mouseCol;
 
-		selectedTargetRow = -1;
-		selectedTargetCol = -1;
+		selectedTargetRow = selectedTargetCol = -1;
 		entityMoving = nullptr;
 
 		isLMB = true;
@@ -377,6 +376,7 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 		if(entityMoving != nullptr){
 			entityMoving->im_Attribs.im_GridCellTargetLocalPos = Vector3((float)selectedTargetCol, (float)selectedTargetRow, 0.0f);
 			sim->OnEntityDeactivated(gridCols, (int)entityMoving->im_Attribs.im_LocalPos.y, (int)entityMoving->im_Attribs.im_LocalPos.x);
+			selectedRow = selectedCol = -1;
 		}
 
 		isRMB = true;
@@ -606,15 +606,17 @@ void Scene::UpdateEntities(const double dt){
 		const Vector3& entityLocalPos = entityMoving->im_Attribs.im_LocalPos;
 		const Vector3 entityDir = (entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos).Normalized();
 
-		entityMoving->im_Attribs.im_LocalPos = entityLocalPos + 50.0f * entityDir * (float)dt;
+		entityMoving->im_Attribs.im_LocalPos = entityLocalPos + 4.0f * entityDir * (float)dt;
 
-		if((entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityMoving->im_Attribs.im_LocalPos).Length() < 50.0f * (float)dt){ //LenSquared??
+		if((entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityMoving->im_Attribs.im_LocalPos).Length() < 4.0f * (float)dt){ //LenSquared??
 			entityMoving->im_Attribs.im_LocalPos = Vector3(
 				roundf(entityMoving->im_Attribs.im_LocalPos.x),
 				roundf(entityMoving->im_Attribs.im_LocalPos.y),
 				roundf(entityMoving->im_Attribs.im_LocalPos.z)
 			); //Snap entity's local pos
 
+			selectedRow = (int)entityMoving->im_Attribs.im_LocalPos.y;
+			selectedCol = (int)entityMoving->im_Attribs.im_LocalPos.x;
 			selectedTargetRow = selectedTargetCol = -1;
 
 			sim->OnEntityActivated(gridCols, entityMoving);
