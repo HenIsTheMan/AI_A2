@@ -40,8 +40,8 @@ Scene::Scene():
 	customHue(0.0f),
 	creditsPlayer(0),
 	creditsAI(0),
-	spawnCostPlayer(10),
-	spawnCostAI(10),
+	canSpawnAmtPlayer(20),
+	canSpawnAmtAI(20),
 	gridType(HexGrid<float>::GridType::FlatTop),
 	gridCellScaleX(48.0f),
 	gridCellScaleY(48.0f),
@@ -305,10 +305,9 @@ void Scene::UpdateSimOngoing(const double dt){
 void Scene::UpdateSimOngoingTurnAI(const double dt){
 	static float decisionBT = 0.0f;
 	if(decisionBT <= elapsedTime){
-		if(creditsAI >= spawnCostAI){
+		if(canSpawnAmtAI > 0){
 			sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim, gridType == HexGrid<float>::GridType::FlatTop));
-			creditsAI -= spawnCostAI;
-			spawnCostAI += 10;
+			--canSpawnAmtAI;
 		}
 
 		decisionBT = elapsedTime + Math::RandFloatMinMax(0.5f, 1.0f);
@@ -334,10 +333,9 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 
 	static bool isKeyDownQ = false;
 	if(!isKeyDownQ && App::Key('Q')){
-		if(creditsPlayer >= spawnCostPlayer){
+		if(canSpawnAmtPlayer){
 			sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim, gridType == HexGrid<float>::GridType::FlatTop));
-			creditsPlayer -= spawnCostPlayer;
-			spawnCostPlayer += 10;
+			--canSpawnAmtPlayer;
 		}
 
 		isKeyDownQ = true;
@@ -1636,7 +1634,7 @@ void Scene::RenderSceneText(){
 	);
 	RenderTextOnScreen(
 		textMesh,
-		"AI's Spawn Cost: " + std::to_string(spawnCostAI),
+		"canSpawnAmtAI: " + std::to_string(canSpawnAmtAI),
 		Color(),
 		textSize,
 		(float)windowWidth * 0.5f,
@@ -1656,7 +1654,7 @@ void Scene::RenderSceneText(){
 	);
 	RenderTextOnScreen(
 		textMesh,
-		"Your Spawn Cost: " + std::to_string(spawnCostPlayer),
+		"canSpawnAmtPlayer: " + std::to_string(canSpawnAmtPlayer),
 		Color(),
 		textSize,
 		(float)windowWidth * 0.5f,

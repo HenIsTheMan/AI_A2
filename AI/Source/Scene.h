@@ -31,8 +31,8 @@ private:
 
 	int creditsPlayer;
 	int creditsAI;
-	int spawnCostPlayer;
-	int spawnCostAI;
+	int canSpawnAmtPlayer;
+	int canSpawnAmtAI;
 
 	HexGrid<float>::GridType gridType;
 	float gridCellScaleX;
