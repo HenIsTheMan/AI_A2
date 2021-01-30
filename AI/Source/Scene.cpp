@@ -42,6 +42,8 @@ Scene::Scene():
 	creditsAI(0),
 	canSpawnAmtPlayer(20),
 	canSpawnAmtAI(20),
+	unitsLeftPlayer(0),
+	unitsLeftAI(0),
 	gridType(HexGrid<float>::GridType::FlatTop),
 	gridCellScaleX(48.0f),
 	gridCellScaleY(48.0f),
@@ -201,6 +203,9 @@ void Scene::Update(const double updateDt, const double renderDt){
 		case SimRuntimeStatus::Ongoing:
 			UpdateSimOngoing(updateDt);
 			break;
+		case SimRuntimeStatus::Ended:
+			UpdateSimEnded(updateDt);
+			break;
 	}
 
 	gridWidth = grid->CalcWidth();
@@ -300,6 +305,9 @@ void Scene::UpdateSimOngoing(const double dt){
 	sim->Update(dt); //Not (dt * sim->spd) as...
 	UpdateStates();
 	UpdateEntities(dt * sim->spd);
+}
+
+void Scene::UpdateSimEnded(const double dt){
 }
 
 void Scene::UpdateSimOngoingTurnAI(const double dt){
@@ -513,7 +521,6 @@ void Scene::UpdateEntities(const double dt){
 
 	for(int i = 0; i < entityLayerSize; ++i){
 		Entity* const& entity = entityLayer[i];
-
 		if(entity == nullptr){
 			continue;
 		}
@@ -525,6 +532,12 @@ void Scene::UpdateEntities(const double dt){
 		if(entity->im_Attribs.im_CurrHealth <= 0.0f){
 			entitiesToDeactivate.emplace_back(entity);
 			continue;
+		}
+
+		if(entity->im_Attribs.im_Team == Obj::EntityTeam::Player){
+			++unitsLeftPlayer;
+		} else{
+			++unitsLeftAI;
 		}
 
 		///Idle if not your turn
@@ -563,6 +576,11 @@ void Scene::UpdateEntities(const double dt){
 				healerSM->UpdateCurrState(entity, dt);
 				break;
 		}
+	}
+
+	if((unitsLeftPlayer + canSpawnAmtPlayer == 0) || (unitsLeftAI + canSpawnAmtAI == 0)){
+		sim->status = SimRuntimeStatus::Ended;
+		return;
 	}
 
 	for(Entity* const entity: entitiesToDeactivate){
@@ -609,6 +627,9 @@ void Scene::Render(){
 		case SimRuntimeStatus::Ongoing:
 			RenderSimOngoing();
 			break;
+		case SimRuntimeStatus::Ended:
+			RenderSimEnded();
+			break;
 	}
 	RenderSceneText();
 
@@ -640,6 +661,22 @@ void Scene::RenderSimOngoing(){
 		RenderGridCellOfMouse();
 	}
 	RenderSelected();
+}
+
+void Scene::RenderSimEnded(){
+	RenderCoverMap();
+	static bool endResult = unitsLeftPlayer + canSpawnAmtPlayer == 0;
+
+	RenderTextOnScreen(
+		meshList[(int)GeoType::TextMod],
+		endResult ? "You Lose..." : "You Win!",
+		endResult ? Color(1.0f, 0.0f, 0.0f) : Color(0.0f, 1.0f, 0.0f),
+		(float)windowWidth * 0.05f,
+		(float)windowWidth * 0.5f,
+		(float)windowHeight * 0.5f + cosf(elapsedTime * 4.0f) * (float)windowHeight * 0.05f,
+		TextAlignment::Center,
+		-0.1f
+	);
 }
 
 void Scene::RenderBG(){

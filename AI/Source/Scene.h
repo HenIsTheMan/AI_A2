@@ -33,6 +33,8 @@ private:
 	int creditsAI;
 	int canSpawnAmtPlayer;
 	int canSpawnAmtAI;
+	int unitsLeftPlayer;
+	int unitsLeftAI;
 
 	HexGrid<float>::GridType gridType;
 	float gridCellScaleX;
@@ -87,6 +89,7 @@ private:
 	void UpdateSimWaiting(const double dt);
 	void UpdateSimMakingTheMap(const double dt);
 	void UpdateSimOngoing(const double dt);
+	void UpdateSimEnded(const double dt);
 	void UpdateSimOngoingTurnAI(const double dt);
 	void UpdateSimOngoingTurnEnvironment(const double dt);
 	void UpdateSimOngoingTurnPlayer(const double dt);
@@ -101,6 +104,7 @@ private:
 	void RenderSimWaiting();
 	void RenderSimMakingTheMap();
 	void RenderSimOngoing();
+	void RenderSimEnded();
 	void RenderBG();
 	void RenderCoverMap();
 	void RenderCoverText();
