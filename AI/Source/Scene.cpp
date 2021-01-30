@@ -355,11 +355,12 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 
 	static bool isLMB = false;
 	if(!isLMB && App::IsMousePressed(GLFW_MOUSE_BUTTON_LEFT)){
-		selectedRow = (int)mouseRow;
-		selectedCol = (int)mouseCol;
+		if(entityMoving == nullptr){
+			selectedRow = (int)mouseRow;
+			selectedCol = (int)mouseCol;
 
-		selectedTargetRow = selectedTargetCol = -1;
-		entityMoving = nullptr;
+			selectedTargetRow = selectedTargetCol = -1;
+		}
 
 		isLMB = true;
 	} else if(isLMB && !App::IsMousePressed(GLFW_MOUSE_BUTTON_LEFT)){
@@ -368,15 +369,17 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 
 	static bool isRMB = false;
 	if(!isRMB && App::IsMousePressed(GLFW_MOUSE_BUTTON_RIGHT)){
-		if(selectedRow >= 0 && selectedCol >= 0){
-			selectedTargetRow = (int)mouseRow;
-			selectedTargetCol = (int)mouseCol;
-			entityMoving = sim->GetEntityLayer()[selectedRow * gridCols + selectedCol];
-		}
-		if(entityMoving != nullptr){
-			entityMoving->im_Attribs.im_GridCellTargetLocalPos = Vector3((float)selectedTargetCol, (float)selectedTargetRow, 0.0f);
-			sim->OnEntityDeactivated(gridCols, (int)entityMoving->im_Attribs.im_LocalPos.y, (int)entityMoving->im_Attribs.im_LocalPos.x);
-			selectedRow = selectedCol = -1;
+		if(entityMoving == nullptr || (entityMoving != nullptr && (selectedTargetRow < 0 || selectedTargetCol < 0))){
+			if(selectedRow >= 0 && selectedCol >= 0){
+				selectedTargetRow = (int)mouseRow;
+				selectedTargetCol = (int)mouseCol;
+				entityMoving = sim->GetEntityLayer()[selectedRow * gridCols + selectedCol];
+			}
+			if(entityMoving != nullptr){
+				entityMoving->im_Attribs.im_GridCellTargetLocalPos = Vector3((float)selectedTargetCol, (float)selectedTargetRow, 0.0f);
+				sim->OnEntityDeactivated(gridCols, (int)entityMoving->im_Attribs.im_LocalPos.y, (int)entityMoving->im_Attribs.im_LocalPos.x);
+				selectedRow = selectedCol = -1;
+			}
 		}
 
 		isRMB = true;
