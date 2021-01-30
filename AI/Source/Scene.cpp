@@ -379,9 +379,17 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 			if(selectedRow >= 0 && selectedCol >= 0){
 				selectedTargetRow = (int)mouseRow;
 				selectedTargetCol = (int)mouseCol;
-				entityMoving = sim->GetEntityLayer()[selectedRow * gridCols + selectedCol];
 
-				if(entityMoving != nullptr){
+				const int indexSelected = selectedRow * gridCols + selectedCol;
+				const int indexSelectedTarget = selectedTargetRow * gridCols + selectedTargetCol;
+				const std::vector<TileType>& tileLayer = sim->GetTileLayer();
+				const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
+
+				if(entityLayer[indexSelected] != nullptr
+					&& (int)tileCosts[(int)tileLayer[indexSelectedTarget]] >= (int)TileCost::EmptyCost
+					&& entityLayer[indexSelectedTarget] == nullptr){
+					entityMoving = entityLayer[indexSelected];
+
 					MyAStar.Reset();
 					myShortestPath.clear();
 
@@ -410,7 +418,6 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 					);
 
 					if(MyAStar.CalcShortestPath()){
-						std::cout << '\n';
 						MyAStar.PrintPath();
 
 						const std::vector<AStarNode<Vector3, float>*>& shortestPath = MyAStar.GetShortestPath();
