@@ -6,6 +6,10 @@ void StateIdleKnight::Enter(Entity* const entity){
 }
 
 void StateIdleKnight::Update(Entity* const entity, const double dt){
+	if(entity->im_Attribs.im_CurrHealth <= 0.0f){
+		entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateDeadKnight);
+	}
+
 	if(entity->im_Attribs.im_IdleChangeFacingDirBT <= entity->im_Attribs.im_TimeAlive){
 		if(Math::RandIntMinMax(1, 10) > 4){
 			if(sm_IsFlatTop){

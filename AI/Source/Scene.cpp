@@ -8,6 +8,7 @@
 #include "Easing.hpp"
 
 #include "EventAddCredits.h"
+#include "EventDespawnEntity.h"
 #include "EventResetSelected.h"
 #include "ListenerFlags.hpp"
 
@@ -379,7 +380,7 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 
 	static bool isRMB = false;
 	if(!isRMB && App::IsMousePressed(GLFW_MOUSE_BUTTON_RIGHT)){
-		if((entityMoving == nullptr || (entityMoving != nullptr && (selectedTargetRow < 0 || selectedTargetCol < 0))) && mouseRow >= 0 && mouseCol >= 0){
+		if((entityMoving == nullptr || (entityMoving != nullptr && entityMoving->im_Attribs.im_CurrHealth > 0.0f && (selectedTargetRow < 0 || selectedTargetCol < 0))) && mouseRow >= 0 && mouseCol >= 0){
 			if(selectedRow >= 0 && selectedCol >= 0){
 				selectedTargetRow = (int)mouseRow;
 				selectedTargetCol = (int)mouseCol;
@@ -390,6 +391,7 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 				Entity* const entitySelected = entityLayer[selectedRow * gridCols + selectedCol];
 
 				if(entitySelected != nullptr
+					&& entitySelected->im_Attribs.im_CurrHealth > 0.0f
 					&& ((entitySelected->im_Attribs.im_Team == Obj::EntityTeam::Player && sim->turn == SimTurn::Player)
 					|| (entitySelected->im_Attribs.im_Team == Obj::EntityTeam::AI && sim->turn == SimTurn::AI))
 					&& (int)tileCosts[(int)tileLayer[indexSelectedTarget]] >= (int)TileCost::EmptyCost
@@ -618,11 +620,6 @@ void Scene::UpdateEntities(const double dt){
 			entity->im_Attribs.im_CurrHealth -= (float)dt;
 		}
 
-		if(entity->im_Attribs.im_CurrHealth <= 0.0f){
-			entitiesToDeactivate.emplace_back(entity);
-			continue;
-		}
-
 		if(entity->im_Attribs.im_Team == Obj::EntityTeam::Player){
 			++unitsLeftPlayer;
 		} else{
@@ -654,15 +651,15 @@ void Scene::UpdateEntities(const double dt){
 
 			case EntityType::Knight:
 				knightSM->CheckForStateTransition(entity);
-				//knightSM->UpdateCurrState(entity, dt);
+				knightSM->UpdateCurrState(entity, dt);
 				break;
 			case EntityType::Gunner:
 				gunnerSM->CheckForStateTransition(entity);
-				//gunnerSM->UpdateCurrState(entity, dt);
+				gunnerSM->UpdateCurrState(entity, dt);
 				break;
 			case EntityType::Healer:
 				healerSM->CheckForStateTransition(entity);
-				//healerSM->UpdateCurrState(entity, dt);
+				healerSM->UpdateCurrState(entity, dt);
 				break;
 		}
 	}
@@ -677,130 +674,125 @@ void Scene::UpdateEntities(const double dt){
 			entityMoving->im_Attribs.im_CurrHealth -= (float)dt;
 		}
 
-		if(entityMoving->im_Attribs.im_CurrHealth <= 0.0f){
-			entitiesToDeactivate.emplace_back(entityMoving);
-			entityMoving = nullptr;
+		if(entityMoving->im_Attribs.im_Team == Obj::EntityTeam::Player){
+			++unitsLeftPlayer;
 		} else{
-			if(entityMoving->im_Attribs.im_Team == Obj::EntityTeam::Player){
-				++unitsLeftPlayer;
-			} else{
-				++unitsLeftAI;
-			}
+			++unitsLeftAI;
+		}
 
-			entityMoving->im_Attribs.im_TimeAlive += (float)dt;
+		entityMoving->im_Attribs.im_TimeAlive += (float)dt;
 
-			Vector3& entityLocalPos = entityMoving->im_Attribs.im_LocalPos;
-			const Vector3 diff = entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos;
-			const float dist = diff.Length();
-			if(!(dist <= Math::EPSILON && -dist <= Math::EPSILON)){
-				entityLocalPos = entityLocalPos + 4.0f * diff.Normalized() * (float)dt;
-			}
+		Vector3& entityLocalPos = entityMoving->im_Attribs.im_LocalPos;
+		const Vector3 diff = entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos;
+		const float dist = diff.Length();
+		if(!(dist <= Math::EPSILON && -dist <= Math::EPSILON)){
+			entityLocalPos = entityLocalPos + 4.0f * diff.Normalized() * (float)dt;
+		}
 
-			if((entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos).LengthSquared() < 4.0f * (float)dt * 4.0f * (float)dt){
-				entityLocalPos = Vector3(
-					roundf(entityLocalPos.x),
-					roundf(entityLocalPos.y),
-					roundf(entityLocalPos.z)
-				); //Snap entity's local pos
+		if((entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos).LengthSquared() < 4.0f * (float)dt * 4.0f * (float)dt){
+			entityLocalPos = Vector3(
+				roundf(entityLocalPos.x),
+				roundf(entityLocalPos.y),
+				roundf(entityLocalPos.z)
+			); //Snap entity's local pos
 
-				if(gridType == HexGrid<float>::GridType::FlatTop){
-					switch(entityMoving->im_Attribs.im_FacingDir){
-						case Obj::EntityFacingDir::Left:
-							if(((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.x & 1) == 1){
-								entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
-							} else{
-								entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
-							}
-							break;
-						case Obj::EntityFacingDir::Right:
-							if(((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.x & 1) == 1){
-								entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
-							} else{
-								entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
-							}
-							break;
-						case Obj::EntityFacingDir::UL:
-						case Obj::EntityFacingDir::DL:
-							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Left;
-							break;
-						case Obj::EntityFacingDir::UR:
-						case Obj::EntityFacingDir::DR:
-							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Right;
-							break;
-					}
-				} else{
-					switch(entityMoving->im_Attribs.im_FacingDir){
-						case Obj::EntityFacingDir::Up:
-							if(((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.y & 1) == 1){
-								entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
-							} else{
-								entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
-							}
-							break;
-						case Obj::EntityFacingDir::Down:
-							if(((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.y & 1) == 1){
-								entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
-							} else{
-								entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
-							}
-							break;
-						case Obj::EntityFacingDir::UL:
-						case Obj::EntityFacingDir::UR:
-							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up;
-							break;
-						case Obj::EntityFacingDir::DL:
-						case Obj::EntityFacingDir::DR:
-							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Down;
-							break;
-					}
-				}
-
-				if(myShortestPath.empty()){
-					selectedRow = (int)entityLocalPos.y;
-					selectedCol = (int)entityLocalPos.x;
-
-					selectedTargetRow = selectedTargetCol = -1;
-					sim->OnEntityActivated(gridCols, entityMoving);
-					entityMoving = nullptr;
-				} else{
-					entityMoving->im_Attribs.im_GridCellTargetLocalPos = myShortestPath.front();
-					entityMoving->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
-					myShortestPath.erase(myShortestPath.begin());
-				}
-			} else{
-				if((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.x == (int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.x){
-
-					if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y){
-						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up;
-					} else{
-						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Down;
-					}
-
-				} else if((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.y == (int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.y){
-
-					if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
-						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Right;
-					} else{
-						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Left;
-					}
-
-				} else{
-
-					if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y){
-						if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
-							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
+			if(gridType == HexGrid<float>::GridType::FlatTop){
+				switch(entityMoving->im_Attribs.im_FacingDir){
+					case Obj::EntityFacingDir::Left:
+						if(((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.x & 1) == 1){
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
 						} else{
 							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
 						}
-					} else{
-						if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
+						break;
+					case Obj::EntityFacingDir::Right:
+						if(((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.x & 1) == 1){
 							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
 						} else{
-							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
 						}
-					}
-
+						break;
+					case Obj::EntityFacingDir::UL:
+					case Obj::EntityFacingDir::DL:
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Left;
+						break;
+					case Obj::EntityFacingDir::UR:
+					case Obj::EntityFacingDir::DR:
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Right;
+						break;
 				}
+			} else{
+				switch(entityMoving->im_Attribs.im_FacingDir){
+					case Obj::EntityFacingDir::Up:
+						if(((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.y & 1) == 1){
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
+						} else{
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
+						}
+						break;
+					case Obj::EntityFacingDir::Down:
+						if(((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.y & 1) == 1){
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
+						} else{
+							entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
+						}
+						break;
+					case Obj::EntityFacingDir::UL:
+					case Obj::EntityFacingDir::UR:
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up;
+						break;
+					case Obj::EntityFacingDir::DL:
+					case Obj::EntityFacingDir::DR:
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Down;
+						break;
+				}
+			}
+
+			if(myShortestPath.empty()){
+				selectedRow = (int)entityLocalPos.y;
+				selectedCol = (int)entityLocalPos.x;
+
+				selectedTargetRow = selectedTargetCol = -1;
+				sim->OnEntityActivated(gridCols, entityMoving);
+				entityMoving = nullptr;
+			} else{
+				entityMoving->im_Attribs.im_GridCellTargetLocalPos = myShortestPath.front();
+				entityMoving->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
+				myShortestPath.erase(myShortestPath.begin());
+			}
+		} else{
+			if((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.x == (int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.x){
+
+				if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y){
+					entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up;
+				} else{
+					entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Down;
+				}
+
+			} else if((int)entityMoving->im_Attribs.im_GridCellStartLocalPos.y == (int)entityMoving->im_Attribs.im_GridCellTargetLocalPos.y){
+
+				if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
+					entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Right;
+				} else{
+					entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Left;
+				}
+
+			} else{
+
+				if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.y > entityMoving->im_Attribs.im_GridCellStartLocalPos.y){
+					if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
+					} else{
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
+					}
+				} else{
+					if(entityMoving->im_Attribs.im_GridCellTargetLocalPos.x > entityMoving->im_Attribs.im_GridCellStartLocalPos.x){
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
+					} else{
+						entityMoving->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
+					}
+				}
+
 			}
 		}
 	}
@@ -2703,6 +2695,11 @@ int Scene::OnEvent(Event* myEvent, const bool destroyEvent){
 			const int credits = eventAddCredits->GetCredits();
 			(eventAddCredits->GetToPlayer() ? creditsPlayer : creditsAI) += credits;
 
+			break;
+		}
+		case EventID::EventDespawnEntity: {
+			const EventDespawnEntity* const eventDespawnEntity = static_cast<const EventDespawnEntity*>(myEvent);
+			entitiesToDeactivate.emplace_back(eventDespawnEntity->AcquireEntity());
 			break;
 		}
 		case EventID::EventResetSelected: {
