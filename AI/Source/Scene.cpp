@@ -301,6 +301,17 @@ void Scene::UpdateSimOngoing(const double dt){
 
 void Scene::UpdateSimOngoingTurnAI(const double dt){
 	selectedRow = selectedCol = -1;
+	static float decisionBT = 0.0f;
+
+	if(decisionBT <= elapsedTime){
+		if(creditsAI >= spawnCostAI){
+			sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim, gridType == HexGrid<float>::GridType::FlatTop));
+			creditsAI -= spawnCostAI;
+			spawnCostAI += 10;
+		}
+
+		decisionBT = elapsedTime + Math::RandFloatMinMax(0.5f, 1.0f);
+	}
 }
 
 void Scene::UpdateSimOngoingTurnEnvironment(const double dt){
@@ -310,16 +321,9 @@ void Scene::UpdateSimOngoingTurnEnvironment(const double dt){
 void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 	static bool isKeyDownSpace = false;
 	if(!isKeyDownSpace && App::Key(VK_SPACE)){
-		if(sim->turn == SimTurn::Player){
-			sim->turn = Math::RandIntMinMax(1, 10) <= 4 ? SimTurn::Environment : SimTurn::AI;
-			sim->turnElapsedTime = 0.0f;
-
-			if(sim->turn == SimTurn::Player){
-				creditsPlayer += 100;
-			} else if(sim->turn == SimTurn::AI){
-				creditsAI += 100;
-			}
-		}
+		sim->turn = Math::RandIntMinMax(1, 10) <= 4 ? SimTurn::Environment : SimTurn::AI;
+		sim->turnElapsedTime = 0.0f;
+		creditsPlayer += 100;
 
 		isKeyDownSpace = true;
 	} else if(isKeyDownSpace && !App::Key(VK_SPACE)){
@@ -328,7 +332,7 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 
 	static bool isKeyDownQ = false;
 	if(!isKeyDownQ && App::Key('Q')){
-		if(sim->turn == SimTurn::Player && creditsPlayer >= spawnCostPlayer){
+		if(creditsPlayer >= spawnCostPlayer){
 			sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim, gridType == HexGrid<float>::GridType::FlatTop));
 			creditsPlayer -= spawnCostPlayer;
 			spawnCostPlayer += 10;
