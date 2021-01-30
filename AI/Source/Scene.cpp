@@ -478,7 +478,7 @@ void Scene::UpdateEntities(const double dt){
 		}
 
 		if(tileLayer[i] == TileType::Fire){
-			entity->im_Attribs.im_CurrHealth -= 1.0f;
+			entity->im_Attribs.im_CurrHealth -= (float)dt;
 		}
 
 		if(entity->im_Attribs.im_CurrHealth <= 0.0f){
@@ -550,12 +550,12 @@ void Scene::Render(){
 			break;
 		case SimRuntimeStatus::Ongoing:
 			RenderMap();
+			RenderEntities();
 			if(shldRenderFog){
 				glDepthFunc(GL_ALWAYS);
 				RenderFog();
 				glDepthFunc(GL_LESS);
 			}
-			RenderEntities();
 			if(sim->turn == SimTurn::Player){
 				RenderGridCellOfMouse();
 				RenderSelectedGridCell();
@@ -1183,7 +1183,10 @@ void Scene::RenderFog(){
 	}
 
 	for(int i = 0; i < entityLayerSize; ++i){
-		if(entityLayer[i] != nullptr){
+		const Entity* const entity = entityLayer[i];
+		if(entity != nullptr
+			&& ((entity->im_Attribs.im_Team == Obj::EntityTeam::Player && sim->turn == SimTurn::Player)
+			|| (entity->im_Attribs.im_Team == Obj::EntityTeam::AI && sim->turn == SimTurn::AI))){
 			fogLayer[i] = false;
 		}
 	}
