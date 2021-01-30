@@ -82,6 +82,9 @@ private:
 
 	std::thread* myThread;
 
+	void UpdateSimWaiting(const double dt);
+	void UpdateSimMakingTheMap(const double dt);
+	void UpdateSimOngoing(const double dt);
 	void UpdateGridAttribs();
 	void UpdateMisc(const double dt);
 	void UpdateEntities(const double dt);
@@ -90,6 +93,9 @@ private:
 	void UpdateGunnerStates();
 	void UpdateHealerStates();
 
+	void RenderSimWaiting();
+	void RenderSimMakingTheMap();
+	void RenderSimOngoing();
 	void RenderBG();
 	void RenderCoverMap();
 	void RenderCoverText();

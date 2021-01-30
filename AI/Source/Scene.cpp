@@ -190,91 +190,13 @@ void Scene::Update(const double updateDt, const double renderDt){
 
 	switch(sim->status){
 		case SimRuntimeStatus::Waiting:
-			UpdateGridAttribs();
-
-			if(canMakeSimMap && App::IsMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)){
-				myThread = new std::thread(&Scene::MakeSimMap, this);
-				sim->InitEntityLayer(gridRows, gridCols);
-
-				const int gridTotalCells = gridRows * gridCols;
-				fogLayer.reserve(gridTotalCells);
-				fogLayer.resize(gridTotalCells);
-
-				const bool isFlatTop = gridType == HexGrid<float>::GridType::FlatTop;
-				StateIdleKnight::sm_IsFlatTop = isFlatTop;
-				StateIdleGunner::sm_IsFlatTop = isFlatTop;
-				StateIdleHealer::sm_IsFlatTop = isFlatTop;
-
-				canMakeSimMap = false;
-			}
-
+			UpdateSimWaiting(updateDt);
 			break;
 		case SimRuntimeStatus::MakingTheMap:
-			im_Cam.Update(updateDt);
-			if(App::Key('R')){
-				orthoProjectionScaleFactor = 1.0;
-			}
-			orthoProjectionScaleFactor -= mouseScrollWheelYOffset * 0.02; //No need dt
-			orthoProjectionScaleFactor = Math::Clamp(orthoProjectionScaleFactor, 0.2, 1.0);
-
+			UpdateSimMakingTheMap(updateDt);
 			break;
 		case SimRuntimeStatus::Ongoing:
-			im_Cam.Update(updateDt);
-			if(App::Key('R')){
-				orthoProjectionScaleFactor = 1.0;
-			}
-			orthoProjectionScaleFactor -= mouseScrollWheelYOffset * 0.02; //No need dt
-			orthoProjectionScaleFactor = Math::Clamp(orthoProjectionScaleFactor, 0.2, 1.0);
-
-			static bool isKeyDownSpace = false;
-			if(!isKeyDownSpace && App::Key(VK_SPACE)){
-				if(sim->turn == SimTurn::Player){
-					sim->turn = Math::RandIntMinMax(1, 10) <= 4 ? SimTurn::Environment : SimTurn::AI;
-					sim->turnElapsedTime = 0.0f;
-
-					if(sim->turn == SimTurn::Player){
-						creditsPlayer += 100;
-					} else if(sim->turn == SimTurn::AI){
-						creditsAI += 100;
-					}
-				}
-
-				isKeyDownSpace = true;
-			} else if(isKeyDownSpace && !App::Key(VK_SPACE)){
-				isKeyDownSpace = false;
-			}
-
-			static bool isKeyDownQ = false;
-			if(!isKeyDownQ && App::Key('Q')){
-				if(sim->turn == SimTurn::Player && creditsPlayer >= spawnCostPlayer){
-					sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim, gridType == HexGrid<float>::GridType::FlatTop));
-					creditsPlayer -= spawnCostPlayer;
-					spawnCostPlayer += 10;
-				}
-
-				isKeyDownQ = true;
-			} else if(isKeyDownQ && !App::Key('Q')){
-				isKeyDownQ = false;
-			}
-
-			static bool isLMB = false;
-			if(!isLMB && App::IsMousePressed(GLFW_MOUSE_BUTTON_LEFT)){
-				selectedRow = (int)mouseRow;
-				selectedCol = (int)mouseCol;
-
-				isLMB = true;
-			} else if(isLMB && !App::IsMousePressed(GLFW_MOUSE_BUTTON_LEFT)){
-				isLMB = false;
-			}
-
-			if(sim->turn != SimTurn::Player){
-				selectedRow = selectedCol = -1;
-			}
-
-			sim->Update(updateDt); //Not (dt * sim->spd) as...
-			UpdateStates();
-			UpdateEntities(updateDt * sim->spd);
-
+			UpdateSimOngoing(updateDt);
 			break;
 	}
 
@@ -321,6 +243,93 @@ void Scene::Update(const double updateDt, const double renderDt){
 	gridAltOffsetY = grid->CalcAltOffsetY();
 
 	mouseScrollWheelYOffset = 0.0;
+}
+
+void Scene::UpdateSimWaiting(const double dt){
+	UpdateGridAttribs();
+
+	if(canMakeSimMap && App::IsMousePressed(GLFW_MOUSE_BUTTON_MIDDLE)){
+		myThread = new std::thread(&Scene::MakeSimMap, this);
+		sim->InitEntityLayer(gridRows, gridCols);
+
+		const int gridTotalCells = gridRows * gridCols;
+		fogLayer.reserve(gridTotalCells);
+		fogLayer.resize(gridTotalCells);
+
+		const bool isFlatTop = gridType == HexGrid<float>::GridType::FlatTop;
+		StateIdleKnight::sm_IsFlatTop = isFlatTop;
+		StateIdleGunner::sm_IsFlatTop = isFlatTop;
+		StateIdleHealer::sm_IsFlatTop = isFlatTop;
+
+		canMakeSimMap = false;
+	}
+}
+
+void Scene::UpdateSimMakingTheMap(const double dt){
+	im_Cam.Update(dt);
+	if(App::Key('R')){
+		orthoProjectionScaleFactor = 1.0;
+	}
+	orthoProjectionScaleFactor -= mouseScrollWheelYOffset * 0.02; //No need dt
+	orthoProjectionScaleFactor = Math::Clamp(orthoProjectionScaleFactor, 0.2, 1.0);
+}
+
+void Scene::UpdateSimOngoing(const double dt){
+	im_Cam.Update(dt);
+	if(App::Key('R')){
+		orthoProjectionScaleFactor = 1.0;
+	}
+	orthoProjectionScaleFactor -= mouseScrollWheelYOffset * 0.02; //No need dt
+	orthoProjectionScaleFactor = Math::Clamp(orthoProjectionScaleFactor, 0.2, 1.0);
+
+	static bool isKeyDownSpace = false;
+	if(!isKeyDownSpace && App::Key(VK_SPACE)){
+		if(sim->turn == SimTurn::Player){
+			sim->turn = Math::RandIntMinMax(1, 10) <= 4 ? SimTurn::Environment : SimTurn::AI;
+			sim->turnElapsedTime = 0.0f;
+
+			if(sim->turn == SimTurn::Player){
+				creditsPlayer += 100;
+			} else if(sim->turn == SimTurn::AI){
+				creditsAI += 100;
+			}
+		}
+
+		isKeyDownSpace = true;
+	} else if(isKeyDownSpace && !App::Key(VK_SPACE)){
+		isKeyDownSpace = false;
+	}
+
+	static bool isKeyDownQ = false;
+	if(!isKeyDownQ && App::Key('Q')){
+		if(sim->turn == SimTurn::Player && creditsPlayer >= spawnCostPlayer){
+			sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim, gridType == HexGrid<float>::GridType::FlatTop));
+			creditsPlayer -= spawnCostPlayer;
+			spawnCostPlayer += 10;
+		}
+
+		isKeyDownQ = true;
+	} else if(isKeyDownQ && !App::Key('Q')){
+		isKeyDownQ = false;
+	}
+
+	static bool isLMB = false;
+	if(!isLMB && App::IsMousePressed(GLFW_MOUSE_BUTTON_LEFT)){
+		selectedRow = (int)mouseRow;
+		selectedCol = (int)mouseCol;
+
+		isLMB = true;
+	} else if(isLMB && !App::IsMousePressed(GLFW_MOUSE_BUTTON_LEFT)){
+		isLMB = false;
+	}
+
+	if(sim->turn != SimTurn::Player){
+		selectedRow = selectedCol = -1;
+	}
+
+	sim->Update(dt); //Not (dt * sim->spd) as...
+	UpdateStates();
+	UpdateEntities(dt * sim->spd);
 }
 
 void Scene::UpdateGridAttribs(){
@@ -560,24 +569,13 @@ void Scene::Render(){
 	RenderBG();
 	switch(sim->status){
 		case SimRuntimeStatus::Waiting:
-			RenderCoverMap();
-			RenderCoverText();
-			break;
-		case SimRuntimeStatus::Ongoing:
-			RenderMap();
-			RenderEntities();
-			if(shldRenderFog){
-				glDepthFunc(GL_ALWAYS);
-				RenderFog();
-				glDepthFunc(GL_LESS);
-			}
-			if(sim->turn == SimTurn::Player){
-				RenderGridCellOfMouse();
-				RenderSelectedGridCell();
-			}
+			RenderSimWaiting();
 			break;
 		case SimRuntimeStatus::MakingTheMap:
-			RenderMap();
+			RenderSimMakingTheMap();
+			break;
+		case SimRuntimeStatus::Ongoing:
+			RenderSimOngoing();
 			break;
 	}
 	RenderSceneText();
@@ -586,6 +584,29 @@ void Scene::Render(){
 
 	if(sim->status == SimRuntimeStatus::Waiting){
 		canMakeSimMap = true;
+	}
+}
+
+void Scene::RenderSimWaiting(){
+	RenderCoverMap();
+	RenderCoverText();
+}
+
+void Scene::RenderSimMakingTheMap(){
+	RenderMap();
+}
+
+void Scene::RenderSimOngoing(){
+	RenderMap();
+	RenderEntities();
+	if(shldRenderFog){
+		glDepthFunc(GL_ALWAYS);
+		RenderFog();
+		glDepthFunc(GL_LESS);
+	}
+	if(sim->turn == SimTurn::Player){
+		RenderGridCellOfMouse();
+		RenderSelectedGridCell();
 	}
 }
 
