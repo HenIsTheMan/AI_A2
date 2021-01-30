@@ -18,7 +18,7 @@ namespace Obj{
 				IEntityCreationAttribs<T, Type>::im_ActionType = EntityActionType::UnidirectionalAttack;
 				IEntityCreationAttribs<T, Type>::im_ActionRange = 1;
 				IEntityCreationAttribs<T, Type>::im_VisionType = EntityVisionType::Omnidirectional;
-				IEntityCreationAttribs<T, Type>::im_VisionRange = 1;
+				IEntityCreationAttribs<T, Type>::im_VisionRange = 3;
 
 				IEntityCreationAttribs<T, Type>::im_ActionMag = 1.0f;
 				IEntityCreationAttribs<T, Type>::im_Health = 4.0f;
@@ -27,7 +27,7 @@ namespace Obj{
 				IEntityCreationAttribs<T, Type>::im_ActionType = EntityActionType::UnidirectionalAttack;
 				IEntityCreationAttribs<T, Type>::im_ActionRange = 1;
 				IEntityCreationAttribs<T, Type>::im_VisionType = EntityVisionType::Omnidirectional;
-				IEntityCreationAttribs<T, Type>::im_VisionRange = 2;
+				IEntityCreationAttribs<T, Type>::im_VisionRange = 4;
 
 				IEntityCreationAttribs<T, Type>::im_ActionMag = 2.0f;
 				IEntityCreationAttribs<T, Type>::im_Health = 8.0f;
@@ -36,7 +36,7 @@ namespace Obj{
 				IEntityCreationAttribs<T, Type>::im_ActionType = EntityActionType::UnidirectionalAttack;
 				IEntityCreationAttribs<T, Type>::im_ActionRange = 1;
 				IEntityCreationAttribs<T, Type>::im_VisionType = EntityVisionType::Omnidirectional;
-				IEntityCreationAttribs<T, Type>::im_VisionRange = 3;
+				IEntityCreationAttribs<T, Type>::im_VisionRange = 5;
 
 				IEntityCreationAttribs<T, Type>::im_ActionMag = 3.0f;
 				IEntityCreationAttribs<T, Type>::im_Health = 16.0f;
