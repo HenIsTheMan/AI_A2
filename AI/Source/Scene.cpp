@@ -247,6 +247,10 @@ void Scene::Update(const double updateDt, const double renderDt){
 		mouseCol = std::floorf((trueMouseX - gridOffsetX - ((int)mouseRow & 1) * gridAltOffsetX + gridAltOffsetX) / unitX);
 	}
 
+	if(mouseRow > gridRows - 1 || mouseCol > gridCols - 1){ //Lame
+		mouseRow = mouseCol = -1;
+	}
+
 	gridCellFlatToFlatLen = grid->CalcCellFlatToFlatLen();
 	gridCellSideLen = grid->CalcCellSideLen();
 	gridAltOffsetX = grid->CalcAltOffsetX();
@@ -361,7 +365,7 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 
 	static bool isLMB = false;
 	if(!isLMB && App::IsMousePressed(GLFW_MOUSE_BUTTON_LEFT)){
-		if(entityMoving == nullptr){
+		if(entityMoving == nullptr && mouseRow >= 0 && mouseCol >= 0){
 			selectedRow = (int)mouseRow;
 			selectedCol = (int)mouseCol;
 
@@ -375,7 +379,7 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 
 	static bool isRMB = false;
 	if(!isRMB && App::IsMousePressed(GLFW_MOUSE_BUTTON_RIGHT)){
-		if(entityMoving == nullptr || (entityMoving != nullptr && (selectedTargetRow < 0 || selectedTargetCol < 0))){
+		if((entityMoving == nullptr || (entityMoving != nullptr && (selectedTargetRow < 0 || selectedTargetCol < 0))) && mouseRow >= 0 && mouseCol >= 0){
 			if(selectedRow >= 0 && selectedCol >= 0){
 				selectedTargetRow = (int)mouseRow;
 				selectedTargetCol = (int)mouseCol;
@@ -673,7 +677,7 @@ void Scene::UpdateEntities(const double dt){
 	if(entityMoving != nullptr){
 		const Vector3& entityLocalPos = entityMoving->im_Attribs.im_LocalPos;
 
-		if((entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos).Length() < 4.0f * (float)dt){ //LenSquared??
+		if((entityMoving->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos).LengthSquared() < 4.0f * (float)dt * 4.0f * (float)dt){
 			entityMoving->im_Attribs.im_LocalPos = Vector3(
 				roundf(entityLocalPos.x),
 				roundf(entityLocalPos.y),
