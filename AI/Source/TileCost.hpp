@@ -3,12 +3,12 @@
 enum struct TileCost: int{
 	InvalidCost = -999,
 	WallCost = -1,
-	EmptyCost,
-	SoilCost = 1,
-	FireCost = 0,
-	WaterCost = 3,
-	GrassCost = 2,
-	MudCost = 4,
+	EmptyCost = 1,
+	SoilCost = 2,
+	FireCost = 1,
+	WaterCost = 4,
+	GrassCost = 3,
+	MudCost = 5,
 	Amt = 8
 };
 
