@@ -288,6 +288,8 @@ void Scene::UpdateSimWaiting(const double dt){
 		StateChaseKnight::selectedCol = &selectedCol;
 		StateChaseKnight::selectedTargetRow = &selectedTargetRow;
 		StateChaseKnight::selectedTargetCol = &selectedTargetCol;
+		StateChaseKnight::creditsPlayer = &creditsPlayer;
+		StateChaseKnight::creditsAI = &creditsAI;
 
 		StateChaseGunner::sim = sim;
 		StateChaseGunner::entityMoving = &entityMoving;

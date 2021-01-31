@@ -9,6 +9,8 @@ int* StateChaseKnight::selectedRow = nullptr;
 int* StateChaseKnight::selectedCol = nullptr;
 int* StateChaseKnight::selectedTargetRow = nullptr;
 int* StateChaseKnight::selectedTargetCol = nullptr;
+int* StateChaseKnight::creditsPlayer = nullptr;
+int* StateChaseKnight::creditsAI = nullptr;
 
 void StateChaseKnight::Enter(Entity* const entity){
 	myAStar->Reset();
@@ -90,6 +92,12 @@ void StateChaseKnight::Update(Entity* const entity, const double dt){
 			roundf(entityLocalPos.y),
 			roundf(entityLocalPos.z)
 		); //Snap entity's local pos
+
+		if(sim->turn == SimTurn::Player){
+			*creditsPlayer -= (int)tileCosts[(int)sim->GetTileLayer()[(int)entity->im_Attribs.im_GridCellTargetLocalPos.y * gridCols + (int)entity->im_Attribs.im_GridCellTargetLocalPos.x]];
+		} else if(sim->turn == SimTurn::AI){
+			*creditsAI -= (int)tileCosts[(int)sim->GetTileLayer()[(int)entity->im_Attribs.im_GridCellTargetLocalPos.y * gridCols + (int)entity->im_Attribs.im_GridCellTargetLocalPos.x]];
+		}
 
 		if(gridType == HexGrid<float>::GridType::FlatTop){
 			switch(entity->im_Attribs.im_FacingDir){
