@@ -148,9 +148,9 @@ void Scene::Init(){
 
 	sim->status = SimRuntimeStatus::Waiting;
 	sim->spd = 1.0f;
-	sim->turnDurationAI = 60.0f;
+	sim->turnDurationAI = 30.0f;
 	sim->turnDurationEnvironment = 10.0f;
-	sim->turnDurationPlayer = 60.0f;
+	sim->turnDurationPlayer = 30.0f;
 	sim->turnElapsedTime = 0.0f;
 	sim->turn = Math::RandIntMinMax(0, 1) == 1 ? SimTurn::Player : SimTurn::AI;
 	sim->timeOfDayDuration = 4.0f;
@@ -429,9 +429,37 @@ void Scene::UpdateSimEnded(const double dt){
 void Scene::UpdateSimOngoingTurnAI(const double dt){
 	static float decisionBT = 0.0f;
 	if(decisionBT <= elapsedTime){
-		if(canSpawnAmtAI > 0){
+		if(canSpawnAmtAI > 0 && (unitsLeftAI < 3 || Math::RandIntMinMax(1, 10) == 10)){
 			sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim, gridType == HexGrid<float>::GridType::FlatTop));
 			--canSpawnAmtAI;
+		} else{
+			const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
+			const int entityLayerSize = entityLayer.size();
+
+			std::vector<Entity*> entities;
+			entities.reserve(entityLayerSize);
+			for(int i = 0; i < entityLayerSize; ++i){
+				Entity* const entity = entityLayer[i];
+				if(entity != nullptr && entity->im_Attribs.im_Team == Obj::EntityTeam::AI){
+					entities.emplace_back(entity);
+				}
+			}
+			std::random_shuffle(entities.begin(), entities.end());
+
+			if(!entities.empty()){
+				Entity* const selectedEntity = entities[0];
+
+				selectedRow = (int)selectedEntity->im_Attribs.im_LocalPos.y;
+				selectedCol = (int)selectedEntity->im_Attribs.im_LocalPos.x;
+
+				selectedTargetRow = selectedTargetCol = -1;
+
+				if(entityMoving == nullptr){
+					entityMoving = selectedEntity;
+					entityMoving->im_Attribs.im_IdleShldChase = false;
+					entityMoving->im_Attribs.im_IdleShldPatrol = true;
+				}
+			}
 		}
 
 		decisionBT = elapsedTime + Math::RandFloatMinMax(0.5f, 1.0f);
