@@ -10,7 +10,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static GLFWwindow* s_UpdateWindow = nullptr;
 static GLFWwindow* s_RenderWindow = nullptr;
 
 ///Shld be members of App instead
@@ -63,9 +62,6 @@ void App::Init(){
 
 	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
-	s_UpdateWindow = glfwCreateWindow(1, 1, "Update Window", nullptr, nullptr);
-	glfwHideWindow(s_UpdateWindow);
-
 	const GLFWvidmode* const& mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	s_RenderWindow = glfwCreateWindow(mode->width / 2, mode->height / 2, "App Window", nullptr, nullptr);
 	glfwSetWindowPos(s_RenderWindow, mode->width / 4, mode->height / 4);
@@ -117,18 +113,20 @@ void App::Render(){
 }
 
 void App::Run(){
-	glfwMakeContextCurrent(NULL);
+	/*glfwMakeContextCurrent(NULL);
 
 	std::thread renderThread(&App::Render, this);
 
-	glfwMakeContextCurrent(s_UpdateWindow);
+	glfwMakeContextCurrent(s_UpdateWindow);*/
 
 	static bool isF3 = false;
 	static bool isF1 = false;
 
 	im_UpdateTimer.startTimer();
+	im_RenderTimer.startTimer();
+
 	while(!endLoop){
-		if(glfwWindowShouldClose(s_UpdateWindow)){
+		if(glfwWindowShouldClose(s_RenderWindow)){
 			endLoop = true;
 			continue;
 		}
@@ -149,19 +147,32 @@ void App::Run(){
 			isF1 = false;
 		}
 
-		glfwPollEvents();
-
-		static double prevTime = 0.0;
-		static double currTime = 0.0;
-		double dt = 0.0;
-		while(dt < 1.0 / 400.0){ //Cap at 400 FPS
-			currTime = glfwGetTime();
-			dt = currTime - prevTime;
+		if(glfwWindowShouldClose(s_RenderWindow)){
+			endLoop = true;
+			continue;
 		}
-		prevTime = currTime;
+
+		renderDt = im_RenderTimer.getElapsedTime();
+
+		if(glfwGetWindowAttrib(s_RenderWindow, GLFW_VISIBLE)){
+			glViewport(0, 0, windowWidth, windowHeight);
+			im_Scene->Render();
+		}
+
+		glfwPollEvents();
+		glfwSwapBuffers(s_RenderWindow);
+
+		//static double prevTime = 0.0;
+		//static double currTime = 0.0;
+		//double dt = 0.0;
+		//while(dt < 1.0 / 400.0){ //Cap at 400 FPS
+		//	currTime = glfwGetTime();
+		//	dt = currTime - prevTime;
+		//}
+		//prevTime = currTime;
 	}
 
-	renderThread.join();
+	//renderThread.join();
 }
 
 void App::Exit(){
@@ -170,7 +181,7 @@ void App::Exit(){
 		im_Scene = nullptr;
 	}
 
-	glfwDestroyWindow(s_UpdateWindow);
+	//glfwDestroyWindow(s_UpdateWindow);
 	glfwDestroyWindow(s_RenderWindow);
 	glfwTerminate();
 }
