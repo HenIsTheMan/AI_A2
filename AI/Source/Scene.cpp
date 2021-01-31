@@ -427,43 +427,7 @@ void Scene::UpdateSimEnded(const double dt){
 }
 
 void Scene::UpdateSimOngoingTurnAI(const double dt){
-	static float decisionBT = 0.0f;
-	if(decisionBT <= elapsedTime){
-		if(canSpawnAmtAI > 0 && (unitsLeftAI < 3 || Math::RandIntMinMax(1, 10) == 10)){
-			sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim, gridType == HexGrid<float>::GridType::FlatTop));
-			--canSpawnAmtAI;
-		} else{
-			const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
-			const int entityLayerSize = entityLayer.size();
 
-			std::vector<Entity*> entities;
-			entities.reserve(entityLayerSize);
-			for(int i = 0; i < entityLayerSize; ++i){
-				Entity* const entity = entityLayer[i];
-				if(entity != nullptr && entity->im_Attribs.im_Team == Obj::EntityTeam::AI){
-					entities.emplace_back(entity);
-				}
-			}
-			std::random_shuffle(entities.begin(), entities.end());
-
-			if(!entities.empty()){
-				Entity* const selectedEntity = entities[0];
-
-				selectedRow = (int)selectedEntity->im_Attribs.im_LocalPos.y;
-				selectedCol = (int)selectedEntity->im_Attribs.im_LocalPos.x;
-
-				selectedTargetRow = selectedTargetCol = -1;
-
-				if(entityMoving == nullptr){
-					entityMoving = selectedEntity;
-					entityMoving->im_Attribs.im_IdleShldChase = false;
-					entityMoving->im_Attribs.im_IdleShldPatrol = true;
-				}
-			}
-		}
-
-		decisionBT = elapsedTime + Math::RandFloatMinMax(0.5f, 1.0f);
-	}
 }
 
 void Scene::UpdateSimOngoingTurnEnvironment(const double dt){
@@ -526,6 +490,74 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 }
 
 void Scene::LateUpdateSimOngoingTurnAI(const double dt){
+		static float decisionBT = 0.0f;
+	if(decisionBT <= elapsedTime){
+		if(canSpawnAmtAI > 0 && (unitsLeftAI < 3 || Math::RandIntMinMax(1, 100) == 1)){
+			sim->OnEntityActivated(gridCols, entityFactory->SpawnRandUnit(gridCols, sim, gridType == HexGrid<float>::GridType::FlatTop));
+			--canSpawnAmtAI;
+		} else{
+			const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
+			const int entityLayerSize = entityLayer.size();
+
+			std::vector<Entity*> entities;
+			entities.reserve(entityLayerSize);
+			for(int i = 0; i < entityLayerSize; ++i){
+				Entity* const entity = entityLayer[i];
+				if(entity != nullptr && entity->im_Attribs.im_Team == Obj::EntityTeam::AI){
+					entities.emplace_back(entity);
+				}
+			}
+			std::random_shuffle(entities.begin(), entities.end());
+
+			if(!entities.empty()){
+				Entity* const selectedEntity = entities[0];
+
+				selectedRow = (int)selectedEntity->im_Attribs.im_LocalPos.y;
+				selectedCol = (int)selectedEntity->im_Attribs.im_LocalPos.x;
+
+				selectedTargetRow = selectedTargetCol = -1;
+
+				if(Math::RandIntMinMax(1, 100) == 40){
+					if(entityMoving == nullptr){
+						entityMoving = selectedEntity;
+						entityMoving->im_Attribs.im_IdleShldChase = false;
+						entityMoving->im_Attribs.im_IdleShldPatrol = true;
+					}
+				} else{
+					const std::vector<TileType>& tileLayer = sim->GetTileLayer();
+					const int randRow = Math::RandIntMinMax(0, gridRows - 1);
+					const int randCol = Math::RandIntMinMax(0, gridCols - 1);
+					const int tileCost = (int)tileCosts[(int)tileLayer[randRow * gridCols + (int)randCol]];
+
+					if((entityMoving == nullptr
+						|| (entityMoving != nullptr
+						&& entityMoving->im_Attribs.im_CurrHealth > 0.0f
+						&& (selectedTargetRow < 0 || selectedTargetCol < 0)))
+						&& selectedRow >= 0 && selectedCol >= 0
+						&& (mouseRow != selectedRow || mouseCol != selectedCol)
+						&& creditsAI >= tileCost
+					){
+						selectedTargetRow = (int)randRow;
+						selectedTargetCol = (int)randCol;
+
+						const int indexSelectedTarget = selectedTargetRow * gridCols + selectedTargetCol;
+						if(selectedEntity != nullptr
+							&& selectedEntity->im_Attribs.im_CurrHealth > 0.0f
+							&& selectedEntity->im_Attribs.im_Team == Obj::EntityTeam::AI
+							&& (int)tileCosts[(int)tileLayer[indexSelectedTarget]] >= (int)TileCost::EmptyCost
+							&& (indexSelectedTarget < (int)visionLayer.size() && !visionLayer[indexSelectedTarget])
+						){
+							entityMoving = selectedEntity;
+							entityMoving->im_Attribs.im_IdleShldChase = true;
+							entityMoving->im_Attribs.im_IdleShldPatrol = false;
+						}
+					}
+				}
+			}
+		}
+
+		decisionBT = elapsedTime + Math::RandFloatMinMax(2.0f, 4.0f);
+	}
 }
 
 void Scene::LateUpdateSimOngoingTurnEnvironment(const double dt){
@@ -560,8 +592,7 @@ void Scene::LateUpdateSimOngoingTurnPlayer(const double dt){
 			&& mouseRow >= 0 && mouseCol >= 0
 			&& selectedRow >= 0 && selectedCol >= 0
 			&& (mouseRow != selectedRow || mouseCol != selectedCol)
-			&& ((sim->turn == SimTurn::Player && creditsPlayer >= tileCost)
-			|| (sim->turn == SimTurn::AI && creditsAI >= tileCost))
+			&& creditsPlayer >= tileCost
 		){
 			selectedTargetRow = (int)mouseRow;
 			selectedTargetCol = (int)mouseCol;
@@ -571,10 +602,9 @@ void Scene::LateUpdateSimOngoingTurnPlayer(const double dt){
 
 			if(entitySelected != nullptr
 				&& entitySelected->im_Attribs.im_CurrHealth > 0.0f
-				&& ((entitySelected->im_Attribs.im_Team == Obj::EntityTeam::Player && sim->turn == SimTurn::Player)
-				|| (entitySelected->im_Attribs.im_Team == Obj::EntityTeam::AI && sim->turn == SimTurn::AI))
+				&& entitySelected->im_Attribs.im_Team == Obj::EntityTeam::Player
 				&& (int)tileCosts[(int)tileLayer[indexSelectedTarget]] >= (int)TileCost::EmptyCost
-				&& !visionLayer[indexSelectedTarget]
+				&& (indexSelectedTarget < (int)visionLayer.size() && !visionLayer[indexSelectedTarget])
 			){
 				entityMoving = entitySelected;
 				entityMoving->im_Attribs.im_IdleShldChase = true;
