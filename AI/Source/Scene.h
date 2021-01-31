@@ -13,7 +13,11 @@
 #include "ObjPool.h"
 #include "Publisher.h"
 
+#include "AStar.h"
+
 using Entity = Obj::Entity<Vector3, float>; //Can because Entity<Vector3, float> is in another namespace
+
+using namespace Algs;
 
 class Scene final: public SceneSupport, public Listener{
 public:
@@ -85,6 +89,10 @@ private:
 	std::vector<Entity*> entitiesToDeactivate;
 
 	std::thread* myThread;
+
+	Entity* entityMoving;
+	AStar<Vector3, float> myAStar;
+	std::vector<Vector3> myShortestPath;
 
 	void UpdateSimWaiting(const double dt);
 	void UpdateSimMakingTheMap(const double dt);

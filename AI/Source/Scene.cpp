@@ -3,8 +3,6 @@
 #include "App.h"
 #include "GLFW/glfw3.h"
 
-#include "AStar.h"
-
 #include "Easing.hpp"
 
 #include "EventAddCredits.h"
@@ -85,7 +83,10 @@ Scene::Scene():
 	publisher(Publisher::RetrieveGlobalObjPtr()),
 	fogLayer(),
 	entitiesToDeactivate(),
-	myThread(nullptr)
+	myThread(nullptr),
+	entityMoving(nullptr),
+	myAStar(),
+	myShortestPath()
 {
 }
 
@@ -266,6 +267,7 @@ void Scene::UpdateSimWaiting(const double dt){
 		const int gridTotalCells = gridRows * gridCols;
 		fogLayer.reserve(gridTotalCells);
 		fogLayer.resize(gridTotalCells);
+		myShortestPath.reserve(gridTotalCells);
 
 		const bool isFlatTop = gridType == HexGrid<float>::GridType::FlatTop;
 		StateIdleKnight::sm_IsFlatTop = isFlatTop;
@@ -328,12 +330,6 @@ void Scene::UpdateSimOngoingTurnAI(const double dt){
 void Scene::UpdateSimOngoingTurnEnvironment(const double dt){
 }
 
-using namespace Algs;
-static AStar<Vector3, float> MyAStar;
-static std::vector<Vector3> myShortestPath;
-
-static Entity* entityMoving = nullptr;
-
 void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 	static bool isKeyDownSpace = false;
 	if(!isKeyDownSpace && App::Key(VK_SPACE)){
@@ -395,14 +391,14 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 				){
 					entityMoving = entitySelected;
 
-					MyAStar.Reset();
+					myAStar.Reset();
 					myShortestPath.clear();
 
 					for(int r = 0; r < gridRows; ++r){
 						for(int c = 0; c < gridCols; ++c){
 							const int cost = (int)tileCosts[(int)sim->GetTileLayer()[r * gridCols + c]];
 
-							(void)MyAStar.CreateNode(CreateAStarNodeParams<Vector3, float>{
+							(void)myAStar.CreateNode(CreateAStarNodeParams<Vector3, float>{
 								cost < 0 || (!(r == selectedRow && c == selectedCol) && entityLayer[r * gridCols + c] != nullptr) ? AStarNodeType::Inaccessible : AStarNodeType::Accessible,
 								'(' + std::to_string(c) + ", " + std::to_string(r) + ')' + " Cost: " + std::to_string(cost),
 								(float)cost,
@@ -411,10 +407,10 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 						}
 					}
 
-					MyAStar.SetStart(Vector3((float)selectedCol, (float)selectedRow, 0.0f));
-					MyAStar.SetEnd(Vector3((float)selectedTargetCol, (float)selectedTargetRow, 0.0f));
+					myAStar.SetStart(Vector3((float)selectedCol, (float)selectedRow, 0.0f));
+					myAStar.SetEnd(Vector3((float)selectedTargetCol, (float)selectedTargetRow, 0.0f));
 					if(gridType == HexGrid<float>::GridType::FlatTop){
-						MyAStar.SetNeighboursForHexGridFlatTop(
+						myAStar.SetNeighboursForHexGridFlatTop(
 							Vector3(0.0f, 0.0f, 0.0f),
 							Vector3((float)gridCols - 1.0f, 0.0f, 0.0f),
 							Vector3(0.0f, (float)gridRows - 1.0f, 0.0f),
@@ -423,7 +419,7 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 							1.0f
 						);
 					} else{
-						MyAStar.SetNeighboursForHexGridSharpTop(
+						myAStar.SetNeighboursForHexGridSharpTop(
 							Vector3(0.0f, 0.0f, 0.0f),
 							Vector3((float)gridCols - 1.0f, 0.0f, 0.0f),
 							Vector3(0.0f, (float)gridRows - 1.0f, 0.0f),
@@ -433,10 +429,10 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 						);
 					}
 
-					if(MyAStar.CalcShortestPath()){
-						MyAStar.PrintPath();
+					if(myAStar.CalcShortestPath()){
+						myAStar.PrintPath();
 
-						const std::vector<AStarNode<Vector3, float>*>& shortestPath = MyAStar.GetShortestPath();
+						const std::vector<AStarNode<Vector3, float>*>& shortestPath = myAStar.GetShortestPath();
 						for(const AStarNode<Vector3, float>* const node : shortestPath){
 							myShortestPath.emplace_back(node->GetPos());
 						}
