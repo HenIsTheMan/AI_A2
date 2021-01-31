@@ -1658,14 +1658,60 @@ void Scene::RenderEntityState(const Entity* const entity){
 		0.1f
 	);
 	modelStack.Scale(
-		0.4f,
-		0.4f,
+		0.22f,
+		0.22f,
 		1.0f
 	);
 
+	static std::string stateText = std::string();
+	switch(entity->im_Attribs.im_CurrState->GetID()){
+		case StateID::StateIdleKnight:
+			stateText = "KnightIdle";
+			break;
+		case StateID::StateIdleGunner:
+			stateText = "GunnerIdle";
+			break;
+		case StateID::StateIdleHealer:
+			stateText = "HealerIdle";
+			break;
+		case StateID::StatePatrolKnight:
+			stateText = "KnightPatrol";
+			break;
+		case StateID::StatePatrolGunner:
+			stateText = "GunnerPatrol";
+			break;
+		case StateID::StateChaseKnight:
+			stateText = "KnightChase";
+			break;
+		case StateID::StateChaseGunner:
+			stateText = "GunnerChase";
+			break;
+		case StateID::StateFollowHealer:
+			stateText = "HealerFollow";
+			break;
+		case StateID::StateAttackKnight:
+			stateText = "KnightAttack";
+			break;
+		case StateID::StateAttackGunner:
+			stateText = "GunnerAttack";
+			break;
+		case StateID::StateHealHealer:
+			stateText = "HealerHeal";
+			break;
+		case StateID::StateDeadKnight:
+			stateText = "KnightDead";
+			break;
+		case StateID::StateDeadGunner:
+			stateText = "GunnerDead";
+			break;
+		case StateID::StateDeadHealer:
+			stateText = "HealerDead";
+			break;
+	}
+
 	RenderText(
 		meshList[(int)GeoType::TextMod],
-		"State",
+		stateText,
 		Color(),
 		TextAlignment::Center,
 		-0.1f
