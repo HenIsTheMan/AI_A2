@@ -88,10 +88,10 @@ void StateChaseKnight::Update(Entity* const entity, const double dt){
 	const Vector3 diff = entity->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos;
 	const float dist = diff.Length();
 	if(!(dist <= Math::EPSILON && -dist <= Math::EPSILON)){
-		entityLocalPos = entityLocalPos + 4.0f * diff.Normalized() * (float)dt;
+		entityLocalPos = entityLocalPos + entity->im_Attribs.im_Spd * diff.Normalized() * (float)dt;
 	}
 
-	if((entity->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos).LengthSquared() < 4.0f * (float)dt * 4.0f * (float)dt){
+	if((entity->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos).LengthSquared() < entity->im_Attribs.im_Spd * (float)dt * entity->im_Attribs.im_Spd * (float)dt){
 		entityLocalPos = Vector3(
 			roundf(entityLocalPos.x),
 			roundf(entityLocalPos.y),

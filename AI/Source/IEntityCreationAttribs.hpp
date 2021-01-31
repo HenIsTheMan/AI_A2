@@ -23,6 +23,7 @@ namespace Obj{
 
 		Type im_ActionMag = Type();
 		Type im_Health = Type();
+		Type im_Spd = Type();
 	protected:
 		IEntityCreationAttribs<T, Type>() = default;
 	};

@@ -38,6 +38,7 @@ namespace Obj{
 		Type im_CurrHealth = Type();
 		Type im_MaxHealth = Type();
 		Type im_TimeAlive = Type();
+		Type im_Spd = Type();
 
 		//* Vars for specific entities only (help la, I wanna do ECS alr)
 		bool im_IdleShldChase = false;
