@@ -11,8 +11,6 @@ int* StateChaseKnight::selectedTargetRow = nullptr;
 int* StateChaseKnight::selectedTargetCol = nullptr;
 
 void StateChaseKnight::Enter(Entity* const entity){
-	const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
-
 	myAStar->Reset();
 	myShortestPath->clear();
 
@@ -21,16 +19,21 @@ void StateChaseKnight::Enter(Entity* const entity){
 			const int cost = (int)tileCosts[(int)sim->GetTileLayer()[r * gridCols + c]];
 
 			(void)myAStar->CreateNode(CreateAStarNodeParams<Vector3, float>{
-				cost < 0 || (!(r == *selectedRow && c == *selectedCol) && entityLayer[r * gridCols + c] != nullptr) ? AStarNodeType::Inaccessible : AStarNodeType::Accessible,
-					'(' + std::to_string(c) + ", " + std::to_string(r) + ')' + " Cost: " + std::to_string(cost),
-					(float)cost,
-					Vector3((float)c, (float)r, 0.0f),
+				cost < 0 || sim->GetEntityLayer()[r * gridCols + c] != nullptr
+					? AStarNodeType::Inaccessible
+					: AStarNodeType::Accessible,
+				'(' + std::to_string(c) + ", " + std::to_string(r) + ')' + " Cost: " + std::to_string(cost),
+				(float)cost,
+				Vector3((float)c, (float)r, 0.0f),
 			});
 		}
 	}
 
 	myAStar->SetStart(Vector3((float)*selectedCol, (float)*selectedRow, 0.0f));
 	myAStar->SetEnd(Vector3((float)*selectedTargetCol, (float)*selectedTargetRow, 0.0f));
+	myAStar->MakeStartAccessible();
+	myAStar->MakeEndAccessible();
+
 	if(gridType == HexGrid<float>::GridType::FlatTop){
 		myAStar->SetNeighboursForHexGridFlatTop(
 			Vector3(0.0f, 0.0f, 0.0f),
@@ -151,9 +154,22 @@ void StateChaseKnight::Update(Entity* const entity, const double dt){
 
 			*entityMoving = nullptr;
 		} else{
-			entity->im_Attribs.im_GridCellTargetLocalPos = myShortestPath->front();
-			entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
-			myShortestPath->erase(myShortestPath->begin());
+			const Vector3 localPos = myShortestPath->front();
+			if(sim->GetEntityLayer()[(int)localPos.y * gridCols + (int)localPos.x] == nullptr){
+				entity->im_Attribs.im_GridCellTargetLocalPos = localPos;
+				entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
+				myShortestPath->erase(myShortestPath->begin());
+			} else{
+				*selectedRow = (int)entityLocalPos.y;
+				*selectedCol = (int)entityLocalPos.x;
+
+				*selectedTargetRow = *selectedTargetCol = -1;
+
+				entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateAttackKnight);
+				sim->OnEntityActivated(gridCols, entity);
+
+				*entityMoving = nullptr;
+			}
 		}
 	} else{
 		if((int)entity->im_Attribs.im_GridCellStartLocalPos.x == (int)entity->im_Attribs.im_GridCellTargetLocalPos.x){

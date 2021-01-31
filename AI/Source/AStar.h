@@ -76,6 +76,18 @@ namespace Algs{
 			assert(false);
 		}
 
+		void MakeStartAccessible(){
+			if(start != nullptr){
+				start->accessible = true;
+			}
+		}
+
+		void MakeEndAccessible(){
+			if(end != nullptr){
+				end->accessible = true;
+			}
+		}
+
 		void SetNeighboursForSquareGrid(const T& bottomLeft, const T& bottomRight, const T& topLeft, const T& topRight, const Type& gridCellWidth, const Type& gridCellHeight){
 			for(AStarNode<T, Type>* const element: toVisit){
 				element->ReserveNeighbours(4);

@@ -38,15 +38,15 @@ namespace Algs{
 	template <class T, typename Type>
 	bool AStar<T, Type>::CalcShortestPath(){
 		if(!start){
-			//("No start node in path!");
+			//puts("No start node in path!");
 			return false;
 		}
 		if(!end){
-			//("No end node in path!");
+			//puts("No end node in path!");
 			return false;
 		}
 		if(toVisit.empty()){
-			//("No nodes in path!");
+			//puts("No nodes in path!");
 			return false;
 		}
 		if(!start->accessible){

@@ -414,7 +414,6 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 					&& ((entitySelected->im_Attribs.im_Team == Obj::EntityTeam::Player && sim->turn == SimTurn::Player)
 					|| (entitySelected->im_Attribs.im_Team == Obj::EntityTeam::AI && sim->turn == SimTurn::AI))
 					&& (int)tileCosts[(int)tileLayer[indexSelectedTarget]] >= (int)TileCost::EmptyCost
-					&& entityLayer[indexSelectedTarget] == nullptr
 				){
 					entityMoving = entitySelected;
 					entityMoving->im_Attribs.im_IdleShldChase = true;
