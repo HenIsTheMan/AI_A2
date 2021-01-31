@@ -316,6 +316,8 @@ void Scene::UpdateSimWaiting(const double dt){
 		StatePatrolKnight::sim = sim;
 		StatePatrolKnight::gridRows = gridRows;
 		StatePatrolKnight::gridCols = gridCols;
+		StatePatrolKnight::selectedRow = &selectedRow;
+		StatePatrolKnight::selectedCol = &selectedCol;
 
 		canMakeSimMap = false;
 	}

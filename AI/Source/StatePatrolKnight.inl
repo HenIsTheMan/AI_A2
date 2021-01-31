@@ -1,15 +1,15 @@
 Sim* StatePatrolKnight::sim = nullptr;
-std::vector<Vector3> StatePatrolKnight::myPath = std::vector<Vector3>();
 std::vector<Vector3> StatePatrolKnight::myVec = std::vector<Vector3>();
 std::vector<bool> StatePatrolKnight::visited = std::vector<bool>();
 int StatePatrolKnight::gridRows = 0;
 int StatePatrolKnight::gridCols = 0;
+int* StatePatrolKnight::selectedRow = nullptr;
+int* StatePatrolKnight::selectedCol = nullptr;
 
 void StatePatrolKnight::Enter(Entity* const entity){
 	entity->im_Attribs.im_PatrolRange = 20; //??
 
 	const int gridTotalCells = gridRows * gridCols;
-	myPath.reserve(gridTotalCells);
 	myVec.reserve(gridTotalCells);
 	visited.reserve(gridTotalCells);
 	visited.resize(gridTotalCells);
@@ -20,7 +20,7 @@ void StatePatrolKnight::Enter(Entity* const entity){
 	entity->im_Attribs.im_GridCellStartLocalPos = entity->im_Attribs.im_LocalPos;
 
 	sim->OnEntityDeactivated(gridCols, (int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x);
-	//*selectedRow = *selectedCol = -1;
+	*selectedRow = *selectedCol = -1;
 }
 
 void StatePatrolKnight::Update(Entity* const entity, const double dt){
@@ -88,7 +88,6 @@ void StatePatrolKnight::Update(Entity* const entity, const double dt){
 			nextIndex = (int)next.y * gridCols + (int)next.x; //Update nextIndex
 			if(!visited[nextIndex]){
 				if((int)tileCosts[(int)tileLayer[nextIndex]] >= 0){
-					entity->im_Attribs.im_LocalPos = next;
 					entity->im_Attribs.im_GridCellTargetLocalPos = next;
 					entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
 					return;
@@ -98,8 +97,6 @@ void StatePatrolKnight::Update(Entity* const entity, const double dt){
 
 		myVec.pop_back();
 		if(!myVec.empty()){
-			//myPath.emplace_back();
-			//entity->im_Attribs.im_LocalPos = myVec.back();
 			entity->im_Attribs.im_GridCellTargetLocalPos = myVec.back();
 			entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
 			myVec.pop_back();
