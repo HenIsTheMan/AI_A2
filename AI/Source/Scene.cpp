@@ -373,7 +373,7 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 	if(!isKeyDownSpace && App::Key(VK_SPACE)){
 		sim->turn = Math::RandIntMinMax(1, 10) <= 4 ? SimTurn::Environment : SimTurn::AI;
 		sim->turnElapsedTime = 0.0f;
-		creditsPlayer += 100;
+		creditsAI += 100;
 		selectedRow = selectedCol = -1;
 		selectedTargetRow = selectedTargetCol = -1;
 
