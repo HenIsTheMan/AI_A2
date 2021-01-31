@@ -5,14 +5,12 @@ enum struct StateID: int{
 	StatePatrolKnight,
 	StateChaseKnight,
 	StateAttackKnight,
-	StateEscapeKnight,
 	StateDeadKnight,
 
 	StateIdleGunner,
 	StatePatrolGunner,
 	StateChaseGunner,
 	StateAttackGunner,
-	StateEscapeGunner,
 	StateDeadGunner,
 
 	StateIdleHealer,

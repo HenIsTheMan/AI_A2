@@ -15,14 +15,12 @@
 #include "StateAttackKnight.h"
 #include "StateChaseKnight.h"
 #include "StateDeadKnight.h"
-#include "StateEscapeKnight.h"
 #include "StateIdleKnight.h"
 #include "StatePatrolKnight.h"
 
 #include "StateAttackGunner.h"
 #include "StateChaseGunner.h"
 #include "StateDeadGunner.h"
-#include "StateEscapeGunner.h"
 #include "StateIdleGunner.h"
 #include "StatePatrolGunner.h"
 
@@ -167,14 +165,12 @@ void Scene::Init(){
 	knightSM->AddState(new State(StateID::StateAttackKnight, StateAttackKnight::Enter, StateAttackKnight::Update, StateAttackKnight::Exit));
 	knightSM->AddState(new State(StateID::StateChaseKnight, StateChaseKnight::Enter, StateChaseKnight::Update, StateChaseKnight::Exit));
 	knightSM->AddState(new State(StateID::StateDeadKnight, StateDeadKnight::Enter, StateDeadKnight::Update, StateDeadKnight::Exit));
-	knightSM->AddState(new State(StateID::StateEscapeKnight, StateEscapeKnight::Enter, StateEscapeKnight::Update, StateEscapeKnight::Exit));
 	knightSM->AddState(new State(StateID::StateIdleKnight, StateIdleKnight::Enter, StateIdleKnight::Update, StateIdleKnight::Exit));
 	knightSM->AddState(new State(StateID::StatePatrolKnight, StatePatrolKnight::Enter, StatePatrolKnight::Update, StatePatrolKnight::Exit));
 
 	gunnerSM->AddState(new State(StateID::StateAttackGunner, StateAttackGunner::Enter, StateAttackGunner::Update, StateAttackGunner::Exit));
 	gunnerSM->AddState(new State(StateID::StateChaseGunner, StateChaseGunner::Enter, StateChaseGunner::Update, StateChaseGunner::Exit));
 	gunnerSM->AddState(new State(StateID::StateDeadGunner, StateDeadGunner::Enter, StateDeadGunner::Update, StateDeadGunner::Exit));
-	gunnerSM->AddState(new State(StateID::StateEscapeGunner, StateEscapeGunner::Enter, StateEscapeGunner::Update, StateEscapeGunner::Exit));
 	gunnerSM->AddState(new State(StateID::StateIdleGunner, StateIdleGunner::Enter, StateIdleGunner::Update, StateIdleGunner::Exit));
 	gunnerSM->AddState(new State(StateID::StatePatrolGunner, StatePatrolGunner::Enter, StatePatrolGunner::Update, StatePatrolGunner::Exit));
 

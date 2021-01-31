@@ -213,12 +213,6 @@
     <ClInclude Include="Source\StateDeadKnight.h">
       <Filter>State\States\KnightStates</Filter>
     </ClInclude>
-    <ClInclude Include="Source\StateEscapeGunner.h">
-      <Filter>State\States\GunnerStates</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\StateEscapeKnight.h">
-      <Filter>State\States\KnightStates</Filter>
-    </ClInclude>
     <ClInclude Include="Source\StateFollowHealer.h">
       <Filter>State\States\HealerStates</Filter>
     </ClInclude>
@@ -366,12 +360,6 @@
     </None>
     <None Include="Source\StateDeadHealer.inl">
       <Filter>State\States\HealerStates</Filter>
-    </None>
-    <None Include="Source\StateEscapeGunner.inl">
-      <Filter>State\States\GunnerStates</Filter>
-    </None>
-    <None Include="Source\StateEscapeKnight.inl">
-      <Filter>State\States\KnightStates</Filter>
     </None>
     <None Include="Source\StateFollowHealer.inl">
       <Filter>State\States\HealerStates</Filter>
