@@ -439,7 +439,7 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 
 	static bool isRMB = false;
 	if(!isRMB && App::IsMousePressed(GLFW_MOUSE_BUTTON_RIGHT)){
-		const int tileCost = (int)tileCosts[(int)tileLayer[mouseRow * gridCols + mouseCol]];
+		const int tileCost = (int)tileCosts[(int)tileLayer[(int)mouseRow * gridCols + (int)mouseCol]];
 
 		if((entityMoving == nullptr
 			|| (entityMoving != nullptr
@@ -2035,7 +2035,7 @@ void Scene::RenderGridCellOfMouse(){
 			modelStack.Translate(
 				gridOffsetX + (gridCellSideLen * 1.5f + gridLineThickness) * mouseCol,
 				gridOffsetY + (gridCellFlatToFlatLen + gridLineThickness) * mouseRow + ((int)mouseCol & 1) * gridAltOffsetY,
-				0.39f
+				0.99f
 			);
 			modelStack.Scale(
 				gridCellScaleX + gridLineThickness * 2.5f,
@@ -2046,7 +2046,7 @@ void Scene::RenderGridCellOfMouse(){
 			modelStack.Translate(
 				gridOffsetX + (gridCellFlatToFlatLen + gridLineThickness) * mouseCol + ((int)mouseRow & 1) * gridAltOffsetX,
 				gridOffsetY + (gridCellSideLen * 1.5f + gridLineThickness) * mouseRow,
-				0.39f
+				0.99f
 			);
 			modelStack.Rotate(
 				90.0f,
@@ -2075,7 +2075,7 @@ void Scene::RenderSelected(){
 			modelStack.Translate(
 				gridOffsetX + (gridCellSideLen * 1.5f + gridLineThickness) * (float)selectedCol,
 				gridOffsetY + (gridCellFlatToFlatLen + gridLineThickness) * (float)selectedRow + (selectedCol & 1) * gridAltOffsetY,
-				0.4f
+				1.0f
 			);
 			modelStack.Scale(
 				gridCellScaleX + gridLineThickness * 2.5f,
@@ -2086,7 +2086,7 @@ void Scene::RenderSelected(){
 			modelStack.Translate(
 				gridOffsetX + (gridCellFlatToFlatLen + gridLineThickness) * (float)selectedCol + (selectedRow & 1) * gridAltOffsetX,
 				gridOffsetY + (gridCellSideLen * 1.5f + gridLineThickness) * (float)selectedRow,
-				0.4f
+				1.0f
 			);
 			modelStack.Rotate(
 				90.0f,
@@ -2113,7 +2113,7 @@ void Scene::RenderSelected(){
 			modelStack.Translate(
 				gridOffsetX + (gridCellSideLen * 1.5f + gridLineThickness) * (float)selectedTargetCol,
 				gridOffsetY + (gridCellFlatToFlatLen + gridLineThickness) * (float)selectedTargetRow + (selectedTargetCol & 1) * gridAltOffsetY,
-				0.4f
+				1.0f
 			);
 			modelStack.Scale(
 				gridCellScaleX + gridLineThickness * 2.5f,
@@ -2124,7 +2124,7 @@ void Scene::RenderSelected(){
 			modelStack.Translate(
 				gridOffsetX + (gridCellFlatToFlatLen + gridLineThickness) * (float)selectedTargetCol + (selectedTargetRow & 1) * gridAltOffsetX,
 				gridOffsetY + (gridCellSideLen * 1.5f + gridLineThickness) * (float)selectedTargetRow,
-				0.4f
+				1.0f
 			);
 			modelStack.Rotate(
 				90.0f,
