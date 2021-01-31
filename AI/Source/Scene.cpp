@@ -301,6 +301,13 @@ void Scene::UpdateSimWaiting(const double dt){
 		StateChaseGunner::selectedTargetRow = &selectedTargetRow;
 		StateChaseGunner::selectedTargetCol = &selectedTargetCol;
 
+		StateAttackKnight::sim = sim;
+		StateAttackKnight::gridCols = gridCols;
+		StateAttackKnight::selectedRow = &selectedRow;
+		StateAttackKnight::selectedCol = &selectedCol;
+		StateAttackKnight::selectedTargetRow = &selectedTargetRow;
+		StateAttackKnight::selectedTargetCol = &selectedTargetCol;
+
 		canMakeSimMap = false;
 	}
 }
