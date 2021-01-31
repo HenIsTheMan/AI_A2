@@ -437,7 +437,13 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 
 	static bool isRMB = false;
 	if(!isRMB && App::IsMousePressed(GLFW_MOUSE_BUTTON_RIGHT)){
-		if((entityMoving == nullptr || (entityMoving != nullptr && entityMoving->im_Attribs.im_CurrHealth > 0.0f && (selectedTargetRow < 0 || selectedTargetCol < 0))) && mouseRow >= 0 && mouseCol >= 0){
+		if((entityMoving == nullptr
+			|| (entityMoving != nullptr
+			&& entityMoving->im_Attribs.im_CurrHealth > 0.0f
+			&& (selectedTargetRow < 0 || selectedTargetCol < 0)))
+			&& mouseRow >= 0 && mouseCol >= 0
+			&& (mouseRow != selectedRow || mouseCol != selectedCol)
+		){
 			if(selectedRow >= 0 && selectedCol >= 0){
 				selectedTargetRow = (int)mouseRow;
 				selectedTargetCol = (int)mouseCol;
