@@ -9,6 +9,9 @@ int* StatePatrolKnight::selectedCol = nullptr;
 void StatePatrolKnight::Enter(Entity* const entity){
 	entity->im_Attribs.im_PatrolRange = 20; //??
 
+	myVec.clear();
+	visited.clear();
+
 	const int gridTotalCells = gridRows * gridCols;
 	myVec.reserve(gridTotalCells);
 	visited.reserve(gridTotalCells);
