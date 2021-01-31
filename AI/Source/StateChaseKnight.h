@@ -6,7 +6,7 @@ class StateChaseKnight final{ //Static class
 	_6_DELETED(StateChaseKnight)
 public:
 	static Sim* sim;
-	static Entity* entityMoving;
+	static Entity** entityMoving;
 	static AStar<Vector3, float>* myAStar;
 	static std::vector<Vector3>* myShortestPath;
 	static HexGrid<float>::GridType gridType;
