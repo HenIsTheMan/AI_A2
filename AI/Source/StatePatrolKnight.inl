@@ -87,7 +87,7 @@ void StatePatrolKnight::Update(Entity* const entity, const double dt){
 
 			nextIndex = (int)next.y * gridCols + (int)next.x; //Update nextIndex
 			if(!visited[nextIndex]){
-				if((int)tileLayer[nextIndex] >= 0){
+				if((int)tileCosts[(int)tileLayer[nextIndex]] >= 0){
 					entity->im_Attribs.im_LocalPos = next;
 					entity->im_Attribs.im_GridCellTargetLocalPos = next;
 					entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
