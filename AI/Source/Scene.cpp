@@ -149,7 +149,7 @@ void Scene::Init(){
 	sim->spd = 1.0f;
 	sim->turnDurationAI = 4.0f;
 	sim->turnDurationEnvironment = 10.0f;
-	sim->turnDurationPlayer = 4.0f;
+	sim->turnDurationPlayer = 9999.0f;
 	sim->turnElapsedTime = 0.0f;
 	sim->turn = SimTurn::Player;
 	sim->timeOfDayDuration = 4.0f;
@@ -346,8 +346,21 @@ void Scene::UpdateSimOngoing(const double dt){
 	}
 
 	sim->Update(dt); //Not (dt * sim->spd) as...
-	UpdateStates();
+	UpdateStates(dt * sim->spd);
 	UpdateEntities(dt * sim->spd);
+
+	switch(sim->turn){
+		case SimTurn::AI:
+			LateUpdateSimOngoingTurnAI(dt);
+			break;
+		case SimTurn::Environment:
+			LateUpdateSimOngoingTurnEnvironment(dt);
+			break;
+		case SimTurn::Player:
+			LateUpdateSimOngoingTurnPlayer(dt);
+			break;
+	}
+	UpdateFog(0.0f);
 }
 
 void Scene::UpdateSimEnded(const double dt){
@@ -422,6 +435,17 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 	} else if(isKeyDownQ && !App::Key('Q')){
 		isKeyDownQ = false;
 	}
+}
+
+void Scene::LateUpdateSimOngoingTurnAI(const double dt){
+}
+
+void Scene::LateUpdateSimOngoingTurnEnvironment(const double dt){
+}
+
+void Scene::LateUpdateSimOngoingTurnPlayer(const double dt){
+	const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
+	const std::vector<TileType>& tileLayer = sim->GetTileLayer();
 
 	static bool isLMB = false;
 	if(!isLMB && App::IsMousePressed(GLFW_MOUSE_BUTTON_LEFT)){
@@ -450,7 +474,7 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 			&& (mouseRow != selectedRow || mouseCol != selectedCol)
 			&& ((sim->turn == SimTurn::Player && creditsPlayer >= tileCost)
 			|| (sim->turn == SimTurn::AI && creditsAI >= tileCost))
-		){
+			){
 			selectedTargetRow = (int)mouseRow;
 			selectedTargetCol = (int)mouseCol;
 
@@ -701,19 +725,52 @@ void Scene::UpdateEntities(const double dt){
 	entitiesToDeactivate.clear();
 }
 
-void Scene::UpdateStates(){
-	UpdateKnightStates();
-	UpdateGunnerStates();
-	UpdateHealerStates();
+void Scene::UpdateStates(const double dt){
+	UpdateKnightStates(dt);
+	UpdateGunnerStates(dt);
+	UpdateHealerStates(dt);
 }
 
-void Scene::UpdateKnightStates(){
+void Scene::UpdateKnightStates(const double dt){
 }
 
-void Scene::UpdateGunnerStates(){
+void Scene::UpdateGunnerStates(const double dt){
 }
 
-void Scene::UpdateHealerStates(){
+void Scene::UpdateHealerStates(const double dt){
+}
+
+void Scene::UpdateFog(const double dt){
+	std::fill(fogLayer.begin(), fogLayer.end(), true);
+	static const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
+	const int entityLayerSize = (int)entityLayer.size();
+
+	if(selectedRow >= 0 && selectedCol >= 0){
+		const Entity* const entity = entityLayer[selectedRow * gridCols + selectedCol];
+		if(entity != nullptr
+			&& ((entity->im_Attribs.im_Team == Obj::EntityTeam::Player && sim->turn == SimTurn::Player)
+			|| (entity->im_Attribs.im_Team == Obj::EntityTeam::AI && sim->turn == SimTurn::AI))){
+			switch(entity->im_Attribs.im_VisionType){
+				case Obj::EntityVisionType::Unidirectional:
+					ClearFogUnidirectional((int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x, entity->im_Attribs.im_VisionRange, entity->im_Attribs.im_FacingDir);
+					break;
+				case Obj::EntityVisionType::Omnidirectional:
+					ClearFogOmnidirectional((int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x, entity->im_Attribs.im_VisionRange);
+					break;
+				default:
+					assert(false);
+			}
+		}
+	}
+
+	for(int i = 0; i < entityLayerSize; ++i){
+		const Entity* const entity = entityLayer[i];
+		if(entity != nullptr
+			&& ((entity->im_Attribs.im_Team == Obj::EntityTeam::Player && sim->turn == SimTurn::Player)
+			|| (entity->im_Attribs.im_Team == Obj::EntityTeam::AI && sim->turn == SimTurn::AI))){
+			fogLayer[i] = false;
+		}
+	}
 }
 
 void Scene::Render(){
@@ -768,10 +825,10 @@ void Scene::RenderSimOngoing(){
 		RenderFog();
 		glDepthFunc(GL_LESS);
 	}
+	RenderSelected();
 	if(sim->turn == SimTurn::Player){
 		RenderGridCellOfMouse();
 	}
-	RenderSelected();
 }
 
 void Scene::RenderSimEnded(){
@@ -1769,37 +1826,6 @@ void Scene::RenderFog(){
 	static float endAngle = 400.0f;
 	const float lerpFactor = EaseInOutSine((sinf(0.4f * elapsedTime) + cosf(0.4f * elapsedTime)) * 0.25f + 0.5f);
 	const float angle = (1.0f - lerpFactor) * startAngle + lerpFactor * endAngle;
-
-	std::fill(fogLayer.begin(), fogLayer.end(), true);
-	static const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
-	const int entityLayerSize = (int)entityLayer.size();
-
-	if(selectedRow >= 0 && selectedCol >= 0){
-		const Entity* const entity = entityLayer[selectedRow * gridCols + selectedCol];
-		if(entity != nullptr
-			&& ((entity->im_Attribs.im_Team == Obj::EntityTeam::Player && sim->turn == SimTurn::Player)
-			|| (entity->im_Attribs.im_Team == Obj::EntityTeam::AI && sim->turn == SimTurn::AI))){
-			switch(entity->im_Attribs.im_VisionType){
-				case Obj::EntityVisionType::Unidirectional:
-					ClearFogUnidirectional((int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x, entity->im_Attribs.im_VisionRange, entity->im_Attribs.im_FacingDir);
-					break;
-				case Obj::EntityVisionType::Omnidirectional:
-					ClearFogOmnidirectional((int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x, entity->im_Attribs.im_VisionRange);
-					break;
-				default:
-					assert(false);
-			}
-		}
-	}
-
-	for(int i = 0; i < entityLayerSize; ++i){
-		const Entity* const entity = entityLayer[i];
-		if(entity != nullptr
-			&& ((entity->im_Attribs.im_Team == Obj::EntityTeam::Player && sim->turn == SimTurn::Player)
-			|| (entity->im_Attribs.im_Team == Obj::EntityTeam::AI && sim->turn == SimTurn::AI))){
-			fogLayer[i] = false;
-		}
-	}
 
 	for(int r = 0; r < gridRows; ++r){
 		for(int c = 0; c < gridCols; ++c){

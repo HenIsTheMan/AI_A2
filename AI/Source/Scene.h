@@ -101,13 +101,17 @@ private:
 	void UpdateSimOngoingTurnAI(const double dt);
 	void UpdateSimOngoingTurnEnvironment(const double dt);
 	void UpdateSimOngoingTurnPlayer(const double dt);
+	void LateUpdateSimOngoingTurnAI(const double dt);
+	void LateUpdateSimOngoingTurnEnvironment(const double dt);
+	void LateUpdateSimOngoingTurnPlayer(const double dt);
 	void UpdateGridAttribs();
 	void UpdateMisc(const double dt);
 	void UpdateEntities(const double dt);
-	void UpdateStates();
-	void UpdateKnightStates();
-	void UpdateGunnerStates();
-	void UpdateHealerStates();
+	void UpdateStates(const double dt);
+	void UpdateKnightStates(const double dt);
+	void UpdateGunnerStates(const double dt);
+	void UpdateHealerStates(const double dt);
+	void UpdateFog(const double dt);
 
 	void RenderSimWaiting();
 	void RenderSimMakingTheMap();
