@@ -274,6 +274,30 @@ void Scene::UpdateSimWaiting(const double dt){
 		StateIdleGunner::sm_IsFlatTop = isFlatTop;
 		StateIdleHealer::sm_IsFlatTop = isFlatTop;
 
+		StateChaseKnight::sim = sim;
+		StateChaseKnight::entityMoving = &entityMoving;
+		StateChaseKnight::myAStar = &myAStar;
+		StateChaseKnight::myShortestPath = &myShortestPath;
+		StateChaseKnight::gridType = gridType;
+		StateChaseKnight::gridRows = gridRows;
+		StateChaseKnight::gridCols = gridCols;
+		StateChaseKnight::selectedRow = &selectedRow;
+		StateChaseKnight::selectedCol = &selectedCol;
+		StateChaseKnight::selectedTargetRow = &selectedTargetRow;
+		StateChaseKnight::selectedTargetCol = &selectedTargetCol;
+
+		StateChaseGunner::sim = sim;
+		StateChaseGunner::entityMoving = &entityMoving;
+		StateChaseGunner::myAStar = &myAStar;
+		StateChaseGunner::myShortestPath = &myShortestPath;
+		StateChaseGunner::gridType = gridType;
+		StateChaseGunner::gridRows = gridRows;
+		StateChaseGunner::gridCols = gridCols;
+		StateChaseGunner::selectedRow = &selectedRow;
+		StateChaseGunner::selectedCol = &selectedCol;
+		StateChaseGunner::selectedTargetRow = &selectedTargetRow;
+		StateChaseGunner::selectedTargetCol = &selectedTargetCol;
+
 		canMakeSimMap = false;
 	}
 }
@@ -653,17 +677,6 @@ void Scene::UpdateStates(){
 }
 
 void Scene::UpdateKnightStates(){
-	StateChaseKnight::sim = sim;
-	StateChaseKnight::entityMoving = &entityMoving;
-	StateChaseKnight::myAStar = &myAStar;
-	StateChaseKnight::myShortestPath = &myShortestPath;
-	StateChaseKnight::gridType = gridType; //
-	StateChaseKnight::gridRows = gridRows; //
-	StateChaseKnight::gridCols = gridCols; //
-	StateChaseKnight::selectedRow = &selectedRow;
-	StateChaseKnight::selectedCol = &selectedCol;
-	StateChaseKnight::selectedTargetRow = &selectedTargetRow;
-	StateChaseKnight::selectedTargetCol = &selectedTargetCol;
 }
 
 void Scene::UpdateGunnerStates(){
