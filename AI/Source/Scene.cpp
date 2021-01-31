@@ -369,6 +369,9 @@ void Scene::UpdateSimOngoingTurnEnvironment(const double dt){
 }
 
 void Scene::UpdateSimOngoingTurnPlayer(const double dt){
+	const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
+	const std::vector<TileType>& tileLayer = sim->GetTileLayer();
+
 	static bool isKeyDownSpace = false;
 	if(!isKeyDownSpace && App::Key(VK_SPACE)){
 		sim->turn = Math::RandIntMinMax(1, 10) <= 4 ? SimTurn::Environment : SimTurn::AI;
@@ -378,7 +381,6 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 		selectedTargetRow = selectedTargetCol = -1;
 
 		//* Idle for...
-		const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
 		for(Entity* const entity: entityLayer){
 			if(entity != nullptr && entity->im_Attribs.im_Team == Obj::EntityTeam::Player){
 				using Obj::EntityType;
@@ -437,31 +439,32 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 
 	static bool isRMB = false;
 	if(!isRMB && App::IsMousePressed(GLFW_MOUSE_BUTTON_RIGHT)){
+		const int tileCost = (int)tileCosts[(int)tileLayer[mouseRow * gridCols + mouseCol]];
+
 		if((entityMoving == nullptr
 			|| (entityMoving != nullptr
 			&& entityMoving->im_Attribs.im_CurrHealth > 0.0f
 			&& (selectedTargetRow < 0 || selectedTargetCol < 0)))
 			&& mouseRow >= 0 && mouseCol >= 0
+			&& selectedRow >= 0 && selectedCol >= 0
 			&& (mouseRow != selectedRow || mouseCol != selectedCol)
+			&& ((sim->turn == SimTurn::Player && creditsPlayer >= tileCost)
+			|| (sim->turn == SimTurn::AI && creditsAI >= tileCost))
 		){
-			if(selectedRow >= 0 && selectedCol >= 0){
-				selectedTargetRow = (int)mouseRow;
-				selectedTargetCol = (int)mouseCol;
+			selectedTargetRow = (int)mouseRow;
+			selectedTargetCol = (int)mouseCol;
 
-				const int indexSelectedTarget = selectedTargetRow * gridCols + selectedTargetCol;
-				const std::vector<TileType>& tileLayer = sim->GetTileLayer();
-				const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
-				Entity* const entitySelected = entityLayer[selectedRow * gridCols + selectedCol];
+			const int indexSelectedTarget = selectedTargetRow * gridCols + selectedTargetCol;
+			Entity* const entitySelected = entityLayer[selectedRow * gridCols + selectedCol];
 
-				if(entitySelected != nullptr
-					&& entitySelected->im_Attribs.im_CurrHealth > 0.0f
-					&& ((entitySelected->im_Attribs.im_Team == Obj::EntityTeam::Player && sim->turn == SimTurn::Player)
-					|| (entitySelected->im_Attribs.im_Team == Obj::EntityTeam::AI && sim->turn == SimTurn::AI))
-					&& (int)tileCosts[(int)tileLayer[indexSelectedTarget]] >= (int)TileCost::EmptyCost
+			if(entitySelected != nullptr
+				&& entitySelected->im_Attribs.im_CurrHealth > 0.0f
+				&& ((entitySelected->im_Attribs.im_Team == Obj::EntityTeam::Player && sim->turn == SimTurn::Player)
+				|| (entitySelected->im_Attribs.im_Team == Obj::EntityTeam::AI && sim->turn == SimTurn::AI))
+				&& (int)tileCosts[(int)tileLayer[indexSelectedTarget]] >= (int)TileCost::EmptyCost
 				){
-					entityMoving = entitySelected;
-					entityMoving->im_Attribs.im_IdleShldChase = true;
-				}
+				entityMoving = entitySelected;
+				entityMoving->im_Attribs.im_IdleShldChase = true;
 			}
 		}
 

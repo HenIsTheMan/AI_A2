@@ -55,7 +55,7 @@ void StateAttackKnight::Update(Entity* const entity, const double dt){
 	}
 	if(!isDeducted){
 		//* Still will minus even if dmg has not been done
-		/*if(sim->turn == SimTurn::Player){
+		if(sim->turn == SimTurn::Player){
 			if(*creditsPlayer >= 10){
 				*creditsPlayer -= 10;
 			} else{
@@ -71,7 +71,7 @@ void StateAttackKnight::Update(Entity* const entity, const double dt){
 			}
 		}
 
-		isDeducted = true;*/
+		isDeducted = true;
 		//*/
 	}
 
