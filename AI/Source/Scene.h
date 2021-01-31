@@ -94,6 +94,8 @@ private:
 	AStar<Vector3, float> myAStar;
 	std::vector<Vector3> myShortestPath;
 
+	std::vector<bool> visionLayer;
+
 	void UpdateSimWaiting(const double dt);
 	void UpdateSimMakingTheMap(const double dt);
 	void UpdateSimOngoing(const double dt);

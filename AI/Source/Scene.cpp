@@ -86,7 +86,8 @@ Scene::Scene():
 	myThread(nullptr),
 	entityMoving(nullptr),
 	myAStar(),
-	myShortestPath()
+	myShortestPath(),
+	visionLayer()
 {
 }
 
@@ -474,7 +475,7 @@ void Scene::LateUpdateSimOngoingTurnPlayer(const double dt){
 			&& (mouseRow != selectedRow || mouseCol != selectedCol)
 			&& ((sim->turn == SimTurn::Player && creditsPlayer >= tileCost)
 			|| (sim->turn == SimTurn::AI && creditsAI >= tileCost))
-			){
+		){
 			selectedTargetRow = (int)mouseRow;
 			selectedTargetCol = (int)mouseCol;
 
@@ -486,7 +487,8 @@ void Scene::LateUpdateSimOngoingTurnPlayer(const double dt){
 				&& ((entitySelected->im_Attribs.im_Team == Obj::EntityTeam::Player && sim->turn == SimTurn::Player)
 				|| (entitySelected->im_Attribs.im_Team == Obj::EntityTeam::AI && sim->turn == SimTurn::AI))
 				&& (int)tileCosts[(int)tileLayer[indexSelectedTarget]] >= (int)TileCost::EmptyCost
-				){
+				&& !visionLayer[indexSelectedTarget]
+			){
 				entityMoving = entitySelected;
 				entityMoving->im_Attribs.im_IdleShldChase = true;
 			}
@@ -761,6 +763,8 @@ void Scene::UpdateFog(const double dt){
 					assert(false);
 			}
 		}
+
+		visionLayer = fogLayer;
 	}
 
 	for(int i = 0; i < entityLayerSize; ++i){
