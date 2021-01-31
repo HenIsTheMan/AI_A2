@@ -24,7 +24,9 @@ void StatePatrolKnight::Enter(Entity* const entity){
 }
 
 void StatePatrolKnight::Update(Entity* const entity, const double dt){
+	const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
 	const std::vector<TileType>& tileLayer = sim->GetTileLayer();
+
 	Vector3& entityLocalPos = entity->im_Attribs.im_LocalPos;
 	const Vector3 diff = entity->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos;
 	const float dist = diff.Length();
@@ -88,7 +90,7 @@ void StatePatrolKnight::Update(Entity* const entity, const double dt){
 			nextIndex = (int)next.y * gridCols + (int)next.x; //Update nextIndex
 			if(!visited[nextIndex]){
 				const int index = (int)tileLayer[nextIndex];
-				if(index >= 0 && index <= (int)TileCost::Amt - 1 && (int)tileCosts[index] >= 0){
+				if(index >= 0 && index <= (int)TileCost::Amt - 1 && (int)tileCosts[index] >= 0 && entityLayer[(int)next.y * gridCols + (int)next.x] == nullptr){
 					entity->im_Attribs.im_GridCellTargetLocalPos = next;
 					entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
 					return;
