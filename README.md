@@ -4,7 +4,7 @@
 
 * Do nth (Idle)
 * Patrol (Idle -----> Patrol -----> Idle)
-* Move to a grid cell (Idle -----> Chase -----> Idle)
+* Move to a grid cell within vision (Idle -----> Chase -----> Idle)
 * Attack an enemy unit within vision (Idle -----> Chase -----> Attack -----> Idle)
 
 ## Features
