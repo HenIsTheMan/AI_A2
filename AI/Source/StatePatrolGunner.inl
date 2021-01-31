@@ -14,7 +14,7 @@ int* StatePatrolGunner::creditsAI = nullptr;
 
 void StatePatrolGunner::Enter(Entity* const entity){
 	entity->im_Attribs.im_PatrolMoves = -1;
-	entity->im_Attribs.im_PatrolRange = 8;
+	entity->im_Attribs.im_PatrolRange = 10;
 
 	myVec.clear();
 	visited.clear();

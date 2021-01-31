@@ -2,7 +2,7 @@ Publisher* StateDeadGunner::sm_Publisher = Publisher::RetrieveGlobalObjPtr();
 Entity** StateDeadGunner::entityMoving = nullptr;
 
 void StateDeadGunner::Enter(Entity* const entity){
-	entity->im_Attribs.im_DeadCurrTime = entity->im_Attribs.im_DeadMaxTime = 4.0f;
+	entity->im_Attribs.im_DeadCurrTime = entity->im_Attribs.im_DeadMaxTime = 5.0f;
 }
 
 void StateDeadGunner::Update(Entity* const entity, const double dt){

@@ -9,7 +9,7 @@ int* StateHealHealer::creditsPlayer = nullptr;
 int* StateHealHealer::creditsAI = nullptr;
 
 void StateHealHealer::Enter(Entity* const entity){
-	entity->im_Attribs.im_CurrActionTime = entity->im_Attribs.im_MaxActionTime = 3.0f;
+	entity->im_Attribs.im_CurrActionTime = entity->im_Attribs.im_MaxActionTime = 4.0f;
 
 	//* So will face enemy unit before...
 	if((int)entity->im_Attribs.im_GridCellStartLocalPos.x == (int)entity->im_Attribs.im_GridCellTargetLocalPos.x){
@@ -56,15 +56,15 @@ void StateHealHealer::Update(Entity* const entity, const double dt){
 	if(!isDeducted){
 		//* Still will minus even if dmg has not been done
 		if(sim->turn == SimTurn::Player){
-			if(*creditsPlayer >= 10){
-				*creditsPlayer -= 10;
+			if(*creditsPlayer >= 7){
+				*creditsPlayer -= 7;
 			} else{
 				entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleHealer);
 				return;
 			}
 		} else if(sim->turn == SimTurn::AI){
-			if(*creditsAI >= 10){
-				*creditsAI -= 10;
+			if(*creditsAI >= 7){
+				*creditsAI -= 7;
 			} else{
 				entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleHealer);
 				return;

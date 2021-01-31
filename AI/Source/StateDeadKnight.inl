@@ -2,7 +2,7 @@ Publisher* StateDeadKnight::sm_Publisher = Publisher::RetrieveGlobalObjPtr();
 Entity** StateDeadKnight::entityMoving = nullptr;
 
 void StateDeadKnight::Enter(Entity* const entity){
-	entity->im_Attribs.im_DeadCurrTime = entity->im_Attribs.im_DeadMaxTime = 4.0f;
+	entity->im_Attribs.im_DeadCurrTime = entity->im_Attribs.im_DeadMaxTime = 3.0f;
 }
 
 void StateDeadKnight::Update(Entity* const entity, const double dt){

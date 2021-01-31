@@ -9,7 +9,7 @@ int* StateAttackKnight::creditsPlayer = nullptr;
 int* StateAttackKnight::creditsAI = nullptr;
 
 void StateAttackKnight::Enter(Entity* const entity){
-	entity->im_Attribs.im_CurrActionTime = entity->im_Attribs.im_MaxActionTime = 3.0f;
+	entity->im_Attribs.im_CurrActionTime = entity->im_Attribs.im_MaxActionTime = 5.0f;
 
 	//* So will face enemy unit before...
 	if((int)entity->im_Attribs.im_GridCellStartLocalPos.x == (int)entity->im_Attribs.im_GridCellTargetLocalPos.x){

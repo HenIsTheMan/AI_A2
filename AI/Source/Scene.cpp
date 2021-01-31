@@ -148,11 +148,11 @@ void Scene::Init(){
 
 	sim->status = SimRuntimeStatus::Waiting;
 	sim->spd = 1.0f;
-	sim->turnDurationAI = 4.0f;
+	sim->turnDurationAI = 60.0f;
 	sim->turnDurationEnvironment = 10.0f;
-	sim->turnDurationPlayer = 9999.0f;
+	sim->turnDurationPlayer = 60.0f;
 	sim->turnElapsedTime = 0.0f;
-	sim->turn = SimTurn::Player;
+	sim->turn = Math::RandIntMinMax(0, 1) == 1 ? SimTurn::Player : SimTurn::AI;
 	sim->timeOfDayDuration = 4.0f;
 	sim->timeOfDayElapsedTime = 0.0f;
 	sim->timeOfDay = (SimTimeOfDay)Math::RandIntMinMax((int)SimTimeOfDay::Day, (int)SimTimeOfDay::Amt - 1);
