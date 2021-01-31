@@ -1,6 +1,6 @@
 #pragma once
 
-#include "StateHelpers.h"
+#include "StateShared.h"
 
 class StateIdleHealer final{ //Static class
 	_6_DELETED(StateIdleHealer)

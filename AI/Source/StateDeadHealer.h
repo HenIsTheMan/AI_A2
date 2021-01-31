@@ -1,6 +1,6 @@
 #pragma once
 
-#include "StateHelpers.h"
+#include "StateShared.h"
 
 #include "Publisher.h"
 

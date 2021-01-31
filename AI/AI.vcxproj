@@ -164,7 +164,7 @@
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SpriteAni.cpp" />
     <ClCompile Include="Source\State.cpp" />
-    <ClCompile Include="Source\StateHelpers.cpp" />
+    <ClCompile Include="Source\StateShared.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AStar.h" />
@@ -217,7 +217,7 @@
     <ClInclude Include="Source\StateDeadKnight.h" />
     <ClInclude Include="Source\StateChaseHealer.h" />
     <ClInclude Include="Source\StateHealHealer.h" />
-    <ClInclude Include="Source\StateHelpers.h" />
+    <ClInclude Include="Source\StateShared.h" />
     <ClInclude Include="Source\StateID.hpp" />
     <ClInclude Include="Source\StateIdleGunner.h" />
     <ClInclude Include="Source\StateIdleKnight.h" />

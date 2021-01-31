@@ -1,6 +1,6 @@
 #pragma once
 
-#include "StateHelpers.h"
+#include "StateShared.h"
 
 class StateAttackGunner final{ //Static class
 	_6_DELETED(StateAttackGunner)

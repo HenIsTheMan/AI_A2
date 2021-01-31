@@ -49,14 +49,14 @@
     <ClCompile Include="Source\EventAddCredits.cpp">
       <Filter>Event\Events</Filter>
     </ClCompile>
-    <ClCompile Include="Source\StateHelpers.cpp">
-      <Filter>State</Filter>
-    </ClCompile>
     <ClCompile Include="Source\EventResetSelected.cpp">
       <Filter>Event\Events</Filter>
     </ClCompile>
     <ClCompile Include="Source\EventDespawnEntity.cpp">
       <Filter>Event\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\StateShared.cpp">
+      <Filter>State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -228,9 +228,6 @@
     <ClInclude Include="Source\StatePatrolKnight.h">
       <Filter>State\States\KnightStates</Filter>
     </ClInclude>
-    <ClInclude Include="Source\StateHelpers.h">
-      <Filter>State</Filter>
-    </ClInclude>
     <ClInclude Include="Source\StateIdleHealer.h">
       <Filter>State\States\HealerStates</Filter>
     </ClInclude>
@@ -248,6 +245,9 @@
     </ClInclude>
     <ClInclude Include="Source\StateChaseHealer.h">
       <Filter>State\States\HealerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateShared.h">
+      <Filter>State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
