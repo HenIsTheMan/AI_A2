@@ -40,7 +40,7 @@ void StatePatrolKnight::Update(Entity* const entity, const double dt){
 			roundf(entityLocalPos.z)
 		); //Snap entity's local pos
 
-		if(myVec.empty()){
+		if(myVec.empty()){ //??
 			return;
 		}
 
@@ -87,7 +87,8 @@ void StatePatrolKnight::Update(Entity* const entity, const double dt){
 
 			nextIndex = (int)next.y * gridCols + (int)next.x; //Update nextIndex
 			if(!visited[nextIndex]){
-				if((int)tileCosts[(int)tileLayer[nextIndex]] >= 0){
+				const int index = (int)tileLayer[nextIndex];
+				if(index >= 0 && index <= (int)TileCost::Amt - 1 && (int)tileCosts[index] >= 0){
 					entity->im_Attribs.im_GridCellTargetLocalPos = next;
 					entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
 					return;
@@ -100,6 +101,40 @@ void StatePatrolKnight::Update(Entity* const entity, const double dt){
 			entity->im_Attribs.im_GridCellTargetLocalPos = myVec.back();
 			entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
 			myVec.pop_back();
+		}
+	} else{
+		if((int)entity->im_Attribs.im_GridCellStartLocalPos.x == (int)entity->im_Attribs.im_GridCellTargetLocalPos.x){
+
+			if(entity->im_Attribs.im_GridCellTargetLocalPos.y > entity->im_Attribs.im_GridCellStartLocalPos.y){
+				entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up;
+			} else{
+				entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Down;
+			}
+
+		} else if((int)entity->im_Attribs.im_GridCellStartLocalPos.y == (int)entity->im_Attribs.im_GridCellTargetLocalPos.y){
+
+			if(entity->im_Attribs.im_GridCellTargetLocalPos.x > entity->im_Attribs.im_GridCellStartLocalPos.x){
+				entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Right;
+			} else{
+				entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Left;
+			}
+
+		} else{
+
+			if(entity->im_Attribs.im_GridCellTargetLocalPos.y > entity->im_Attribs.im_GridCellStartLocalPos.y){
+				if(entity->im_Attribs.im_GridCellTargetLocalPos.x > entity->im_Attribs.im_GridCellStartLocalPos.x){
+					entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
+				} else{
+					entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
+				}
+			} else{
+				if(entity->im_Attribs.im_GridCellTargetLocalPos.x > entity->im_Attribs.im_GridCellStartLocalPos.x){
+					entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
+				} else{
+					entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
+				}
+			}
+
 		}
 	}
 }
