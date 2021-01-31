@@ -54,8 +54,11 @@ void StateAttackKnight::Update(Entity* const entity, const double dt){
 		entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleKnight);
 	} else if(entity->im_Attribs.im_CurrMainStepTime <= entity->im_Attribs.im_MaxMainStepTime * 0.5f){
 		if(*selectedTargetRow >= 0 && *selectedTargetCol >= 0){
-			sim->GetEntityLayer()[*selectedTargetRow * gridCols + *selectedTargetCol]->im_Attribs.im_CurrHealth
-				-= entity->im_Attribs.im_ActionMag;
+			Entity* targetEntity = sim->GetEntityLayer()[*selectedTargetRow * gridCols + *selectedTargetCol];
+
+			if(targetEntity->im_Attribs.im_Team != entity->im_Attribs.im_Team){
+				targetEntity->im_Attribs.im_CurrHealth -= entity->im_Attribs.im_ActionMag;
+			}
 
 			*selectedTargetRow = *selectedTargetCol = -1;
 		}
