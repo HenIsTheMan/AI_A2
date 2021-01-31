@@ -314,10 +314,13 @@ void Scene::UpdateSimWaiting(const double dt){
 		StateAttackKnight::creditsAI = &creditsAI;
 
 		StatePatrolKnight::sim = sim;
+		StatePatrolKnight::entityMoving = &entityMoving;
 		StatePatrolKnight::gridRows = gridRows;
 		StatePatrolKnight::gridCols = gridCols;
 		StatePatrolKnight::selectedRow = &selectedRow;
 		StatePatrolKnight::selectedCol = &selectedCol;
+		StatePatrolKnight::selectedTargetRow = &selectedTargetRow;
+		StatePatrolKnight::selectedTargetCol = &selectedTargetCol;
 
 		canMakeSimMap = false;
 	}

@@ -1,13 +1,17 @@
 Sim* StatePatrolKnight::sim = nullptr;
+Entity** StatePatrolKnight::entityMoving = nullptr;
 std::vector<Vector3> StatePatrolKnight::myVec = std::vector<Vector3>();
 std::vector<bool> StatePatrolKnight::visited = std::vector<bool>();
 int StatePatrolKnight::gridRows = 0;
 int StatePatrolKnight::gridCols = 0;
 int* StatePatrolKnight::selectedRow = nullptr;
 int* StatePatrolKnight::selectedCol = nullptr;
+int* StatePatrolKnight::selectedTargetRow = nullptr;
+int* StatePatrolKnight::selectedTargetCol = nullptr;
 
 void StatePatrolKnight::Enter(Entity* const entity){
-	entity->im_Attribs.im_PatrolRange = 20; //??
+	entity->im_Attribs.im_PatrolMoves = -1;
+	entity->im_Attribs.im_PatrolRange = 3; //??
 
 	myVec.clear();
 	visited.clear();
@@ -45,67 +49,77 @@ void StatePatrolKnight::Update(Entity* const entity, const double dt){
 			roundf(entityLocalPos.z)
 		); //Snap entity's local pos
 
-		if(myVec.empty()){ //??
-			return;
-		}
+		++entity->im_Attribs.im_PatrolMoves;
 
-		int nextIndex = 0;
-		myVec.emplace_back(entityLocalPos);
-		visited[(int)entityLocalPos.y * gridCols + (int)entityLocalPos.x] = true;
+		if(myVec.empty() || entity->im_Attribs.im_PatrolMoves == entity->im_Attribs.im_PatrolRange){
+			*selectedRow = (int)entityLocalPos.y;
+			*selectedCol = (int)entityLocalPos.x;
 
-		for(int i = 1; i < (int)Obj::EntityFacingDir::Amt; ++i){ //Exclude EntityFacingDir::Invalid
-			Vector3 next = entityLocalPos;
-			switch(Obj::entityFacingDirs[i]){
-				case Obj::EntityFacingDir::Up:
-					++next.y;
-					break;
-				case Obj::EntityFacingDir::Down:
-					--next.y;
-					break;
-				case Obj::EntityFacingDir::Left:
-					--next.x;
-					break;
-				case Obj::EntityFacingDir::Right:
-					++next.x;
-					break;
-				case Obj::EntityFacingDir::UL:
-					--next.x;
-					++next.y;
-					break;
-				case Obj::EntityFacingDir::UR:
-					++next.x;
-					++next.y;
-					break;
-				case Obj::EntityFacingDir::DL:
-					--next.x;
-					--next.y;
-					break;
-				case Obj::EntityFacingDir::DR:
-					++next.x;
-					--next.y;
-					break;
-			}
+			*selectedTargetRow = *selectedTargetCol = -1;
 
-			if(next.x < 0 || next.x > gridCols - 1 || next.y < 0 || next.y > gridRows - 1){
-				continue;
-			}
+			entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleKnight);
+			sim->OnEntityActivated(gridCols, entity);
 
-			nextIndex = (int)next.y * gridCols + (int)next.x; //Update nextIndex
-			if(!visited[nextIndex]){
-				const int index = (int)tileLayer[nextIndex];
-				if(index >= 0 && index <= (int)TileCost::Amt - 1 && (int)tileCosts[index] >= 0 && entityLayer[(int)next.y * gridCols + (int)next.x] == nullptr){
-					entity->im_Attribs.im_GridCellTargetLocalPos = next;
-					entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
-					return;
+			*entityMoving = nullptr;
+		} else{
+			int nextIndex = 0;
+			myVec.emplace_back(entityLocalPos);
+			visited[(int)entityLocalPos.y * gridCols + (int)entityLocalPos.x] = true;
+
+			for(int i = 1; i < (int)Obj::EntityFacingDir::Amt; ++i){ //Exclude EntityFacingDir::Invalid
+				Vector3 next = entityLocalPos;
+				switch(Obj::entityFacingDirs[i]){
+					case Obj::EntityFacingDir::Up:
+						++next.y;
+						break;
+					case Obj::EntityFacingDir::Down:
+						--next.y;
+						break;
+					case Obj::EntityFacingDir::Left:
+						--next.x;
+						break;
+					case Obj::EntityFacingDir::Right:
+						++next.x;
+						break;
+					case Obj::EntityFacingDir::UL:
+						--next.x;
+						++next.y;
+						break;
+					case Obj::EntityFacingDir::UR:
+						++next.x;
+						++next.y;
+						break;
+					case Obj::EntityFacingDir::DL:
+						--next.x;
+						--next.y;
+						break;
+					case Obj::EntityFacingDir::DR:
+						++next.x;
+						--next.y;
+						break;
+				}
+
+				if(next.x < 0 || next.x > gridCols - 1 || next.y < 0 || next.y > gridRows - 1){
+					continue;
+				}
+
+				nextIndex = (int)next.y * gridCols + (int)next.x; //Update nextIndex
+				if(!visited[nextIndex]){
+					const int index = (int)tileLayer[nextIndex];
+					if(index >= 0 && index <= (int)TileCost::Amt - 1 && (int)tileCosts[index] >= 0 && entityLayer[(int)next.y * gridCols + (int)next.x] == nullptr){
+						entity->im_Attribs.im_GridCellTargetLocalPos = next;
+						entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
+						return;
+					}
 				}
 			}
-		}
 
-		myVec.pop_back();
-		if(!myVec.empty()){
-			entity->im_Attribs.im_GridCellTargetLocalPos = myVec.back();
-			entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
 			myVec.pop_back();
+			if(!myVec.empty()){
+				entity->im_Attribs.im_GridCellTargetLocalPos = myVec.back();
+				entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
+				myVec.pop_back();
+			}
 		}
 	} else{
 		if((int)entity->im_Attribs.im_GridCellStartLocalPos.x == (int)entity->im_Attribs.im_GridCellTargetLocalPos.x){

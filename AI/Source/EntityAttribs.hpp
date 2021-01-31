@@ -43,6 +43,7 @@ namespace Obj{
 		//* Vars for specific entities only (help la, I wanna do ECS alr)
 		bool im_IdleShldChase = false;
 		bool im_IdleShldPatrol = false;
+		int im_PatrolMoves = 0;
 		int im_PatrolRange = 0;
 		Type im_IdleChangeFacingDirBT = Type();
 		Type im_IdleChangeFacingDirDelay = Type();
