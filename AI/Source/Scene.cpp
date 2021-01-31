@@ -1076,7 +1076,12 @@ void Scene::RenderEntities(){
 			);
 		}
 
-		RenderMesh(meshList[(int)GeoType::Circle], true, entity->im_Attribs.im_Team == Obj::EntityTeam::AI ? Color(0.4f, 0.0f, 0.0f) : Color(0.0f, 0.4f, 0.0f), 1.0f);
+		RenderMesh(
+			meshList[(int)GeoType::Circle],
+			true,
+			entity->im_Attribs.im_Team == Obj::EntityTeam::AI ? Color(0.4f, 0.0f, 0.0f) : Color(0.0f, 0.4f, 0.0f),
+			entity->im_Attribs.im_DeadMaxTime > 0.0f ? entity->im_Attribs.im_DeadCurrTime / entity->im_Attribs.im_DeadMaxTime : 1.0f
+		);
 		RenderEntityArt(entity);
 		RenderHealthBar(entity);
 		RenderEntityState(entity);
@@ -1139,7 +1144,12 @@ void Scene::RenderEntities(){
 			);
 		}
 
-		RenderMesh(meshList[(int)GeoType::Circle], true, entityMoving->im_Attribs.im_Team == Obj::EntityTeam::AI ? Color(0.4f, 0.0f, 0.0f) : Color(0.0f, 0.4f, 0.0f), 1.0f);
+		RenderMesh(
+			meshList[(int)GeoType::Circle],
+			true,
+			entityMoving->im_Attribs.im_Team == Obj::EntityTeam::AI ? Color(0.4f, 0.0f, 0.0f) : Color(0.0f, 0.4f, 0.0f),
+			entityMoving->im_Attribs.im_DeadMaxTime > 0.0f ? entityMoving->im_Attribs.im_DeadCurrTime / entityMoving->im_Attribs.im_DeadMaxTime : 1.0f
+		);
 		RenderEntityArtMoving(entityMoving);
 		RenderHealthBar(entityMoving);
 		RenderEntityState(entityMoving);
@@ -1367,13 +1377,28 @@ void Scene::RenderEntityArt(const Entity* const entity){
 
 	switch(entity->im_Attribs.im_Type){
 		case Obj::EntityType::Knight:
-			RenderMesh(meshList[(int)GeoType::Knight], false);
+			RenderMesh(
+				meshList[(int)GeoType::Knight],
+				true,
+				Color(),
+				entity->im_Attribs.im_DeadMaxTime > 0.0f ? entity->im_Attribs.im_DeadCurrTime / entity->im_Attribs.im_DeadMaxTime : 1.0f
+			);
 			break;
 		case Obj::EntityType::Gunner:
-			RenderMesh(meshList[(int)GeoType::Gunner], false);
+			RenderMesh(
+				meshList[(int)GeoType::Knight],
+				true,
+				Color(),
+				entity->im_Attribs.im_DeadMaxTime > 0.0f ? entity->im_Attribs.im_DeadCurrTime / entity->im_Attribs.im_DeadMaxTime : 1.0f
+			);
 			break;
 		case Obj::EntityType::Healer:
-			RenderMesh(meshList[(int)GeoType::Healer], false);
+			RenderMesh(
+				meshList[(int)GeoType::Knight],
+				true,
+				Color(),
+				entity->im_Attribs.im_DeadMaxTime > 0.0f ? entity->im_Attribs.im_DeadCurrTime / entity->im_Attribs.im_DeadMaxTime : 1.0f
+			);
 			break;
 	}
 
@@ -1597,13 +1622,28 @@ void Scene::RenderEntityArtMoving(const Entity* const entity){
 
 	switch(entity->im_Attribs.im_Type){
 		case Obj::EntityType::Knight:
-			RenderMesh(meshList[(int)GeoType::Knight], false);
+			RenderMesh(
+				meshList[(int)GeoType::Knight],
+				true,
+				Color(),
+				entity->im_Attribs.im_DeadMaxTime > 0.0f ? entity->im_Attribs.im_DeadCurrTime / entity->im_Attribs.im_DeadMaxTime : 1.0f
+			);
 			break;
 		case Obj::EntityType::Gunner:
-			RenderMesh(meshList[(int)GeoType::Gunner], false);
+			RenderMesh(
+				meshList[(int)GeoType::Knight],
+				true,
+				Color(),
+				entity->im_Attribs.im_DeadMaxTime > 0.0f ? entity->im_Attribs.im_DeadCurrTime / entity->im_Attribs.im_DeadMaxTime : 1.0f
+			);
 			break;
 		case Obj::EntityType::Healer:
-			RenderMesh(meshList[(int)GeoType::Healer], false);
+			RenderMesh(
+				meshList[(int)GeoType::Knight],
+				true,
+				Color(),
+				entity->im_Attribs.im_DeadMaxTime > 0.0f ? entity->im_Attribs.im_DeadCurrTime / entity->im_Attribs.im_DeadMaxTime : 1.0f
+			);
 			break;
 	}
 
@@ -1611,6 +1651,10 @@ void Scene::RenderEntityArtMoving(const Entity* const entity){
 }
 
 void Scene::RenderHealthBar(const Entity* const entity){
+	if(entity->im_Attribs.im_CurrHealth <= 0.0f){
+		return;
+	}
+
 	const float ratio = entity->im_Attribs.im_CurrHealth / entity->im_Attribs.im_MaxHealth;
 	modelStack.PushMatrix();
 
@@ -1625,24 +1669,22 @@ void Scene::RenderHealthBar(const Entity* const entity){
 		1.0f
 	);
 
-	if(entity->im_Attribs.im_CurrHealth > 0.0f){
-		modelStack.PushMatrix();
+	modelStack.PushMatrix();
 
-		modelStack.Translate(
-			-(1.0f - ratio) * 0.5f,
-			0.0f,
-			0.0f
-		);
-		modelStack.Scale(
-			ratio - 0.04f,
-			0.8f,
-			1.0f
-		);
+	modelStack.Translate(
+		-(1.0f - ratio) * 0.5f,
+		0.0f,
+		0.0f
+	);
+	modelStack.Scale(
+		ratio - 0.04f,
+		0.8f,
+		1.0f
+	);
 
-		RenderMesh(meshList[(int)GeoType::Quad], true, Color::HSVToRGB({ratio * 120.0f, 1.0f, 1.0f}), 1.0f);
+	RenderMesh(meshList[(int)GeoType::Quad], true, Color::HSVToRGB({ratio * 120.0f, 1.0f, 1.0f}), 1.0f);
 
-		modelStack.PopMatrix();
-	}
+	modelStack.PopMatrix();
 
 	RenderMesh(meshList[(int)GeoType::Quad], true, Color(0.1f, 0.1f, 0.1f), 1.0f);
 

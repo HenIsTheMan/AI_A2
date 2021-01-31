@@ -42,7 +42,8 @@ namespace Obj{
 		//* Vars for specific entities only (help la, I wanna do ECS alr)
 		Type im_IdleChangeFacingDirBT = Type();
 		Type im_IdleChangeFacingDirDelay = Type();
-		Type im_DeadVanishTime = Type();
+		Type im_DeadCurrTime = Type();
+		Type im_DeadMaxTime = Type();
 		//*/
 
 		T im_GridCellTargetLocalPos = T();
