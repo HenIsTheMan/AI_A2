@@ -12,10 +12,10 @@ public:
 	static HexGrid<float>::GridType gridType;
 	static int gridRows;
 	static int gridCols;
-	static int selectedRow;
-	static int selectedCol;
-	static int selectedTargetRow;
-	static int selectedTargetCol;
+	static int* selectedRow;
+	static int* selectedCol;
+	static int* selectedTargetRow;
+	static int* selectedTargetCol;
 
 	static void Enter(Entity* const entity);
 	static void Update(Entity* const entity, const double dt);

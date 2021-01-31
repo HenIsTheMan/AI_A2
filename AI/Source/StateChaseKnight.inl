@@ -5,10 +5,10 @@ std::vector<Vector3>* StateChaseKnight::myShortestPath = nullptr;
 HexGrid<float>::GridType StateChaseKnight::gridType = HexGrid<float>::GridType::Amt;
 int StateChaseKnight::gridRows = 0;
 int StateChaseKnight::gridCols = 0;
-int StateChaseKnight::selectedRow = 0;
-int StateChaseKnight::selectedCol = 0;
-int StateChaseKnight::selectedTargetRow = 0;
-int StateChaseKnight::selectedTargetCol = 0;
+int* StateChaseKnight::selectedRow = nullptr;
+int* StateChaseKnight::selectedCol = nullptr;
+int* StateChaseKnight::selectedTargetRow = nullptr;
+int* StateChaseKnight::selectedTargetCol = nullptr;
 
 void StateChaseKnight::Enter(Entity* const entity){
 	const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
@@ -21,7 +21,7 @@ void StateChaseKnight::Enter(Entity* const entity){
 			const int cost = (int)tileCosts[(int)sim->GetTileLayer()[r * gridCols + c]];
 
 			(void)myAStar->CreateNode(CreateAStarNodeParams<Vector3, float>{
-				cost < 0 || (!(r == selectedRow && c == selectedCol) && entityLayer[r * gridCols + c] != nullptr) ? AStarNodeType::Inaccessible : AStarNodeType::Accessible,
+				cost < 0 || (!(r == *selectedRow && c == *selectedCol) && entityLayer[r * gridCols + c] != nullptr) ? AStarNodeType::Inaccessible : AStarNodeType::Accessible,
 					'(' + std::to_string(c) + ", " + std::to_string(r) + ')' + " Cost: " + std::to_string(cost),
 					(float)cost,
 					Vector3((float)c, (float)r, 0.0f),
@@ -29,8 +29,8 @@ void StateChaseKnight::Enter(Entity* const entity){
 		}
 	}
 
-	myAStar->SetStart(Vector3((float)selectedCol, (float)selectedRow, 0.0f));
-	myAStar->SetEnd(Vector3((float)selectedTargetCol, (float)selectedTargetRow, 0.0f));
+	myAStar->SetStart(Vector3((float)*selectedCol, (float)*selectedRow, 0.0f));
+	myAStar->SetEnd(Vector3((float)*selectedTargetCol, (float)*selectedTargetRow, 0.0f));
 	if(gridType == HexGrid<float>::GridType::FlatTop){
 		myAStar->SetNeighboursForHexGridFlatTop(
 			Vector3(0.0f, 0.0f, 0.0f),
@@ -65,7 +65,7 @@ void StateChaseKnight::Enter(Entity* const entity){
 	}
 
 	sim->OnEntityDeactivated(gridCols, (int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x);
-	selectedRow = selectedCol = -1;
+	*selectedRow = *selectedCol = -1;
 }
 
 void StateChaseKnight::Update(Entity* const entity, const double dt){
@@ -136,11 +136,14 @@ void StateChaseKnight::Update(Entity* const entity, const double dt){
 		}
 
 		if(myShortestPath->empty()){
-			selectedRow = (int)entityLocalPos.y;
-			selectedCol = (int)entityLocalPos.x;
+			*selectedRow = (int)entityLocalPos.y;
+			*selectedCol = (int)entityLocalPos.x;
 
-			selectedTargetRow = selectedTargetCol = -1;
+			*selectedTargetRow = *selectedTargetCol = -1;
+
+			entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleKnight);
 			sim->OnEntityActivated(gridCols, entity);
+
 			*entityMoving = nullptr;
 		} else{
 			entity->im_Attribs.im_GridCellTargetLocalPos = myShortestPath->front();

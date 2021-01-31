@@ -657,13 +657,13 @@ void Scene::UpdateKnightStates(){
 	StateChaseKnight::entityMoving = &entityMoving;
 	StateChaseKnight::myAStar = &myAStar;
 	StateChaseKnight::myShortestPath = &myShortestPath;
-	StateChaseKnight::gridType = gridType;
-	StateChaseKnight::gridRows = gridRows;
-	StateChaseKnight::gridCols = gridCols;
-	StateChaseKnight::selectedRow = selectedRow;
-	StateChaseKnight::selectedCol = selectedCol;
-	StateChaseKnight::selectedTargetRow = selectedTargetRow;
-	StateChaseKnight::selectedTargetCol = selectedTargetCol;
+	StateChaseKnight::gridType = gridType; //
+	StateChaseKnight::gridRows = gridRows; //
+	StateChaseKnight::gridCols = gridCols; //
+	StateChaseKnight::selectedRow = &selectedRow;
+	StateChaseKnight::selectedCol = &selectedCol;
+	StateChaseKnight::selectedTargetRow = &selectedTargetRow;
+	StateChaseKnight::selectedTargetCol = &selectedTargetCol;
 }
 
 void Scene::UpdateGunnerStates(){
