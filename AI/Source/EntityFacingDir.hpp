@@ -13,4 +13,16 @@ namespace Obj{
 		DR,
 		Amt
 	};
+
+	static EntityFacingDir entityFacingDirs[(int)EntityFacingDir::Amt]{
+		EntityFacingDir::Invalid,
+		EntityFacingDir::Up,
+		EntityFacingDir::Down,
+		EntityFacingDir::Left,
+		EntityFacingDir::Right,
+		EntityFacingDir::UL,
+		EntityFacingDir::UR,
+		EntityFacingDir::DL,
+		EntityFacingDir::DR,
+	};
 }
