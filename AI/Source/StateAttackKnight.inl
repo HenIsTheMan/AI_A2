@@ -9,7 +9,7 @@ int* StateAttackKnight::creditsPlayer = nullptr;
 int* StateAttackKnight::creditsAI = nullptr;
 
 void StateAttackKnight::Enter(Entity* const entity){
-	entity->im_Attribs.im_CurrMainStepTime = entity->im_Attribs.im_MaxMainStepTime = 3.0f;
+	entity->im_Attribs.im_CurrActionTime = entity->im_Attribs.im_MaxActionTime = 3.0f;
 
 	//* So will face enemy unit before...
 	if((int)entity->im_Attribs.im_GridCellStartLocalPos.x == (int)entity->im_Attribs.im_GridCellTargetLocalPos.x){
@@ -75,15 +75,15 @@ void StateAttackKnight::Update(Entity* const entity, const double dt){
 		//*/
 	}
 
-	entity->im_Attribs.im_CurrMainStepTime -= (float)dt;
+	entity->im_Attribs.im_CurrActionTime -= (float)dt;
 
-	if(entity->im_Attribs.im_CurrMainStepTime <= 0.0f){
+	if(entity->im_Attribs.im_CurrActionTime <= 0.0f){
 		const Vector3& entityLocalPos = entity->im_Attribs.im_LocalPos;
 		*selectedRow = (int)entityLocalPos.y;
 		*selectedCol = (int)entityLocalPos.x;
 
 		entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleKnight);
-	} else if(entity->im_Attribs.im_CurrMainStepTime <= entity->im_Attribs.im_MaxMainStepTime * 0.5f){
+	} else if(entity->im_Attribs.im_CurrActionTime <= entity->im_Attribs.im_MaxActionTime * 0.5f){
 		if(*selectedTargetRow >= 0 && *selectedTargetCol >= 0){
 			Entity* targetEntity = sim->GetEntityLayer()[*selectedTargetRow * gridCols + *selectedTargetCol];
 

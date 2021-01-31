@@ -1,6 +1,6 @@
 # AI_A2
 
-## Actions (made up of 1 or more states, can only perform when it's your turn and your unit is idle)
+## Activity (made up of 1 or more states, can only perform when it's your turn and your unit is idle)
 
 * Do nth (Idle)
 * Patrol (Idle -----> Patrol -----> Idle)

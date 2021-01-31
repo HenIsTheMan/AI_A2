@@ -511,6 +511,7 @@ void Sim::Update(const double dt){
 			(void)publisher->Notify((long int)ListenerFlags::Scene, new EventAddCredits(false, 100));
 		}
 
+		//* Idle for...
 		for(Entity* const entity: entityLayer){
 			if(entity != nullptr && ((entity->im_Attribs.im_Team == Obj::EntityTeam::Player && turn != SimTurn::Player)
 				|| (entity->im_Attribs.im_Team == Obj::EntityTeam::AI && turn != SimTurn::AI))){
@@ -535,6 +536,7 @@ void Sim::Update(const double dt){
 				}
 			}
 		}
+		//*/
 	}
 
 	if(timeOfDayElapsedTime >= timeOfDayDuration){

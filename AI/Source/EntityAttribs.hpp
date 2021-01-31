@@ -46,8 +46,8 @@ namespace Obj{
 		Type im_IdleChangeFacingDirDelay = Type();
 		Type im_DeadCurrTime = Type();
 		Type im_DeadMaxTime = Type();
-		Type im_CurrMainStepTime = Type();
-		Type im_MaxMainStepTime = Type();
+		Type im_CurrActionTime = Type();
+		Type im_MaxActionTime = Type();
 		//*/
 
 		T im_GridCellTargetLocalPos = T();
