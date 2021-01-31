@@ -11,7 +11,7 @@ int* StatePatrolKnight::selectedTargetCol = nullptr;
 
 void StatePatrolKnight::Enter(Entity* const entity){
 	entity->im_Attribs.im_PatrolMoves = -1;
-	entity->im_Attribs.im_PatrolRange = 3; //??
+	entity->im_Attribs.im_PatrolRange = 10;
 
 	myVec.clear();
 	visited.clear();
@@ -31,6 +31,11 @@ void StatePatrolKnight::Enter(Entity* const entity){
 }
 
 void StatePatrolKnight::Update(Entity* const entity, const double dt){
+	if(entity->im_Attribs.im_CurrHealth <= 0.0f){
+		entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateDeadKnight);
+		return;
+	}
+
 	const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
 	const std::vector<TileType>& tileLayer = sim->GetTileLayer();
 
