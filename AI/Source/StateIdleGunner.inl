@@ -8,6 +8,7 @@ void StateIdleGunner::Enter(Entity* const entity){
 void StateIdleGunner::Update(Entity* const entity, const double dt){
 	if(entity->im_Attribs.im_CurrHealth <= 0.0f){
 		entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateDeadGunner);
+		return;
 	} else if(entity->im_Attribs.im_IdleShldChase){
 		entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateChaseGunner);
 	}

@@ -269,6 +269,9 @@ void Scene::UpdateSimWaiting(const double dt){
 		fogLayer.resize(gridTotalCells);
 		myShortestPath.reserve(gridTotalCells);
 
+		StateDeadKnight::entityMoving = &entityMoving;
+		StateDeadGunner::entityMoving = &entityMoving;
+
 		const bool isFlatTop = gridType == HexGrid<float>::GridType::FlatTop;
 		StateIdleKnight::sm_IsFlatTop = isFlatTop;
 		StateIdleGunner::sm_IsFlatTop = isFlatTop;

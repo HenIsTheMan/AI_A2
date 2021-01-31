@@ -69,6 +69,11 @@ void StateChaseKnight::Enter(Entity* const entity){
 }
 
 void StateChaseKnight::Update(Entity* const entity, const double dt){
+	if(entity->im_Attribs.im_CurrHealth <= 0.0f){
+		entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateDeadKnight);
+		return;
+	}
+
 	Vector3& entityLocalPos = entity->im_Attribs.im_LocalPos;
 	const Vector3 diff = entity->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos;
 	const float dist = diff.Length();
