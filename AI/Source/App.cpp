@@ -95,6 +95,10 @@ void App::Init(){
 	glfwSwapInterval(0); //Disable VSync
 }
 
+namespace{ //anon/unnamed namespace
+	std::mutex myMutex;
+}
+
 void App::Render(){
 	glfwMakeContextCurrent(s_RenderWindow);
 
@@ -109,7 +113,11 @@ void App::Render(){
 
 		if(glfwGetWindowAttrib(s_RenderWindow, GLFW_VISIBLE)){
 			glViewport(0, 0, windowWidth, windowHeight);
-			im_Scene->Render();
+			//Test(false);
+			if(myMutex.try_lock()){
+				im_Scene->Render();
+				myMutex.unlock();
+			}
 		}
 
 		glfwSwapBuffers(s_RenderWindow);
@@ -133,7 +141,13 @@ void App::Run(){
 			continue;
 		}
 
-		im_Scene->Update(im_UpdateTimer.getElapsedTime(), renderDt);
+		updateDt = (float)im_UpdateTimer.getElapsedTime();
+
+		Test(true);
+		/*if(myMutex.try_lock()){
+			im_Scene->Update(updateDt, renderDt);
+			myMutex.unlock();
+		}*/
 
 		if(!isF3 && Key(VK_F3)){
 			glfwGetWindowAttrib(s_RenderWindow, GLFW_VISIBLE) ? glfwHideWindow(s_RenderWindow) : glfwShowWindow(s_RenderWindow);
@@ -173,4 +187,23 @@ void App::Exit(){
 	glfwDestroyWindow(s_UpdateWindow);
 	glfwDestroyWindow(s_RenderWindow);
 	glfwTerminate();
+}
+
+void App::Test(const bool isUpdate){
+	//const std::lock_guard<std::mutex> lockGuard(myMutex);
+	//if(myMutex.try_lock()){
+	//	if(isUpdate){
+	//		//std::cout << "here1\n";
+	//		im_Scene->Update(updateDt, renderDt);
+	//	} else{
+	//		//std::cout << "here2\n";
+	//		im_Scene->Render();
+	//	}
+
+	//	myMutex.unlock();
+	//}
+
+	myMutex.lock();
+	im_Scene->Update(updateDt, renderDt);
+	myMutex.unlock();
 }

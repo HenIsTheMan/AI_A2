@@ -33,6 +33,9 @@ private:
 	static IScene* im_Scene;
 
 	void Render();
+
+	void Test(const bool isUpdate);
+	float updateDt = 0.0f;
 };
 
 #endif
