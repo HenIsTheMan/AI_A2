@@ -19,6 +19,6 @@ namespace Obj{
 
 		IEntityCreationAttribs<T, Type>::im_ActionMag = 2.0f;
 		IEntityCreationAttribs<T, Type>::im_Health = 4.0f;
-		IEntityCreationAttribs<T, Type>::im_Spd = 4.0f;
+		IEntityCreationAttribs<T, Type>::im_Spd = 12.0f;
 	}
 }
