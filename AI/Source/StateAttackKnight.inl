@@ -7,6 +7,40 @@ int* StateAttackKnight::selectedTargetCol = nullptr;
 
 void StateAttackKnight::Enter(Entity* const entity){
 	entity->im_Attribs.im_CurrMainStepTime = entity->im_Attribs.im_MaxMainStepTime = 3.0f;
+
+	if((int)entity->im_Attribs.im_GridCellStartLocalPos.x == (int)entity->im_Attribs.im_GridCellTargetLocalPos.x){
+
+		if(entity->im_Attribs.im_GridCellTargetLocalPos.y > entity->im_Attribs.im_GridCellStartLocalPos.y){
+			entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up;
+		} else{
+			entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Down;
+		}
+
+	} else if((int)entity->im_Attribs.im_GridCellStartLocalPos.y == (int)entity->im_Attribs.im_GridCellTargetLocalPos.y){
+
+		if(entity->im_Attribs.im_GridCellTargetLocalPos.x > entity->im_Attribs.im_GridCellStartLocalPos.x){
+			entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Right;
+		} else{
+			entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Left;
+		}
+
+	} else{
+
+		if(entity->im_Attribs.im_GridCellTargetLocalPos.y > entity->im_Attribs.im_GridCellStartLocalPos.y){
+			if(entity->im_Attribs.im_GridCellTargetLocalPos.x > entity->im_Attribs.im_GridCellStartLocalPos.x){
+				entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
+			} else{
+				entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
+			}
+		} else{
+			if(entity->im_Attribs.im_GridCellTargetLocalPos.x > entity->im_Attribs.im_GridCellStartLocalPos.x){
+				entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
+			} else{
+				entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
+			}
+		}
+
+	}
 }
 
 void StateAttackKnight::Update(Entity* const entity, const double dt){

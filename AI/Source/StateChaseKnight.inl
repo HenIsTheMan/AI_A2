@@ -160,6 +160,11 @@ void StateChaseKnight::Update(Entity* const entity, const double dt){
 				entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
 				myShortestPath->erase(myShortestPath->begin());
 			} else{
+				//* For use in attack state
+				entity->im_Attribs.im_GridCellTargetLocalPos = localPos;
+				entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
+				//*/
+
 				entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateAttackKnight);
 				sim->OnEntityActivated(gridCols, entity);
 
