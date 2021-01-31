@@ -4,9 +4,18 @@ int* StateAttackKnight::selectedRow = nullptr;
 int* StateAttackKnight::selectedCol = nullptr;
 int* StateAttackKnight::selectedTargetRow = nullptr;
 int* StateAttackKnight::selectedTargetCol = nullptr;
+int* StateAttackKnight::creditsPlayer = nullptr;
+int* StateAttackKnight::creditsAI = nullptr;
 
 void StateAttackKnight::Enter(Entity* const entity){
 	entity->im_Attribs.im_CurrMainStepTime = entity->im_Attribs.im_MaxMainStepTime = 3.0f;
+
+	///Still will minus even if dmg has not been done
+	if(sim->turn == SimTurn::Player){
+		*creditsPlayer -= 10;
+	} else if(sim->turn == SimTurn::AI){
+		*creditsAI -= 10;
+	}
 
 	if((int)entity->im_Attribs.im_GridCellStartLocalPos.x == (int)entity->im_Attribs.im_GridCellTargetLocalPos.x){
 
