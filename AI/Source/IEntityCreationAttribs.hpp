@@ -13,7 +13,6 @@ namespace Obj{
 
 		EntityTeam im_Team = EntityTeam::None;
 		EntityFacingDir im_FacingDir = EntityFacingDir::Invalid;
-		int im_Lvl = 1;
 
 		EntityActionType im_ActionType = EntityActionType::Nil;
 		int im_ActionRange = 0;

@@ -1083,7 +1083,7 @@ void Scene::RenderEntities(){
 		RenderMesh(meshList[(int)GeoType::Circle], true, entity->im_Attribs.im_Team == Obj::EntityTeam::AI ? Color(0.4f, 0.0f, 0.0f) : Color(0.0f, 0.4f, 0.0f), 1.0f);
 		RenderEntityArt(entity);
 		RenderHealthBar(entity);
-		RenderEntityLvl(entity);
+		RenderEntityState(entity);
 
 		modelStack.PopMatrix();
 
@@ -1146,7 +1146,7 @@ void Scene::RenderEntities(){
 		RenderMesh(meshList[(int)GeoType::Circle], true, entityMoving->im_Attribs.im_Team == Obj::EntityTeam::AI ? Color(0.4f, 0.0f, 0.0f) : Color(0.0f, 0.4f, 0.0f), 1.0f);
 		RenderEntityArtMoving(entityMoving);
 		RenderHealthBar(entityMoving);
-		RenderEntityLvl(entityMoving);
+		RenderEntityState(entityMoving);
 
 		modelStack.PopMatrix();
 	}
@@ -1653,7 +1653,7 @@ void Scene::RenderHealthBar(const Entity* const entity){
 	modelStack.PopMatrix();
 }
 
-void Scene::RenderEntityLvl(const Entity* const entity){
+void Scene::RenderEntityState(const Entity* const entity){
 	modelStack.PushMatrix();
 
 	modelStack.Translate(
@@ -1669,7 +1669,7 @@ void Scene::RenderEntityLvl(const Entity* const entity){
 
 	RenderText(
 		meshList[(int)GeoType::TextMod],
-		"Lvl " + std::to_string(entity->im_Attribs.im_Lvl),
+		"State",
 		Color(),
 		TextAlignment::Center,
 		-0.1f

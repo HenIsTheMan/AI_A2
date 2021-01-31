@@ -23,7 +23,6 @@ namespace Obj{
 		entity->im_Attribs.im_Type = Obj::EntityType::Knight;
 		entity->im_Attribs.im_Team = attribs.im_Team;
 		entity->im_Attribs.im_FacingDir = attribs.im_FacingDir;
-		entity->im_Attribs.im_Lvl = attribs.im_Lvl;
 
 		entity->im_Attribs.im_ActionType = attribs.im_ActionType;
 		entity->im_Attribs.im_ActionRange = attribs.im_ActionRange;
@@ -50,7 +49,6 @@ namespace Obj{
 		entity->im_Attribs.im_Type = Obj::EntityType::Gunner;
 		entity->im_Attribs.im_Team = attribs.im_Team;
 		entity->im_Attribs.im_FacingDir = attribs.im_FacingDir;
-		entity->im_Attribs.im_Lvl = attribs.im_Lvl;
 
 		entity->im_Attribs.im_ActionType = attribs.im_ActionType;
 		entity->im_Attribs.im_ActionRange = attribs.im_ActionRange;
@@ -77,7 +75,6 @@ namespace Obj{
 		entity->im_Attribs.im_Type = Obj::EntityType::Healer;
 		entity->im_Attribs.im_Team = attribs.im_Team;
 		entity->im_Attribs.im_FacingDir = attribs.im_FacingDir;
-		entity->im_Attribs.im_Lvl = attribs.im_Lvl;
 
 		entity->im_Attribs.im_ActionType = attribs.im_ActionType;
 		entity->im_Attribs.im_ActionRange = attribs.im_ActionRange;
@@ -101,11 +98,11 @@ namespace Obj{
 	::Entity* EntityFactory<T, Type>::SpawnRandUnit(const int gridCols, const Sim* const sim, const bool isFlatTop){
 		switch(Math::RandIntMinMax(0, 2)){
 			case 0:
-				return SpawnKnight(KnightCreationAttribs<Vector3, float>(1, gridCols, sim, isFlatTop));
+				return SpawnKnight(KnightCreationAttribs<Vector3, float>(gridCols, sim, isFlatTop));
 			case 1:
-				return SpawnGunner(GunnerCreationAttribs<Vector3, float>(1, gridCols, sim, isFlatTop));
+				return SpawnGunner(GunnerCreationAttribs<Vector3, float>(gridCols, sim, isFlatTop));
 			case 2:
-				return SpawnHealer(HealerCreationAttribs<Vector3, float>(1, gridCols, sim, isFlatTop));
+				return SpawnHealer(HealerCreationAttribs<Vector3, float>(gridCols, sim, isFlatTop));
 		}
 		return nullptr;
 	}

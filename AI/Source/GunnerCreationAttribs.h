@@ -9,7 +9,7 @@ namespace Obj{
 	struct GunnerCreationAttribs final: public IEntityCreationAttribs<T, Type>{
 	public:
 		GunnerCreationAttribs<T, Type>() = delete;
-		GunnerCreationAttribs<T, Type>(const int lvl, const int gridCols, const Sim* const sim, const bool isFlatTop);
+		GunnerCreationAttribs<T, Type>(const int gridCols, const Sim* const sim, const bool isFlatTop);
 		~GunnerCreationAttribs<T, Type>() = default;
 	};
 }
