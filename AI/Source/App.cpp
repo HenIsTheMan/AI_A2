@@ -95,6 +95,10 @@ void App::Init(){
 	glfwSwapInterval(0); //Disable VSync
 }
 
+namespace{ //anon/unnamed namespace
+	std::mutex myMutex;
+}
+
 void App::Render(){
 	glfwMakeContextCurrent(s_RenderWindow);
 
@@ -109,7 +113,11 @@ void App::Render(){
 
 		if(glfwGetWindowAttrib(s_RenderWindow, GLFW_VISIBLE)){
 			glViewport(0, 0, windowWidth, windowHeight);
-			im_Scene->Render();
+
+			if(myMutex.try_lock()){
+				im_Scene->Render();
+				myMutex.unlock();
+			}
 		}
 
 		glfwSwapBuffers(s_RenderWindow);
@@ -133,7 +141,11 @@ void App::Run(){
 			continue;
 		}
 
-		im_Scene->Update(im_UpdateTimer.getElapsedTime(), renderDt);
+		updateDt = im_UpdateTimer.getElapsedTime();
+
+		myMutex.lock();
+		im_Scene->Update(updateDt, renderDt);
+		myMutex.unlock();
 
 		if(!isF3 && Key(VK_F3)){
 			glfwGetWindowAttrib(s_RenderWindow, GLFW_VISIBLE) ? glfwHideWindow(s_RenderWindow) : glfwShowWindow(s_RenderWindow);
@@ -150,15 +162,6 @@ void App::Run(){
 		}
 
 		glfwPollEvents();
-
-		static double prevTime = 0.0;
-		static double currTime = 0.0;
-		double dt = 0.0;
-		while(dt < 1.0 / 400.0){ //Cap at 400 FPS
-			currTime = glfwGetTime();
-			dt = currTime - prevTime;
-		}
-		prevTime = currTime;
 	}
 
 	renderThread.join();

@@ -26,6 +26,7 @@ public:
 private:
 	App() = default;
 
+	double updateDt = 0.0f;
 	double renderDt = 0.0f;
 	StopWatch im_UpdateTimer = StopWatch();
 	StopWatch im_RenderTimer = StopWatch();
