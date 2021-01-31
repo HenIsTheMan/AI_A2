@@ -7,6 +7,7 @@ class StatePatrolKnight final{ //Static class
 public:
 	static Sim* sim;
 	static Entity** entityMoving;
+	static HexGrid<float>::GridType gridType;
 	static int gridRows;
 	static int gridCols;
 	static int* selectedRow;

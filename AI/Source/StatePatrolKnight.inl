@@ -2,6 +2,7 @@ Sim* StatePatrolKnight::sim = nullptr;
 Entity** StatePatrolKnight::entityMoving = nullptr;
 std::vector<Vector3> StatePatrolKnight::myVec = std::vector<Vector3>();
 std::vector<bool> StatePatrolKnight::visited = std::vector<bool>();
+HexGrid<float>::GridType StatePatrolKnight::gridType = HexGrid<float>::GridType::Amt;
 int StatePatrolKnight::gridRows = 0;
 int StatePatrolKnight::gridCols = 0;
 int* StatePatrolKnight::selectedRow = nullptr;
@@ -55,6 +56,58 @@ void StatePatrolKnight::Update(Entity* const entity, const double dt){
 		); //Snap entity's local pos
 
 		++entity->im_Attribs.im_PatrolMoves;
+
+		if(gridType == HexGrid<float>::GridType::FlatTop){
+			switch(entity->im_Attribs.im_FacingDir){
+				case Obj::EntityFacingDir::Left:
+					if(((int)entity->im_Attribs.im_GridCellStartLocalPos.x & 1) == 1){
+						entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
+					} else{
+						entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
+					}
+					break;
+				case Obj::EntityFacingDir::Right:
+					if(((int)entity->im_Attribs.im_GridCellStartLocalPos.x & 1) == 1){
+						entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
+					} else{
+						entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
+					}
+					break;
+				case Obj::EntityFacingDir::UL:
+				case Obj::EntityFacingDir::DL:
+					entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Left;
+					break;
+				case Obj::EntityFacingDir::UR:
+				case Obj::EntityFacingDir::DR:
+					entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Right;
+					break;
+			}
+		} else{
+			switch(entity->im_Attribs.im_FacingDir){
+				case Obj::EntityFacingDir::Up:
+					if(((int)entity->im_Attribs.im_GridCellStartLocalPos.y & 1) == 1){
+						entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UL;
+					} else{
+						entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::UR;
+					}
+					break;
+				case Obj::EntityFacingDir::Down:
+					if(((int)entity->im_Attribs.im_GridCellStartLocalPos.y & 1) == 1){
+						entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DL;
+					} else{
+						entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::DR;
+					}
+					break;
+				case Obj::EntityFacingDir::UL:
+				case Obj::EntityFacingDir::UR:
+					entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Up;
+					break;
+				case Obj::EntityFacingDir::DL:
+				case Obj::EntityFacingDir::DR:
+					entity->im_Attribs.im_FacingDir = Obj::EntityFacingDir::Down;
+					break;
+			}
+		}
 
 		if(myVec.empty() || entity->im_Attribs.im_PatrolMoves == entity->im_Attribs.im_PatrolRange){
 			*selectedRow = (int)entityLocalPos.y;
