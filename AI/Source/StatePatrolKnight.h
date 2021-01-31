@@ -14,6 +14,8 @@ public:
 	static int* selectedCol;
 	static int* selectedTargetRow;
 	static int* selectedTargetCol;
+	static int* creditsPlayer;
+	static int* creditsAI;
 
 	static void Enter(Entity* const entity);
 	static void Update(Entity* const entity, const double dt);

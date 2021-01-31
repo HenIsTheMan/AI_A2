@@ -322,6 +322,8 @@ void Scene::UpdateSimWaiting(const double dt){
 		StatePatrolKnight::selectedCol = &selectedCol;
 		StatePatrolKnight::selectedTargetRow = &selectedTargetRow;
 		StatePatrolKnight::selectedTargetCol = &selectedTargetCol;
+		StatePatrolKnight::creditsPlayer = &creditsPlayer;
+		StatePatrolKnight::creditsAI = &creditsAI;
 
 		canMakeSimMap = false;
 	}

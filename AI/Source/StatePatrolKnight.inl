@@ -9,10 +9,12 @@ int* StatePatrolKnight::selectedRow = nullptr;
 int* StatePatrolKnight::selectedCol = nullptr;
 int* StatePatrolKnight::selectedTargetRow = nullptr;
 int* StatePatrolKnight::selectedTargetCol = nullptr;
+int* StatePatrolKnight::creditsPlayer = nullptr;
+int* StatePatrolKnight::creditsAI = nullptr;
 
 void StatePatrolKnight::Enter(Entity* const entity){
 	entity->im_Attribs.im_PatrolMoves = -1;
-	entity->im_Attribs.im_PatrolRange = 10;
+	entity->im_Attribs.im_PatrolRange = 8;
 
 	myVec.clear();
 	visited.clear();
@@ -120,6 +122,8 @@ void StatePatrolKnight::Update(Entity* const entity, const double dt){
 
 			*entityMoving = nullptr;
 		} else{
+			Vector3 targetLocalPos = Vector3();
+			bool shldSkip = false;
 			int nextIndex = 0;
 			myVec.emplace_back(entityLocalPos);
 			visited[(int)entityLocalPos.y * gridCols + (int)entityLocalPos.x] = true;
@@ -165,18 +169,44 @@ void StatePatrolKnight::Update(Entity* const entity, const double dt){
 				if(!visited[nextIndex]){
 					const int index = (int)tileLayer[nextIndex];
 					if(index >= 0 && index <= (int)TileCost::Amt - 1 && (int)tileCosts[index] >= 0 && entityLayer[(int)next.y * gridCols + (int)next.x] == nullptr){
-						entity->im_Attribs.im_GridCellTargetLocalPos = next;
-						entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
-						return;
+						targetLocalPos = next;
+						shldSkip = true;
+						break;
 					}
 				}
 			}
 
-			myVec.pop_back();
-			if(!myVec.empty()){
-				entity->im_Attribs.im_GridCellTargetLocalPos = myVec.back();
-				entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
+			if(!shldSkip){
 				myVec.pop_back();
+				if(!myVec.empty()){
+					targetLocalPos = myVec.back();
+					myVec.pop_back();
+				}
+			}
+
+			const int targetIndex = (int)targetLocalPos.y * gridCols + (int)targetLocalPos.x;
+			const int tileCost = (int)tileCosts[(int)sim->GetTileLayer()[targetIndex]];
+
+			if((sim->turn == SimTurn::Player && *creditsPlayer >= tileCost)
+				|| (sim->turn == SimTurn::AI && *creditsAI >= tileCost)){
+
+				if(sim->turn == SimTurn::Player){
+					*creditsPlayer -= tileCost;
+				} else if(sim->turn == SimTurn::AI){
+					*creditsAI -= tileCost;
+				}
+				entity->im_Attribs.im_GridCellTargetLocalPos = targetLocalPos;
+				entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
+			} else{
+				*selectedRow = (int)entityLocalPos.y;
+				*selectedCol = (int)entityLocalPos.x;
+
+				*selectedTargetRow = *selectedTargetCol = -1;
+
+				entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleKnight);
+				sim->OnEntityActivated(gridCols, entity);
+
+				*entityMoving = nullptr;
 			}
 		}
 	} else{
