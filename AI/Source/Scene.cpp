@@ -390,60 +390,7 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 					&& entityLayer[indexSelectedTarget] == nullptr
 				){
 					entityMoving = entitySelected;
-
-					myAStar.Reset();
-					myShortestPath.clear();
-
-					for(int r = 0; r < gridRows; ++r){
-						for(int c = 0; c < gridCols; ++c){
-							const int cost = (int)tileCosts[(int)sim->GetTileLayer()[r * gridCols + c]];
-
-							(void)myAStar.CreateNode(CreateAStarNodeParams<Vector3, float>{
-								cost < 0 || (!(r == selectedRow && c == selectedCol) && entityLayer[r * gridCols + c] != nullptr) ? AStarNodeType::Inaccessible : AStarNodeType::Accessible,
-								'(' + std::to_string(c) + ", " + std::to_string(r) + ')' + " Cost: " + std::to_string(cost),
-								(float)cost,
-								Vector3((float)c, (float)r, 0.0f),
-							});
-						}
-					}
-
-					myAStar.SetStart(Vector3((float)selectedCol, (float)selectedRow, 0.0f));
-					myAStar.SetEnd(Vector3((float)selectedTargetCol, (float)selectedTargetRow, 0.0f));
-					if(gridType == HexGrid<float>::GridType::FlatTop){
-						myAStar.SetNeighboursForHexGridFlatTop(
-							Vector3(0.0f, 0.0f, 0.0f),
-							Vector3((float)gridCols - 1.0f, 0.0f, 0.0f),
-							Vector3(0.0f, (float)gridRows - 1.0f, 0.0f),
-							Vector3((float)gridCols - 1.0f, (float)gridRows - 1.0f, 0.0f),
-							1.0f,
-							1.0f
-						);
-					} else{
-						myAStar.SetNeighboursForHexGridSharpTop(
-							Vector3(0.0f, 0.0f, 0.0f),
-							Vector3((float)gridCols - 1.0f, 0.0f, 0.0f),
-							Vector3(0.0f, (float)gridRows - 1.0f, 0.0f),
-							Vector3((float)gridCols - 1.0f, (float)gridRows - 1.0f, 0.0f),
-							1.0f,
-							1.0f
-						);
-					}
-
-					if(myAStar.CalcShortestPath()){
-						myAStar.PrintPath();
-
-						const std::vector<AStarNode<Vector3, float>*>& shortestPath = myAStar.GetShortestPath();
-						for(const AStarNode<Vector3, float>* const node : shortestPath){
-							myShortestPath.emplace_back(node->GetPos());
-						}
-
-						entityMoving->im_Attribs.im_GridCellTargetLocalPos = myShortestPath.front();
-						entityMoving->im_Attribs.im_GridCellStartLocalPos = entityMoving->im_Attribs.im_LocalPos;
-						myShortestPath.erase(myShortestPath.begin());
-					}
-
-					sim->OnEntityDeactivated(gridCols, (int)entityMoving->im_Attribs.im_LocalPos.y, (int)entityMoving->im_Attribs.im_LocalPos.x);
-					selectedRow = selectedCol = -1;
+					entityMoving->im_Attribs.im_IdleShldChase = true;
 				}
 			}
 		}
@@ -803,6 +750,17 @@ void Scene::UpdateStates(){
 }
 
 void Scene::UpdateKnightStates(){
+	StateChaseKnight::sim = sim;
+	StateChaseKnight::entityMoving = entityMoving;
+	StateChaseKnight::myAStar = &myAStar;
+	StateChaseKnight::myShortestPath = &myShortestPath;
+	StateChaseKnight::gridType = gridType;
+	StateChaseKnight::gridRows = gridRows;
+	StateChaseKnight::gridCols = gridCols;
+	StateChaseKnight::selectedRow = selectedRow;
+	StateChaseKnight::selectedCol = selectedCol;
+	StateChaseKnight::selectedTargetRow = selectedTargetRow;
+	StateChaseKnight::selectedTargetCol = selectedTargetCol;
 }
 
 void Scene::UpdateGunnerStates(){

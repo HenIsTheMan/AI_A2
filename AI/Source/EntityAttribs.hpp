@@ -40,6 +40,7 @@ namespace Obj{
 		Type im_TimeAlive = Type();
 
 		//* Vars for specific entities only (help la, I wanna do ECS alr)
+		bool im_IdleShldChase = false;
 		Type im_IdleChangeFacingDirBT = Type();
 		Type im_IdleChangeFacingDirDelay = Type();
 		Type im_DeadCurrTime = Type();

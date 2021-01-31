@@ -8,6 +8,8 @@ void StateIdleKnight::Enter(Entity* const entity){
 void StateIdleKnight::Update(Entity* const entity, const double dt){
 	if(entity->im_Attribs.im_CurrHealth <= 0.0f){
 		entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateDeadKnight);
+	} else if(entity->im_Attribs.im_IdleShldChase){
+		entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateChaseKnight);
 	}
 
 	if(entity->im_Attribs.im_IdleChangeFacingDirBT <= entity->im_Attribs.im_TimeAlive){
@@ -109,4 +111,5 @@ void StateIdleKnight::Update(Entity* const entity, const double dt){
 }
 
 void StateIdleKnight::Exit(Entity* const entity){
+	entity->im_Attribs.im_IdleShldChase = false;
 }
