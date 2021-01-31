@@ -10,13 +10,15 @@ int* StateAttackKnight::creditsAI = nullptr;
 void StateAttackKnight::Enter(Entity* const entity){
 	entity->im_Attribs.im_CurrMainStepTime = entity->im_Attribs.im_MaxMainStepTime = 3.0f;
 
-	///Still will minus even if dmg has not been done
+	//* Still will minus even if dmg has not been done
 	if(sim->turn == SimTurn::Player){
 		*creditsPlayer -= 10;
 	} else if(sim->turn == SimTurn::AI){
 		*creditsAI -= 10;
 	}
+	//*/
 
+	//* So will face enemy unit before...
 	if((int)entity->im_Attribs.im_GridCellStartLocalPos.x == (int)entity->im_Attribs.im_GridCellTargetLocalPos.x){
 
 		if(entity->im_Attribs.im_GridCellTargetLocalPos.y > entity->im_Attribs.im_GridCellStartLocalPos.y){
@@ -50,9 +52,15 @@ void StateAttackKnight::Enter(Entity* const entity){
 		}
 
 	}
+	//*/
 }
 
 void StateAttackKnight::Update(Entity* const entity, const double dt){
+	if(entity->im_Attribs.im_CurrHealth <= 0.0f){
+		entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateDeadKnight);
+		return;
+	}
+
 	entity->im_Attribs.im_CurrMainStepTime -= (float)dt;
 
 	if(entity->im_Attribs.im_CurrMainStepTime <= 0.0f){

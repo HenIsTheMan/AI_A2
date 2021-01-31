@@ -60,13 +60,18 @@ void StateChaseKnight::Enter(Entity* const entity){
 		myAStar->PrintPath();
 
 		const std::vector<AStarNode<Vector3, float>*>& shortestPath = myAStar->GetShortestPath();
-		for(const AStarNode<Vector3, float>* const node: shortestPath){
-			myShortestPath->emplace_back(node->GetPos());
+		const int shortestPathSize = shortestPath.size();
+		for(int i = 1; i < shortestPathSize; ++i){ //Exclude start node
+			myShortestPath->emplace_back(shortestPath[i]->GetPos());
 		}
 
-		entity->im_Attribs.im_GridCellTargetLocalPos = myShortestPath->front();
-		entity->im_Attribs.im_GridCellStartLocalPos = entity->im_Attribs.im_LocalPos;
-		myShortestPath->erase(myShortestPath->begin());
+		const Vector3 targetLocalPos = myShortestPath->front();
+		if((sim->turn == SimTurn::Player && *creditsPlayer >= (int)tileCosts[(int)sim->GetTileLayer()[(int)targetLocalPos.y * gridCols + (int)targetLocalPos.x]])
+			|| (sim->turn == SimTurn::AI && *creditsAI >= (int)tileCosts[(int)sim->GetTileLayer()[(int)targetLocalPos.y * gridCols + (int)targetLocalPos.x]])){
+			entity->im_Attribs.im_GridCellTargetLocalPos = targetLocalPos;
+			entity->im_Attribs.im_GridCellStartLocalPos = entity->im_Attribs.im_LocalPos;
+			myShortestPath->erase(myShortestPath->begin());
+		}
 	}
 
 	sim->OnEntityDeactivated(gridCols, (int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x);
@@ -93,10 +98,37 @@ void StateChaseKnight::Update(Entity* const entity, const double dt){
 			roundf(entityLocalPos.z)
 		); //Snap entity's local pos
 
+		const int tileCost = (int)tileCosts[(int)sim->GetTileLayer()[(int)entity->im_Attribs.im_GridCellTargetLocalPos.y * gridCols + (int)entity->im_Attribs.im_GridCellTargetLocalPos.x]];
 		if(sim->turn == SimTurn::Player){
-			*creditsPlayer -= (int)tileCosts[(int)sim->GetTileLayer()[(int)entity->im_Attribs.im_GridCellTargetLocalPos.y * gridCols + (int)entity->im_Attribs.im_GridCellTargetLocalPos.x]];
+			if(*creditsPlayer >= tileCost){
+				*creditsPlayer -= tileCost;
+			} else{
+				*selectedRow = (int)entityLocalPos.y;
+				*selectedCol = (int)entityLocalPos.x;
+
+				*selectedTargetRow = *selectedTargetCol = -1;
+
+				entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleKnight);
+				sim->OnEntityActivated(gridCols, entity);
+
+				*entityMoving = nullptr;
+				return;
+			}
 		} else if(sim->turn == SimTurn::AI){
-			*creditsAI -= (int)tileCosts[(int)sim->GetTileLayer()[(int)entity->im_Attribs.im_GridCellTargetLocalPos.y * gridCols + (int)entity->im_Attribs.im_GridCellTargetLocalPos.x]];
+			if(*creditsAI >= tileCost){
+				*creditsAI -= tileCost;
+			} else{
+				*selectedRow = (int)entityLocalPos.y;
+				*selectedCol = (int)entityLocalPos.x;
+
+				*selectedTargetRow = *selectedTargetCol = -1;
+
+				entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleKnight);
+				sim->OnEntityActivated(gridCols, entity);
+
+				*entityMoving = nullptr;
+				return;
+			}
 		}
 
 		if(gridType == HexGrid<float>::GridType::FlatTop){
@@ -164,9 +196,24 @@ void StateChaseKnight::Update(Entity* const entity, const double dt){
 		} else{
 			const Vector3 localPos = myShortestPath->front();
 			if(sim->GetEntityLayer()[(int)localPos.y * gridCols + (int)localPos.x] == nullptr){
-				entity->im_Attribs.im_GridCellTargetLocalPos = localPos;
-				entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
-				myShortestPath->erase(myShortestPath->begin());
+				
+				if((sim->turn == SimTurn::Player && *creditsPlayer >= (int)tileCosts[(int)sim->GetTileLayer()[(int)localPos.y * gridCols + (int)localPos.x]])
+					|| (sim->turn == SimTurn::AI && *creditsAI >= (int)tileCosts[(int)sim->GetTileLayer()[(int)localPos.y * gridCols + (int)localPos.x]])){
+					entity->im_Attribs.im_GridCellTargetLocalPos = localPos;
+					entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
+					myShortestPath->erase(myShortestPath->begin());
+				} else{
+					*selectedRow = (int)entityLocalPos.y;
+					*selectedCol = (int)entityLocalPos.x;
+
+					*selectedTargetRow = *selectedTargetCol = -1;
+
+					entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleKnight);
+					sim->OnEntityActivated(gridCols, entity);
+
+					*entityMoving = nullptr;
+				}
+
 			} else{
 				//* For use in attack state
 				entity->im_Attribs.im_GridCellTargetLocalPos = localPos;
