@@ -213,9 +213,6 @@
     <ClInclude Include="Source\StateDeadKnight.h">
       <Filter>State\States\KnightStates</Filter>
     </ClInclude>
-    <ClInclude Include="Source\StateFollowHealer.h">
-      <Filter>State\States\HealerStates</Filter>
-    </ClInclude>
     <ClInclude Include="Source\StateHealHealer.h">
       <Filter>State\States\HealerStates</Filter>
     </ClInclude>
@@ -248,6 +245,9 @@
     </ClInclude>
     <ClInclude Include="Source\EventDespawnEntity.h">
       <Filter>Event\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateChaseHealer.h">
+      <Filter>State\States\HealerStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -361,9 +361,6 @@
     <None Include="Source\StateDeadHealer.inl">
       <Filter>State\States\HealerStates</Filter>
     </None>
-    <None Include="Source\StateFollowHealer.inl">
-      <Filter>State\States\HealerStates</Filter>
-    </None>
     <None Include="Source\StateHealHealer.inl">
       <Filter>State\States\HealerStates</Filter>
     </None>
@@ -391,6 +388,9 @@
     </None>
     <None Include="Source\AStarNode.inl">
       <Filter>AStar</Filter>
+    </None>
+    <None Include="Source\StateChaseHealer.inl">
+      <Filter>State\States\HealerStates</Filter>
     </None>
   </ItemGroup>
 </Project>

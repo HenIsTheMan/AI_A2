@@ -215,7 +215,7 @@
     <ClInclude Include="Source\StateDeadGunner.h" />
     <ClInclude Include="Source\StateDeadHealer.h" />
     <ClInclude Include="Source\StateDeadKnight.h" />
-    <ClInclude Include="Source\StateFollowHealer.h" />
+    <ClInclude Include="Source\StateChaseHealer.h" />
     <ClInclude Include="Source\StateHealHealer.h" />
     <ClInclude Include="Source\StateHelpers.h" />
     <ClInclude Include="Source\StateID.hpp" />
@@ -257,7 +257,7 @@
     <None Include="Source\StateDeadGunner.inl" />
     <None Include="Source\StateDeadHealer.inl" />
     <None Include="Source\StateDeadKnight.inl" />
-    <None Include="Source\StateFollowHealer.inl" />
+    <None Include="Source\StateChaseHealer.inl" />
     <None Include="Source\StateHealHealer.inl" />
     <None Include="Source\StateIdleGunner.inl" />
     <None Include="Source\StateIdleKnight.inl" />

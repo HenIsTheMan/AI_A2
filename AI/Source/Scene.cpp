@@ -23,7 +23,7 @@
 #include "StatePatrolGunner.h"
 
 #include "StateDeadHealer.h"
-#include "StateFollowHealer.h"
+#include "StateChaseHealer.h"
 #include "StateHealHealer.h"
 #include "StateIdleHealer.h"
 
@@ -177,7 +177,7 @@ void Scene::Init(){
 	gunnerSM->AddState(new State(StateID::StatePatrolGunner, StatePatrolGunner::Enter, StatePatrolGunner::Update, StatePatrolGunner::Exit));
 
 	healerSM->AddState(new State(StateID::StateDeadHealer, StateDeadHealer::Enter, StateDeadHealer::Update, StateDeadHealer::Exit));
-	healerSM->AddState(new State(StateID::StateFollowHealer, StateFollowHealer::Enter, StateFollowHealer::Update, StateFollowHealer::Exit));
+	healerSM->AddState(new State(StateID::StateChaseHealer, StateChaseHealer::Enter, StateChaseHealer::Update, StateChaseHealer::Exit));
 	healerSM->AddState(new State(StateID::StateHealHealer, StateHealHealer::Enter, StateHealHealer::Update, StateHealHealer::Exit));
 	healerSM->AddState(new State(StateID::StateIdleHealer, StateIdleHealer::Enter, StateIdleHealer::Update, StateIdleHealer::Exit));
 
@@ -1716,8 +1716,8 @@ void Scene::RenderEntityState(const Entity* const entity){
 		case StateID::StateChaseGunner:
 			stateText = "GunnerChase";
 			break;
-		case StateID::StateFollowHealer:
-			stateText = "HealerFollow";
+		case StateID::StateChaseHealer:
+			stateText = "HealerChase";
 			break;
 		case StateID::StateAttackKnight:
 			stateText = "KnightAttack";

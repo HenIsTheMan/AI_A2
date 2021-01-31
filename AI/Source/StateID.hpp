@@ -14,7 +14,7 @@ enum struct StateID: int{
 	StateDeadGunner,
 
 	StateIdleHealer,
-	StateFollowHealer,
+	StateChaseHealer,
 	StateHealHealer,
 	StateDeadHealer,
 
