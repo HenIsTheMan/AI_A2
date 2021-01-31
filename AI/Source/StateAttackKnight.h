@@ -5,6 +5,7 @@
 class StateAttackKnight final{ //Static class
 	_6_DELETED(StateAttackKnight)
 public:
+	static bool isDeducted;
 	static Sim* sim;
 	static int gridCols;
 	static int* selectedRow;

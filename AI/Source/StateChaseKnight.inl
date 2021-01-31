@@ -66,12 +66,12 @@ void StateChaseKnight::Enter(Entity* const entity){
 		}
 
 		const Vector3 targetLocalPos = myShortestPath->front();
-		if((sim->turn == SimTurn::Player && *creditsPlayer >= (int)tileCosts[(int)sim->GetTileLayer()[(int)targetLocalPos.y * gridCols + (int)targetLocalPos.x]])
-			|| (sim->turn == SimTurn::AI && *creditsAI >= (int)tileCosts[(int)sim->GetTileLayer()[(int)targetLocalPos.y * gridCols + (int)targetLocalPos.x]])){
+		//if((sim->turn == SimTurn::Player && *creditsPlayer >= (int)tileCosts[(int)sim->GetTileLayer()[(int)targetLocalPos.y * gridCols + (int)targetLocalPos.x]])
+			//|| (sim->turn == SimTurn::AI && *creditsAI >= (int)tileCosts[(int)sim->GetTileLayer()[(int)targetLocalPos.y * gridCols + (int)targetLocalPos.x]])){
 			entity->im_Attribs.im_GridCellTargetLocalPos = targetLocalPos;
 			entity->im_Attribs.im_GridCellStartLocalPos = entity->im_Attribs.im_LocalPos;
 			myShortestPath->erase(myShortestPath->begin());
-		}
+		//}
 	}
 
 	sim->OnEntityDeactivated(gridCols, (int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x);
@@ -98,7 +98,7 @@ void StateChaseKnight::Update(Entity* const entity, const double dt){
 			roundf(entityLocalPos.z)
 		); //Snap entity's local pos
 
-		const int tileCost = (int)tileCosts[(int)sim->GetTileLayer()[(int)entity->im_Attribs.im_GridCellTargetLocalPos.y * gridCols + (int)entity->im_Attribs.im_GridCellTargetLocalPos.x]];
+		/*const int tileCost = (int)tileCosts[(int)sim->GetTileLayer()[(int)entity->im_Attribs.im_GridCellTargetLocalPos.y * gridCols + (int)entity->im_Attribs.im_GridCellTargetLocalPos.x]];
 		if(sim->turn == SimTurn::Player){
 			if(*creditsPlayer >= tileCost){
 				*creditsPlayer -= tileCost;
@@ -129,7 +129,7 @@ void StateChaseKnight::Update(Entity* const entity, const double dt){
 				*entityMoving = nullptr;
 				return;
 			}
-		}
+		}*/
 
 		if(gridType == HexGrid<float>::GridType::FlatTop){
 			switch(entity->im_Attribs.im_FacingDir){
@@ -197,12 +197,12 @@ void StateChaseKnight::Update(Entity* const entity, const double dt){
 			const Vector3 localPos = myShortestPath->front();
 			if(sim->GetEntityLayer()[(int)localPos.y * gridCols + (int)localPos.x] == nullptr){
 				
-				if((sim->turn == SimTurn::Player && *creditsPlayer >= (int)tileCosts[(int)sim->GetTileLayer()[(int)localPos.y * gridCols + (int)localPos.x]])
-					|| (sim->turn == SimTurn::AI && *creditsAI >= (int)tileCosts[(int)sim->GetTileLayer()[(int)localPos.y * gridCols + (int)localPos.x]])){
+				//if((sim->turn == SimTurn::Player && *creditsPlayer >= (int)tileCosts[(int)sim->GetTileLayer()[(int)localPos.y * gridCols + (int)localPos.x]])
+					//|| (sim->turn == SimTurn::AI && *creditsAI >= (int)tileCosts[(int)sim->GetTileLayer()[(int)localPos.y * gridCols + (int)localPos.x]])){
 					entity->im_Attribs.im_GridCellTargetLocalPos = localPos;
 					entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
 					myShortestPath->erase(myShortestPath->begin());
-				} else{
+				/*} else{
 					*selectedRow = (int)entityLocalPos.y;
 					*selectedCol = (int)entityLocalPos.x;
 
@@ -212,7 +212,7 @@ void StateChaseKnight::Update(Entity* const entity, const double dt){
 					sim->OnEntityActivated(gridCols, entity);
 
 					*entityMoving = nullptr;
-				}
+				}*/
 
 			} else{
 				//* For use in attack state
