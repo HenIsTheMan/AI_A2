@@ -510,6 +510,31 @@ void Sim::Update(const double dt){
 		} else if(turn == SimTurn::AI){
 			(void)publisher->Notify((long int)ListenerFlags::Scene, new EventAddCredits(false, 100));
 		}
+
+		for(Entity* const entity: entityLayer){
+			if(entity != nullptr && ((entity->im_Attribs.im_Team == Obj::EntityTeam::Player && turn != SimTurn::Player)
+				|| (entity->im_Attribs.im_Team == Obj::EntityTeam::AI && turn != SimTurn::AI))){
+				using Obj::EntityType;
+
+				switch(entity->im_Attribs.im_Type){
+					case EntityType::Knight:
+						if(entity->im_Attribs.im_CurrState != entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateDeadKnight)){
+							entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleKnight);
+						}
+						break;
+					case EntityType::Gunner:
+						if(entity->im_Attribs.im_CurrState != entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateDeadGunner)){
+							entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleGunner);
+						}
+						break;
+					case EntityType::Healer:
+						if(entity->im_Attribs.im_CurrState != entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateDeadHealer)){
+							entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleHealer);
+						}
+						break;
+				}
+			}
+		}
 	}
 
 	if(timeOfDayElapsedTime >= timeOfDayDuration){

@@ -73,7 +73,7 @@ void StateAttackKnight::Update(Entity* const entity, const double dt){
 		if(*selectedTargetRow >= 0 && *selectedTargetCol >= 0){
 			Entity* targetEntity = sim->GetEntityLayer()[*selectedTargetRow * gridCols + *selectedTargetCol];
 
-			if(targetEntity->im_Attribs.im_Team != entity->im_Attribs.im_Team){
+			if(targetEntity != nullptr && targetEntity->im_Attribs.im_Team != entity->im_Attribs.im_Team){
 				targetEntity->im_Attribs.im_CurrHealth -= entity->im_Attribs.im_ActionMag;
 			}
 

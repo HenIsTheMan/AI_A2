@@ -377,6 +377,33 @@ void Scene::UpdateSimOngoingTurnPlayer(const double dt){
 		selectedRow = selectedCol = -1;
 		selectedTargetRow = selectedTargetCol = -1;
 
+		//* Idle for...
+		const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
+		for(Entity* const entity: entityLayer){
+			if(entity != nullptr && entity->im_Attribs.im_Team == Obj::EntityTeam::Player){
+				using Obj::EntityType;
+
+				switch(entity->im_Attribs.im_Type){
+					case EntityType::Knight:
+						if(entity->im_Attribs.im_CurrState != entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateDeadKnight)){
+							entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleKnight);
+						}
+						break;
+					case EntityType::Gunner:
+						if(entity->im_Attribs.im_CurrState != entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateDeadGunner)){
+							entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleGunner);
+						}
+						break;
+					case EntityType::Healer:
+						if(entity->im_Attribs.im_CurrState != entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateDeadHealer)){
+							entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleHealer);
+						}
+						break;
+				}
+			}
+		}
+		//*/
+
 		isKeyDownSpace = true;
 	} else if(isKeyDownSpace && !App::Key(VK_SPACE)){
 		isKeyDownSpace = false;
@@ -600,24 +627,6 @@ void Scene::UpdateEntities(const double dt){
 			++unitsLeftPlayer;
 		} else{
 			++unitsLeftAI;
-		}
-
-		///Idle if not your turn
-		if((entity->im_Attribs.im_Team == Obj::EntityTeam::Player && sim->turn != SimTurn::Player)
-			|| (entity->im_Attribs.im_Team == Obj::EntityTeam::AI && sim->turn != SimTurn::AI)){
-			using Obj::EntityType;
-
-			switch(entity->im_Attribs.im_Type){
-				case EntityType::Knight:
-					entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleKnight);
-					break;
-				case EntityType::Gunner:
-					entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleGunner);
-					break;
-				case EntityType::Healer:
-					entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleHealer);
-					break;
-			}
 		}
 
 		entity->im_Attribs.im_TimeAlive += (float)dt;
