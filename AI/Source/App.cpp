@@ -120,6 +120,15 @@ void App::Render(){
 			}
 		}
 
+		static double prevTime = 0.0;
+		static double currTime = 0.0;
+		double dt = 0.0;
+		while(dt < 1.0 / 200.0){ //Cap at 200 FPS
+			currTime = glfwGetTime();
+			dt = currTime - prevTime;
+		}
+		prevTime = currTime;
+
 		glfwSwapBuffers(s_RenderWindow);
 	}
 }
@@ -160,6 +169,15 @@ void App::Run(){
 		} else if(isF1 && !Key(VK_F1)){
 			isF1 = false;
 		}
+
+		static double prevTime = 0.0;
+		static double currTime = 0.0;
+		double dt = 0.0;
+		while(dt < 1.0 / 4000.0){ //Cap at 4000 FPS
+			currTime = glfwGetTime();
+			dt = currTime - prevTime;
+		}
+		prevTime = currTime;
 
 		glfwPollEvents();
 	}
