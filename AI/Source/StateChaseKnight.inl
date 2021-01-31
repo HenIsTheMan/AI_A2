@@ -55,7 +55,7 @@ void StateChaseKnight::Enter(Entity* const entity){
 		myAStar->PrintPath();
 
 		const std::vector<AStarNode<Vector3, float>*>& shortestPath = myAStar->GetShortestPath();
-		for(const AStarNode<Vector3, float>* const node : shortestPath){
+		for(const AStarNode<Vector3, float>* const node: shortestPath){
 			myShortestPath->emplace_back(node->GetPos());
 		}
 

@@ -1340,7 +1340,7 @@ void Scene::RenderEntityArt(const Entity* const entity){
 			break;
 		case Obj::EntityType::Gunner:
 			RenderMesh(
-				meshList[(int)GeoType::Knight],
+				meshList[(int)GeoType::Gunner],
 				true,
 				Color(),
 				entity->im_Attribs.im_DeadMaxTime > 0.0f ? entity->im_Attribs.im_DeadCurrTime / entity->im_Attribs.im_DeadMaxTime : 1.0f
@@ -1348,7 +1348,7 @@ void Scene::RenderEntityArt(const Entity* const entity){
 			break;
 		case Obj::EntityType::Healer:
 			RenderMesh(
-				meshList[(int)GeoType::Knight],
+				meshList[(int)GeoType::Healer],
 				true,
 				Color(),
 				entity->im_Attribs.im_DeadMaxTime > 0.0f ? entity->im_Attribs.im_DeadCurrTime / entity->im_Attribs.im_DeadMaxTime : 1.0f
@@ -1585,7 +1585,7 @@ void Scene::RenderEntityArtMoving(const Entity* const entity){
 			break;
 		case Obj::EntityType::Gunner:
 			RenderMesh(
-				meshList[(int)GeoType::Knight],
+				meshList[(int)GeoType::Gunner],
 				true,
 				Color(),
 				entity->im_Attribs.im_DeadMaxTime > 0.0f ? entity->im_Attribs.im_DeadCurrTime / entity->im_Attribs.im_DeadMaxTime : 1.0f
@@ -1593,7 +1593,7 @@ void Scene::RenderEntityArtMoving(const Entity* const entity){
 			break;
 		case Obj::EntityType::Healer:
 			RenderMesh(
-				meshList[(int)GeoType::Knight],
+				meshList[(int)GeoType::Healer],
 				true,
 				Color(),
 				entity->im_Attribs.im_DeadMaxTime > 0.0f ? entity->im_Attribs.im_DeadCurrTime / entity->im_Attribs.im_DeadMaxTime : 1.0f
