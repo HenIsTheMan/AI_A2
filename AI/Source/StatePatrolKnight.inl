@@ -125,11 +125,21 @@ void StatePatrolKnight::Update(Entity* const entity, const double dt){
 			Vector3 targetLocalPos = Vector3();
 			bool shldSkip = false;
 			int nextIndex = 0;
+
 			myVec.emplace_back(entityLocalPos);
 			visited[(int)entityLocalPos.y * gridCols + (int)entityLocalPos.x] = true;
 
+			//* For rand facing dirs
+			std::vector<int> indices;
+			indices.reserve((int)Obj::EntityFacingDir::Amt - 1);
+			for(int i = 1; i < (int)Obj::EntityFacingDir::Amt; ++i){
+				indices.emplace_back(i);
+			}
+			std::random_shuffle(indices.begin(), indices.end());
+			//*/
+
 			for(int i = 1; i < (int)Obj::EntityFacingDir::Amt; ++i){ //Excludes EntityFacingDir::Invalid
-				Obj::EntityFacingDir facingDir = Obj::entityFacingDirs[i];
+				Obj::EntityFacingDir facingDir = Obj::entityFacingDirs[indices[i - 1]];
 
 				//* Filtering irrelevant facing dirs
 				if(gridType == HexGrid<float>::GridType::FlatTop){
