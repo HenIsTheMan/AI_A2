@@ -6,6 +6,7 @@ class StatePatrolKnight final{ //Static class
 	_6_DELETED(StatePatrolKnight)
 public:
 	static Sim* sim;
+	static std::vector<Vector3> myPath;
 	static std::vector<Vector3> myVec;
 	static std::vector<bool> visited;
 	static int gridRows;

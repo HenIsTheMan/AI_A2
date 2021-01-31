@@ -506,39 +506,14 @@ void Scene::LateUpdateSimOngoingTurnPlayer(const double dt){
 
 	static bool isKeyP = false;
 	if(!isKeyP && App::Key('P')){
-		const int tileCost = (int)tileCosts[(int)tileLayer[(int)mouseRow * gridCols + (int)mouseCol]];
-
-		if((entityMoving == nullptr
-			|| (entityMoving != nullptr
-			&& entityMoving->im_Attribs.im_CurrHealth > 0.0f
-			&& (selectedTargetRow < 0 || selectedTargetCol < 0)))
-			&& mouseRow >= 0 && mouseCol >= 0
-			&& selectedRow >= 0 && selectedCol >= 0
-			&& (mouseRow != selectedRow || mouseCol != selectedCol)
-			&& ((sim->turn == SimTurn::Player && creditsPlayer >= tileCost)
-			|| (sim->turn == SimTurn::AI && creditsAI >= tileCost))
-		){
-			selectedTargetRow = (int)mouseRow;
-			selectedTargetCol = (int)mouseCol;
-
-			const int indexSelectedTarget = selectedTargetRow * gridCols + selectedTargetCol;
-			Entity* const entitySelected = entityLayer[selectedRow * gridCols + selectedCol];
-
-			if(entitySelected != nullptr
-				&& entitySelected->im_Attribs.im_CurrHealth > 0.0f
-				&& ((entitySelected->im_Attribs.im_Team == Obj::EntityTeam::Player && sim->turn == SimTurn::Player)
-				|| (entitySelected->im_Attribs.im_Team == Obj::EntityTeam::AI && sim->turn == SimTurn::AI))
-				&& (int)tileCosts[(int)tileLayer[indexSelectedTarget]] >= (int)TileCost::EmptyCost
-				&& !visionLayer[indexSelectedTarget]
-			){
-				entityMoving = entitySelected;
-				entityMoving->im_Attribs.im_IdleShldChase = false;
-				entityMoving->im_Attribs.im_IdleShldPatrol = true;
-			}
+		if(entityMoving == nullptr && selectedRow >= 0 && selectedCol >= 0){
+			entityMoving = entityLayer[selectedRow * gridCols + selectedCol];
+			entityMoving->im_Attribs.im_IdleShldChase = false;
+			entityMoving->im_Attribs.im_IdleShldPatrol = true;
 		}
 
 		isKeyP = true;
-	} else if(isKeyP && !App::IsMousePressed(GLFW_MOUSE_BUTTON_RIGHT)){
+	} else if(isKeyP && !App::Key('P')){
 		isKeyP = false;
 	}
 }

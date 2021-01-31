@@ -1,4 +1,5 @@
 Sim* StatePatrolKnight::sim = nullptr;
+std::vector<Vector3> StatePatrolKnight::myPath = std::vector<Vector3>();
 std::vector<Vector3> StatePatrolKnight::myVec = std::vector<Vector3>();
 std::vector<bool> StatePatrolKnight::visited = std::vector<bool>();
 int StatePatrolKnight::gridRows = 0;
@@ -6,8 +7,14 @@ int StatePatrolKnight::gridCols = 0;
 
 void StatePatrolKnight::Enter(Entity* const entity){
 	entity->im_Attribs.im_PatrolRange = 20; //??
+
+	const int gridTotalCells = gridRows * gridCols;
+	myPath.reserve(gridTotalCells);
+	myVec.reserve(gridTotalCells);
+	visited.reserve(gridTotalCells);
+	visited.resize(gridTotalCells);
+
 	myVec.emplace_back(entity->im_Attribs.im_LocalPos);
-	//reserve??
 }
 
 void StatePatrolKnight::Update(Entity* const entity, const double dt){
@@ -62,8 +69,9 @@ void StatePatrolKnight::Update(Entity* const entity, const double dt){
 		nextIndex = (int)next.y * gridCols + (int)next.x; //Update nextIndex
 		if(!visited[nextIndex]){
 			if((int)tileLayer[nextIndex] >= 0){
-				entity->im_Attribs.im_GridCellTargetLocalPos = myVec.back();
-				entity->im_Attribs.im_GridCellStartLocalPos = localPos; //??
+				entity->im_Attribs.im_LocalPos = next;
+				//entity->im_Attribs.im_GridCellTargetLocalPos = next;
+				//entity->im_Attribs.im_GridCellStartLocalPos = localPos;
 				return;
 			}
 		}
@@ -71,8 +79,10 @@ void StatePatrolKnight::Update(Entity* const entity, const double dt){
 
 	myVec.pop_back();
 	if(!myVec.empty()){
-		entity->im_Attribs.im_GridCellTargetLocalPos = myVec.back();
-		entity->im_Attribs.im_GridCellStartLocalPos = localPos; //??
+		//myPath.emplace_back();
+		entity->im_Attribs.im_LocalPos = myVec.back();
+		//entity->im_Attribs.im_GridCellTargetLocalPos = myVec.back();
+		//entity->im_Attribs.im_GridCellStartLocalPos = localPos;
 		myVec.pop_back();
 	}
 }
