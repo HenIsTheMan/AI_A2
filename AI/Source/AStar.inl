@@ -114,6 +114,9 @@ namespace Algs{
 				}
 			}
 
+			if(curr == nullptr){
+				return false;
+			}
 			open.erase(std::find(open.begin(), open.end(), curr));
 			visited.emplace_back(curr);
 

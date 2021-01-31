@@ -1,4 +1,5 @@
 Publisher* StateDeadHealer::sm_Publisher = Publisher::RetrieveGlobalObjPtr();
+Entity** StateDeadHealer::entityMoving = nullptr;
 
 void StateDeadHealer::Enter(Entity* const entity){
 	entity->im_Attribs.im_DeadCurrTime = entity->im_Attribs.im_DeadMaxTime = 4.0f;
@@ -7,6 +8,7 @@ void StateDeadHealer::Enter(Entity* const entity){
 void StateDeadHealer::Update(Entity* const entity, const double dt){
 	if(entity->im_Attribs.im_DeadCurrTime <= 0.0f){
 		(void)sm_Publisher->Notify((long int)ListenerFlags::Scene, new EventDespawnEntity(entity));
+		*entityMoving = nullptr;
 	} else{
 		entity->im_Attribs.im_DeadCurrTime -= (float)dt;
 	}

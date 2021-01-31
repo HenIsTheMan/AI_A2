@@ -272,6 +272,7 @@ void Scene::UpdateSimWaiting(const double dt){
 
 		StateDeadKnight::entityMoving = &entityMoving;
 		StateDeadGunner::entityMoving = &entityMoving;
+		StateDeadHealer::entityMoving = &entityMoving;
 
 		const bool isFlatTop = gridType == HexGrid<float>::GridType::FlatTop;
 		StateIdleKnight::sm_IsFlatTop = isFlatTop;
@@ -303,6 +304,22 @@ void Scene::UpdateSimWaiting(const double dt){
 		StateChaseGunner::selectedCol = &selectedCol;
 		StateChaseGunner::selectedTargetRow = &selectedTargetRow;
 		StateChaseGunner::selectedTargetCol = &selectedTargetCol;
+		StateChaseGunner::creditsPlayer = &creditsPlayer;
+		StateChaseGunner::creditsAI = &creditsAI;
+
+		StateChaseHealer::sim = sim;
+		StateChaseHealer::entityMoving = &entityMoving;
+		StateChaseHealer::myAStar = &myAStar;
+		StateChaseHealer::myShortestPath = &myShortestPath;
+		StateChaseHealer::gridType = gridType;
+		StateChaseHealer::gridRows = gridRows;
+		StateChaseHealer::gridCols = gridCols;
+		StateChaseHealer::selectedRow = &selectedRow;
+		StateChaseHealer::selectedCol = &selectedCol;
+		StateChaseHealer::selectedTargetRow = &selectedTargetRow;
+		StateChaseHealer::selectedTargetCol = &selectedTargetCol;
+		StateChaseHealer::creditsPlayer = &creditsPlayer;
+		StateChaseHealer::creditsAI = &creditsAI;
 
 		StateAttackKnight::sim = sim;
 		StateAttackKnight::gridCols = gridCols;
@@ -312,6 +329,24 @@ void Scene::UpdateSimWaiting(const double dt){
 		StateAttackKnight::selectedTargetCol = &selectedTargetCol;
 		StateAttackKnight::creditsPlayer = &creditsPlayer;
 		StateAttackKnight::creditsAI = &creditsAI;
+
+		StateAttackGunner::sim = sim;
+		StateAttackGunner::gridCols = gridCols;
+		StateAttackGunner::selectedRow = &selectedRow;
+		StateAttackGunner::selectedCol = &selectedCol;
+		StateAttackGunner::selectedTargetRow = &selectedTargetRow;
+		StateAttackGunner::selectedTargetCol = &selectedTargetCol;
+		StateAttackGunner::creditsPlayer = &creditsPlayer;
+		StateAttackGunner::creditsAI = &creditsAI;
+
+		StateHealHealer::sim = sim;
+		StateHealHealer::gridCols = gridCols;
+		StateHealHealer::selectedRow = &selectedRow;
+		StateHealHealer::selectedCol = &selectedCol;
+		StateHealHealer::selectedTargetRow = &selectedTargetRow;
+		StateHealHealer::selectedTargetCol = &selectedTargetCol;
+		StateHealHealer::creditsPlayer = &creditsPlayer;
+		StateHealHealer::creditsAI = &creditsAI;
 
 		StatePatrolKnight::sim = sim;
 		StatePatrolKnight::entityMoving = &entityMoving;
@@ -324,6 +359,18 @@ void Scene::UpdateSimWaiting(const double dt){
 		StatePatrolKnight::selectedTargetCol = &selectedTargetCol;
 		StatePatrolKnight::creditsPlayer = &creditsPlayer;
 		StatePatrolKnight::creditsAI = &creditsAI;
+
+		StatePatrolGunner::sim = sim;
+		StatePatrolGunner::entityMoving = &entityMoving;
+		StatePatrolGunner::gridType = gridType;
+		StatePatrolGunner::gridRows = gridRows;
+		StatePatrolGunner::gridCols = gridCols;
+		StatePatrolGunner::selectedRow = &selectedRow;
+		StatePatrolGunner::selectedCol = &selectedCol;
+		StatePatrolGunner::selectedTargetRow = &selectedTargetRow;
+		StatePatrolGunner::selectedTargetCol = &selectedTargetCol;
+		StatePatrolGunner::creditsPlayer = &creditsPlayer;
+		StatePatrolGunner::creditsAI = &creditsAI;
 
 		canMakeSimMap = false;
 	}

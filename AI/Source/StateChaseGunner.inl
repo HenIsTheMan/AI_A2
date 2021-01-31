@@ -9,10 +9,10 @@ int* StateChaseGunner::selectedRow = nullptr;
 int* StateChaseGunner::selectedCol = nullptr;
 int* StateChaseGunner::selectedTargetRow = nullptr;
 int* StateChaseGunner::selectedTargetCol = nullptr;
+int* StateChaseGunner::creditsPlayer = nullptr;
+int* StateChaseGunner::creditsAI = nullptr;
 
 void StateChaseGunner::Enter(Entity* const entity){
-	const std::vector<Entity*>& entityLayer = sim->GetEntityLayer();
-
 	myAStar->Reset();
 	myShortestPath->clear();
 
@@ -21,16 +21,21 @@ void StateChaseGunner::Enter(Entity* const entity){
 			const int cost = (int)tileCosts[(int)sim->GetTileLayer()[r * gridCols + c]];
 
 			(void)myAStar->CreateNode(CreateAStarNodeParams<Vector3, float>{
-				cost < 0 || (!(r == *selectedRow && c == *selectedCol) && entityLayer[r * gridCols + c] != nullptr) ? AStarNodeType::Inaccessible : AStarNodeType::Accessible,
-					'(' + std::to_string(c) + ", " + std::to_string(r) + ')' + " Cost: " + std::to_string(cost),
-					(float)cost,
-					Vector3((float)c, (float)r, 0.0f),
+				cost < 0 || sim->GetEntityLayer()[r * gridCols + c] != nullptr
+					? AStarNodeType::Inaccessible
+					: AStarNodeType::Accessible,
+				'(' + std::to_string(c) + ", " + std::to_string(r) + ')' + " Cost: " + std::to_string(cost),
+				(float)cost,
+				Vector3((float)c, (float)r, 0.0f),
 			});
 		}
 	}
 
 	myAStar->SetStart(Vector3((float)*selectedCol, (float)*selectedRow, 0.0f));
 	myAStar->SetEnd(Vector3((float)*selectedTargetCol, (float)*selectedTargetRow, 0.0f));
+	myAStar->MakeStartAccessible();
+	myAStar->MakeEndAccessible();
+
 	if(gridType == HexGrid<float>::GridType::FlatTop){
 		myAStar->SetNeighboursForHexGridFlatTop(
 			Vector3(0.0f, 0.0f, 0.0f),
@@ -55,13 +60,13 @@ void StateChaseGunner::Enter(Entity* const entity){
 		myAStar->PrintPath();
 
 		const std::vector<AStarNode<Vector3, float>*>& shortestPath = myAStar->GetShortestPath();
-		for(const AStarNode<Vector3, float>* const node: shortestPath){
-			myShortestPath->emplace_back(node->GetPos());
+		const int shortestPathSize = shortestPath.size();
+		for(int i = 1; i < shortestPathSize; ++i){ //Exclude start node
+			myShortestPath->emplace_back(shortestPath[i]->GetPos());
 		}
 
-		entity->im_Attribs.im_GridCellTargetLocalPos = myShortestPath->front();
+		entity->im_Attribs.im_GridCellTargetLocalPos = entity->im_Attribs.im_LocalPos;
 		entity->im_Attribs.im_GridCellStartLocalPos = entity->im_Attribs.im_LocalPos;
-		myShortestPath->erase(myShortestPath->begin());
 	}
 
 	sim->OnEntityDeactivated(gridCols, (int)entity->im_Attribs.im_LocalPos.y, (int)entity->im_Attribs.im_LocalPos.x);
@@ -77,11 +82,12 @@ void StateChaseGunner::Update(Entity* const entity, const double dt){
 	Vector3& entityLocalPos = entity->im_Attribs.im_LocalPos;
 	const Vector3 diff = entity->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos;
 	const float dist = diff.Length();
+
 	if(!(dist <= Math::EPSILON && -dist <= Math::EPSILON)){
-		entityLocalPos = entityLocalPos + 4.0f * diff.Normalized() * (float)dt;
+		entityLocalPos = entityLocalPos + entity->im_Attribs.im_Spd * diff.Normalized() * (float)dt;
 	}
 
-	if((entity->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos).LengthSquared() < 4.0f * (float)dt * 4.0f * (float)dt){
+	if((entity->im_Attribs.im_GridCellTargetLocalPos - entityLocalPos).LengthSquared() < entity->im_Attribs.im_Spd * (float)dt * entity->im_Attribs.im_Spd * (float)dt){
 		entityLocalPos = Vector3(
 			roundf(entityLocalPos.x),
 			roundf(entityLocalPos.y),
@@ -151,9 +157,46 @@ void StateChaseGunner::Update(Entity* const entity, const double dt){
 
 			*entityMoving = nullptr;
 		} else{
-			entity->im_Attribs.im_GridCellTargetLocalPos = myShortestPath->front();
-			entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
-			myShortestPath->erase(myShortestPath->begin());
+			const Vector3 targetLocalPos = myShortestPath->front();
+			const int targetIndex = (int)targetLocalPos.y * gridCols + (int)targetLocalPos.x;
+
+			if(sim->GetEntityLayer()[targetIndex] == nullptr){
+				const int tileCost = (int)tileCosts[(int)sim->GetTileLayer()[targetIndex]];
+
+				if((sim->turn == SimTurn::Player && *creditsPlayer >= tileCost)
+					|| (sim->turn == SimTurn::AI && *creditsAI >= tileCost)){
+
+					if(sim->turn == SimTurn::Player){
+						*creditsPlayer -= tileCost;
+					} else if(sim->turn == SimTurn::AI){
+						*creditsAI -= tileCost;
+					}
+					entity->im_Attribs.im_GridCellTargetLocalPos = targetLocalPos;
+					entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
+					myShortestPath->erase(myShortestPath->begin());
+
+				} else{
+					*selectedRow = (int)entityLocalPos.y;
+					*selectedCol = (int)entityLocalPos.x;
+
+					*selectedTargetRow = *selectedTargetCol = -1;
+
+					entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateIdleGunner);
+					sim->OnEntityActivated(gridCols, entity);
+
+					*entityMoving = nullptr;
+				}
+			} else{
+				//* For use in attack state
+				entity->im_Attribs.im_GridCellTargetLocalPos = targetLocalPos;
+				entity->im_Attribs.im_GridCellStartLocalPos = entityLocalPos;
+				//*/
+
+				entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateAttackGunner);
+				sim->OnEntityActivated(gridCols, entity);
+
+				*entityMoving = nullptr;
+			}
 		}
 	} else{
 		if((int)entity->im_Attribs.im_GridCellStartLocalPos.x == (int)entity->im_Attribs.im_GridCellTargetLocalPos.x){

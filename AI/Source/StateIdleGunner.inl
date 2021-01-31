@@ -11,6 +11,8 @@ void StateIdleGunner::Update(Entity* const entity, const double dt){
 		return;
 	} else if(entity->im_Attribs.im_IdleShldChase){
 		entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StateChaseGunner);
+	} else if(entity->im_Attribs.im_IdleShldPatrol){
+		entity->im_Attribs.im_NextState = entity->im_Attribs.im_StateMachine->AcquireState(StateID::StatePatrolGunner);
 	}
 
 	if(entity->im_Attribs.im_IdleChangeFacingDirBT <= entity->im_Attribs.im_TimeAlive){
@@ -113,4 +115,5 @@ void StateIdleGunner::Update(Entity* const entity, const double dt){
 
 void StateIdleGunner::Exit(Entity* const entity){
 	entity->im_Attribs.im_IdleShldChase = false;
+	entity->im_Attribs.im_IdleShldPatrol = false;
 }
