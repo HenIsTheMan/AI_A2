@@ -128,9 +128,34 @@ void StatePatrolKnight::Update(Entity* const entity, const double dt){
 			myVec.emplace_back(entityLocalPos);
 			visited[(int)entityLocalPos.y * gridCols + (int)entityLocalPos.x] = true;
 
-			for(int i = 1; i < (int)Obj::EntityFacingDir::Amt; ++i){ //Exclude EntityFacingDir::Invalid
+			for(int i = 1; i < (int)Obj::EntityFacingDir::Amt; ++i){ //Excludes EntityFacingDir::Invalid
+				Obj::EntityFacingDir facingDir = Obj::entityFacingDirs[i];
+
+				//* Filtering irrelevant facing dirs
+				if(gridType == HexGrid<float>::GridType::FlatTop){
+					if(((int)entityLocalPos.x & 1) == 1){
+						if(facingDir == Obj::EntityFacingDir::DL || facingDir == Obj::EntityFacingDir::DR){
+							continue;
+						}
+					} else{
+						if(facingDir == Obj::EntityFacingDir::UL || facingDir == Obj::EntityFacingDir::UR){
+							continue;
+						}
+					}
+				} else{
+					if(((int)entityLocalPos.y & 1) == 1){
+						if(facingDir == Obj::EntityFacingDir::DL || facingDir == Obj::EntityFacingDir::UL){
+							continue;
+						}
+					} else{
+						if(facingDir == Obj::EntityFacingDir::DR || facingDir == Obj::EntityFacingDir::UR){
+							continue;
+						}
+					}
+				}
+
 				Vector3 next = entityLocalPos;
-				switch(Obj::entityFacingDirs[i]){
+				switch(facingDir){
 					case Obj::EntityFacingDir::Up:
 						++next.y;
 						break;
